@@ -1,0 +1,13 @@
+export type SByte = number;
+export type Byte = number;
+export type Int16 = number;
+export type UInt16 = number;
+export type Int32 = number;
+export type UInt32 = number;
+export type Int64 = bigint;
+export type UInt64 = bigint;
+export type Float = number;
+export type Double = number;
+export type UaString = string | undefined;
+export type ByteString = Uint8Array | undefined;
+export type XmlElement = string | undefined;
