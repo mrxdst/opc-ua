@@ -85,6 +85,15 @@ export class DataValue implements DataValueOptions {
     return str.join('\n');
   }
 
+  isNull(): boolean {
+    return this.value === undefined &&
+    this.status === undefined &&
+    this.sourceTimestamp === undefined &&
+    this.sourcePicoSeconds === undefined &&
+    this.serverTimestamp === undefined &&
+    this.serverPicoSeconds === undefined;
+  }
+
   [encode](encoder: BinaryDataEncoder): void {
     let encodingMask = 0;
     if (this.value !== undefined) {

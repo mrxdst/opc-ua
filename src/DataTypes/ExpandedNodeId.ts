@@ -55,6 +55,12 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     return `${svrPart}nsu=${encodeNamespaceUri(this.namespaceUri)};${identifierPart}`;
   }
 
+  isNull(): boolean {
+    return this.nodeId.isNull() &&
+    !this.namespaceUri &&
+    this.serverIndex === 0;
+  }
+
   toNodeId(namespaceArray: string[]): NodeId {
     if (!this.namespaceUri) {
       return this.nodeId;
@@ -108,7 +114,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
 
   [encode](encoder: BinaryDataEncoder): void {
     const nodeId = new NodeId(this.nodeId);
-    nodeId[namespaceUriFlag] = this.namespaceUri !== undefined;
+    nodeId[namespaceUriFlag] = !!this.namespaceUri;
     nodeId[serverIndexFlag] = !!this.serverIndex;
 
     try {

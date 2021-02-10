@@ -109,6 +109,10 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
     });
   }
 
+  isNull(): boolean {
+    return this.typeId === VariantTypeId.Null;
+  }
+
   [encode](encoder: BinaryDataEncoder): void {
     if (this.typeId === VariantTypeId.Null) {
       encoder.writeByte(0);

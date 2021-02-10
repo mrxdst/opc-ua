@@ -101,6 +101,16 @@ export class DiagnosticInfo implements DiagnosticInfoOptions {
     return str.join('\n');
   }
 
+  isNull(): boolean {
+    return this.symbolicId === undefined &&
+    this.namespaceUri === undefined &&
+    this.locale === undefined &&
+    this.localizedText === undefined &&
+    this.additionalInfo === undefined &&
+    this.innerStatusCode === undefined &&
+    this.innerDiagnosticInfo === undefined;
+  }
+
   [encode](encoder: BinaryDataEncoder): void {
     let mask = 0x00;
     if (this.symbolicId !== undefined) mask += 0x01;

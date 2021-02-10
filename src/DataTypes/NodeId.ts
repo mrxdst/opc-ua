@@ -226,6 +226,21 @@ export class NodeId<
     }
   }
 
+  isNull(): boolean {
+    if (this.namespace !== 0) {
+      return false;
+    }
+    if (!this.value) {
+      return true;
+    } else if (this.value instanceof Guid) {
+      return this.value.isNull();
+    } else if (this.value instanceof Uint8Array) {
+      return this.value.byteLength === 0;
+    } else {
+      return false;
+    }
+  }
+
   [encode](encoder: BinaryDataEncoder): void {
     let identifierType: Byte = this.identifierType;
     if (this[namespaceUriFlag]) {

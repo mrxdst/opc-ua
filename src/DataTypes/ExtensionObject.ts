@@ -52,6 +52,10 @@ export class ExtensionObject implements ExtensionObjectOptions {
     return str.join('\n');
   }
 
+  isNull(): boolean {
+    return this.typeId.isNull();
+  }
+
   [encode](encoder: BinaryDataEncoder): void {
     if (this.body === undefined) {
       encoder.writeType(this.typeId);

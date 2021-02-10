@@ -34,6 +34,10 @@ export class QualifiedName implements QualifiedName {
     return `${this.namespaceIndex}:${this.name ?? ''}`;
   }
 
+  isNull(): boolean {
+    return this.namespaceIndex === 0 && this.name === undefined;
+  }
+
   /** Parses the string to a QualifiedName. */
   static parse(str: string): QualifiedName {
     let namespaceIndex = 0;

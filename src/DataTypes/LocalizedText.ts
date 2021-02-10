@@ -37,20 +37,24 @@ export class LocalizedText implements LocalizedTextOptions {
     return str.join(`\n`);
   }
 
+  isNull(): boolean {
+    return !this.locale && !this.text;
+  }
+
   [encode](encoder: BinaryDataEncoder): void {
     let mask = 0x00;
-    if (this.locale !== undefined) {
+    if (this.locale) {
       mask += localeMask;
     }
-    if (this.text !== undefined) {
+    if (this.text) {
       mask += textMask;
     }
     encoder.writeByte(mask);
 
-    if (this.locale !== undefined) {
+    if (this.locale) {
       encoder.writeString(this.locale);
     }
-    if (this.text !== undefined) {
+    if (this.text) {
       encoder.writeString(this.text);
     }
   }
