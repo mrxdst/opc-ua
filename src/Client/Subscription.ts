@@ -61,6 +61,8 @@ interface SubscriptionInternals {
 
 export interface SubscriptionEvents {
   status: (status: StatusCode) => void;
+  events: (monitoredItems: MonitoredItem[]) => void;
+  values: (monitoredItems: MonitoredItem[]) => void;
   deleted: () => void;
 }
 
@@ -342,16 +344,26 @@ export class Subscription extends (EventEmitter as new () => TypedEmitter<Subscr
     for (const notificationData of notificationMessage.notificationData ?? []) {
       const notification = notificationData.body;
       if (notification instanceof DataChangeNotification) {
+        const items: MonitoredItem[] = [];
         for (const handleValue of notification.monitoredItems ?? []) {
           const monitoredItem = this.#monitoredItemsHandle.get(handleValue.clientHandle);
-          monitoredItem?.[handleDataChange]?.(handleValue.value);
+          if (monitoredItem) {
+            monitoredItem[handleDataChange](handleValue.value);
+            items.push(monitoredItem);
+          }
         }
+        this.emit('values', items);
       } 
       else if (notification instanceof EventNotificationList) {
-         for (const event of notification.events ?? []) {
+        const items: MonitoredItem[] = [];
+        for (const event of notification.events ?? []) {
           const monitoredItem = this.#monitoredItemsHandle.get(event.clientHandle);
-          monitoredItem?.[handleEvent]?.(event.eventFields);
+          if (monitoredItem) {
+            monitoredItem[handleEvent](event.eventFields);
+            items.push(monitoredItem);
+          }
         }
+        this.emit('events', items);
       } 
       else if (notification instanceof StatusChangeNotification) {
         this.#status = notification.status;

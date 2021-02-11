@@ -108,6 +108,9 @@ export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<Monit
   /** The current value of the MonitoredItem. */
   get value(): DataValue { return this.#value; }
   #value: DataValue = new DataValue();
+  /** The last received event fields of the MonitoredItem. */
+  get eventFields(): Variant[] | undefined {return this.#eventFields; }
+  #eventFields?: Variant[];
   /** The MonitoredItem is deleted. */
   get deleted(): boolean { return this.#deleted; }
   #deleted = false;
@@ -191,6 +194,8 @@ export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<Monit
   }
 
   [handleEvent](eventFields?: Variant[]): void {
+    debug(`[${this.clientHandle}] Handling event fields`);
+    this.#eventFields = eventFields;
     this.emit('event', eventFields);
   }
 
