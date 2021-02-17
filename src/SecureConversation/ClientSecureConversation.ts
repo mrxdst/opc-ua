@@ -156,8 +156,8 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
           messageType: MessageType.OPN,
           isFinal: IsFinal.F,
           securityPolicyUri: 'http://opcfoundation.org/UA/SecurityPolicy#None',
-          secureChannelId: 0,
-          tokenId: 0,
+          secureChannelId: this.#securityToken?.channelId ?? 0,
+          tokenId: this.#securityToken?.tokenId ?? 0,
           sequenceNumber: this.#sequenceNumber.next().value,
           requestId,
           body: bodyEncoder.finish()
