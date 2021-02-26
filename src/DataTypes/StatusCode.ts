@@ -18,17 +18,18 @@ export interface StatusCodeOptions {
 }
 
 export class StatusCode implements StatusCodeOptions {
-  get code(): UInt32 { return this.#code; }
-  #code: UInt32;
-  get name(): string | undefined { return this.#name; }
-  #name?: string;
-  get description(): string | undefined { return this.#description; }
-  #description?: string;
+  readonly code: UInt32;
+  readonly name?: string;
+  readonly description?: string;
 
   private constructor(options?: StatusCodeOptions) {
-    this.#code = options?.code ?? 0;
-    this.#name = options?.name;
-    this.#description = options?.description;
+    this.code = options?.code ?? 0;
+    this.name = options?.name;
+    this.description = options?.description;
+
+    Object.defineProperty(this, 'code', { writable: false, enumerable: true });
+    Object.defineProperty(this, 'name', { writable: false, enumerable: true });
+    Object.defineProperty(this, 'description', { writable: false, enumerable: true });
   }
 
   toString(): string {
