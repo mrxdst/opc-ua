@@ -1,6 +1,6 @@
 import ndarray from 'ndarray';
 import { BinaryDataEncoder, BinaryDataDecoder } from '../BinaryDataEncoding';
-import { isTypedArray } from '../util';
+import { isNdArray, isTypedArray } from '../util';
 import { DataValue } from './DataValue';
 import { DiagnosticInfo } from './DiagnosticInfo';
 import { ExpandedNodeId } from './ExpandedNodeId';
@@ -101,6 +101,10 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
     this.isArray = options.isArray ?? false;
   }
 
+  toString(): string {
+    return this.value?.toString() ?? 'undefined';
+  }
+
   /** Return a new null Variant */
   static null(): Variant {
     return new Variant({
@@ -136,7 +140,7 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
           writeVariantValue(encoder, this.typeId, this.value[i] as VariantValueType<T>);
         }
       }
-      else if (typeof this.value === 'object' && 'data' in this.value) {
+      else if (isNdArray(this.value)) {
         encodingMask |= arrayValuesMask;
         encodingMask |= arrayDimensionsMask;
         encoder.writeByte(encodingMask);
@@ -156,7 +160,7 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
       if (this.typeId === VariantTypeId.Variant) {
         throw new UaError({code: StatusCode.BadInvalidArgument, reason: "The value of a Variant isn't allowd to be another Variant unless it's an array of Variants"});
       }
-      if (this.value === undefined || Array.isArray(this.value) || isTypedArray(this.value) || (typeof this.value === 'object' && 'data' in this.value)) {
+      if (this.value === undefined || Array.isArray(this.value) || isTypedArray(this.value) || isNdArray(this.value)) {
         throw new UaError({code: StatusCode.BadInvalidArgument, reason: `Invalid Value for TypeId=${VariantTypeId[this.typeId] ?? this.typeId}`});
       }
       encoder.writeByte(encodingMask);

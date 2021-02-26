@@ -1,4 +1,5 @@
 import { TypedArray } from './types';
+import ndarray from 'ndarray';
 import {
   SByte,
   Byte,
@@ -118,6 +119,10 @@ export function isTypedArray(obj: unknown): obj is TypedArray {
     obj instanceof Uint8ClampedArray ||
     obj instanceof Float32Array ||
     obj instanceof Float64Array;
+}
+
+export function isNdArray<T>(obj: unknown): obj is ndarray<T> {
+  return new Object(obj) === obj && 'data' in obj;
 }
 
 export function byteStringToUaString(value: Uint8Array): string

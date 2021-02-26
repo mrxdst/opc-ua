@@ -533,7 +533,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
     if (this.#publishLoopTimer !== undefined) {
       return;
     }
-    this.#publishLoopTimer = setTimeout(() => void(publishLoop()));
+    this.#publishLoopTimer = setTimeout(() => void(publishLoop())) as unknown as number;
     debug('Publish loop started');
 
     const publishLoop = async (): Promise<void> => {
@@ -565,7 +565,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
 
         const subscription = this.#subscriptionsIndex.get(response.subscriptionId);
         subscription?.[handleNotificationMessage](response.notificationMessage);
-        this.#publishLoopTimer = setTimeout(() => void(publishLoop()));
+        this.#publishLoopTimer = setTimeout(() => void(publishLoop())) as unknown as number;
       } catch (e) {
         debug(`Publish error: ${(e as Error)?.message}`);
         this.#publishLoopTimer = setTimeout(() => void(publishLoop()), minInterval) as unknown as number;
@@ -577,7 +577,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
     if (this.#keepAliveTimer !== undefined) {
       return;
     }
-    this.#keepAliveTimer = setTimeout(() => void(keepAlive()));
+    this.#keepAliveTimer = setTimeout(() => void(keepAlive())) as unknown as number;
     debug('Keep alive started');
 
     const keepAlive = async (): Promise<void> => {

@@ -88,5 +88,7 @@ export {
   isUInt32,
   isUInt64,
   uaStringToByteString,
-  byteStringToUaString
+  byteStringToUaString,
+  isNdArray,
+  isTypedArray
 } from './util';
