@@ -22,6 +22,8 @@ test('Encode/Decode', () => {
   encoder.writeType(new Variant({typeId: VariantTypeId.Int32, isArray: true, value: ndarray([1,2,3,4,5,6,7,8], [2,2,2,2])}));
 
   expect(() => encoder.writeType(new Variant({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     typeId: VariantTypeId.Variant, value: new Variant({
       typeId: VariantTypeId.Boolean, value: true
     })

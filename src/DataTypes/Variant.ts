@@ -11,7 +11,6 @@ import { Guid } from './Guid';
 import { StatusCode } from './StatusCode';
 import { NodeId } from './NodeId';
 import { QualifiedName } from './QualifiedName';
-import { TypedArray } from '../types';
 import { decode, encode } from '../symbols';
 import { UaError } from '../UaError';
 
@@ -75,14 +74,26 @@ T extends VariantTypeId.DataValue ? DataValue :
 T extends VariantTypeId.Variant ? Variant :
 T extends VariantTypeId.DiagnosticInfo ? DiagnosticInfo : never;
 
-export type VariantValue<T extends VariantTypeId = VariantTypeId> = VariantValueType<T> | VariantValueType<T>[] | ndarray<VariantValueType<T>> | TypedArray | undefined;
+export type VariantTypedArrayType<T extends VariantTypeId> =
+T extends VariantTypeId.SByte ? Int8Array :
+T extends VariantTypeId.Byte ? Uint8Array :
+T extends VariantTypeId.Int16 ? Int16Array :
+T extends VariantTypeId.UInt16 ? Uint16Array :
+T extends VariantTypeId.Int32 ? Int32Array :
+T extends VariantTypeId.UInt32 ? Uint32Array :
+T extends VariantTypeId.Int64 ? BigInt64Array :
+T extends VariantTypeId.UInt64 ? BigInt64Array :
+T extends VariantTypeId.Float ? Float32Array :
+T extends VariantTypeId.Double ? Float64Array : never;
+
+export type VariantValue<T extends VariantTypeId = VariantTypeId> = VariantValueType<Exclude<T, VariantTypeId.Variant>> | VariantValueType<T>[] | ndarray<VariantValueType<T>> | VariantTypedArrayType<T> | undefined;
 
 export interface VariantOptions<T extends VariantTypeId = VariantTypeId> {
   /** The type of the value. */
   typeId: T;
   /** The value. */
   value: VariantValue<T>;
-  /** Value is an array. */
+  /** Value is an array. Only needed if it can't be infered from the value. */
   isArray?: boolean;
 }
 
@@ -92,13 +103,13 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
   typeId: T;
   /** The value. */
   value: VariantValue<T>;
-  /** Value is an array. */
-  isArray: boolean;
+  /** Value is an array. Only needed if it can't be infered from the value. */
+  isArray?: boolean;
 
   constructor(options: VariantOptions<T>) {
     this.typeId = options.typeId;
     this.value = options.value;
-    this.isArray = options.isArray ?? false;
+    this.isArray = options.isArray;
   }
 
   toString(): string {
@@ -125,7 +136,17 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
 
     let encodingMask = this.typeId as Byte;
 
-    if (this.isArray) {
+    let isArray = this.isArray;
+
+    if (isArray === undefined) {
+      if (this.typeId === VariantTypeId.ByteString) {
+        isArray = Array.isArray(this.value) || isNdArray(this.value);
+      } else {
+        isArray = Array.isArray(this.value) || isTypedArray(this.value) || isNdArray(this.value);
+      }
+    }
+
+    if (isArray) {
       if (this.value === undefined) {
         encodingMask |= arrayValuesMask;
         encoder.writeByte(encodingMask);
@@ -158,13 +179,11 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
       }
     } else {
       if (this.typeId === VariantTypeId.Variant) {
-        throw new UaError({code: StatusCode.BadInvalidArgument, reason: "The value of a Variant isn't allowd to be another Variant unless it's an array of Variants"});
+        throw new UaError({code: StatusCode.BadInvalidArgument, reason: "The value of a Variant isn't allowed to be another Variant unless it's an array of Variants"});
       }
-      if (this.value === undefined || Array.isArray(this.value) || isTypedArray(this.value) || isNdArray(this.value)) {
-        throw new UaError({code: StatusCode.BadInvalidArgument, reason: `Invalid Value for TypeId=${VariantTypeId[this.typeId] ?? this.typeId}`});
-      }
+
       encoder.writeByte(encodingMask);
-      writeVariantValue(encoder, this.typeId, this.value);
+      writeVariantValue(encoder, this.typeId, this.value as VariantValueType<T>);
     }
   }
 

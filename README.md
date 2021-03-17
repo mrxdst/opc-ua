@@ -8,7 +8,7 @@ This library was built to fit my needs and doesn't fully conform to any client p
 ## Features
 
 * TCP and WebSocket transports.
-* Works in the browser (with webpack, WebSocket tansport only).
+* Works in the browser (with webpack, WebSocket transport only).
 * Auto-reconnect (with re-creation of subscriptions).
 
 ## Implementation notes

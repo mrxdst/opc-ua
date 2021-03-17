@@ -122,7 +122,11 @@ export function isTypedArray(obj: unknown): obj is TypedArray {
 }
 
 export function isNdArray<T>(obj: unknown): obj is ndarray<T> {
-  return new Object(obj) === obj && 'data' in obj;
+  return new Object(obj) === obj
+    && 'data' in obj
+    && 'shape' in obj
+    && 'stride' in obj
+    && 'offset' in obj;
 }
 
 export function byteStringToUaString(value: Uint8Array): string

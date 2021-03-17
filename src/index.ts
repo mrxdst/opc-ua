@@ -64,7 +64,7 @@ export type { ServiceFaultOptions } from './DataTypes/ServiceFault';
 export { StatusCode, StatusCodeSeverity } from './DataTypes/StatusCode';
 
 export { Variant, VariantTypeId } from './DataTypes/Variant';
-export type { VariantValueType, VariantValue, VariantOptions } from './DataTypes/Variant';
+export type { VariantValueType, VariantValue, VariantOptions, VariantTypedArrayType } from './DataTypes/Variant';
 
 export { UaError } from './UaError';
 
