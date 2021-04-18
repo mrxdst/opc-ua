@@ -66,6 +66,9 @@ export { StatusCode, StatusCodeSeverity } from './DataTypes/StatusCode';
 export { Variant, VariantTypeId } from './DataTypes/Variant';
 export type { VariantValueType, VariantValue, VariantOptions, VariantTypedArrayType } from './DataTypes/Variant';
 
+export { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding';
+export type { Encodable, Decodable } from './BinaryDataEncoding';
+
 export { UaError } from './UaError';
 
 export type { EncodableType, DecodableType } from './types';

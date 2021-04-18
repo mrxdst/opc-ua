@@ -106,6 +106,8 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
           return;
         }
 
+        this.#securityToken = undefined;
+
         this.#state = OpenState.Opening;
     
         const _request = new OpenSecureChannelRequest({
