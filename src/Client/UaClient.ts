@@ -180,6 +180,8 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
   #publishLoopTimer: number | undefined;
   #keepAliveTimer: number | undefined;
 
+  #lastRequestTimestamp = Date.now();
+
   #subscriptionsIndex = new Map<UInt32, Subscription>();
 
   constructor(options: UaClientOptions) {
@@ -586,21 +588,23 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
         debug('Keep alive ended');
         return;
       }
-      
-      debug('Send keep alive');
-      try {
-        await this.read(new ReadRequest({
-          timestampsToReturn: TimestampsToReturn.Neither,
-          nodesToRead: [
-            new ReadValueId({
-              attributeId: AttributeIds.Value,
-              nodeId: NodeId.parse(NodeIds.Server_ServerStatus_CurrentTime)
-            })
-          ]
-        }));
-        debug('Got keep alive response');
-      } catch (e) {
-        debug(`Keep alive error: ${(e as Error)?.message}`);
+
+      if (Date.now() - this.#lastRequestTimestamp > 5000-1) {
+        debug('Send keep alive');
+        try {
+          await this.read(new ReadRequest({
+            timestampsToReturn: TimestampsToReturn.Neither,
+            nodesToRead: [
+              new ReadValueId({
+                attributeId: AttributeIds.Value,
+                nodeId: NodeId.parse(NodeIds.Server_ServerStatus_CurrentTime)
+              })
+            ]
+          }));
+          debug('Got keep alive response');
+        } catch (e) {
+          debug(`Keep alive error: ${(e as Error)?.message}`);
+        }
       }
       this.#keepAliveTimer = setTimeout(() => void(keepAlive()), 5000) as unknown as number;
     };   
@@ -615,6 +619,8 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
       ...request,
       requestHeader: this.#newRequestHeader(request)
     });
+
+    this.#lastRequestTimestamp = _request.requestHeader.timestamp.getTime();
 
     return await this.#secureConversation.sendRequest(_request);
   }

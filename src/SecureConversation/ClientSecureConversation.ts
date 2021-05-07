@@ -221,7 +221,9 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
       setTimeout(() => {
         const write = async (): Promise<void> => {
           try {
-            await Promise.all(messages.map(message => this.#transport.write(BinaryDataEncoder.encodeType(message))));
+            for (const message of messages) {
+              await this.#transport.write(BinaryDataEncoder.encodeType(message));
+            }
           } catch (e) {
             deferredResponse.reject(e);
           }
