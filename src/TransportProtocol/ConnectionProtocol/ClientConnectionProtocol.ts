@@ -162,6 +162,7 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
     }
 
     const data = new Uint8Array(dataBuf.buffer, dataBuf.byteOffset, dataBuf.byteLength);
+    let hadError = false;
     
     try {
       const decoder = new BinaryDataDecoder(data);
@@ -187,8 +188,7 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
           break;
         }
         case MessageType.HEL: {
-          this.#transportProtocol.close(new UaError({code: StatusCode.BadUnexpectedError, reason: 'Unexpected HelloMessage'}));
-          break;
+          throw new UaError({code: StatusCode.BadUnexpectedError, reason: 'Unexpected HelloMessage'});
         }
         case MessageType.RHE: {
           // Ignore
@@ -196,7 +196,12 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
         }
       }
     } catch (e) {
+      hadError = true;
       this.#transportProtocol.close(e);
+    } finally {
+      if (!hadError) {
+        this.#dataStream.readableLength && this.#onMessage(new Uint8Array(0));
+      }
     }
   }
 
