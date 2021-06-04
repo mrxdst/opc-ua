@@ -1,4 +1,4 @@
-import ndarray from 'ndarray';
+import ndarray, { NdArray } from 'ndarray';
 import { BinaryDataEncoder, BinaryDataDecoder } from '../BinaryDataEncoding';
 import { isNdArray, isTypedArray } from '../util';
 import { DataValue } from './DataValue';
@@ -11,8 +11,9 @@ import { Guid } from './Guid';
 import { StatusCode } from './StatusCode';
 import { NodeId } from './NodeId';
 import { QualifiedName } from './QualifiedName';
-import { decode, encode } from '../symbols';
+import { decode, encode, typeId } from '../symbols';
 import { UaError } from '../UaError';
+import { NodeIds } from './NodeIds';
 
 const arrayDimensionsMask = 0x40;
 const arrayValuesMask = 0x80;
@@ -86,7 +87,7 @@ T extends VariantTypeId.UInt64 ? BigInt64Array :
 T extends VariantTypeId.Float ? Float32Array :
 T extends VariantTypeId.Double ? Float64Array : never;
 
-export type VariantValue<T extends VariantTypeId = VariantTypeId> = VariantValueType<Exclude<T, VariantTypeId.Variant>> | VariantValueType<T>[] | ndarray<VariantValueType<T>> | VariantTypedArrayType<T> | undefined;
+export type VariantValue<T extends VariantTypeId = VariantTypeId> = VariantValueType<Exclude<T, VariantTypeId.Variant>> | VariantValueType<T>[] | NdArray<VariantValueType<T>> | VariantTypedArrayType<T> | undefined;
 
 export interface VariantOptions<T extends VariantTypeId = VariantTypeId> {
   /** The type of the value. */
@@ -94,7 +95,7 @@ export interface VariantOptions<T extends VariantTypeId = VariantTypeId> {
   /** The value. */
   value: VariantValue<T>;
   /** Value is an array. Only needed if it can't be infered from the value. */
-  isArray?: boolean;
+  isArray?: boolean | undefined;
 }
 
 /** A union of several types. */
@@ -104,7 +105,7 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
   /** The value. */
   value: VariantValue<T>;
   /** Value is an array. Only needed if it can't be infered from the value. */
-  isArray?: boolean;
+  isArray?: boolean | undefined;
 
   constructor(options: VariantOptions<T>) {
     this.typeId = options.typeId;
@@ -127,6 +128,8 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
   isNull(): boolean {
     return this.typeId === VariantTypeId.Null;
   }
+
+  static [typeId] = NodeIds.BaseDataType as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     if (this.typeId === VariantTypeId.Null) {

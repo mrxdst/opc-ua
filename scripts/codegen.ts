@@ -305,9 +305,15 @@ async function createTypes(): Promise<void> {
         factory.createComputedPropertyName(factory.createIdentifier('typeId')),
         undefined,
         undefined,
-        factory.createPropertyAccessExpression(
-          factory.createIdentifier('NodeIds'),
-          factory.createIdentifier(`${name}_Encoding_DefaultBinary`)
+        factory.createAsExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('NodeIds'),
+            factory.createIdentifier(`${name}_Encoding_DefaultBinary`)
+          ),
+          factory.createTypeReferenceNode(
+            factory.createIdentifier("const"),
+            undefined
+          )
         )
       );
     }

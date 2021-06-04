@@ -1,7 +1,8 @@
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode } from '../symbols';
+import { decode, encode, typeId } from '../symbols';
 import { UaError } from '../UaError';
 import { isUInt32 } from '../util';
+import { NodeIds } from './NodeIds';
 import { UInt32 } from './Primitives';
 
 export enum StatusCodeSeverity {
@@ -50,16 +51,28 @@ export class StatusCode implements StatusCodeOptions {
   isGood(): boolean {
     return this.severity === StatusCodeSeverity.Good;
   }
-  
+
   isUncertain(): boolean {
     return this.severity === StatusCodeSeverity.Uncertain;
   }
-  
+
   isBad(): boolean {
     return this.severity === StatusCodeSeverity.Bad;
   }
 
-  equals(other: StatusCode): boolean {
+  isNotGood(): boolean {
+    return this.severity !== StatusCodeSeverity.Good;
+  }
+
+  isNotUncertain(): boolean {
+    return this.severity !== StatusCodeSeverity.Uncertain;
+  }
+
+  isNotBad(): boolean {
+    return this.severity !== StatusCodeSeverity.Bad;
+  }
+
+  is(other: StatusCode): boolean {
     return this.code === other.code;
   }
 
@@ -88,6 +101,8 @@ export class StatusCode implements StatusCodeOptions {
     }
     return new StatusCode({code});
   }
+
+  static [typeId] = NodeIds.StatusCode as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     encoder.writeUInt32(this.code);

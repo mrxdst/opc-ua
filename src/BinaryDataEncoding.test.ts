@@ -2,27 +2,48 @@ import { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding';
 import { Guid } from './DataTypes/Guid';
 
 test('Encode/Decode', () => {
-  
+  const encoder = new BinaryDataEncoder();
+  encoder.writeBoolean(true);
+  encoder.writeBoolean(false);
+  encoder.writeSByte(-127);
+  encoder.writeByte(255);
+  encoder.writeInt16(-1 * 2 ** 15);
+  encoder.writeUInt16(2 ** 16 - 1);
+  encoder.writeInt32(-1 * 2 ** 31);
+  encoder.writeUInt32(2 ** 32 - 1);
+  encoder.writeInt64(BigInt(Number.MIN_SAFE_INTEGER));
+  encoder.writeUInt64(BigInt(Number.MAX_SAFE_INTEGER));
+  encoder.writeFloat(10);
+  encoder.writeDouble(Number.MAX_VALUE);
+  encoder.writeByteString(new Uint8Array([0, 127, 255]));
+  encoder.writeString(undefined);
+  encoder.writeString('Test');
+  encoder.writeDateTime(new Date('2020-01-01T00:00:00Z'));
+  encoder.writeDateTime(new Date('0000-01-01T00:00:00Z'));
+  encoder.writeXmlElement('<test/>');
+  encoder.writeType(Guid.parse('72962B91-FA75-4AE6-8D28-B404DC7DAF63'));
 
-  expect(BinaryDataDecoder.decodeBoolean(BinaryDataEncoder.encodeBoolean(true))).toBe(true);
-  expect(BinaryDataDecoder.decodeBoolean(BinaryDataEncoder.encodeBoolean(false))).toBe(false);
-  expect(BinaryDataDecoder.decodeSByte(BinaryDataEncoder.encodeSByte(-127))).toBe(-127);
-  expect(BinaryDataDecoder.decodeByte(BinaryDataEncoder.encodeByte(255))).toBe(255);
-  expect(BinaryDataDecoder.decodeInt16(BinaryDataEncoder.encodeInt16(-1*2**15))).toBe(-1*2**15);
-  expect(BinaryDataDecoder.decodeUInt16(BinaryDataEncoder.encodeUInt16(2**16-1))).toBe(2**16-1);
-  expect(BinaryDataDecoder.decodeInt32(BinaryDataEncoder.encodeInt32(-1*2**31))).toBe(-1*2**31);
-  expect(BinaryDataDecoder.decodeUInt32(BinaryDataEncoder.encodeUInt32(2**32-1))).toBe(2**32-1);
-  expect(BinaryDataDecoder.decodeInt64(BinaryDataEncoder.encodeInt64(BigInt(Number.MIN_SAFE_INTEGER)))).toBe(BigInt(Number.MIN_SAFE_INTEGER));
-  expect(BinaryDataDecoder.decodeUInt64(BinaryDataEncoder.encodeUInt64(BigInt(Number.MAX_SAFE_INTEGER)))).toBe(BigInt(Number.MAX_SAFE_INTEGER));
-  expect(BinaryDataDecoder.decodeFloat(BinaryDataEncoder.encodeFloat(10))).toBe(10);
-  expect(BinaryDataDecoder.decodeDouble(BinaryDataEncoder.encodeDouble(Number.MAX_VALUE))).toBe(Number.MAX_VALUE);
-  expect(BinaryDataDecoder.decodeByteString(BinaryDataEncoder.encodeByteString(new Uint8Array([0, 127, 255])))).toStrictEqual(new Uint8Array([0, 127, 255]));
-  expect(BinaryDataDecoder.decodeString(BinaryDataEncoder.encodeString(undefined))).toBe(undefined);
-  expect(BinaryDataDecoder.decodeString(BinaryDataEncoder.encodeString('Test'))).toBe('Test');
-  expect(BinaryDataDecoder.decodeDateTime(BinaryDataEncoder.encodeDateTime(new Date('2020-01-01T00:00:00Z')))).toStrictEqual(new Date('2020-01-01T00:00:00Z'));
-  expect(BinaryDataDecoder.decodeDateTime(BinaryDataEncoder.encodeDateTime(new Date('0000-01-01T00:00:00Z')))).toStrictEqual(new Date('1601-01-01T00:00:00Z'));
-  expect(BinaryDataDecoder.decodeXmlElement(BinaryDataEncoder.encodeXmlElement('<test/>'))).toBe('<test/>');
-  expect(BinaryDataDecoder.decodeType(BinaryDataEncoder.encodeType(Guid.parse('72962B91-FA75-4AE6-8D28-B404DC7DAF63')), Guid).toString()).toBe('72962B91-FA75-4AE6-8D28-B404DC7DAF63');
+  const decoder = new BinaryDataDecoder(encoder.finish());
+
+  expect(decoder.readBoolean()).toBe(true);
+  expect(decoder.readBoolean()).toBe(false);
+  expect(decoder.readSByte()).toBe(-127);
+  expect(decoder.readByte()).toBe(255);
+  expect(decoder.readInt16()).toBe(-1*2**15);
+  expect(decoder.readUInt16()).toBe(2**16-1);
+  expect(decoder.readInt32()).toBe(-1*2**31);
+  expect(decoder.readUInt32()).toBe(2**32-1);
+  expect(decoder.readInt64()).toBe(BigInt(Number.MIN_SAFE_INTEGER));
+  expect(decoder.readUInt64()).toBe(BigInt(Number.MAX_SAFE_INTEGER));
+  expect(decoder.readFloat()).toBe(10);
+  expect(decoder.readDouble()).toBe(Number.MAX_VALUE);
+  expect(decoder.readByteString()).toStrictEqual(new Uint8Array([0, 127, 255]));
+  expect(decoder.readString()).toBe(undefined);
+  expect(decoder.readString()).toBe('Test');
+  expect(decoder.readDateTime()).toStrictEqual(new Date('2020-01-01T00:00:00Z'));
+  expect(decoder.readDateTime()).toStrictEqual(new Date('1601-01-01T00:00:00Z'));
+  expect(decoder.readXmlElement()).toBe('<test/>');
+  expect(decoder.readType(Guid).toString()).toBe('72962B91-FA75-4AE6-8D28-B404DC7DAF63');
 });
 
 test('Integer encoding', () => {

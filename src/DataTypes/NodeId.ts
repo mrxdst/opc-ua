@@ -2,10 +2,11 @@ import { Guid } from './Guid';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
 import { Byte, ByteString, UaString, UInt16, UInt32 } from './Primitives';
 import { NodeIdType } from './Generated';
-import { decode, encode, namespaceUriFlag, serverIndexFlag } from '../symbols';
-import { isByte, isUInt16, isUInt32 } from '../util';
+import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols';
+import { isByte, isByteString, isUaString, isUInt16, isUInt32 } from '../util';
 import { UaError } from '../UaError';
 import { StatusCode } from './StatusCode';
+import { NodeIds } from './NodeIds';
 
 const namespaceUriFlagMask = 0x80;
 const serverIndexFlagMask = 0x40;
@@ -161,13 +162,13 @@ export class NodeId<
   toString(): string {
     switch (this.identifierType) {
       case NodeIdType.TwoByte: {
-        if (typeof this.value !== 'number' || !isByte(this.value)) {
+        if (!isByte(this.value)) {
           return 'Invalid NodeId';
         }
         return `i=${this.value}`;
       }
       case NodeIdType.FourByte: {
-        if (typeof this.value !== 'number' || !isUInt16(this.value) || !isByte(this.namespace)) {
+        if (!isUInt16(this.value) || !isByte(this.namespace)) {
           return 'Invalid NodeId';
         }
         if (!this.namespace) {
@@ -176,7 +177,7 @@ export class NodeId<
         return `ns=${this.namespace};i=${this.value}`;
       }
       case NodeIdType.Numeric: {
-        if (typeof this.value !== 'number' || !isUInt32(this.value) || !isUInt16(this.namespace)) {
+        if (!isUInt32(this.value) || !isUInt16(this.namespace)) {
           return 'Invalid NodeId';
         }
         if (!this.namespace) {
@@ -185,10 +186,10 @@ export class NodeId<
         return `ns=${this.namespace};i=${this.value}`;
       }
       case NodeIdType.String: {
-        if ((typeof this.value !== 'string' && this.value !== undefined) || !isUInt16(this.namespace)) {
+        if (!isUaString(this.value) || !isUInt16(this.namespace)) {
           return 'Invalid NodeId';
         }
-        const text = (this.value ?? '') as string;
+        const text = (this.value ?? '');
         if (text.length > 4096) {
           return 'Invalid NodeId';
         }
@@ -241,6 +242,8 @@ export class NodeId<
     }
   }
 
+  static [typeId] = NodeIds.NodeId as const;
+
   [encode](encoder: BinaryDataEncoder): void {
     let identifierType: Byte = this.identifierType;
     if (this[namespaceUriFlag]) {
@@ -272,16 +275,16 @@ export class NodeId<
           throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
         }
         encoder.writeUInt16(this.namespace);
-        encoder.writeUInt32(this.value as number);
+        encoder.writeUInt32(this.value);
         break;
       }
       case NodeIdType.String: {
-        if (typeof this.value !== 'string' && this.value !== undefined) {
+        if (!isUaString(this.value)) {
           throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
         }
-        const value = this.value as UaString;
+        let value = this.value as UaString;
         if ((value?.length ?? 0) > 4096) {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: 'String identifier too long'});
+          value = value?.substring(0, 4096);
         }
         encoder.writeUInt16(this.namespace);
         encoder.writeString(value);
@@ -292,16 +295,16 @@ export class NodeId<
           throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
         }
         encoder.writeUInt16(this.namespace);
-        encoder.writeType(this.value as Guid);
+        encoder.writeType(this.value);
         break;
       }
       case NodeIdType.ByteString: {
-        if (!(this.value instanceof Uint8Array) && this.value !== undefined) {
+        if (!isByteString(this.value)) {
           throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
         }
-        const value = this.value as ByteString;
+        let value = this.value as ByteString;
         if ((value?.byteLength ?? 0) > 4096) {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: 'ByteString identifier too long'});
+          value = value?.slice(0, 4096);
         }
         encoder.writeUInt16(this.namespace);
         encoder.writeByteString(value);

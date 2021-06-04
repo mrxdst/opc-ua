@@ -1,7 +1,7 @@
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode } from '../symbols';
-import { UaError } from '../UaError';
+import { decode, encode, typeId } from '../symbols';
 import { clampInteger } from '../util';
+import { NodeIds } from './NodeIds';
 import { UInt16 } from './Primitives';
 import { StatusCode } from './StatusCode';
 import { Variant } from './Variant';
@@ -94,6 +94,8 @@ export class DataValue implements DataValueOptions {
     this.serverPicoSeconds === undefined;
   }
 
+  static [typeId] = NodeIds.DataValue as const;
+
   [encode](encoder: BinaryDataEncoder): void {
     let encodingMask = 0;
     if (this.value !== undefined) {
@@ -108,10 +110,10 @@ export class DataValue implements DataValueOptions {
     if (this.serverTimestamp !== undefined) {
       encodingMask |= serverTimestampMask;
     }
-    if (this.sourcePicoSeconds) {
+    if (this.sourceTimestamp !== undefined && this.sourcePicoSeconds !== undefined) {
       encodingMask |= sourcePicoSecondsMask;
     }
-    if (this.serverPicoSeconds) {
+    if (this.serverTimestamp !== undefined && this.serverPicoSeconds !== undefined) {
       encodingMask |= serverPicoSecondsMask;
     }
 
@@ -129,17 +131,11 @@ export class DataValue implements DataValueOptions {
     if (this.serverTimestamp !== undefined) {
       encoder.writeDateTime(this.serverTimestamp);
     }
-    if (this.sourcePicoSeconds) {
-      if (this.sourcePicoSeconds !== clampInteger(this.sourcePicoSeconds, 0, 9999)) {
-        throw new UaError({code: StatusCode.BadOutOfRange, reason: 'Invalid SourcePicoSeconds value'});
-      }
-      encoder.writeUInt16(this.sourcePicoSeconds);
+    if (this.sourceTimestamp !== undefined &&  this.sourcePicoSeconds !== undefined) {
+      encoder.writeUInt16(clampInteger(this.sourcePicoSeconds, 0, 9999));
     }
-    if (this.serverPicoSeconds) {
-      if (this.serverPicoSeconds !== clampInteger(this.serverPicoSeconds, 0, 9999)) {
-        throw new UaError({code: StatusCode.BadOutOfRange, reason: 'Invalid ServerPicoSeconds value'});
-      }
-      encoder.writeUInt16(this.serverPicoSeconds);
+    if (this.serverTimestamp !== undefined && this.serverPicoSeconds !== undefined) {
+      encoder.writeUInt16(clampInteger(this.serverPicoSeconds, 0, 9999));
     }
   }
 

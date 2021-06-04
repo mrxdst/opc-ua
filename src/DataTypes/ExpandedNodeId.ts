@@ -1,10 +1,11 @@
 import { NodeId } from './NodeId';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
 import { UaString, UInt32 } from './Primitives';
-import { decode, encode, namespaceUriFlag, serverIndexFlag } from '../symbols';
+import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols';
 import { isUInt32 } from '../util';
 import { UaError } from '../UaError';
 import { StatusCode } from './StatusCode';
+import { NodeIds } from './NodeIds';
 
 export interface ExpandedNodeIdOptions {
   nodeId?: NodeId;
@@ -111,6 +112,8 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
       serverIndex
     });
   }
+
+  static [typeId] = NodeIds.ExpandedNodeId as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     const nodeId = new NodeId(this.nodeId);

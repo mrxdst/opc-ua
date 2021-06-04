@@ -5,10 +5,9 @@ import { decode, encode } from '../symbols';
 import { UaError } from '../UaError';
 import { StatusCode } from './StatusCode';
 import { NodeIds } from './NodeIds';
-import { DecodableType, EncodableType } from '../types';
-import { ServiceFault } from './ServiceFault';
-import * as GeneratedTypes from './Generated';
+import { EncodableType } from '../types';
 import { typeId } from '../symbols';
+import { getTypeFromTypeId } from '../util';
 
 enum Encoding {
   NoBody = 0x00,
@@ -55,6 +54,8 @@ export class ExtensionObject implements ExtensionObjectOptions {
   isNull(): boolean {
     return this.typeId.isNull();
   }
+
+  static [typeId] = NodeIds.Structure as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     if (this.body === undefined) {
@@ -121,23 +122,9 @@ function decodeBody(typeId: NodeId, body: Uint8Array): EncodableType {
     throw new UaError({code: StatusCode.BadDecodingError});
   }
 
-  let name = NodeIds[typeId.value];
-  if (!name || !name.endsWith('_Encoding_DefaultBinary')) {
-    throw new UaError({code: StatusCode.BadDecodingError});
-  }
-
-  name = name.replace(/_Encoding_DefaultBinary$/, '');
-
-  let decodable: DecodableType | undefined;
-  switch (name) {
-    case 'ServiceFault':
-      decodable = ServiceFault;
-      break;
-    default:
-      decodable = GeneratedTypes[name as keyof typeof GeneratedTypes] as DecodableType;
-  }
-
-  if (!decodable || !(decode in decodable)) {
+  const decodable = getTypeFromTypeId(typeId.value);
+  
+  if (!decodable) {
     throw new UaError({code: StatusCode.BadDecodingError});
   }
 

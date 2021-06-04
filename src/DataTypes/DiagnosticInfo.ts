@@ -1,6 +1,7 @@
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode } from '../symbols';
+import { decode, encode, typeId } from '../symbols';
 import { isUInt32 } from '../util';
+import { NodeIds } from './NodeIds';
 import { Int32, UaString } from './Primitives';
 import { StatusCode } from './StatusCode';
 
@@ -110,6 +111,8 @@ export class DiagnosticInfo implements DiagnosticInfoOptions {
     this.innerStatusCode === undefined &&
     this.innerDiagnosticInfo === undefined;
   }
+
+  static [typeId] = NodeIds.DiagnosticInfo as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     let mask = 0x00;

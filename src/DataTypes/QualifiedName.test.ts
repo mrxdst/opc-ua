@@ -9,12 +9,13 @@ test('Encode/Decode', () => {
 
   encoder.writeType(new QualifiedName({namespaceIndex: 1, name: 'test'}));
   encoder.writeType(new QualifiedName({namespaceIndex: 1}));
-  expect(() => encoder.writeType(new QualifiedName({namespaceIndex:0, name: longName}))).toThrowError(UaError);
+  encoder.writeType(new QualifiedName({namespaceIndex: 0, name: longName}));
 
   const decoder = new BinaryDataDecoder(encoder.finish());
 
   expect(decoder.readType(QualifiedName).toString()).toBe('1:test');
   expect(decoder.readType(QualifiedName).toString()).toBe('1:');
+  expect(decoder.readType(QualifiedName).toString().length).toBe(512);
 });
 
 test('toString', () => {

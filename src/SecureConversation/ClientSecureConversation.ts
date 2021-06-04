@@ -19,13 +19,12 @@ import {
 import { UaError } from '../UaError';
 import { chunkBody } from './util';
 import { ExpandedNodeId } from '../DataTypes/ExpandedNodeId';
-import * as GeneratedTypes from '../DataTypes/Generated';
-import { decode, typeId } from '../symbols';
+import { typeId } from '../symbols';
 import { ClientConnectionProtocol } from '../TransportProtocol/ConnectionProtocol/ClientConnectionProtocol';
-import { DecodableType, OpenState, Request, Response } from '../types';
+import { OpenState, Request, Response } from '../types';
 import { IsFinal, Message, MessageType } from './Message';
 import { AbortMessageBody } from './AbortMessageBody';
-import { integerIdGenerator } from '../util';
+import { getTypeFromTypeId, integerIdGenerator } from '../util';
 import createDebug from 'debug';
 import { ServiceFault } from '../DataTypes/ServiceFault';
 import { StatusCode } from '../DataTypes/StatusCode';
@@ -300,28 +299,18 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
         throw new UaError({code: StatusCode.BadDecodingError});
       }
   
-      let name = NodeIds[typeId.nodeId.value];
-      if (!name || !name.endsWith('_Encoding_DefaultBinary')) {
-        throw new UaError({code: StatusCode.BadDecodingError, reason: 'Response uses wrong encoding'});
-      }
-      name = name.replace(/_Encoding_DefaultBinary$/, '');
+      const name = NodeIds[typeId.nodeId.value];
 
-      debug(`Received response: ${name}`);
-
-      let decodable: DecodableType | undefined;
-      switch (name) {
-        case 'ServiceFault':
-          decodable = ServiceFault;
-          break;
-        default:
-          if (typeId.nodeId.value !== NodeIds[`${name.replace(/Request$/, 'Response')}_Encoding_DefaultBinary` as keyof typeof NodeIds]) {
-            throw new UaError({code: StatusCode.BadDecodingError, reason: 'Invalid response for request'});
-          }
-          decodable = GeneratedTypes[name as keyof typeof GeneratedTypes] as DecodableType;
+      if (!name) {
+        throw new UaError({ code: StatusCode.BadDecodingError });
       }
-  
-      if (!decodable || !(decode in decodable)) {
-        throw new UaError({code: StatusCode.BadDecodingError});
+
+      debug(`Received response: ${name || typeId.nodeId.value}`);
+      
+      const decodable = getTypeFromTypeId(typeId.nodeId.value);
+      
+      if (!decodable) {
+        throw new UaError({ code: StatusCode.BadDecodingError });
       }
 
       const requestBody = bodyDecoder.readBytes(bodyDecoder.bytesLeft);

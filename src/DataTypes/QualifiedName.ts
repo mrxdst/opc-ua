@@ -1,7 +1,8 @@
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode } from '../symbols';
+import { decode, encode, typeId } from '../symbols';
 import { UaError } from '../UaError';
 import { isUInt16 } from '../util';
+import { NodeIds } from './NodeIds';
 import { UaString, UInt16 } from './Primitives';
 import { StatusCode } from './StatusCode';
 
@@ -59,12 +60,15 @@ export class QualifiedName implements QualifiedName {
     });
   }
 
+  static [typeId] = NodeIds.QualifiedName as const;
+
   [encode](encoder: BinaryDataEncoder): void {
     encoder.writeUInt16(this.namespaceIndex);
-    if (this.name && this.name.length > 512) {
-      throw new UaError({code: StatusCode.BadOutOfRange, reason: 'Name too long'});
+    let name = this.name;
+    if (name && name.length > 512) {
+      name = name.substring(0, 512);
     }
-    encoder.writeString(this.name);
+    encoder.writeString(name);
   }
 
   static [decode](decoder: BinaryDataDecoder): QualifiedName {

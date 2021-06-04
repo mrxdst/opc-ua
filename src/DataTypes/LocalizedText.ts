@@ -1,5 +1,6 @@
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode } from '../symbols';
+import { decode, encode, typeId } from '../symbols';
+import { NodeIds } from './NodeIds';
 import { UaString } from './Primitives';
 
 const localeMask = 0x01;
@@ -40,6 +41,8 @@ export class LocalizedText implements LocalizedTextOptions {
   isNull(): boolean {
     return !this.locale && !this.text;
   }
+
+  static [typeId] = NodeIds.LocalizedText as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     let mask = 0x00;

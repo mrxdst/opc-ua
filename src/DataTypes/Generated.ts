@@ -51,7 +51,7 @@ export class KeyValuePair implements KeyValuePairOptions {
         this.key = options?.key ?? new QualifiedName();
         this.value = options?.value ?? Variant.null();
     }
-    static [typeId] = NodeIds.KeyValuePair_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.KeyValuePair_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.key);
         encoder.writeType(this.value);
@@ -73,7 +73,7 @@ export class AdditionalParametersType implements AdditionalParametersTypeOptions
     constructor(options?: AdditionalParametersTypeOptions) {
         this.parameters = options?.parameters;
     }
-    static [typeId] = NodeIds.AdditionalParametersType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AdditionalParametersType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.parameters);
     }
@@ -95,7 +95,7 @@ export class EphemeralKeyType implements EphemeralKeyTypeOptions {
         this.publicKey = options?.publicKey;
         this.signature = options?.signature;
     }
-    static [typeId] = NodeIds.EphemeralKeyType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EphemeralKeyType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeByteString(this.publicKey);
         encoder.writeByteString(this.signature);
@@ -126,7 +126,7 @@ export class EndpointType implements EndpointTypeOptions {
         this.securityPolicyUri = options?.securityPolicyUri;
         this.transportProfileUri = options?.transportProfileUri;
     }
-    static [typeId] = NodeIds.EndpointType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EndpointType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.endpointUrl);
         encoder.writeUInt32(this.securityMode);
@@ -157,7 +157,7 @@ export class RationalNumber implements RationalNumberOptions {
         this.numerator = options?.numerator ?? 0;
         this.denominator = options?.denominator ?? 0;
     }
-    static [typeId] = NodeIds.RationalNumber_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RationalNumber_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt32(this.numerator);
         encoder.writeUInt32(this.denominator);
@@ -172,7 +172,7 @@ export class RationalNumber implements RationalNumberOptions {
     }
 }
 export class Vector {
-    static [typeId] = NodeIds.Vector_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Vector_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): Vector {
@@ -193,7 +193,7 @@ export class ThreeDVector implements ThreeDVectorOptions {
         this.y = options?.y ?? 0;
         this.z = options?.z ?? 0;
     }
-    static [typeId] = NodeIds.ThreeDVector_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ThreeDVector_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.x);
         encoder.writeDouble(this.y);
@@ -211,7 +211,7 @@ export class ThreeDVector implements ThreeDVectorOptions {
     }
 }
 export class CartesianCoordinates {
-    static [typeId] = NodeIds.CartesianCoordinates_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CartesianCoordinates_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): CartesianCoordinates {
@@ -232,7 +232,7 @@ export class ThreeDCartesianCoordinates implements ThreeDCartesianCoordinatesOpt
         this.y = options?.y ?? 0;
         this.z = options?.z ?? 0;
     }
-    static [typeId] = NodeIds.ThreeDCartesianCoordinates_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ThreeDCartesianCoordinates_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.x);
         encoder.writeDouble(this.y);
@@ -250,7 +250,7 @@ export class ThreeDCartesianCoordinates implements ThreeDCartesianCoordinatesOpt
     }
 }
 export class Orientation {
-    static [typeId] = NodeIds.Orientation_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Orientation_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): Orientation {
@@ -271,7 +271,7 @@ export class ThreeDOrientation implements ThreeDOrientationOptions {
         this.b = options?.b ?? 0;
         this.c = options?.c ?? 0;
     }
-    static [typeId] = NodeIds.ThreeDOrientation_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ThreeDOrientation_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.a);
         encoder.writeDouble(this.b);
@@ -289,7 +289,7 @@ export class ThreeDOrientation implements ThreeDOrientationOptions {
     }
 }
 export class Frame {
-    static [typeId] = NodeIds.Frame_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Frame_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): Frame {
@@ -307,7 +307,7 @@ export class ThreeDFrame implements ThreeDFrameOptions {
         this.cartesianCoordinates = options?.cartesianCoordinates ?? new ThreeDCartesianCoordinates();
         this.orientation = options?.orientation ?? new ThreeDOrientation();
     }
-    static [typeId] = NodeIds.ThreeDFrame_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ThreeDFrame_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.cartesianCoordinates);
         encoder.writeType(this.orientation);
@@ -346,7 +346,7 @@ export class IdentityMappingRuleType implements IdentityMappingRuleTypeOptions {
         this.criteriaType = options?.criteriaType ?? IdentityCriteriaType.UserName;
         this.criteria = options?.criteria;
     }
-    static [typeId] = NodeIds.IdentityMappingRuleType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.IdentityMappingRuleType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.criteriaType);
         encoder.writeString(this.criteria);
@@ -377,7 +377,7 @@ export class CurrencyUnitType implements CurrencyUnitTypeOptions {
         this.alphabeticCode = options?.alphabeticCode;
         this.currency = options?.currency ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.CurrencyUnitType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CurrencyUnitType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt16(this.numericCode);
         encoder.writeSByte(this.exponent);
@@ -425,7 +425,7 @@ export class TrustListDataType implements TrustListDataTypeOptions {
         this.issuerCertificates = options?.issuerCertificates;
         this.issuerCrls = options?.issuerCrls;
     }
-    static [typeId] = NodeIds.TrustListDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TrustListDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedLists);
         encoder.writeByteStringArray(this.trustedCertificates);
@@ -459,7 +459,7 @@ export class DecimalDataType implements DecimalDataTypeOptions {
         this.scale = options?.scale ?? 0;
         this.value = options?.value;
     }
-    static [typeId] = NodeIds.DecimalDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DecimalDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt16(this.scale);
         encoder.writeByteString(this.value);
@@ -490,7 +490,7 @@ export class DataTypeSchemaHeader implements DataTypeSchemaHeaderOptions {
         this.enumDataTypes = options?.enumDataTypes;
         this.simpleDataTypes = options?.simpleDataTypes;
     }
-    static [typeId] = NodeIds.DataTypeSchemaHeader_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataTypeSchemaHeader_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeStringArray(this.namespaces);
         encoder.writeTypeArray(this.structureDataTypes);
@@ -521,7 +521,7 @@ export class DataTypeDescription implements DataTypeDescriptionOptions {
         this.dataTypeId = options?.dataTypeId ?? NodeId.null();
         this.name = options?.name ?? new QualifiedName();
     }
-    static [typeId] = NodeIds.DataTypeDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataTypeDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.dataTypeId);
         encoder.writeType(this.name);
@@ -549,7 +549,7 @@ export class StructureDescription implements StructureDescriptionOptions {
         this.name = options?.name ?? new QualifiedName();
         this.structureDefinition = options?.structureDefinition ?? new StructureDefinition();
     }
-    static [typeId] = NodeIds.StructureDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.StructureDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.dataTypeId);
         encoder.writeType(this.name);
@@ -583,7 +583,7 @@ export class EnumDescription implements EnumDescriptionOptions {
         this.enumDefinition = options?.enumDefinition ?? new EnumDefinition();
         this.builtInType = options?.builtInType ?? 0;
     }
-    static [typeId] = NodeIds.EnumDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EnumDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.dataTypeId);
         encoder.writeType(this.name);
@@ -620,7 +620,7 @@ export class SimpleTypeDescription implements SimpleTypeDescriptionOptions {
         this.baseDataType = options?.baseDataType ?? NodeId.null();
         this.builtInType = options?.builtInType ?? 0;
     }
-    static [typeId] = NodeIds.SimpleTypeDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SimpleTypeDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.dataTypeId);
         encoder.writeType(this.name);
@@ -666,7 +666,7 @@ export class UABinaryFileDataType implements UABinaryFileDataTypeOptions {
         this.fileHeader = options?.fileHeader;
         this.body = options?.body ?? Variant.null();
     }
-    static [typeId] = NodeIds.UABinaryFileDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UABinaryFileDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeStringArray(this.namespaces);
         encoder.writeTypeArray(this.structureDataTypes);
@@ -733,7 +733,7 @@ export class DataSetMetaDataType implements DataSetMetaDataTypeOptions {
         this.dataSetClassId = options?.dataSetClassId ?? new Guid();
         this.configurationVersion = options?.configurationVersion ?? new ConfigurationVersionDataType();
     }
-    static [typeId] = NodeIds.DataSetMetaDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetMetaDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeStringArray(this.namespaces);
         encoder.writeTypeArray(this.structureDataTypes);
@@ -803,7 +803,7 @@ export class FieldMetaData implements FieldMetaDataOptions {
         this.dataSetFieldId = options?.dataSetFieldId ?? new Guid();
         this.properties = options?.properties;
     }
-    static [typeId] = NodeIds.FieldMetaData_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FieldMetaData_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeType(this.description);
@@ -856,7 +856,7 @@ export class ConfigurationVersionDataType implements ConfigurationVersionDataTyp
         this.majorVersion = options?.majorVersion ?? 0;
         this.minorVersion = options?.minorVersion ?? 0;
     }
-    static [typeId] = NodeIds.ConfigurationVersionDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ConfigurationVersionDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.majorVersion);
         encoder.writeUInt32(this.minorVersion);
@@ -890,7 +890,7 @@ export class PublishedDataSetDataType implements PublishedDataSetDataTypeOptions
         this.extensionFields = options?.extensionFields;
         this.dataSetSource = options?.dataSetSource ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.PublishedDataSetDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishedDataSetDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeStringArray(this.dataSetFolder);
@@ -914,7 +914,7 @@ export class PublishedDataSetDataType implements PublishedDataSetDataTypeOptions
     }
 }
 export class PublishedDataSetSourceDataType {
-    static [typeId] = NodeIds.PublishedDataSetSourceDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishedDataSetSourceDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): PublishedDataSetSourceDataType {
@@ -950,7 +950,7 @@ export class PublishedVariableDataType implements PublishedVariableDataTypeOptio
         this.substituteValue = options?.substituteValue ?? Variant.null();
         this.metaDataProperties = options?.metaDataProperties;
     }
-    static [typeId] = NodeIds.PublishedVariableDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishedVariableDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.publishedVariable);
         encoder.writeUInt32(this.attributeId);
@@ -990,7 +990,7 @@ export class PublishedDataItemsDataType implements PublishedDataItemsDataTypeOpt
     constructor(options?: PublishedDataItemsDataTypeOptions) {
         this.publishedData = options?.publishedData;
     }
-    static [typeId] = NodeIds.PublishedDataItemsDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishedDataItemsDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.publishedData);
     }
@@ -1015,7 +1015,7 @@ export class PublishedEventsDataType implements PublishedEventsDataTypeOptions {
         this.selectedFields = options?.selectedFields;
         this.filter = options?.filter ?? new ContentFilter();
     }
-    static [typeId] = NodeIds.PublishedEventsDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishedEventsDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.eventNotifier);
         encoder.writeTypeArray(this.selectedFields);
@@ -1073,7 +1073,7 @@ export class DataSetWriterDataType implements DataSetWriterDataTypeOptions {
         this.transportSettings = options?.transportSettings ?? new ExtensionObject();
         this.messageSettings = options?.messageSettings ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.DataSetWriterDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetWriterDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeBoolean(this.enabled);
@@ -1109,7 +1109,7 @@ export class DataSetWriterDataType implements DataSetWriterDataTypeOptions {
     }
 }
 export class DataSetWriterTransportDataType {
-    static [typeId] = NodeIds.DataSetWriterTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetWriterTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): DataSetWriterTransportDataType {
@@ -1117,7 +1117,7 @@ export class DataSetWriterTransportDataType {
     }
 }
 export class DataSetWriterMessageDataType {
-    static [typeId] = NodeIds.DataSetWriterMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetWriterMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): DataSetWriterMessageDataType {
@@ -1150,7 +1150,7 @@ export class PubSubGroupDataType implements PubSubGroupDataTypeOptions {
         this.maxNetworkMessageSize = options?.maxNetworkMessageSize ?? 0;
         this.groupProperties = options?.groupProperties;
     }
-    static [typeId] = NodeIds.PubSubGroupDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PubSubGroupDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeBoolean(this.enabled);
@@ -1232,7 +1232,7 @@ export class WriterGroupDataType implements WriterGroupDataTypeOptions {
         this.messageSettings = options?.messageSettings ?? new ExtensionObject();
         this.dataSetWriters = options?.dataSetWriters;
     }
-    static [typeId] = NodeIds.WriterGroupDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.WriterGroupDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeBoolean(this.enabled);
@@ -1289,7 +1289,7 @@ export class WriterGroupDataType implements WriterGroupDataTypeOptions {
     }
 }
 export class WriterGroupTransportDataType {
-    static [typeId] = NodeIds.WriterGroupTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.WriterGroupTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): WriterGroupTransportDataType {
@@ -1297,7 +1297,7 @@ export class WriterGroupTransportDataType {
     }
 }
 export class WriterGroupMessageDataType {
-    static [typeId] = NodeIds.WriterGroupMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.WriterGroupMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): WriterGroupMessageDataType {
@@ -1336,7 +1336,7 @@ export class PubSubConnectionDataType implements PubSubConnectionDataTypeOptions
         this.writerGroups = options?.writerGroups;
         this.readerGroups = options?.readerGroups;
     }
-    static [typeId] = NodeIds.PubSubConnectionDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PubSubConnectionDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeBoolean(this.enabled);
@@ -1372,7 +1372,7 @@ export class PubSubConnectionDataType implements PubSubConnectionDataTypeOptions
     }
 }
 export class ConnectionTransportDataType {
-    static [typeId] = NodeIds.ConnectionTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ConnectionTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): ConnectionTransportDataType {
@@ -1387,7 +1387,7 @@ export class NetworkAddressDataType implements NetworkAddressDataTypeOptions {
     constructor(options?: NetworkAddressDataTypeOptions) {
         this.networkInterface = options?.networkInterface;
     }
-    static [typeId] = NodeIds.NetworkAddressDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NetworkAddressDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.networkInterface);
     }
@@ -1409,7 +1409,7 @@ export class NetworkAddressUrlDataType implements NetworkAddressUrlDataTypeOptio
         this.networkInterface = options?.networkInterface;
         this.url = options?.url;
     }
-    static [typeId] = NodeIds.NetworkAddressUrlDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NetworkAddressUrlDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.networkInterface);
         encoder.writeString(this.url);
@@ -1458,7 +1458,7 @@ export class ReaderGroupDataType implements ReaderGroupDataTypeOptions {
         this.messageSettings = options?.messageSettings ?? new ExtensionObject();
         this.dataSetReaders = options?.dataSetReaders;
     }
-    static [typeId] = NodeIds.ReaderGroupDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReaderGroupDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeBoolean(this.enabled);
@@ -1497,7 +1497,7 @@ export class ReaderGroupDataType implements ReaderGroupDataTypeOptions {
     }
 }
 export class ReaderGroupTransportDataType {
-    static [typeId] = NodeIds.ReaderGroupTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReaderGroupTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): ReaderGroupTransportDataType {
@@ -1505,7 +1505,7 @@ export class ReaderGroupTransportDataType {
     }
 }
 export class ReaderGroupMessageDataType {
-    static [typeId] = NodeIds.ReaderGroupMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReaderGroupMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): ReaderGroupMessageDataType {
@@ -1568,7 +1568,7 @@ export class DataSetReaderDataType implements DataSetReaderDataTypeOptions {
         this.messageSettings = options?.messageSettings ?? new ExtensionObject();
         this.subscribedDataSet = options?.subscribedDataSet ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.DataSetReaderDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetReaderDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeBoolean(this.enabled);
@@ -1628,7 +1628,7 @@ export class DataSetReaderDataType implements DataSetReaderDataTypeOptions {
     }
 }
 export class DataSetReaderTransportDataType {
-    static [typeId] = NodeIds.DataSetReaderTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetReaderTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): DataSetReaderTransportDataType {
@@ -1636,7 +1636,7 @@ export class DataSetReaderTransportDataType {
     }
 }
 export class DataSetReaderMessageDataType {
-    static [typeId] = NodeIds.DataSetReaderMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataSetReaderMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): DataSetReaderMessageDataType {
@@ -1644,7 +1644,7 @@ export class DataSetReaderMessageDataType {
     }
 }
 export class SubscribedDataSetDataType {
-    static [typeId] = NodeIds.SubscribedDataSetDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SubscribedDataSetDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): SubscribedDataSetDataType {
@@ -1659,7 +1659,7 @@ export class TargetVariablesDataType implements TargetVariablesDataTypeOptions {
     constructor(options?: TargetVariablesDataTypeOptions) {
         this.targetVariables = options?.targetVariables;
     }
-    static [typeId] = NodeIds.TargetVariablesDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TargetVariablesDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.targetVariables);
     }
@@ -1696,7 +1696,7 @@ export class FieldTargetDataType implements FieldTargetDataTypeOptions {
         this.overrideValueHandling = options?.overrideValueHandling ?? OverrideValueHandling.Disabled;
         this.overrideValue = options?.overrideValue ?? Variant.null();
     }
-    static [typeId] = NodeIds.FieldTargetDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FieldTargetDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.dataSetFieldId);
         encoder.writeString(this.receiverIndexRange);
@@ -1741,7 +1741,7 @@ export class SubscribedDataSetMirrorDataType implements SubscribedDataSetMirrorD
         this.parentNodeName = options?.parentNodeName;
         this.rolePermissions = options?.rolePermissions;
     }
-    static [typeId] = NodeIds.SubscribedDataSetMirrorDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SubscribedDataSetMirrorDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.parentNodeName);
         encoder.writeTypeArray(this.rolePermissions);
@@ -1769,7 +1769,7 @@ export class PubSubConfigurationDataType implements PubSubConfigurationDataTypeO
         this.connections = options?.connections;
         this.enabled = options?.enabled ?? false;
     }
-    static [typeId] = NodeIds.PubSubConfigurationDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PubSubConfigurationDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.publishedDataSets);
         encoder.writeTypeArray(this.connections);
@@ -1825,7 +1825,7 @@ export class UadpWriterGroupMessageDataType implements UadpWriterGroupMessageDat
         this.samplingOffset = options?.samplingOffset ?? 0;
         this.publishingOffset = options?.publishingOffset;
     }
-    static [typeId] = NodeIds.UadpWriterGroupMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UadpWriterGroupMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.groupVersion);
         encoder.writeUInt32(this.dataSetOrdering);
@@ -1874,7 +1874,7 @@ export class UadpDataSetWriterMessageDataType implements UadpDataSetWriterMessag
         this.networkMessageNumber = options?.networkMessageNumber ?? 0;
         this.dataSetOffset = options?.dataSetOffset ?? 0;
     }
-    static [typeId] = NodeIds.UadpDataSetWriterMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UadpDataSetWriterMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.dataSetMessageContentMask);
         encoder.writeUInt16(this.configuredSize);
@@ -1926,7 +1926,7 @@ export class UadpDataSetReaderMessageDataType implements UadpDataSetReaderMessag
         this.receiveOffset = options?.receiveOffset ?? 0;
         this.processingOffset = options?.processingOffset ?? 0;
     }
-    static [typeId] = NodeIds.UadpDataSetReaderMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UadpDataSetReaderMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.groupVersion);
         encoder.writeUInt16(this.networkMessageNumber);
@@ -1978,7 +1978,7 @@ export class JsonWriterGroupMessageDataType implements JsonWriterGroupMessageDat
     constructor(options?: JsonWriterGroupMessageDataTypeOptions) {
         this.networkMessageContentMask = options?.networkMessageContentMask ?? JsonNetworkMessageContentMask.None;
     }
-    static [typeId] = NodeIds.JsonWriterGroupMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.JsonWriterGroupMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.networkMessageContentMask);
     }
@@ -2005,7 +2005,7 @@ export class JsonDataSetWriterMessageDataType implements JsonDataSetWriterMessag
     constructor(options?: JsonDataSetWriterMessageDataTypeOptions) {
         this.dataSetMessageContentMask = options?.dataSetMessageContentMask ?? JsonDataSetMessageContentMask.None;
     }
-    static [typeId] = NodeIds.JsonDataSetWriterMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.JsonDataSetWriterMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.dataSetMessageContentMask);
     }
@@ -2027,7 +2027,7 @@ export class JsonDataSetReaderMessageDataType implements JsonDataSetReaderMessag
         this.networkMessageContentMask = options?.networkMessageContentMask ?? JsonNetworkMessageContentMask.None;
         this.dataSetMessageContentMask = options?.dataSetMessageContentMask ?? JsonDataSetMessageContentMask.None;
     }
-    static [typeId] = NodeIds.JsonDataSetReaderMessageDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.JsonDataSetReaderMessageDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.networkMessageContentMask);
         encoder.writeUInt32(this.dataSetMessageContentMask);
@@ -2049,7 +2049,7 @@ export class DatagramConnectionTransportDataType implements DatagramConnectionTr
     constructor(options?: DatagramConnectionTransportDataTypeOptions) {
         this.discoveryAddress = options?.discoveryAddress ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.DatagramConnectionTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DatagramConnectionTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.discoveryAddress);
     }
@@ -2071,7 +2071,7 @@ export class DatagramWriterGroupTransportDataType implements DatagramWriterGroup
         this.messageRepeatCount = options?.messageRepeatCount ?? 0;
         this.messageRepeatDelay = options?.messageRepeatDelay ?? 0;
     }
-    static [typeId] = NodeIds.DatagramWriterGroupTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DatagramWriterGroupTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeByte(this.messageRepeatCount);
         encoder.writeDouble(this.messageRepeatDelay);
@@ -2096,7 +2096,7 @@ export class BrokerConnectionTransportDataType implements BrokerConnectionTransp
         this.resourceUri = options?.resourceUri;
         this.authenticationProfileUri = options?.authenticationProfileUri;
     }
-    static [typeId] = NodeIds.BrokerConnectionTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrokerConnectionTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.resourceUri);
         encoder.writeString(this.authenticationProfileUri);
@@ -2134,7 +2134,7 @@ export class BrokerWriterGroupTransportDataType implements BrokerWriterGroupTran
         this.authenticationProfileUri = options?.authenticationProfileUri;
         this.requestedDeliveryGuarantee = options?.requestedDeliveryGuarantee ?? BrokerTransportQualityOfService.NotSpecified;
     }
-    static [typeId] = NodeIds.BrokerWriterGroupTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrokerWriterGroupTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.queueName);
         encoder.writeString(this.resourceUri);
@@ -2177,7 +2177,7 @@ export class BrokerDataSetWriterTransportDataType implements BrokerDataSetWriter
         this.metaDataQueueName = options?.metaDataQueueName;
         this.metaDataUpdateTime = options?.metaDataUpdateTime ?? 0;
     }
-    static [typeId] = NodeIds.BrokerDataSetWriterTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrokerDataSetWriterTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.queueName);
         encoder.writeString(this.resourceUri);
@@ -2223,7 +2223,7 @@ export class BrokerDataSetReaderTransportDataType implements BrokerDataSetReader
         this.requestedDeliveryGuarantee = options?.requestedDeliveryGuarantee ?? BrokerTransportQualityOfService.NotSpecified;
         this.metaDataQueueName = options?.metaDataQueueName;
     }
-    static [typeId] = NodeIds.BrokerDataSetReaderTransportDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrokerDataSetReaderTransportDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.queueName);
         encoder.writeString(this.resourceUri);
@@ -2268,7 +2268,7 @@ export class AliasNameDataType implements AliasNameDataTypeOptions {
         this.aliasName = options?.aliasName ?? new QualifiedName();
         this.referencedNodes = options?.referencedNodes;
     }
-    static [typeId] = NodeIds.AliasNameDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AliasNameDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.aliasName);
         encoder.writeTypeArray(this.referencedNodes);
@@ -2367,7 +2367,7 @@ export class RolePermissionType implements RolePermissionTypeOptions {
         this.roleId = options?.roleId ?? NodeId.null();
         this.permissions = options?.permissions ?? PermissionType.None;
     }
-    static [typeId] = NodeIds.RolePermissionType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RolePermissionType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.roleId);
         encoder.writeUInt32(this.permissions);
@@ -2412,7 +2412,7 @@ export class StructureField implements StructureFieldOptions {
         this.maxStringLength = options?.maxStringLength ?? 0;
         this.isOptional = options?.isOptional ?? false;
     }
-    static [typeId] = NodeIds.StructureField_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.StructureField_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeType(this.description);
@@ -2458,7 +2458,7 @@ export class StructureDefinition implements StructureDefinitionOptions {
         this.structureType = options?.structureType ?? StructureType.Structure;
         this.fields = options?.fields;
     }
-    static [typeId] = NodeIds.StructureDefinition_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.StructureDefinition_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.defaultEncodingId);
         encoder.writeType(this.baseDataType);
@@ -2486,7 +2486,7 @@ export class EnumDefinition implements EnumDefinitionOptions {
     constructor(options?: EnumDefinitionOptions) {
         this.fields = options?.fields;
     }
-    static [typeId] = NodeIds.EnumDefinition_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EnumDefinition_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.fields);
     }
@@ -2535,7 +2535,7 @@ export class Node implements NodeOptions {
         this.accessRestrictions = options?.accessRestrictions ?? 0;
         this.references = options?.references;
     }
-    static [typeId] = NodeIds.Node_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Node_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -2614,7 +2614,7 @@ export class InstanceNode implements InstanceNodeOptions {
         this.accessRestrictions = options?.accessRestrictions ?? 0;
         this.references = options?.references;
     }
-    static [typeId] = NodeIds.InstanceNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.InstanceNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -2693,7 +2693,7 @@ export class TypeNode implements TypeNodeOptions {
         this.accessRestrictions = options?.accessRestrictions ?? 0;
         this.references = options?.references;
     }
-    static [typeId] = NodeIds.TypeNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TypeNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -2775,7 +2775,7 @@ export class ObjectNode implements ObjectNodeOptions {
         this.references = options?.references;
         this.eventNotifier = options?.eventNotifier ?? 0;
     }
-    static [typeId] = NodeIds.ObjectNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ObjectNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -2860,7 +2860,7 @@ export class ObjectTypeNode implements ObjectTypeNodeOptions {
         this.references = options?.references;
         this.isAbstract = options?.isAbstract ?? false;
     }
-    static [typeId] = NodeIds.ObjectTypeNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ObjectTypeNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -2969,7 +2969,7 @@ export class VariableNode implements VariableNodeOptions {
         this.historizing = options?.historizing ?? false;
         this.accessLevelEx = options?.accessLevelEx ?? 0;
     }
-    static [typeId] = NodeIds.VariableNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.VariableNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -3090,7 +3090,7 @@ export class VariableTypeNode implements VariableTypeNodeOptions {
         this.arrayDimensions = options?.arrayDimensions;
         this.isAbstract = options?.isAbstract ?? false;
     }
-    static [typeId] = NodeIds.VariableTypeNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.VariableTypeNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -3193,7 +3193,7 @@ export class ReferenceTypeNode implements ReferenceTypeNodeOptions {
         this.symmetric = options?.symmetric ?? false;
         this.inverseName = options?.inverseName ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.ReferenceTypeNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReferenceTypeNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -3287,7 +3287,7 @@ export class MethodNode implements MethodNodeOptions {
         this.executable = options?.executable ?? false;
         this.userExecutable = options?.userExecutable ?? false;
     }
-    static [typeId] = NodeIds.MethodNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MethodNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -3378,7 +3378,7 @@ export class ViewNode implements ViewNodeOptions {
         this.containsNoLoops = options?.containsNoLoops ?? false;
         this.eventNotifier = options?.eventNotifier ?? 0;
     }
-    static [typeId] = NodeIds.ViewNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ViewNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -3469,7 +3469,7 @@ export class DataTypeNode implements DataTypeNodeOptions {
         this.isAbstract = options?.isAbstract ?? false;
         this.dataTypeDefinition = options?.dataTypeDefinition ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.DataTypeNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataTypeNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.nodeClass);
@@ -3530,7 +3530,7 @@ export class ReferenceNode implements ReferenceNodeOptions {
         this.isInverse = options?.isInverse ?? false;
         this.targetId = options?.targetId ?? new ExpandedNodeId();
     }
-    static [typeId] = NodeIds.ReferenceNode_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReferenceNode_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.referenceTypeId);
         encoder.writeBoolean(this.isInverse);
@@ -3567,7 +3567,7 @@ export class Argument implements ArgumentOptions {
         this.arrayDimensions = options?.arrayDimensions;
         this.description = options?.description ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.Argument_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Argument_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.name);
         encoder.writeType(this.dataType);
@@ -3604,7 +3604,7 @@ export class EnumValueType implements EnumValueTypeOptions {
         this.displayName = options?.displayName ?? new LocalizedText();
         this.description = options?.description ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.EnumValueType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EnumValueType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt64(this.value);
         encoder.writeType(this.displayName);
@@ -3638,7 +3638,7 @@ export class EnumField implements EnumFieldOptions {
         this.description = options?.description ?? new LocalizedText();
         this.name = options?.name;
     }
-    static [typeId] = NodeIds.EnumField_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EnumField_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt64(this.value);
         encoder.writeType(this.displayName);
@@ -3669,7 +3669,7 @@ export class OptionSet implements OptionSetOptions {
         this.value = options?.value;
         this.validBits = options?.validBits;
     }
-    static [typeId] = NodeIds.OptionSet_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.OptionSet_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeByteString(this.value);
         encoder.writeByteString(this.validBits);
@@ -3684,7 +3684,7 @@ export class OptionSet implements OptionSetOptions {
     }
 }
 export class Union {
-    static [typeId] = NodeIds.Union_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Union_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): Union {
@@ -3702,7 +3702,7 @@ export class TimeZoneDataType implements TimeZoneDataTypeOptions {
         this.offset = options?.offset ?? 0;
         this.daylightSavingInOffset = options?.daylightSavingInOffset ?? false;
     }
-    static [typeId] = NodeIds.TimeZoneDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TimeZoneDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt16(this.offset);
         encoder.writeBoolean(this.daylightSavingInOffset);
@@ -3748,7 +3748,7 @@ export class ApplicationDescription implements ApplicationDescriptionOptions {
         this.discoveryProfileUri = options?.discoveryProfileUri;
         this.discoveryUrls = options?.discoveryUrls;
     }
-    static [typeId] = NodeIds.ApplicationDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ApplicationDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.applicationUri);
         encoder.writeString(this.productUri);
@@ -3803,7 +3803,7 @@ export class RequestHeader implements RequestHeaderOptions {
         this.timeoutHint = options?.timeoutHint ?? 0;
         this.additionalHeader = options?.additionalHeader ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.RequestHeader_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RequestHeader_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.authenticationToken);
         encoder.writeDateTime(this.timestamp);
@@ -3855,7 +3855,7 @@ export class ResponseHeader implements ResponseHeaderOptions {
         this.stringTable = options?.stringTable;
         this.additionalHeader = options?.additionalHeader ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.ResponseHeader_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ResponseHeader_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTime(this.timestamp);
         encoder.writeUInt32(this.requestHandle);
@@ -3901,7 +3901,7 @@ export class SessionlessInvokeRequestType implements SessionlessInvokeRequestTyp
         this.localeIds = options?.localeIds;
         this.serviceId = options?.serviceId ?? 0;
     }
-    static [typeId] = NodeIds.SessionlessInvokeRequestType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SessionlessInvokeRequestType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.urisVersion);
         encoder.writeStringArray(this.namespaceUris);
@@ -3938,7 +3938,7 @@ export class SessionlessInvokeResponseType implements SessionlessInvokeResponseT
         this.serverUris = options?.serverUris;
         this.serviceId = options?.serviceId ?? 0;
     }
-    static [typeId] = NodeIds.SessionlessInvokeResponseType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SessionlessInvokeResponseType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeStringArray(this.namespaceUris);
         encoder.writeStringArray(this.serverUris);
@@ -3972,7 +3972,7 @@ export class FindServersRequest implements FindServersRequestOptions {
         this.localeIds = options?.localeIds;
         this.serverUris = options?.serverUris;
     }
-    static [typeId] = NodeIds.FindServersRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FindServersRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeString(this.endpointUrl);
@@ -4003,7 +4003,7 @@ export class FindServersResponse implements FindServersResponseOptions {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.servers = options?.servers;
     }
-    static [typeId] = NodeIds.FindServersResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FindServersResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.servers);
@@ -4034,7 +4034,7 @@ export class ServerOnNetwork implements ServerOnNetworkOptions {
         this.discoveryUrl = options?.discoveryUrl;
         this.serverCapabilities = options?.serverCapabilities;
     }
-    static [typeId] = NodeIds.ServerOnNetwork_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ServerOnNetwork_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.recordId);
         encoder.writeString(this.serverName);
@@ -4071,7 +4071,7 @@ export class FindServersOnNetworkRequest implements FindServersOnNetworkRequestO
         this.maxRecordsToReturn = options?.maxRecordsToReturn ?? 0;
         this.serverCapabilityFilter = options?.serverCapabilityFilter;
     }
-    static [typeId] = NodeIds.FindServersOnNetworkRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FindServersOnNetworkRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.startingRecordId);
@@ -4105,7 +4105,7 @@ export class FindServersOnNetworkResponse implements FindServersOnNetworkRespons
         this.lastCounterResetTime = options?.lastCounterResetTime ?? new Date(-11644473600000);
         this.servers = options?.servers;
     }
-    static [typeId] = NodeIds.FindServersOnNetworkResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FindServersOnNetworkResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeDateTime(this.lastCounterResetTime);
@@ -4154,7 +4154,7 @@ export class UserTokenPolicy implements UserTokenPolicyOptions {
         this.issuerEndpointUrl = options?.issuerEndpointUrl;
         this.securityPolicyUri = options?.securityPolicyUri;
     }
-    static [typeId] = NodeIds.UserTokenPolicy_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UserTokenPolicy_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.policyId);
         encoder.writeUInt32(this.tokenType);
@@ -4206,7 +4206,7 @@ export class EndpointDescription implements EndpointDescriptionOptions {
         this.transportProfileUri = options?.transportProfileUri;
         this.securityLevel = options?.securityLevel ?? 0;
     }
-    static [typeId] = NodeIds.EndpointDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EndpointDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.endpointUrl);
         encoder.writeType(this.server);
@@ -4255,7 +4255,7 @@ export class GetEndpointsRequest implements GetEndpointsRequestOptions {
         this.localeIds = options?.localeIds;
         this.profileUris = options?.profileUris;
     }
-    static [typeId] = NodeIds.GetEndpointsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.GetEndpointsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeString(this.endpointUrl);
@@ -4286,7 +4286,7 @@ export class GetEndpointsResponse implements GetEndpointsResponseOptions {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.endpoints = options?.endpoints;
     }
-    static [typeId] = NodeIds.GetEndpointsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.GetEndpointsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.endpoints);
@@ -4329,7 +4329,7 @@ export class RegisteredServer implements RegisteredServerOptions {
         this.semaphoreFilePath = options?.semaphoreFilePath;
         this.isOnline = options?.isOnline ?? false;
     }
-    static [typeId] = NodeIds.RegisteredServer_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisteredServer_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.serverUri);
         encoder.writeString(this.productUri);
@@ -4372,7 +4372,7 @@ export class RegisterServerRequest implements RegisterServerRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.server = options?.server ?? new RegisteredServer();
     }
-    static [typeId] = NodeIds.RegisterServerRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisterServerRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.server);
@@ -4394,7 +4394,7 @@ export class RegisterServerResponse implements RegisterServerResponseOptions {
     constructor(options?: RegisterServerResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
-    static [typeId] = NodeIds.RegisterServerResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisterServerResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
     }
@@ -4406,7 +4406,7 @@ export class RegisterServerResponse implements RegisterServerResponseOptions {
     }
 }
 export class DiscoveryConfiguration {
-    static [typeId] = NodeIds.DiscoveryConfiguration_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DiscoveryConfiguration_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): DiscoveryConfiguration {
@@ -4424,7 +4424,7 @@ export class MdnsDiscoveryConfiguration implements MdnsDiscoveryConfigurationOpt
         this.mdnsServerName = options?.mdnsServerName;
         this.serverCapabilities = options?.serverCapabilities;
     }
-    static [typeId] = NodeIds.MdnsDiscoveryConfiguration_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MdnsDiscoveryConfiguration_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.mdnsServerName);
         encoder.writeStringArray(this.serverCapabilities);
@@ -4452,7 +4452,7 @@ export class RegisterServer2Request implements RegisterServer2RequestOptions {
         this.server = options?.server ?? new RegisteredServer();
         this.discoveryConfiguration = options?.discoveryConfiguration;
     }
-    static [typeId] = NodeIds.RegisterServer2Request_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisterServer2Request_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.server);
@@ -4483,7 +4483,7 @@ export class RegisterServer2Response implements RegisterServer2ResponseOptions {
         this.configurationResults = options?.configurationResults;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.RegisterServer2Response_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisterServer2Response_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.configurationResults);
@@ -4521,7 +4521,7 @@ export class ChannelSecurityToken implements ChannelSecurityTokenOptions {
         this.createdAt = options?.createdAt ?? new Date(-11644473600000);
         this.revisedLifetime = options?.revisedLifetime ?? 0;
     }
-    static [typeId] = NodeIds.ChannelSecurityToken_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ChannelSecurityToken_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.channelId);
         encoder.writeUInt32(this.tokenId);
@@ -4564,7 +4564,7 @@ export class OpenSecureChannelRequest implements OpenSecureChannelRequestOptions
         this.clientNonce = options?.clientNonce;
         this.requestedLifetime = options?.requestedLifetime ?? 0;
     }
-    static [typeId] = NodeIds.OpenSecureChannelRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.OpenSecureChannelRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.clientProtocolVersion);
@@ -4607,7 +4607,7 @@ export class OpenSecureChannelResponse implements OpenSecureChannelResponseOptio
         this.securityToken = options?.securityToken ?? new ChannelSecurityToken();
         this.serverNonce = options?.serverNonce;
     }
-    static [typeId] = NodeIds.OpenSecureChannelResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.OpenSecureChannelResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeUInt32(this.serverProtocolVersion);
@@ -4635,7 +4635,7 @@ export class CloseSecureChannelRequest implements CloseSecureChannelRequestOptio
     constructor(options?: CloseSecureChannelRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
     }
-    static [typeId] = NodeIds.CloseSecureChannelRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CloseSecureChannelRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
     }
@@ -4654,7 +4654,7 @@ export class CloseSecureChannelResponse implements CloseSecureChannelResponseOpt
     constructor(options?: CloseSecureChannelResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
-    static [typeId] = NodeIds.CloseSecureChannelResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CloseSecureChannelResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
     }
@@ -4676,7 +4676,7 @@ export class SignedSoftwareCertificate implements SignedSoftwareCertificateOptio
         this.certificateData = options?.certificateData;
         this.signature = options?.signature;
     }
-    static [typeId] = NodeIds.SignedSoftwareCertificate_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SignedSoftwareCertificate_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeByteString(this.certificateData);
         encoder.writeByteString(this.signature);
@@ -4701,7 +4701,7 @@ export class SignatureData implements SignatureDataOptions {
         this.algorithm = options?.algorithm;
         this.signature = options?.signature;
     }
-    static [typeId] = NodeIds.SignatureData_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SignatureData_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.algorithm);
         encoder.writeByteString(this.signature);
@@ -4747,7 +4747,7 @@ export class CreateSessionRequest implements CreateSessionRequestOptions {
         this.requestedSessionTimeout = options?.requestedSessionTimeout ?? 0;
         this.maxResponseMessageSize = options?.maxResponseMessageSize ?? 0;
     }
-    static [typeId] = NodeIds.CreateSessionRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CreateSessionRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.clientDescription);
@@ -4817,7 +4817,7 @@ export class CreateSessionResponse implements CreateSessionResponseOptions {
         this.serverSignature = options?.serverSignature ?? new SignatureData();
         this.maxRequestMessageSize = options?.maxRequestMessageSize ?? 0;
     }
-    static [typeId] = NodeIds.CreateSessionResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CreateSessionResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeType(this.sessionId);
@@ -4863,7 +4863,7 @@ export class UserIdentityToken implements UserIdentityTokenOptions {
     constructor(options?: UserIdentityTokenOptions) {
         this.policyId = options?.policyId;
     }
-    static [typeId] = NodeIds.UserIdentityToken_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UserIdentityToken_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.policyId);
     }
@@ -4882,7 +4882,7 @@ export class AnonymousIdentityToken implements AnonymousIdentityTokenOptions {
     constructor(options?: AnonymousIdentityTokenOptions) {
         this.policyId = options?.policyId;
     }
-    static [typeId] = NodeIds.AnonymousIdentityToken_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AnonymousIdentityToken_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.policyId);
     }
@@ -4910,7 +4910,7 @@ export class UserNameIdentityToken implements UserNameIdentityTokenOptions {
         this.password = options?.password;
         this.encryptionAlgorithm = options?.encryptionAlgorithm;
     }
-    static [typeId] = NodeIds.UserNameIdentityToken_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UserNameIdentityToken_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.policyId);
         encoder.writeString(this.userName);
@@ -4941,7 +4941,7 @@ export class X509IdentityToken implements X509IdentityTokenOptions {
         this.policyId = options?.policyId;
         this.certificateData = options?.certificateData;
     }
-    static [typeId] = NodeIds.X509IdentityToken_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.X509IdentityToken_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.policyId);
         encoder.writeByteString(this.certificateData);
@@ -4969,7 +4969,7 @@ export class IssuedIdentityToken implements IssuedIdentityTokenOptions {
         this.tokenData = options?.tokenData;
         this.encryptionAlgorithm = options?.encryptionAlgorithm;
     }
-    static [typeId] = NodeIds.IssuedIdentityToken_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.IssuedIdentityToken_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.policyId);
         encoder.writeByteString(this.tokenData);
@@ -5009,7 +5009,7 @@ export class ActivateSessionRequest implements ActivateSessionRequestOptions {
         this.userIdentityToken = options?.userIdentityToken ?? new ExtensionObject();
         this.userTokenSignature = options?.userTokenSignature ?? new SignatureData();
     }
-    static [typeId] = NodeIds.ActivateSessionRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ActivateSessionRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.clientSignature);
@@ -5052,7 +5052,7 @@ export class ActivateSessionResponse implements ActivateSessionResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.ActivateSessionResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ActivateSessionResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeByteString(this.serverNonce);
@@ -5083,7 +5083,7 @@ export class CloseSessionRequest implements CloseSessionRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.deleteSubscriptions = options?.deleteSubscriptions ?? false;
     }
-    static [typeId] = NodeIds.CloseSessionRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CloseSessionRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeBoolean(this.deleteSubscriptions);
@@ -5105,7 +5105,7 @@ export class CloseSessionResponse implements CloseSessionResponseOptions {
     constructor(options?: CloseSessionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
-    static [typeId] = NodeIds.CloseSessionResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CloseSessionResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
     }
@@ -5127,7 +5127,7 @@ export class CancelRequest implements CancelRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.requestHandle = options?.requestHandle ?? 0;
     }
-    static [typeId] = NodeIds.CancelRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CancelRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.requestHandle);
@@ -5152,7 +5152,7 @@ export class CancelResponse implements CancelResponseOptions {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.cancelCount = options?.cancelCount ?? 0;
     }
-    static [typeId] = NodeIds.CancelResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CancelResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeUInt32(this.cancelCount);
@@ -5223,7 +5223,7 @@ export class NodeAttributes implements NodeAttributesOptions {
         this.writeMask = options?.writeMask ?? 0;
         this.userWriteMask = options?.userWriteMask ?? 0;
     }
-    static [typeId] = NodeIds.NodeAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NodeAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5269,7 +5269,7 @@ export class ObjectAttributes implements ObjectAttributesOptions {
         this.userWriteMask = options?.userWriteMask ?? 0;
         this.eventNotifier = options?.eventNotifier ?? 0;
     }
-    static [typeId] = NodeIds.ObjectAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ObjectAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5339,7 +5339,7 @@ export class VariableAttributes implements VariableAttributesOptions {
         this.minimumSamplingInterval = options?.minimumSamplingInterval ?? 0;
         this.historizing = options?.historizing ?? false;
     }
-    static [typeId] = NodeIds.VariableAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.VariableAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5412,7 +5412,7 @@ export class MethodAttributes implements MethodAttributesOptions {
         this.executable = options?.executable ?? false;
         this.userExecutable = options?.userExecutable ?? false;
     }
-    static [typeId] = NodeIds.MethodAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MethodAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5464,7 +5464,7 @@ export class ObjectTypeAttributes implements ObjectTypeAttributesOptions {
         this.userWriteMask = options?.userWriteMask ?? 0;
         this.isAbstract = options?.isAbstract ?? false;
     }
-    static [typeId] = NodeIds.ObjectTypeAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ObjectTypeAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5525,7 +5525,7 @@ export class VariableTypeAttributes implements VariableTypeAttributesOptions {
         this.arrayDimensions = options?.arrayDimensions;
         this.isAbstract = options?.isAbstract ?? false;
     }
-    static [typeId] = NodeIds.VariableTypeAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.VariableTypeAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5592,7 +5592,7 @@ export class ReferenceTypeAttributes implements ReferenceTypeAttributesOptions {
         this.symmetric = options?.symmetric ?? false;
         this.inverseName = options?.inverseName ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.ReferenceTypeAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReferenceTypeAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5647,7 +5647,7 @@ export class DataTypeAttributes implements DataTypeAttributesOptions {
         this.userWriteMask = options?.userWriteMask ?? 0;
         this.isAbstract = options?.isAbstract ?? false;
     }
-    static [typeId] = NodeIds.DataTypeAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataTypeAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5699,7 +5699,7 @@ export class ViewAttributes implements ViewAttributesOptions {
         this.containsNoLoops = options?.containsNoLoops ?? false;
         this.eventNotifier = options?.eventNotifier ?? 0;
     }
-    static [typeId] = NodeIds.ViewAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ViewAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5739,7 +5739,7 @@ export class GenericAttributeValue implements GenericAttributeValueOptions {
         this.attributeId = options?.attributeId ?? 0;
         this.value = options?.value ?? Variant.null();
     }
-    static [typeId] = NodeIds.GenericAttributeValue_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.GenericAttributeValue_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.attributeId);
         encoder.writeType(this.value);
@@ -5776,7 +5776,7 @@ export class GenericAttributes implements GenericAttributesOptions {
         this.userWriteMask = options?.userWriteMask ?? 0;
         this.attributeValues = options?.attributeValues;
     }
-    static [typeId] = NodeIds.GenericAttributes_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.GenericAttributes_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.specifiedAttributes);
         encoder.writeType(this.displayName);
@@ -5828,7 +5828,7 @@ export class AddNodesItem implements AddNodesItemOptions {
         this.nodeAttributes = options?.nodeAttributes ?? new ExtensionObject();
         this.typeDefinition = options?.typeDefinition ?? new ExpandedNodeId();
     }
-    static [typeId] = NodeIds.AddNodesItem_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddNodesItem_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.parentNodeId);
         encoder.writeType(this.referenceTypeId);
@@ -5868,7 +5868,7 @@ export class AddNodesResult implements AddNodesResultOptions {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.addedNodeId = options?.addedNodeId ?? NodeId.null();
     }
-    static [typeId] = NodeIds.AddNodesResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddNodesResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeType(this.addedNodeId);
@@ -5893,7 +5893,7 @@ export class AddNodesRequest implements AddNodesRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToAdd = options?.nodesToAdd;
     }
-    static [typeId] = NodeIds.AddNodesRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddNodesRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.nodesToAdd);
@@ -5921,7 +5921,7 @@ export class AddNodesResponse implements AddNodesResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.AddNodesResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddNodesResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -5961,7 +5961,7 @@ export class AddReferencesItem implements AddReferencesItemOptions {
         this.targetNodeId = options?.targetNodeId ?? new ExpandedNodeId();
         this.targetNodeClass = options?.targetNodeClass ?? NodeClass.Unspecified;
     }
-    static [typeId] = NodeIds.AddReferencesItem_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddReferencesItem_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.sourceNodeId);
         encoder.writeType(this.referenceTypeId);
@@ -5998,7 +5998,7 @@ export class AddReferencesRequest implements AddReferencesRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.referencesToAdd = options?.referencesToAdd;
     }
-    static [typeId] = NodeIds.AddReferencesRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddReferencesRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.referencesToAdd);
@@ -6026,7 +6026,7 @@ export class AddReferencesResponse implements AddReferencesResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.AddReferencesResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AddReferencesResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -6054,7 +6054,7 @@ export class DeleteNodesItem implements DeleteNodesItemOptions {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.deleteTargetReferences = options?.deleteTargetReferences ?? false;
     }
-    static [typeId] = NodeIds.DeleteNodesItem_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteNodesItem_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeBoolean(this.deleteTargetReferences);
@@ -6079,7 +6079,7 @@ export class DeleteNodesRequest implements DeleteNodesRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToDelete = options?.nodesToDelete;
     }
-    static [typeId] = NodeIds.DeleteNodesRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteNodesRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.nodesToDelete);
@@ -6107,7 +6107,7 @@ export class DeleteNodesResponse implements DeleteNodesResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.DeleteNodesResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteNodesResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -6144,7 +6144,7 @@ export class DeleteReferencesItem implements DeleteReferencesItemOptions {
         this.targetNodeId = options?.targetNodeId ?? new ExpandedNodeId();
         this.deleteBidirectional = options?.deleteBidirectional ?? false;
     }
-    static [typeId] = NodeIds.DeleteReferencesItem_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteReferencesItem_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.sourceNodeId);
         encoder.writeType(this.referenceTypeId);
@@ -6178,7 +6178,7 @@ export class DeleteReferencesRequest implements DeleteReferencesRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.referencesToDelete = options?.referencesToDelete;
     }
-    static [typeId] = NodeIds.DeleteReferencesRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteReferencesRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.referencesToDelete);
@@ -6206,7 +6206,7 @@ export class DeleteReferencesResponse implements DeleteReferencesResponseOptions
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.DeleteReferencesResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteReferencesResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -6272,7 +6272,7 @@ export class ViewDescription implements ViewDescriptionOptions {
         this.timestamp = options?.timestamp ?? new Date(-11644473600000);
         this.viewVersion = options?.viewVersion ?? 0;
     }
-    static [typeId] = NodeIds.ViewDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ViewDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.viewId);
         encoder.writeDateTime(this.timestamp);
@@ -6312,7 +6312,7 @@ export class BrowseDescription implements BrowseDescriptionOptions {
         this.nodeClassMask = options?.nodeClassMask ?? 0;
         this.resultMask = options?.resultMask ?? 0;
     }
-    static [typeId] = NodeIds.BrowseDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowseDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.browseDirection);
@@ -6376,7 +6376,7 @@ export class ReferenceDescription implements ReferenceDescriptionOptions {
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
         this.typeDefinition = options?.typeDefinition ?? new ExpandedNodeId();
     }
-    static [typeId] = NodeIds.ReferenceDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReferenceDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.referenceTypeId);
         encoder.writeBoolean(this.isForward);
@@ -6419,7 +6419,7 @@ export class BrowseResult implements BrowseResultOptions {
         this.continuationPoint = options?.continuationPoint;
         this.references = options?.references;
     }
-    static [typeId] = NodeIds.BrowseResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowseResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeByteString(this.continuationPoint);
@@ -6453,7 +6453,7 @@ export class BrowseRequest implements BrowseRequestOptions {
         this.requestedMaxReferencesPerNode = options?.requestedMaxReferencesPerNode ?? 0;
         this.nodesToBrowse = options?.nodesToBrowse;
     }
-    static [typeId] = NodeIds.BrowseRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowseRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.view);
@@ -6487,7 +6487,7 @@ export class BrowseResponse implements BrowseResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.BrowseResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowseResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -6518,7 +6518,7 @@ export class BrowseNextRequest implements BrowseNextRequestOptions {
         this.releaseContinuationPoints = options?.releaseContinuationPoints ?? false;
         this.continuationPoints = options?.continuationPoints;
     }
-    static [typeId] = NodeIds.BrowseNextRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowseNextRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeBoolean(this.releaseContinuationPoints);
@@ -6549,7 +6549,7 @@ export class BrowseNextResponse implements BrowseNextResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.BrowseNextResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowseNextResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -6583,7 +6583,7 @@ export class RelativePathElement implements RelativePathElementOptions {
         this.includeSubtypes = options?.includeSubtypes ?? false;
         this.targetName = options?.targetName ?? new QualifiedName();
     }
-    static [typeId] = NodeIds.RelativePathElement_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RelativePathElement_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.referenceTypeId);
         encoder.writeBoolean(this.isInverse);
@@ -6611,7 +6611,7 @@ export class RelativePath implements RelativePathOptions {
     constructor(options?: RelativePathOptions) {
         this.elements = options?.elements;
     }
-    static [typeId] = NodeIds.RelativePath_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RelativePath_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.elements);
     }
@@ -6633,7 +6633,7 @@ export class BrowsePath implements BrowsePathOptions {
         this.startingNode = options?.startingNode ?? NodeId.null();
         this.relativePath = options?.relativePath ?? new RelativePath();
     }
-    static [typeId] = NodeIds.BrowsePath_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowsePath_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.startingNode);
         encoder.writeType(this.relativePath);
@@ -6658,7 +6658,7 @@ export class BrowsePathTarget implements BrowsePathTargetOptions {
         this.targetId = options?.targetId ?? new ExpandedNodeId();
         this.remainingPathIndex = options?.remainingPathIndex ?? 0;
     }
-    static [typeId] = NodeIds.BrowsePathTarget_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowsePathTarget_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.targetId);
         encoder.writeUInt32(this.remainingPathIndex);
@@ -6683,7 +6683,7 @@ export class BrowsePathResult implements BrowsePathResultOptions {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.targets = options?.targets;
     }
-    static [typeId] = NodeIds.BrowsePathResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BrowsePathResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeTypeArray(this.targets);
@@ -6708,7 +6708,7 @@ export class TranslateBrowsePathsToNodeIdsRequest implements TranslateBrowsePath
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.browsePaths = options?.browsePaths;
     }
-    static [typeId] = NodeIds.TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.browsePaths);
@@ -6736,7 +6736,7 @@ export class TranslateBrowsePathsToNodeIdsResponse implements TranslateBrowsePat
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -6764,7 +6764,7 @@ export class RegisterNodesRequest implements RegisterNodesRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToRegister = options?.nodesToRegister;
     }
-    static [typeId] = NodeIds.RegisterNodesRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisterNodesRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.nodesToRegister);
@@ -6789,7 +6789,7 @@ export class RegisterNodesResponse implements RegisterNodesResponseOptions {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.registeredNodeIds = options?.registeredNodeIds;
     }
-    static [typeId] = NodeIds.RegisterNodesResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RegisterNodesResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.registeredNodeIds);
@@ -6814,7 +6814,7 @@ export class UnregisterNodesRequest implements UnregisterNodesRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToUnregister = options?.nodesToUnregister;
     }
-    static [typeId] = NodeIds.UnregisterNodesRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UnregisterNodesRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.nodesToUnregister);
@@ -6836,7 +6836,7 @@ export class UnregisterNodesResponse implements UnregisterNodesResponseOptions {
     constructor(options?: UnregisterNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
-    static [typeId] = NodeIds.UnregisterNodesResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UnregisterNodesResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
     }
@@ -6879,7 +6879,7 @@ export class EndpointConfiguration implements EndpointConfigurationOptions {
         this.channelLifetime = options?.channelLifetime ?? 0;
         this.securityTokenLifetime = options?.securityTokenLifetime ?? 0;
     }
-    static [typeId] = NodeIds.EndpointConfiguration_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EndpointConfiguration_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeInt32(this.operationTimeout);
         encoder.writeBoolean(this.useBinaryEncoding);
@@ -6928,7 +6928,7 @@ export class QueryDataDescription implements QueryDataDescriptionOptions {
         this.attributeId = options?.attributeId ?? 0;
         this.indexRange = options?.indexRange;
     }
-    static [typeId] = NodeIds.QueryDataDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.QueryDataDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.relativePath);
         encoder.writeUInt32(this.attributeId);
@@ -6959,7 +6959,7 @@ export class NodeTypeDescription implements NodeTypeDescriptionOptions {
         this.includeSubTypes = options?.includeSubTypes ?? false;
         this.dataToReturn = options?.dataToReturn;
     }
-    static [typeId] = NodeIds.NodeTypeDescription_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NodeTypeDescription_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.typeDefinitionNode);
         encoder.writeBoolean(this.includeSubTypes);
@@ -7010,7 +7010,7 @@ export class QueryDataSet implements QueryDataSetOptions {
         this.typeDefinitionNode = options?.typeDefinitionNode ?? new ExpandedNodeId();
         this.values = options?.values;
     }
-    static [typeId] = NodeIds.QueryDataSet_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.QueryDataSet_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeType(this.typeDefinitionNode);
@@ -7044,7 +7044,7 @@ export class NodeReference implements NodeReferenceOptions {
         this.isForward = options?.isForward ?? false;
         this.referencedNodeIds = options?.referencedNodeIds;
     }
-    static [typeId] = NodeIds.NodeReference_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NodeReference_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeType(this.referenceTypeId);
@@ -7075,7 +7075,7 @@ export class ContentFilterElement implements ContentFilterElementOptions {
         this.filterOperator = options?.filterOperator ?? FilterOperator.Equals;
         this.filterOperands = options?.filterOperands;
     }
-    static [typeId] = NodeIds.ContentFilterElement_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ContentFilterElement_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.filterOperator);
         encoder.writeTypeArray(this.filterOperands);
@@ -7097,7 +7097,7 @@ export class ContentFilter implements ContentFilterOptions {
     constructor(options?: ContentFilterOptions) {
         this.elements = options?.elements;
     }
-    static [typeId] = NodeIds.ContentFilter_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ContentFilter_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.elements);
     }
@@ -7109,7 +7109,7 @@ export class ContentFilter implements ContentFilterOptions {
     }
 }
 export class FilterOperand {
-    static [typeId] = NodeIds.FilterOperand_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.FilterOperand_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): FilterOperand {
@@ -7124,7 +7124,7 @@ export class ElementOperand implements ElementOperandOptions {
     constructor(options?: ElementOperandOptions) {
         this.index = options?.index ?? 0;
     }
-    static [typeId] = NodeIds.ElementOperand_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ElementOperand_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.index);
     }
@@ -7143,7 +7143,7 @@ export class LiteralOperand implements LiteralOperandOptions {
     constructor(options?: LiteralOperandOptions) {
         this.value = options?.value ?? Variant.null();
     }
-    static [typeId] = NodeIds.LiteralOperand_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.LiteralOperand_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.value);
     }
@@ -7174,7 +7174,7 @@ export class AttributeOperand implements AttributeOperandOptions {
         this.attributeId = options?.attributeId ?? 0;
         this.indexRange = options?.indexRange;
     }
-    static [typeId] = NodeIds.AttributeOperand_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AttributeOperand_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeString(this.alias);
@@ -7214,7 +7214,7 @@ export class SimpleAttributeOperand implements SimpleAttributeOperandOptions {
         this.attributeId = options?.attributeId ?? 0;
         this.indexRange = options?.indexRange;
     }
-    static [typeId] = NodeIds.SimpleAttributeOperand_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SimpleAttributeOperand_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.typeDefinitionId);
         encoder.writeTypeArray(this.browsePath);
@@ -7248,7 +7248,7 @@ export class ContentFilterElementResult implements ContentFilterElementResultOpt
         this.operandStatusCodes = options?.operandStatusCodes;
         this.operandDiagnosticInfos = options?.operandDiagnosticInfos;
     }
-    static [typeId] = NodeIds.ContentFilterElementResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ContentFilterElementResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeTypeArray(this.operandStatusCodes);
@@ -7276,7 +7276,7 @@ export class ContentFilterResult implements ContentFilterResultOptions {
         this.elementResults = options?.elementResults;
         this.elementDiagnosticInfos = options?.elementDiagnosticInfos;
     }
-    static [typeId] = NodeIds.ContentFilterResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ContentFilterResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.elementResults);
         encoder.writeTypeArray(this.elementDiagnosticInfos);
@@ -7304,7 +7304,7 @@ export class ParsingResult implements ParsingResultOptions {
         this.dataStatusCodes = options?.dataStatusCodes;
         this.dataDiagnosticInfos = options?.dataDiagnosticInfos;
     }
-    static [typeId] = NodeIds.ParsingResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ParsingResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeTypeArray(this.dataStatusCodes);
@@ -7344,7 +7344,7 @@ export class QueryFirstRequest implements QueryFirstRequestOptions {
         this.maxDataSetsToReturn = options?.maxDataSetsToReturn ?? 0;
         this.maxReferencesToReturn = options?.maxReferencesToReturn ?? 0;
     }
-    static [typeId] = NodeIds.QueryFirstRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.QueryFirstRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.view);
@@ -7393,7 +7393,7 @@ export class QueryFirstResponse implements QueryFirstResponseOptions {
         this.diagnosticInfos = options?.diagnosticInfos;
         this.filterResult = options?.filterResult ?? new ContentFilterResult();
     }
-    static [typeId] = NodeIds.QueryFirstResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.QueryFirstResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.queryDataSets);
@@ -7433,7 +7433,7 @@ export class QueryNextRequest implements QueryNextRequestOptions {
         this.releaseContinuationPoint = options?.releaseContinuationPoint ?? false;
         this.continuationPoint = options?.continuationPoint;
     }
-    static [typeId] = NodeIds.QueryNextRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.QueryNextRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeBoolean(this.releaseContinuationPoint);
@@ -7464,7 +7464,7 @@ export class QueryNextResponse implements QueryNextResponseOptions {
         this.queryDataSets = options?.queryDataSets;
         this.revisedContinuationPoint = options?.revisedContinuationPoint;
     }
-    static [typeId] = NodeIds.QueryNextResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.QueryNextResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.queryDataSets);
@@ -7505,7 +7505,7 @@ export class ReadValueId implements ReadValueIdOptions {
         this.indexRange = options?.indexRange;
         this.dataEncoding = options?.dataEncoding ?? new QualifiedName();
     }
-    static [typeId] = NodeIds.ReadValueId_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadValueId_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.attributeId);
@@ -7542,7 +7542,7 @@ export class ReadRequest implements ReadRequestOptions {
         this.timestampsToReturn = options?.timestampsToReturn ?? TimestampsToReturn.Source;
         this.nodesToRead = options?.nodesToRead;
     }
-    static [typeId] = NodeIds.ReadRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeDouble(this.maxAge);
@@ -7576,7 +7576,7 @@ export class ReadResponse implements ReadResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.ReadResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -7610,7 +7610,7 @@ export class HistoryReadValueId implements HistoryReadValueIdOptions {
         this.dataEncoding = options?.dataEncoding ?? new QualifiedName();
         this.continuationPoint = options?.continuationPoint;
     }
-    static [typeId] = NodeIds.HistoryReadValueId_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryReadValueId_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeString(this.indexRange);
@@ -7644,7 +7644,7 @@ export class HistoryReadResult implements HistoryReadResultOptions {
         this.continuationPoint = options?.continuationPoint;
         this.historyData = options?.historyData ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.HistoryReadResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryReadResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeByteString(this.continuationPoint);
@@ -7662,7 +7662,7 @@ export class HistoryReadResult implements HistoryReadResultOptions {
     }
 }
 export class HistoryReadDetails {
-    static [typeId] = NodeIds.HistoryReadDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryReadDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): HistoryReadDetails {
@@ -7686,7 +7686,7 @@ export class ReadEventDetails implements ReadEventDetailsOptions {
         this.endTime = options?.endTime ?? new Date(-11644473600000);
         this.filter = options?.filter ?? new EventFilter();
     }
-    static [typeId] = NodeIds.ReadEventDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadEventDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.numValuesPerNode);
         encoder.writeDateTime(this.startTime);
@@ -7726,7 +7726,7 @@ export class ReadRawModifiedDetails implements ReadRawModifiedDetailsOptions {
         this.numValuesPerNode = options?.numValuesPerNode ?? 0;
         this.returnBounds = options?.returnBounds ?? false;
     }
-    static [typeId] = NodeIds.ReadRawModifiedDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadRawModifiedDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeBoolean(this.isReadModified);
         encoder.writeDateTime(this.startTime);
@@ -7769,7 +7769,7 @@ export class ReadProcessedDetails implements ReadProcessedDetailsOptions {
         this.aggregateType = options?.aggregateType;
         this.aggregateConfiguration = options?.aggregateConfiguration ?? new AggregateConfiguration();
     }
-    static [typeId] = NodeIds.ReadProcessedDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadProcessedDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTime(this.startTime);
         encoder.writeDateTime(this.endTime);
@@ -7803,7 +7803,7 @@ export class ReadAtTimeDetails implements ReadAtTimeDetailsOptions {
         this.reqTimes = options?.reqTimes;
         this.useSimpleBounds = options?.useSimpleBounds ?? false;
     }
-    static [typeId] = NodeIds.ReadAtTimeDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadAtTimeDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTimeArray(this.reqTimes);
         encoder.writeBoolean(this.useSimpleBounds);
@@ -7825,7 +7825,7 @@ export class ReadAnnotationDataDetails implements ReadAnnotationDataDetailsOptio
     constructor(options?: ReadAnnotationDataDetailsOptions) {
         this.reqTimes = options?.reqTimes;
     }
-    static [typeId] = NodeIds.ReadAnnotationDataDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ReadAnnotationDataDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTimeArray(this.reqTimes);
     }
@@ -7844,7 +7844,7 @@ export class HistoryData implements HistoryDataOptions {
     constructor(options?: HistoryDataOptions) {
         this.dataValues = options?.dataValues;
     }
-    static [typeId] = NodeIds.HistoryData_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryData_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.dataValues);
     }
@@ -7869,7 +7869,7 @@ export class ModificationInfo implements ModificationInfoOptions {
         this.updateType = options?.updateType ?? HistoryUpdateType.Insert;
         this.userName = options?.userName;
     }
-    static [typeId] = NodeIds.ModificationInfo_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ModificationInfo_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTime(this.modificationTime);
         encoder.writeUInt32(this.updateType);
@@ -7897,7 +7897,7 @@ export class HistoryModifiedData implements HistoryModifiedDataOptions {
         this.dataValues = options?.dataValues;
         this.modificationInfos = options?.modificationInfos;
     }
-    static [typeId] = NodeIds.HistoryModifiedData_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryModifiedData_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.dataValues);
         encoder.writeTypeArray(this.modificationInfos);
@@ -7919,7 +7919,7 @@ export class HistoryEvent implements HistoryEventOptions {
     constructor(options?: HistoryEventOptions) {
         this.events = options?.events;
     }
-    static [typeId] = NodeIds.HistoryEvent_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryEvent_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.events);
     }
@@ -7950,7 +7950,7 @@ export class HistoryReadRequest implements HistoryReadRequestOptions {
         this.releaseContinuationPoints = options?.releaseContinuationPoints ?? false;
         this.nodesToRead = options?.nodesToRead;
     }
-    static [typeId] = NodeIds.HistoryReadRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryReadRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeType(this.historyReadDetails);
@@ -7987,7 +7987,7 @@ export class HistoryReadResponse implements HistoryReadResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.HistoryReadResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryReadResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -8021,7 +8021,7 @@ export class WriteValue implements WriteValueOptions {
         this.indexRange = options?.indexRange;
         this.value = options?.value ?? new DataValue();
     }
-    static [typeId] = NodeIds.WriteValue_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.WriteValue_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.attributeId);
@@ -8052,7 +8052,7 @@ export class WriteRequest implements WriteRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToWrite = options?.nodesToWrite;
     }
-    static [typeId] = NodeIds.WriteRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.WriteRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.nodesToWrite);
@@ -8080,7 +8080,7 @@ export class WriteResponse implements WriteResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.WriteResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.WriteResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -8105,7 +8105,7 @@ export class HistoryUpdateDetails implements HistoryUpdateDetailsOptions {
     constructor(options?: HistoryUpdateDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
     }
-    static [typeId] = NodeIds.HistoryUpdateDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryUpdateDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
     }
@@ -8142,7 +8142,7 @@ export class UpdateDataDetails implements UpdateDataDetailsOptions {
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
         this.updateValues = options?.updateValues;
     }
-    static [typeId] = NodeIds.UpdateDataDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UpdateDataDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.performInsertReplace);
@@ -8173,7 +8173,7 @@ export class UpdateStructureDataDetails implements UpdateStructureDataDetailsOpt
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
         this.updateValues = options?.updateValues;
     }
-    static [typeId] = NodeIds.UpdateStructureDataDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UpdateStructureDataDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.performInsertReplace);
@@ -8207,7 +8207,7 @@ export class UpdateEventDetails implements UpdateEventDetailsOptions {
         this.filter = options?.filter ?? new EventFilter();
         this.eventData = options?.eventData;
     }
-    static [typeId] = NodeIds.UpdateEventDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.UpdateEventDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeUInt32(this.performInsertReplace);
@@ -8244,7 +8244,7 @@ export class DeleteRawModifiedDetails implements DeleteRawModifiedDetailsOptions
         this.startTime = options?.startTime ?? new Date(-11644473600000);
         this.endTime = options?.endTime ?? new Date(-11644473600000);
     }
-    static [typeId] = NodeIds.DeleteRawModifiedDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteRawModifiedDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeBoolean(this.isDeleteModified);
@@ -8275,7 +8275,7 @@ export class DeleteAtTimeDetails implements DeleteAtTimeDetailsOptions {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.reqTimes = options?.reqTimes;
     }
-    static [typeId] = NodeIds.DeleteAtTimeDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteAtTimeDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeDateTimeArray(this.reqTimes);
@@ -8300,7 +8300,7 @@ export class DeleteEventDetails implements DeleteEventDetailsOptions {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.eventIds = options?.eventIds;
     }
-    static [typeId] = NodeIds.DeleteEventDetails_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteEventDetails_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.nodeId);
         encoder.writeByteStringArray(this.eventIds);
@@ -8328,7 +8328,7 @@ export class HistoryUpdateResult implements HistoryUpdateResultOptions {
         this.operationResults = options?.operationResults;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.HistoryUpdateResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryUpdateResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeTypeArray(this.operationResults);
@@ -8356,7 +8356,7 @@ export class HistoryUpdateRequest implements HistoryUpdateRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.historyUpdateDetails = options?.historyUpdateDetails;
     }
-    static [typeId] = NodeIds.HistoryUpdateRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryUpdateRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.historyUpdateDetails);
@@ -8384,7 +8384,7 @@ export class HistoryUpdateResponse implements HistoryUpdateResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.HistoryUpdateResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryUpdateResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -8415,7 +8415,7 @@ export class CallMethodRequest implements CallMethodRequestOptions {
         this.methodId = options?.methodId ?? NodeId.null();
         this.inputArguments = options?.inputArguments;
     }
-    static [typeId] = NodeIds.CallMethodRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CallMethodRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.objectId);
         encoder.writeType(this.methodId);
@@ -8449,7 +8449,7 @@ export class CallMethodResult implements CallMethodResultOptions {
         this.inputArgumentDiagnosticInfos = options?.inputArgumentDiagnosticInfos;
         this.outputArguments = options?.outputArguments;
     }
-    static [typeId] = NodeIds.CallMethodResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CallMethodResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeTypeArray(this.inputArgumentResults);
@@ -8480,7 +8480,7 @@ export class CallRequest implements CallRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.methodsToCall = options?.methodsToCall;
     }
-    static [typeId] = NodeIds.CallRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CallRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.methodsToCall);
@@ -8508,7 +8508,7 @@ export class CallResponse implements CallResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.CallResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CallResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -8541,7 +8541,7 @@ export enum DeadbandType {
     Percent = 2
 }
 export class MonitoringFilter {
-    static [typeId] = NodeIds.MonitoringFilter_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoringFilter_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): MonitoringFilter {
@@ -8562,7 +8562,7 @@ export class DataChangeFilter implements DataChangeFilterOptions {
         this.deadbandType = options?.deadbandType ?? 0;
         this.deadbandValue = options?.deadbandValue ?? 0;
     }
-    static [typeId] = NodeIds.DataChangeFilter_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataChangeFilter_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.trigger);
         encoder.writeUInt32(this.deadbandType);
@@ -8590,7 +8590,7 @@ export class EventFilter implements EventFilterOptions {
         this.selectClauses = options?.selectClauses;
         this.whereClause = options?.whereClause ?? new ContentFilter();
     }
-    static [typeId] = NodeIds.EventFilter_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EventFilter_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.selectClauses);
         encoder.writeType(this.whereClause);
@@ -8624,7 +8624,7 @@ export class AggregateConfiguration implements AggregateConfigurationOptions {
         this.percentDataGood = options?.percentDataGood ?? 0;
         this.useSlopedExtrapolation = options?.useSlopedExtrapolation ?? false;
     }
-    static [typeId] = NodeIds.AggregateConfiguration_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AggregateConfiguration_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeBoolean(this.useServerCapabilitiesDefaults);
         encoder.writeBoolean(this.treatUncertainAsBad);
@@ -8664,7 +8664,7 @@ export class AggregateFilter implements AggregateFilterOptions {
         this.processingInterval = options?.processingInterval ?? 0;
         this.aggregateConfiguration = options?.aggregateConfiguration ?? new AggregateConfiguration();
     }
-    static [typeId] = NodeIds.AggregateFilter_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AggregateFilter_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTime(this.startTime);
         encoder.writeType(this.aggregateType);
@@ -8685,7 +8685,7 @@ export class AggregateFilter implements AggregateFilterOptions {
     }
 }
 export class MonitoringFilterResult {
-    static [typeId] = NodeIds.MonitoringFilterResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoringFilterResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): MonitoringFilterResult {
@@ -8706,7 +8706,7 @@ export class EventFilterResult implements EventFilterResultOptions {
         this.selectClauseDiagnosticInfos = options?.selectClauseDiagnosticInfos;
         this.whereClauseResult = options?.whereClauseResult ?? new ContentFilterResult();
     }
-    static [typeId] = NodeIds.EventFilterResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EventFilterResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.selectClauseResults);
         encoder.writeTypeArray(this.selectClauseDiagnosticInfos);
@@ -8737,7 +8737,7 @@ export class AggregateFilterResult implements AggregateFilterResultOptions {
         this.revisedProcessingInterval = options?.revisedProcessingInterval ?? 0;
         this.revisedAggregateConfiguration = options?.revisedAggregateConfiguration ?? new AggregateConfiguration();
     }
-    static [typeId] = NodeIds.AggregateFilterResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AggregateFilterResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTime(this.revisedStartTime);
         encoder.writeDouble(this.revisedProcessingInterval);
@@ -8774,7 +8774,7 @@ export class MonitoringParameters implements MonitoringParametersOptions {
         this.queueSize = options?.queueSize ?? 0;
         this.discardOldest = options?.discardOldest ?? false;
     }
-    static [typeId] = NodeIds.MonitoringParameters_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoringParameters_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.clientHandle);
         encoder.writeDouble(this.samplingInterval);
@@ -8811,7 +8811,7 @@ export class MonitoredItemCreateRequest implements MonitoredItemCreateRequestOpt
         this.monitoringMode = options?.monitoringMode ?? MonitoringMode.Disabled;
         this.requestedParameters = options?.requestedParameters ?? new MonitoringParameters();
     }
-    static [typeId] = NodeIds.MonitoredItemCreateRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoredItemCreateRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.itemToMonitor);
         encoder.writeUInt32(this.monitoringMode);
@@ -8848,7 +8848,7 @@ export class MonitoredItemCreateResult implements MonitoredItemCreateResultOptio
         this.revisedQueueSize = options?.revisedQueueSize ?? 0;
         this.filterResult = options?.filterResult ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.MonitoredItemCreateResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoredItemCreateResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeUInt32(this.monitoredItemId);
@@ -8888,7 +8888,7 @@ export class CreateMonitoredItemsRequest implements CreateMonitoredItemsRequestO
         this.timestampsToReturn = options?.timestampsToReturn ?? TimestampsToReturn.Source;
         this.itemsToCreate = options?.itemsToCreate;
     }
-    static [typeId] = NodeIds.CreateMonitoredItemsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CreateMonitoredItemsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -8922,7 +8922,7 @@ export class CreateMonitoredItemsResponse implements CreateMonitoredItemsRespons
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.CreateMonitoredItemsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CreateMonitoredItemsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -8950,7 +8950,7 @@ export class MonitoredItemModifyRequest implements MonitoredItemModifyRequestOpt
         this.monitoredItemId = options?.monitoredItemId ?? 0;
         this.requestedParameters = options?.requestedParameters ?? new MonitoringParameters();
     }
-    static [typeId] = NodeIds.MonitoredItemModifyRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoredItemModifyRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.monitoredItemId);
         encoder.writeType(this.requestedParameters);
@@ -8981,7 +8981,7 @@ export class MonitoredItemModifyResult implements MonitoredItemModifyResultOptio
         this.revisedQueueSize = options?.revisedQueueSize ?? 0;
         this.filterResult = options?.filterResult ?? new ExtensionObject();
     }
-    static [typeId] = NodeIds.MonitoredItemModifyResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoredItemModifyResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeDouble(this.revisedSamplingInterval);
@@ -9018,7 +9018,7 @@ export class ModifyMonitoredItemsRequest implements ModifyMonitoredItemsRequestO
         this.timestampsToReturn = options?.timestampsToReturn ?? TimestampsToReturn.Source;
         this.itemsToModify = options?.itemsToModify;
     }
-    static [typeId] = NodeIds.ModifyMonitoredItemsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ModifyMonitoredItemsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9052,7 +9052,7 @@ export class ModifyMonitoredItemsResponse implements ModifyMonitoredItemsRespons
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.ModifyMonitoredItemsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ModifyMonitoredItemsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -9086,7 +9086,7 @@ export class SetMonitoringModeRequest implements SetMonitoringModeRequestOptions
         this.monitoringMode = options?.monitoringMode ?? MonitoringMode.Disabled;
         this.monitoredItemIds = options?.monitoredItemIds;
     }
-    static [typeId] = NodeIds.SetMonitoringModeRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SetMonitoringModeRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9120,7 +9120,7 @@ export class SetMonitoringModeResponse implements SetMonitoringModeResponseOptio
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.SetMonitoringModeResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SetMonitoringModeResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -9157,7 +9157,7 @@ export class SetTriggeringRequest implements SetTriggeringRequestOptions {
         this.linksToAdd = options?.linksToAdd;
         this.linksToRemove = options?.linksToRemove;
     }
-    static [typeId] = NodeIds.SetTriggeringRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SetTriggeringRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9200,7 +9200,7 @@ export class SetTriggeringResponse implements SetTriggeringResponseOptions {
         this.removeResults = options?.removeResults;
         this.removeDiagnosticInfos = options?.removeDiagnosticInfos;
     }
-    static [typeId] = NodeIds.SetTriggeringResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SetTriggeringResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.addResults);
@@ -9237,7 +9237,7 @@ export class DeleteMonitoredItemsRequest implements DeleteMonitoredItemsRequestO
         this.subscriptionId = options?.subscriptionId ?? 0;
         this.monitoredItemIds = options?.monitoredItemIds;
     }
-    static [typeId] = NodeIds.DeleteMonitoredItemsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteMonitoredItemsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9268,7 +9268,7 @@ export class DeleteMonitoredItemsResponse implements DeleteMonitoredItemsRespons
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.DeleteMonitoredItemsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteMonitoredItemsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -9311,7 +9311,7 @@ export class CreateSubscriptionRequest implements CreateSubscriptionRequestOptio
         this.publishingEnabled = options?.publishingEnabled ?? false;
         this.priority = options?.priority ?? 0;
     }
-    static [typeId] = NodeIds.CreateSubscriptionRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CreateSubscriptionRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeDouble(this.requestedPublishingInterval);
@@ -9360,7 +9360,7 @@ export class CreateSubscriptionResponse implements CreateSubscriptionResponseOpt
         this.revisedLifetimeCount = options?.revisedLifetimeCount ?? 0;
         this.revisedMaxKeepAliveCount = options?.revisedMaxKeepAliveCount ?? 0;
     }
-    static [typeId] = NodeIds.CreateSubscriptionResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.CreateSubscriptionResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9409,7 +9409,7 @@ export class ModifySubscriptionRequest implements ModifySubscriptionRequestOptio
         this.maxNotificationsPerPublish = options?.maxNotificationsPerPublish ?? 0;
         this.priority = options?.priority ?? 0;
     }
-    static [typeId] = NodeIds.ModifySubscriptionRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ModifySubscriptionRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9455,7 +9455,7 @@ export class ModifySubscriptionResponse implements ModifySubscriptionResponseOpt
         this.revisedLifetimeCount = options?.revisedLifetimeCount ?? 0;
         this.revisedMaxKeepAliveCount = options?.revisedMaxKeepAliveCount ?? 0;
     }
-    static [typeId] = NodeIds.ModifySubscriptionResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ModifySubscriptionResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeDouble(this.revisedPublishingInterval);
@@ -9489,7 +9489,7 @@ export class SetPublishingModeRequest implements SetPublishingModeRequestOptions
         this.publishingEnabled = options?.publishingEnabled ?? false;
         this.subscriptionIds = options?.subscriptionIds;
     }
-    static [typeId] = NodeIds.SetPublishingModeRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SetPublishingModeRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeBoolean(this.publishingEnabled);
@@ -9520,7 +9520,7 @@ export class SetPublishingModeResponse implements SetPublishingModeResponseOptio
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.SetPublishingModeResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SetPublishingModeResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -9551,7 +9551,7 @@ export class NotificationMessage implements NotificationMessageOptions {
         this.publishTime = options?.publishTime ?? new Date(-11644473600000);
         this.notificationData = options?.notificationData;
     }
-    static [typeId] = NodeIds.NotificationMessage_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NotificationMessage_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.sequenceNumber);
         encoder.writeDateTime(this.publishTime);
@@ -9569,7 +9569,7 @@ export class NotificationMessage implements NotificationMessageOptions {
     }
 }
 export class NotificationData {
-    static [typeId] = NodeIds.NotificationData_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NotificationData_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
     }
     static [decode](decoder: BinaryDataDecoder): NotificationData {
@@ -9587,7 +9587,7 @@ export class DataChangeNotification implements DataChangeNotificationOptions {
         this.monitoredItems = options?.monitoredItems;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.DataChangeNotification_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DataChangeNotification_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.monitoredItems);
         encoder.writeTypeArray(this.diagnosticInfos);
@@ -9612,7 +9612,7 @@ export class MonitoredItemNotification implements MonitoredItemNotificationOptio
         this.clientHandle = options?.clientHandle ?? 0;
         this.value = options?.value ?? new DataValue();
     }
-    static [typeId] = NodeIds.MonitoredItemNotification_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.MonitoredItemNotification_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.clientHandle);
         encoder.writeType(this.value);
@@ -9634,7 +9634,7 @@ export class EventNotificationList implements EventNotificationListOptions {
     constructor(options?: EventNotificationListOptions) {
         this.events = options?.events;
     }
-    static [typeId] = NodeIds.EventNotificationList_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EventNotificationList_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.events);
     }
@@ -9656,7 +9656,7 @@ export class EventFieldList implements EventFieldListOptions {
         this.clientHandle = options?.clientHandle ?? 0;
         this.eventFields = options?.eventFields;
     }
-    static [typeId] = NodeIds.EventFieldList_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EventFieldList_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.clientHandle);
         encoder.writeTypeArray(this.eventFields);
@@ -9678,7 +9678,7 @@ export class HistoryEventFieldList implements HistoryEventFieldListOptions {
     constructor(options?: HistoryEventFieldListOptions) {
         this.eventFields = options?.eventFields;
     }
-    static [typeId] = NodeIds.HistoryEventFieldList_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.HistoryEventFieldList_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeTypeArray(this.eventFields);
     }
@@ -9700,7 +9700,7 @@ export class StatusChangeNotification implements StatusChangeNotificationOptions
         this.status = options?.status ?? StatusCode.Good;
         this.diagnosticInfo = options?.diagnosticInfo ?? new DiagnosticInfo();
     }
-    static [typeId] = NodeIds.StatusChangeNotification_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.StatusChangeNotification_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.status);
         encoder.writeType(this.diagnosticInfo);
@@ -9725,7 +9725,7 @@ export class SubscriptionAcknowledgement implements SubscriptionAcknowledgementO
         this.subscriptionId = options?.subscriptionId ?? 0;
         this.sequenceNumber = options?.sequenceNumber ?? 0;
     }
-    static [typeId] = NodeIds.SubscriptionAcknowledgement_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SubscriptionAcknowledgement_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.subscriptionId);
         encoder.writeUInt32(this.sequenceNumber);
@@ -9750,7 +9750,7 @@ export class PublishRequest implements PublishRequestOptions {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionAcknowledgements = options?.subscriptionAcknowledgements;
     }
-    static [typeId] = NodeIds.PublishRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeTypeArray(this.subscriptionAcknowledgements);
@@ -9790,7 +9790,7 @@ export class PublishResponse implements PublishResponseOptions {
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.PublishResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.PublishResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9833,7 +9833,7 @@ export class RepublishRequest implements RepublishRequestOptions {
         this.subscriptionId = options?.subscriptionId ?? 0;
         this.retransmitSequenceNumber = options?.retransmitSequenceNumber ?? 0;
     }
-    static [typeId] = NodeIds.RepublishRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RepublishRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32(this.subscriptionId);
@@ -9861,7 +9861,7 @@ export class RepublishResponse implements RepublishResponseOptions {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.notificationMessage = options?.notificationMessage ?? new NotificationMessage();
     }
-    static [typeId] = NodeIds.RepublishResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RepublishResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeType(this.notificationMessage);
@@ -9886,7 +9886,7 @@ export class TransferResult implements TransferResultOptions {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.availableSequenceNumbers = options?.availableSequenceNumbers;
     }
-    static [typeId] = NodeIds.TransferResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TransferResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeUInt32Array(this.availableSequenceNumbers);
@@ -9914,7 +9914,7 @@ export class TransferSubscriptionsRequest implements TransferSubscriptionsReques
         this.subscriptionIds = options?.subscriptionIds;
         this.sendInitialValues = options?.sendInitialValues ?? false;
     }
-    static [typeId] = NodeIds.TransferSubscriptionsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TransferSubscriptionsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32Array(this.subscriptionIds);
@@ -9945,7 +9945,7 @@ export class TransferSubscriptionsResponse implements TransferSubscriptionsRespo
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.TransferSubscriptionsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.TransferSubscriptionsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -9973,7 +9973,7 @@ export class DeleteSubscriptionsRequest implements DeleteSubscriptionsRequestOpt
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionIds = options?.subscriptionIds;
     }
-    static [typeId] = NodeIds.DeleteSubscriptionsRequest_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteSubscriptionsRequest_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.requestHeader);
         encoder.writeUInt32Array(this.subscriptionIds);
@@ -10001,7 +10001,7 @@ export class DeleteSubscriptionsResponse implements DeleteSubscriptionsResponseO
         this.results = options?.results;
         this.diagnosticInfos = options?.diagnosticInfos;
     }
-    static [typeId] = NodeIds.DeleteSubscriptionsResponse_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DeleteSubscriptionsResponse_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.responseHeader);
         encoder.writeTypeArray(this.results);
@@ -10041,7 +10041,7 @@ export class BuildInfo implements BuildInfoOptions {
         this.buildNumber = options?.buildNumber;
         this.buildDate = options?.buildDate ?? new Date(-11644473600000);
     }
-    static [typeId] = NodeIds.BuildInfo_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.BuildInfo_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.productUri);
         encoder.writeString(this.manufacturerName);
@@ -10099,7 +10099,7 @@ export class RedundantServerDataType implements RedundantServerDataTypeOptions {
         this.serviceLevel = options?.serviceLevel ?? 0;
         this.serverState = options?.serverState ?? ServerState.Running;
     }
-    static [typeId] = NodeIds.RedundantServerDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.RedundantServerDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.serverId);
         encoder.writeByte(this.serviceLevel);
@@ -10124,7 +10124,7 @@ export class EndpointUrlListDataType implements EndpointUrlListDataTypeOptions {
     constructor(options?: EndpointUrlListDataTypeOptions) {
         this.endpointUrlList = options?.endpointUrlList;
     }
-    static [typeId] = NodeIds.EndpointUrlListDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EndpointUrlListDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeStringArray(this.endpointUrlList);
     }
@@ -10146,7 +10146,7 @@ export class NetworkGroupDataType implements NetworkGroupDataTypeOptions {
         this.serverUri = options?.serverUri;
         this.networkPaths = options?.networkPaths;
     }
-    static [typeId] = NodeIds.NetworkGroupDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.NetworkGroupDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.serverUri);
         encoder.writeTypeArray(this.networkPaths);
@@ -10177,7 +10177,7 @@ export class SamplingIntervalDiagnosticsDataType implements SamplingIntervalDiag
         this.maxMonitoredItemCount = options?.maxMonitoredItemCount ?? 0;
         this.disabledMonitoredItemCount = options?.disabledMonitoredItemCount ?? 0;
     }
-    static [typeId] = NodeIds.SamplingIntervalDiagnosticsDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SamplingIntervalDiagnosticsDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.samplingInterval);
         encoder.writeUInt32(this.monitoredItemCount);
@@ -10238,7 +10238,7 @@ export class ServerDiagnosticsSummaryDataType implements ServerDiagnosticsSummar
         this.securityRejectedRequestsCount = options?.securityRejectedRequestsCount ?? 0;
         this.rejectedRequestsCount = options?.rejectedRequestsCount ?? 0;
     }
-    static [typeId] = NodeIds.ServerDiagnosticsSummaryDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ServerDiagnosticsSummaryDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.serverViewCount);
         encoder.writeUInt32(this.currentSessionCount);
@@ -10305,7 +10305,7 @@ export class ServerStatusDataType implements ServerStatusDataTypeOptions {
         this.secondsTillShutdown = options?.secondsTillShutdown ?? 0;
         this.shutdownReason = options?.shutdownReason ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.ServerStatusDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ServerStatusDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDateTime(this.startTime);
         encoder.writeDateTime(this.currentTime);
@@ -10465,7 +10465,7 @@ export class SessionDiagnosticsDataType implements SessionDiagnosticsDataTypeOpt
         this.registerNodesCount = options?.registerNodesCount ?? new ServiceCounterDataType();
         this.unregisterNodesCount = options?.unregisterNodesCount ?? new ServiceCounterDataType();
     }
-    static [typeId] = NodeIds.SessionDiagnosticsDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SessionDiagnosticsDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.sessionId);
         encoder.writeString(this.sessionName);
@@ -10634,7 +10634,7 @@ export class SessionSecurityDiagnosticsDataType implements SessionSecurityDiagno
         this.securityPolicyUri = options?.securityPolicyUri;
         this.clientCertificate = options?.clientCertificate;
     }
-    static [typeId] = NodeIds.SessionSecurityDiagnosticsDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SessionSecurityDiagnosticsDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.sessionId);
         encoder.writeString(this.clientUserIdOfSession);
@@ -10680,7 +10680,7 @@ export class ServiceCounterDataType implements ServiceCounterDataTypeOptions {
         this.totalCount = options?.totalCount ?? 0;
         this.errorCount = options?.errorCount ?? 0;
     }
-    static [typeId] = NodeIds.ServiceCounterDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ServiceCounterDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeUInt32(this.totalCount);
         encoder.writeUInt32(this.errorCount);
@@ -10705,7 +10705,7 @@ export class StatusResult implements StatusResultOptions {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.diagnosticInfo = options?.diagnosticInfo ?? new DiagnosticInfo();
     }
-    static [typeId] = NodeIds.StatusResult_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.StatusResult_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.statusCode);
         encoder.writeType(this.diagnosticInfo);
@@ -10817,7 +10817,7 @@ export class SubscriptionDiagnosticsDataType implements SubscriptionDiagnosticsD
         this.nextSequenceNumber = options?.nextSequenceNumber ?? 0;
         this.eventQueueOverFlowCount = options?.eventQueueOverFlowCount ?? 0;
     }
-    static [typeId] = NodeIds.SubscriptionDiagnosticsDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SubscriptionDiagnosticsDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.sessionId);
         encoder.writeUInt32(this.subscriptionId);
@@ -10939,7 +10939,7 @@ export class ModelChangeStructureDataType implements ModelChangeStructureDataTyp
         this.affectedType = options?.affectedType ?? NodeId.null();
         this.verb = options?.verb ?? 0;
     }
-    static [typeId] = NodeIds.ModelChangeStructureDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ModelChangeStructureDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.affected);
         encoder.writeType(this.affectedType);
@@ -10967,7 +10967,7 @@ export class SemanticChangeStructureDataType implements SemanticChangeStructureD
         this.affected = options?.affected ?? NodeId.null();
         this.affectedType = options?.affectedType ?? NodeId.null();
     }
-    static [typeId] = NodeIds.SemanticChangeStructureDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.SemanticChangeStructureDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.affected);
         encoder.writeType(this.affectedType);
@@ -10992,7 +10992,7 @@ export class Range implements RangeOptions {
         this.low = options?.low ?? 0;
         this.high = options?.high ?? 0;
     }
-    static [typeId] = NodeIds.Range_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Range_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.low);
         encoder.writeDouble(this.high);
@@ -11023,7 +11023,7 @@ export class EUInformation implements EUInformationOptions {
         this.displayName = options?.displayName ?? new LocalizedText();
         this.description = options?.description ?? new LocalizedText();
     }
-    static [typeId] = NodeIds.EUInformation_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.EUInformation_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.namespaceUri);
         encoder.writeInt32(this.unitId);
@@ -11059,7 +11059,7 @@ export class ComplexNumberType implements ComplexNumberTypeOptions {
         this.real = options?.real ?? 0;
         this.imaginary = options?.imaginary ?? 0;
     }
-    static [typeId] = NodeIds.ComplexNumberType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ComplexNumberType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeFloat(this.real);
         encoder.writeFloat(this.imaginary);
@@ -11084,7 +11084,7 @@ export class DoubleComplexNumberType implements DoubleComplexNumberTypeOptions {
         this.real = options?.real ?? 0;
         this.imaginary = options?.imaginary ?? 0;
     }
-    static [typeId] = NodeIds.DoubleComplexNumberType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.DoubleComplexNumberType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.real);
         encoder.writeDouble(this.imaginary);
@@ -11118,7 +11118,7 @@ export class AxisInformation implements AxisInformationOptions {
         this.axisScaleType = options?.axisScaleType ?? AxisScaleEnumeration.Linear;
         this.axisSteps = options?.axisSteps;
     }
-    static [typeId] = NodeIds.AxisInformation_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.AxisInformation_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.engineeringUnits);
         encoder.writeType(this.euRange);
@@ -11152,7 +11152,7 @@ export class XVType implements XVTypeOptions {
         this.x = options?.x ?? 0;
         this.value = options?.value ?? 0;
     }
-    static [typeId] = NodeIds.XVType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.XVType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeDouble(this.x);
         encoder.writeFloat(this.value);
@@ -11201,7 +11201,7 @@ export class ProgramDiagnosticDataType implements ProgramDiagnosticDataTypeOptio
         this.lastMethodCallTime = options?.lastMethodCallTime ?? new Date(-11644473600000);
         this.lastMethodReturnStatus = options?.lastMethodReturnStatus ?? new StatusResult();
     }
-    static [typeId] = NodeIds.ProgramDiagnosticDataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ProgramDiagnosticDataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.createSessionId);
         encoder.writeString(this.createClientName);
@@ -11280,7 +11280,7 @@ export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOpt
         this.lastMethodCallTime = options?.lastMethodCallTime ?? new Date(-11644473600000);
         this.lastMethodReturnStatus = options?.lastMethodReturnStatus ?? new StatusResult();
     }
-    static [typeId] = NodeIds.ProgramDiagnostic2DataType_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.ProgramDiagnostic2DataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeType(this.createSessionId);
         encoder.writeString(this.createClientName);
@@ -11338,7 +11338,7 @@ export class Annotation implements AnnotationOptions {
         this.userName = options?.userName;
         this.annotationTime = options?.annotationTime ?? new Date(-11644473600000);
     }
-    static [typeId] = NodeIds.Annotation_Encoding_DefaultBinary;
+    static [typeId] = NodeIds.Annotation_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
         encoder.writeString(this.message);
         encoder.writeString(this.userName);
