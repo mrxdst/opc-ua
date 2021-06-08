@@ -189,6 +189,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
     this.#applicationName = options.applicationName ?? new LocalizedText();
     this.#requestedSessionTimeout = options.requestedSessionTimeout ?? 1200_000;
     this.#productUri = options.productUri;
+    this.#sessionName = options.sessionName;
     this.autoReconnect = options.autoReconnect ?? false;
     this.reconnectTimeout = options.reconnectTimeout ?? 2_000;
 
