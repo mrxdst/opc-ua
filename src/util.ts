@@ -256,7 +256,7 @@ export function getTypeFromTypeId(typeId: NodeIds): DecodableType | undefined {
       return Variant;
     case NodeIds.DiagnosticInfo:
       return DiagnosticInfo;
-    case NodeIds.ServiceFault:
+    case NodeIds.ServiceFault_Encoding_DefaultBinary:
       return ServiceFault;
     default: {
       let name = NodeIds[typeId];
