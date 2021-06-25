@@ -29,10 +29,9 @@ const minFiletime = BigInt(0);
 const maxFiletime = BigInt('2650467743990000000');
 
 const encoderInitialSize = 64;
-const encoderSizeStep = 64;
 
 export class BinaryDataEncoder {
-  #dv: DataView;
+  #buff: Uint8Array;
   #byteOffset = 0;
 
   get encodedBytes(): number {
@@ -40,7 +39,7 @@ export class BinaryDataEncoder {
   }
 
   constructor() {
-    this.#dv = new DataView(new ArrayBuffer(encoderInitialSize));
+    this.#buff = new Uint8Array(encoderInitialSize);
   }
 
   writeSByte(value: SByte): void {
@@ -114,16 +113,17 @@ export class BinaryDataEncoder {
   }
 
   writeBytes(value: Uint8Array): void {
-    if (this.#dv.byteLength < this.#byteOffset + value.byteLength) {
-      const old = new Uint8Array(this.#dv.buffer, this.#dv.byteOffset, this.#dv.byteLength);
-      const _new = new Uint8Array(this.#dv.byteLength + Math.ceil(value.byteLength / encoderSizeStep) * encoderSizeStep);
-      _new.set(old);
-      _new.set(value, this.#byteOffset);
-      this.#dv = new DataView(_new.buffer);
+    if (this.#buff.byteLength < this.#byteOffset + value.byteLength) {
+      let newSize = this.#buff.byteLength;
+      do {
+        newSize *= 2;
+      } while (newSize < this.#byteOffset + value.byteLength);
+      const _new = new Uint8Array(newSize);
+      _new.set(this.#buff);
+      this.#buff = _new;
     }
 
-    const data = new Uint8Array(this.#dv.buffer, this.#dv.byteOffset, this.#dv.byteLength);
-    data.set(value, this.#byteOffset);
+    this.#buff.set(value, this.#byteOffset);
     this.#byteOffset += value.byteLength;
   }
 
@@ -316,7 +316,7 @@ export class BinaryDataEncoder {
   }
 
   finish(): Uint8Array {
-    return new Uint8Array(this.#dv.buffer, 0, this.#byteOffset);
+    return new Uint8Array(this.#buff.buffer, 0, this.#byteOffset);
   }
 
   static encodeType(value: Encodable): Uint8Array {
