@@ -3,7 +3,6 @@ import { EventEmitter } from 'events';
 import PQueue from 'p-queue';
 import pDefer from 'p-defer';
 import { Transform } from 'stream';
-import { URL } from 'whatwg-url';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding';
 import { Message, MessageType } from './Message';
 import { UInt32 } from '../../DataTypes/Primitives';
