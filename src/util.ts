@@ -179,6 +179,8 @@ export function isTypedArray(obj: unknown): obj is TypedArray {
     obj instanceof Int32Array ||
     obj instanceof Uint32Array ||
     obj instanceof Uint8ClampedArray ||
+    obj instanceof BigUint64Array ||
+    obj instanceof BigInt64Array ||
     obj instanceof Float32Array ||
     obj instanceof Float64Array;
 }
