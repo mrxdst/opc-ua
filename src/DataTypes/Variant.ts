@@ -87,7 +87,7 @@ T extends VariantTypeId.UInt64 ? BigInt64Array :
 T extends VariantTypeId.Float ? Float32Array :
 T extends VariantTypeId.Double ? Float64Array : never;
 
-export type VariantValue<T extends VariantTypeId = VariantTypeId> = VariantValueType<Exclude<T, VariantTypeId.Variant>> | VariantValueType<T>[] | NdArray<VariantValueType<T>> | VariantTypedArrayType<T> | undefined;
+export type VariantValue<T extends VariantTypeId = VariantTypeId> = VariantValueType<Exclude<T, VariantTypeId.Variant>> | VariantValueType<T>[] | NdArray<VariantValueType<T>[]> | VariantTypedArrayType<T> | undefined;
 
 export interface VariantOptions<T extends VariantTypeId = VariantTypeId> {
   /** The type of the value. */

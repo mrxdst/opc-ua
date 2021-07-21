@@ -1,5 +1,5 @@
 import { DecodableType, TypedArray } from './types';
-import { NdArray } from 'ndarray';
+import { NdArray, TypedArray as NdTypedArray } from 'ndarray';
 import {
   SByte,
   Byte,
@@ -185,7 +185,7 @@ export function isTypedArray(obj: unknown): obj is TypedArray {
     obj instanceof Float64Array;
 }
 
-export function isNdArray<T>(obj: unknown): obj is NdArray<T> {
+export function isNdArray<T extends []>(obj: unknown): obj is NdArray<T> {
   return new Object(obj) === obj
     && 'data' in obj
     && 'shape' in obj
