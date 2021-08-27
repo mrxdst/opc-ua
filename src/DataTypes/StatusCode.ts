@@ -13,15 +13,15 @@ export enum StatusCodeSeverity {
 }
 
 export interface StatusCodeOptions {
-  code?: UInt32;
-  name?: string;
-  description?: string;
+  code?: UInt32 | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
 }
 
 export class StatusCode implements StatusCodeOptions {
   readonly code: UInt32;
-  readonly name?: string;
-  readonly description?: string;
+  readonly name: string | undefined;
+  readonly description: string | undefined;
 
   private constructor(options?: StatusCodeOptions) {
     this.code = options?.code ?? 0;

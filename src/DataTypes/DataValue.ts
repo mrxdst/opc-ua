@@ -15,33 +15,33 @@ const serverPicoSecondsMask = 0x20;
 
 export interface DataValueOptions {
   /** The value. */
-  value?: Variant;
+  value?: Variant | undefined;
   /** The status associated with the value. */
-  status?: StatusCode;
+  status?: StatusCode | undefined;
   /** The source timestamp associated with the value. */
-  sourceTimestamp?: Date;
+  sourceTimestamp?: Date | undefined;
   /** The number of 10 picosecond intervals for the SourceTimestamp. */
-  sourcePicoSeconds?: UInt16;
+  sourcePicoSeconds?: UInt16 | undefined;
   /** The Server timestamp associated with the value. */
-  serverTimestamp?: Date;
+  serverTimestamp?: Date | undefined;
   /** The number of 10 picosecond intervals for the ServerTimestamp. */
-  serverPicoSeconds?: UInt16;
+  serverPicoSeconds?: UInt16 | undefined;
 }
 
 /** A value with an associated timestamp, and quality. */
 export class DataValue implements DataValueOptions {
   /** The value. */
-  value?: Variant;
+  readonly value: Variant | undefined;
   /** The status associated with the value. */
-  status?: StatusCode;
+  readonly status: StatusCode | undefined;
   /** The source timestamp associated with the value. */
-  sourceTimestamp?: Date;
+  readonly sourceTimestamp: Date | undefined;
   /** The number of 10 picosecond intervals for the SourceTimestamp. */
-  sourcePicoSeconds?: UInt16;
+  readonly sourcePicoSeconds: UInt16 | undefined;
   /** The Server timestamp associated with the value. */
-  serverTimestamp?: Date;
+  readonly serverTimestamp: Date | undefined;
   /** The number of 10 picosecond intervals for the ServerTimestamp. */
-  serverPicoSeconds?: UInt16;
+  readonly serverPicoSeconds: UInt16 | undefined;
 
   constructor(options?: DataValueOptions) {
     this.value = options?.value;

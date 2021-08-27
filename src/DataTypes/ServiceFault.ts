@@ -12,7 +12,7 @@ export interface ServiceFaultOptions {
  * A fault that occured when calling the service.
  */
 export class ServiceFault extends UaError implements ServiceFaultOptions {
-  responseHeader: ResponseHeader;
+  readonly responseHeader: ResponseHeader;
 
   constructor(options: ServiceFaultOptions) {
     super({code: options.responseHeader.serviceResult});

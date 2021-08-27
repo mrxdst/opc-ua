@@ -8,17 +8,17 @@ import { StatusCode } from './StatusCode';
 
 export interface QualifiedNameOptions {
   /** The namespace index. */
-  namespaceIndex?: UInt16;
+  namespaceIndex?: UInt16 | undefined;
   /** The name. */
-  name?: UaString;
+  name?: UaString | undefined;
 }
 
 /** A string qualified with a namespace index. */
 export class QualifiedName implements QualifiedName {
   /** The namespace index. */
-  namespaceIndex: UInt16;
+  readonly namespaceIndex: UInt16;
   /** The name. */
-  name?: UaString;
+  readonly name: UaString | undefined;
 
   constructor(options?: QualifiedNameOptions) {
     this.namespaceIndex = options?.namespaceIndex ?? 0;

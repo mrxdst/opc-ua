@@ -1,5 +1,5 @@
 import { DecodableType, TypedArray } from './types';
-import { NdArray, TypedArray as NdTypedArray } from 'ndarray';
+import { NdArray } from 'ndarray';
 import {
   SByte,
   Byte,

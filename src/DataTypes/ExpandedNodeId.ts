@@ -8,16 +8,16 @@ import { StatusCode } from './StatusCode';
 import { NodeIds } from './NodeIds';
 
 export interface ExpandedNodeIdOptions {
-  nodeId?: NodeId;
-  namespaceUri?: UaString;
-  serverIndex?: UInt32;
+  nodeId?: NodeId | undefined;
+  namespaceUri?: UaString | undefined;
+  serverIndex?: UInt32 | undefined;
 }
 
 /** An identifier for a node in a UA server address space qualified with a complete namespace string. */
 export class ExpandedNodeId implements ExpandedNodeIdOptions {
-  nodeId: NodeId;
-  namespaceUri?: UaString;
-  serverIndex: UInt32;
+  readonly nodeId: NodeId;
+  readonly namespaceUri: UaString | undefined;
+  readonly serverIndex: UInt32;
   
   constructor(options?: ExpandedNodeIdOptions) {
     this.nodeId = options?.nodeId ?? NodeId.null();
@@ -40,15 +40,13 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
       return `${svrPart}${text}`;
     }
 
-    const _ns = this.nodeId.namespace;
-    this.nodeId.namespace = 0;
-    let identifierPart: string;
-    try {
-      identifierPart = this.nodeId.toString();
-    } finally {
-      this.nodeId.namespace = _ns;
-    }
-    
+    const nodeId = new NodeId({
+      ...this.nodeId,
+      namespace: 0
+    });
+
+    const identifierPart = nodeId.toString();
+        
     if (identifierPart === 'Invalid NodeId') {
       return 'Invalid ExpandedNodeId';
     }
@@ -66,18 +64,19 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     if (!this.namespaceUri) {
       return this.nodeId;
     }
-
-    const _nodeId = new NodeId(this.nodeId);
     
     const index = namespaceArray.indexOf(this.namespaceUri);
-
+    
     if (index === -1) {
       throw new UaError({code: StatusCode.BadInvalidArgument, reason: "NamespaceUri doesn't exist in NamespaceArray"});
     }
+    
+    const nodeId = new NodeId({
+      ...this.nodeId,
+      namespace: index
+    });
 
-    _nodeId.namespace = index;
-
-    return _nodeId;
+    return nodeId;
   }
 
   /** Parses the string to a ExpandedNodeId. */
@@ -116,16 +115,13 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
   static [typeId] = NodeIds.ExpandedNodeId as const;
 
   [encode](encoder: BinaryDataEncoder): void {
-    const nodeId = new NodeId(this.nodeId);
-    nodeId[namespaceUriFlag] = !!this.namespaceUri;
-    nodeId[serverIndexFlag] = !!this.serverIndex;
+    const nodeId = new NodeId({
+      ...this.nodeId,
+      [namespaceUriFlag]: !!this.namespaceUri,
+      [serverIndexFlag]: !!this.serverIndex
+    });
 
-    try {
-      encoder.writeType(nodeId);
-    } finally {
-      nodeId[namespaceUriFlag] = undefined;
-      nodeId[serverIndexFlag] = undefined;
-    }
+    encoder.writeType(nodeId);
 
     if (this.namespaceUri !== undefined) {
       encoder.writeString(this.namespaceUri);
@@ -136,7 +132,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
   }
 
   static [decode](decoder: BinaryDataDecoder): ExpandedNodeId {
-    const nodeId = decoder.readType(NodeId);
+    let nodeId = decoder.readType(NodeId);
     let namespaceUri: UaString;
     let serverIndex: UInt32 | undefined;
 
@@ -147,8 +143,11 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
       serverIndex = decoder.readUInt32();
     }
 
-    nodeId[namespaceUriFlag] = undefined;
-    nodeId[serverIndexFlag] = undefined;
+    nodeId = new NodeId({
+      ...nodeId,
+      [namespaceUriFlag]: undefined,
+      [serverIndexFlag]: undefined
+    });
 
     return new ExpandedNodeId({
       nodeId,

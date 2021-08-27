@@ -15,37 +15,37 @@ const innerDiagnosticInfoMask = 0x40;
 
 export interface DiagnosticInfoOptions {
   /** A symbolic name for the status code. */
-  symbolicId?: Int32;
+  symbolicId?: Int32 | undefined;
   /** A namespace that qualifies the symbolic id. */
-  namespaceUri?: Int32;
+  namespaceUri?: Int32 | undefined;
   /** The locale used for the localized text. */
-  locale?: Int32;
+  locale?: Int32 | undefined;
   /** A human readable summary of the status code. */
-  localizedText?: Int32;
+  localizedText?: Int32 | undefined;
   /** Detailed application specific diagnostic information. */
-  additionalInfo?: UaString;
+  additionalInfo?: UaString | undefined;
   /** A status code provided by an underlying system. */
-  innerStatusCode?: StatusCode;
+  innerStatusCode?: StatusCode | undefined;
   /** Diagnostic info associated with the inner status code. */
-  innerDiagnosticInfo?: DiagnosticInfo;
+  innerDiagnosticInfo?: DiagnosticInfo | undefined;
 }
 
 /** A recursive structure containing diagnostic information associated with a status code. */
 export class DiagnosticInfo implements DiagnosticInfoOptions {
   /** A symbolic name for the status code. */
-  symbolicId?: Int32;
+  readonly symbolicId: Int32 | undefined;
   /** A namespace that qualifies the symbolic id. */
-  namespaceUri?: Int32;
+  readonly namespaceUri: Int32 | undefined;
   /** The locale used for the localized text. */
-  locale?: Int32;
+  readonly locale: Int32 | undefined;
   /** A human readable summary of the status code. */
-  localizedText?: Int32;
+  readonly localizedText: Int32 | undefined;
   /** Detailed application specific diagnostic information. */
-  additionalInfo?: UaString;
+  readonly additionalInfo: UaString | undefined;
   /** A status code provided by an underlying system. */
-  innerStatusCode?: StatusCode;
+  readonly innerStatusCode: StatusCode | undefined;
   /** Diagnostic info associated with the inner status code. */
-  innerDiagnosticInfo?: DiagnosticInfo;
+  readonly innerDiagnosticInfo: DiagnosticInfo | undefined;
   
   constructor(options?: DiagnosticInfoOptions) {
     this.symbolicId = options?.symbolicId;

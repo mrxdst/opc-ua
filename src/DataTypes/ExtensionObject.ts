@@ -19,9 +19,9 @@ export interface ExtensionObjectOptions {
   /**
    * The identifier for the DataTypeEncoding node in the Server’s AddressSpace.
    */
-  typeId?: NodeId;
+  typeId?: NodeId | undefined;
   /** The object body. */
-  body?: EncodableType | ByteString | XmlElement;
+  body?: EncodableType | ByteString | XmlElement | undefined;
 }
 
 /** A serialized object prefixed with its data type identifier. */
@@ -29,9 +29,9 @@ export class ExtensionObject implements ExtensionObjectOptions {
   /**
    * The identifier for the DataTypeEncoding node in the Server’s AddressSpace.
    */
-  typeId: NodeId;
+  readonly typeId: NodeId;
   /** The object body. */
-  body?: EncodableType | ByteString | XmlElement;
+  readonly body: EncodableType | ByteString | XmlElement | undefined;
 
   constructor(options?: ExtensionObjectOptions) {
     this.typeId = options?.typeId ?? NodeId.null();

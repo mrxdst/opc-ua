@@ -101,11 +101,11 @@ export interface VariantOptions<T extends VariantTypeId = VariantTypeId> {
 /** A union of several types. */
 export class Variant<T extends VariantTypeId = VariantTypeId> implements VariantOptions<T> {
   /** The type of the value. */
-  typeId: T;
+  readonly typeId: T;
   /** The value. */
-  value: VariantValue<T>;
+  readonly value: VariantValue<T>;
   /** Value is an array. Only needed if it can't be infered from the value. */
-  isArray?: boolean | undefined;
+  readonly isArray: boolean | undefined;
 
   constructor(options: VariantOptions<T>) {
     this.typeId = options.typeId;
@@ -233,6 +233,9 @@ export class Variant<T extends VariantTypeId = VariantTypeId> implements Variant
         }
       }
     } else {
+      if (typeId === VariantTypeId.Variant) {
+        throw new UaError({ code: StatusCode.BadInvalidArgument, reason: "The value of a Variant isn't allowed to be another Variant unless it's an array of Variants" });
+      }
       value = readVariantValue(decoder, typeId);
     }
 

@@ -19,15 +19,15 @@ export interface NodeIdOptions<
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace?: UInt16;
+  namespace?: UInt16 | undefined;
   /** The format and data type of the identifier. */
   identifierType: N;
   /** The identifier for a node in the address space of an OPC UA Server. */
   value: V;
   /** Used internaly by ExpandedNodeId. */
-  [namespaceUriFlag]?: boolean;
+  [namespaceUriFlag]?: boolean | undefined;
   /** Used internaly by ExpandedNodeId. */
-  [serverIndexFlag]?: boolean;
+  [serverIndexFlag]?: boolean | undefined;
 }
 
 export type NodeIdTypeToValueType<T> = 
@@ -48,15 +48,15 @@ export class NodeId<
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace: UInt16;
+  readonly namespace: UInt16;
   /** The format and data type of the identifier. */
-  identifierType: N;
+  readonly identifierType: N;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value: V;
+  readonly value: V;
   /** Used internaly by ExpandedNodeId. */
-  [namespaceUriFlag]?: boolean;
+  readonly [namespaceUriFlag]: boolean | undefined;
   /** Used internaly by ExpandedNodeId. */
-  [serverIndexFlag]?: boolean;
+  readonly [serverIndexFlag]: boolean | undefined;
   
   constructor(options: NodeIdOptions<N, V>) {
     this.namespace = options.namespace ?? 0;
@@ -381,7 +381,7 @@ export class NodeId<
 
 export interface TwoByteNodeIdOptions {
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.TwoByte>;
+  value?: NodeIdTypeToValueType<NodeIdType.TwoByte> | undefined;
 }
 
 /** An identifier for a node in a UA server address space. */
@@ -400,9 +400,9 @@ export interface FourByteNodeIdOptions {
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace?: Byte;
+  namespace?: Byte | undefined;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.FourByte>;
+  value?: NodeIdTypeToValueType<NodeIdType.FourByte> | undefined;
 }
 
 /** An identifier for a node in a UA server address space. */
@@ -421,9 +421,9 @@ export interface NumericNodeIdOptions {
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace?: UInt16;
+  namespace?: UInt16 | undefined;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.Numeric>;
+  value?: NodeIdTypeToValueType<NodeIdType.Numeric> | undefined;
 }
 
 /** An identifier for a node in a UA server address space. */
@@ -442,9 +442,9 @@ export interface StringNodeIdOptions {
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace?: UInt16;
+  namespace?: UInt16 | undefined;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.String>;
+  value?: NodeIdTypeToValueType<NodeIdType.String> | undefined;
 }
 
 /** An identifier for a node in a UA server address space. */
@@ -463,9 +463,9 @@ export interface GuidNodeIdOptions {
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace?: UInt16;
+  namespace?: UInt16 | undefined;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.Guid>;
+  value?: NodeIdTypeToValueType<NodeIdType.Guid> | undefined;
 }
 
 /** An identifier for a node in a UA server address space. */
@@ -484,9 +484,9 @@ export interface ByteStringNodeIdOptions {
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
    */
-  namespace?: UInt16;
+  namespace?: UInt16 | undefined;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.ByteString>;
+  value?: NodeIdTypeToValueType<NodeIdType.ByteString> | undefined;
 }
 
 /** An identifier for a node in a UA server address space. */

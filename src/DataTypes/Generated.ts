@@ -41,12 +41,12 @@ export enum NamingRuleType {
     Constraint = 3
 }
 export interface KeyValuePairOptions {
-    key?: QualifiedName;
-    value?: Variant;
+    key?: QualifiedName | undefined;
+    value?: Variant | undefined;
 }
 export class KeyValuePair implements KeyValuePairOptions {
-    key: QualifiedName;
-    value: Variant;
+    readonly key: QualifiedName;
+    readonly value: Variant;
     constructor(options?: KeyValuePairOptions) {
         this.key = options?.key ?? new QualifiedName();
         this.value = options?.value ?? Variant.null();
@@ -57,19 +57,17 @@ export class KeyValuePair implements KeyValuePairOptions {
         encoder.writeType(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): KeyValuePair {
-        const key = decoder.readType(QualifiedName);
-        const value = decoder.readType(Variant);
         return new KeyValuePair({
-            key,
-            value
+            key: decoder.readType(QualifiedName),
+            value: decoder.readType(Variant)
         });
     }
 }
 export interface AdditionalParametersTypeOptions {
-    parameters?: KeyValuePair[];
+    parameters?: KeyValuePair[] | undefined;
 }
 export class AdditionalParametersType implements AdditionalParametersTypeOptions {
-    parameters?: KeyValuePair[];
+    readonly parameters?: KeyValuePair[];
     constructor(options?: AdditionalParametersTypeOptions) {
         this.parameters = options?.parameters;
     }
@@ -78,19 +76,18 @@ export class AdditionalParametersType implements AdditionalParametersTypeOptions
         encoder.writeTypeArray(this.parameters);
     }
     static [decode](decoder: BinaryDataDecoder): AdditionalParametersType {
-        const parameters = decoder.readTypeArray(KeyValuePair);
         return new AdditionalParametersType({
-            parameters
+            parameters: decoder.readTypeArray(KeyValuePair)
         });
     }
 }
 export interface EphemeralKeyTypeOptions {
-    publicKey?: ByteString;
-    signature?: ByteString;
+    publicKey?: ByteString | undefined;
+    signature?: ByteString | undefined;
 }
 export class EphemeralKeyType implements EphemeralKeyTypeOptions {
-    publicKey?: ByteString;
-    signature?: ByteString;
+    readonly publicKey?: ByteString;
+    readonly signature?: ByteString;
     constructor(options?: EphemeralKeyTypeOptions) {
         this.publicKey = options?.publicKey;
         this.signature = options?.signature;
@@ -101,25 +98,23 @@ export class EphemeralKeyType implements EphemeralKeyTypeOptions {
         encoder.writeByteString(this.signature);
     }
     static [decode](decoder: BinaryDataDecoder): EphemeralKeyType {
-        const publicKey = decoder.readByteString();
-        const signature = decoder.readByteString();
         return new EphemeralKeyType({
-            publicKey,
-            signature
+            publicKey: decoder.readByteString(),
+            signature: decoder.readByteString()
         });
     }
 }
 export interface EndpointTypeOptions {
-    endpointUrl?: UaString;
-    securityMode?: MessageSecurityMode;
-    securityPolicyUri?: UaString;
-    transportProfileUri?: UaString;
+    endpointUrl?: UaString | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityPolicyUri?: UaString | undefined;
+    transportProfileUri?: UaString | undefined;
 }
 export class EndpointType implements EndpointTypeOptions {
-    endpointUrl?: UaString;
-    securityMode: MessageSecurityMode;
-    securityPolicyUri?: UaString;
-    transportProfileUri?: UaString;
+    readonly endpointUrl?: UaString;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityPolicyUri?: UaString;
+    readonly transportProfileUri?: UaString;
     constructor(options?: EndpointTypeOptions) {
         this.endpointUrl = options?.endpointUrl;
         this.securityMode = options?.securityMode ?? MessageSecurityMode.Invalid;
@@ -134,25 +129,21 @@ export class EndpointType implements EndpointTypeOptions {
         encoder.writeString(this.transportProfileUri);
     }
     static [decode](decoder: BinaryDataDecoder): EndpointType {
-        const endpointUrl = decoder.readString();
-        const securityMode = decoder.readUInt32();
-        const securityPolicyUri = decoder.readString();
-        const transportProfileUri = decoder.readString();
         return new EndpointType({
-            endpointUrl,
-            securityMode,
-            securityPolicyUri,
-            transportProfileUri
+            endpointUrl: decoder.readString(),
+            securityMode: decoder.readUInt32(),
+            securityPolicyUri: decoder.readString(),
+            transportProfileUri: decoder.readString()
         });
     }
 }
 export interface RationalNumberOptions {
-    numerator?: Int32;
-    denominator?: UInt32;
+    numerator?: Int32 | undefined;
+    denominator?: UInt32 | undefined;
 }
 export class RationalNumber implements RationalNumberOptions {
-    numerator: Int32;
-    denominator: UInt32;
+    readonly numerator: Int32;
+    readonly denominator: UInt32;
     constructor(options?: RationalNumberOptions) {
         this.numerator = options?.numerator ?? 0;
         this.denominator = options?.denominator ?? 0;
@@ -163,11 +154,9 @@ export class RationalNumber implements RationalNumberOptions {
         encoder.writeUInt32(this.denominator);
     }
     static [decode](decoder: BinaryDataDecoder): RationalNumber {
-        const numerator = decoder.readInt32();
-        const denominator = decoder.readUInt32();
         return new RationalNumber({
-            numerator,
-            denominator
+            numerator: decoder.readInt32(),
+            denominator: decoder.readUInt32()
         });
     }
 }
@@ -180,14 +169,14 @@ export class Vector {
     }
 }
 export interface ThreeDVectorOptions {
-    x?: Double;
-    y?: Double;
-    z?: Double;
+    x?: Double | undefined;
+    y?: Double | undefined;
+    z?: Double | undefined;
 }
 export class ThreeDVector implements ThreeDVectorOptions {
-    x: Double;
-    y: Double;
-    z: Double;
+    readonly x: Double;
+    readonly y: Double;
+    readonly z: Double;
     constructor(options?: ThreeDVectorOptions) {
         this.x = options?.x ?? 0;
         this.y = options?.y ?? 0;
@@ -200,13 +189,10 @@ export class ThreeDVector implements ThreeDVectorOptions {
         encoder.writeDouble(this.z);
     }
     static [decode](decoder: BinaryDataDecoder): ThreeDVector {
-        const x = decoder.readDouble();
-        const y = decoder.readDouble();
-        const z = decoder.readDouble();
         return new ThreeDVector({
-            x,
-            y,
-            z
+            x: decoder.readDouble(),
+            y: decoder.readDouble(),
+            z: decoder.readDouble()
         });
     }
 }
@@ -219,14 +205,14 @@ export class CartesianCoordinates {
     }
 }
 export interface ThreeDCartesianCoordinatesOptions {
-    x?: Double;
-    y?: Double;
-    z?: Double;
+    x?: Double | undefined;
+    y?: Double | undefined;
+    z?: Double | undefined;
 }
 export class ThreeDCartesianCoordinates implements ThreeDCartesianCoordinatesOptions {
-    x: Double;
-    y: Double;
-    z: Double;
+    readonly x: Double;
+    readonly y: Double;
+    readonly z: Double;
     constructor(options?: ThreeDCartesianCoordinatesOptions) {
         this.x = options?.x ?? 0;
         this.y = options?.y ?? 0;
@@ -239,13 +225,10 @@ export class ThreeDCartesianCoordinates implements ThreeDCartesianCoordinatesOpt
         encoder.writeDouble(this.z);
     }
     static [decode](decoder: BinaryDataDecoder): ThreeDCartesianCoordinates {
-        const x = decoder.readDouble();
-        const y = decoder.readDouble();
-        const z = decoder.readDouble();
         return new ThreeDCartesianCoordinates({
-            x,
-            y,
-            z
+            x: decoder.readDouble(),
+            y: decoder.readDouble(),
+            z: decoder.readDouble()
         });
     }
 }
@@ -258,14 +241,14 @@ export class Orientation {
     }
 }
 export interface ThreeDOrientationOptions {
-    a?: Double;
-    b?: Double;
-    c?: Double;
+    a?: Double | undefined;
+    b?: Double | undefined;
+    c?: Double | undefined;
 }
 export class ThreeDOrientation implements ThreeDOrientationOptions {
-    a: Double;
-    b: Double;
-    c: Double;
+    readonly a: Double;
+    readonly b: Double;
+    readonly c: Double;
     constructor(options?: ThreeDOrientationOptions) {
         this.a = options?.a ?? 0;
         this.b = options?.b ?? 0;
@@ -278,13 +261,10 @@ export class ThreeDOrientation implements ThreeDOrientationOptions {
         encoder.writeDouble(this.c);
     }
     static [decode](decoder: BinaryDataDecoder): ThreeDOrientation {
-        const a = decoder.readDouble();
-        const b = decoder.readDouble();
-        const c = decoder.readDouble();
         return new ThreeDOrientation({
-            a,
-            b,
-            c
+            a: decoder.readDouble(),
+            b: decoder.readDouble(),
+            c: decoder.readDouble()
         });
     }
 }
@@ -297,12 +277,12 @@ export class Frame {
     }
 }
 export interface ThreeDFrameOptions {
-    cartesianCoordinates?: ThreeDCartesianCoordinates;
-    orientation?: ThreeDOrientation;
+    cartesianCoordinates?: ThreeDCartesianCoordinates | undefined;
+    orientation?: ThreeDOrientation | undefined;
 }
 export class ThreeDFrame implements ThreeDFrameOptions {
-    cartesianCoordinates: ThreeDCartesianCoordinates;
-    orientation: ThreeDOrientation;
+    readonly cartesianCoordinates: ThreeDCartesianCoordinates;
+    readonly orientation: ThreeDOrientation;
     constructor(options?: ThreeDFrameOptions) {
         this.cartesianCoordinates = options?.cartesianCoordinates ?? new ThreeDCartesianCoordinates();
         this.orientation = options?.orientation ?? new ThreeDOrientation();
@@ -313,11 +293,9 @@ export class ThreeDFrame implements ThreeDFrameOptions {
         encoder.writeType(this.orientation);
     }
     static [decode](decoder: BinaryDataDecoder): ThreeDFrame {
-        const cartesianCoordinates = decoder.readType(ThreeDCartesianCoordinates);
-        const orientation = decoder.readType(ThreeDOrientation);
         return new ThreeDFrame({
-            cartesianCoordinates,
-            orientation
+            cartesianCoordinates: decoder.readType(ThreeDCartesianCoordinates),
+            orientation: decoder.readType(ThreeDOrientation)
         });
     }
 }
@@ -336,12 +314,12 @@ export enum IdentityCriteriaType {
     AuthenticatedUser = 6
 }
 export interface IdentityMappingRuleTypeOptions {
-    criteriaType?: IdentityCriteriaType;
-    criteria?: UaString;
+    criteriaType?: IdentityCriteriaType | undefined;
+    criteria?: UaString | undefined;
 }
 export class IdentityMappingRuleType implements IdentityMappingRuleTypeOptions {
-    criteriaType: IdentityCriteriaType;
-    criteria?: UaString;
+    readonly criteriaType: IdentityCriteriaType;
+    readonly criteria?: UaString;
     constructor(options?: IdentityMappingRuleTypeOptions) {
         this.criteriaType = options?.criteriaType ?? IdentityCriteriaType.UserName;
         this.criteria = options?.criteria;
@@ -352,25 +330,23 @@ export class IdentityMappingRuleType implements IdentityMappingRuleTypeOptions {
         encoder.writeString(this.criteria);
     }
     static [decode](decoder: BinaryDataDecoder): IdentityMappingRuleType {
-        const criteriaType = decoder.readUInt32();
-        const criteria = decoder.readString();
         return new IdentityMappingRuleType({
-            criteriaType,
-            criteria
+            criteriaType: decoder.readUInt32(),
+            criteria: decoder.readString()
         });
     }
 }
 export interface CurrencyUnitTypeOptions {
-    numericCode?: Int16;
-    exponent?: SByte;
-    alphabeticCode?: UaString;
-    currency?: LocalizedText;
+    numericCode?: Int16 | undefined;
+    exponent?: SByte | undefined;
+    alphabeticCode?: UaString | undefined;
+    currency?: LocalizedText | undefined;
 }
 export class CurrencyUnitType implements CurrencyUnitTypeOptions {
-    numericCode: Int16;
-    exponent: SByte;
-    alphabeticCode?: UaString;
-    currency: LocalizedText;
+    readonly numericCode: Int16;
+    readonly exponent: SByte;
+    readonly alphabeticCode?: UaString;
+    readonly currency: LocalizedText;
     constructor(options?: CurrencyUnitTypeOptions) {
         this.numericCode = options?.numericCode ?? 0;
         this.exponent = options?.exponent ?? 0;
@@ -385,15 +361,11 @@ export class CurrencyUnitType implements CurrencyUnitTypeOptions {
         encoder.writeType(this.currency);
     }
     static [decode](decoder: BinaryDataDecoder): CurrencyUnitType {
-        const numericCode = decoder.readInt16();
-        const exponent = decoder.readSByte();
-        const alphabeticCode = decoder.readString();
-        const currency = decoder.readType(LocalizedText);
         return new CurrencyUnitType({
-            numericCode,
-            exponent,
-            alphabeticCode,
-            currency
+            numericCode: decoder.readInt16(),
+            exponent: decoder.readSByte(),
+            alphabeticCode: decoder.readString(),
+            currency: decoder.readType(LocalizedText)
         });
     }
 }
@@ -406,18 +378,18 @@ export enum TrustListMasks {
     All = 15
 }
 export interface TrustListDataTypeOptions {
-    specifiedLists?: UInt32;
-    trustedCertificates?: ByteString[];
-    trustedCrls?: ByteString[];
-    issuerCertificates?: ByteString[];
-    issuerCrls?: ByteString[];
+    specifiedLists?: UInt32 | undefined;
+    trustedCertificates?: ByteString[] | undefined;
+    trustedCrls?: ByteString[] | undefined;
+    issuerCertificates?: ByteString[] | undefined;
+    issuerCrls?: ByteString[] | undefined;
 }
 export class TrustListDataType implements TrustListDataTypeOptions {
-    specifiedLists: UInt32;
-    trustedCertificates?: ByteString[];
-    trustedCrls?: ByteString[];
-    issuerCertificates?: ByteString[];
-    issuerCrls?: ByteString[];
+    readonly specifiedLists: UInt32;
+    readonly trustedCertificates?: ByteString[];
+    readonly trustedCrls?: ByteString[];
+    readonly issuerCertificates?: ByteString[];
+    readonly issuerCrls?: ByteString[];
     constructor(options?: TrustListDataTypeOptions) {
         this.specifiedLists = options?.specifiedLists ?? 0;
         this.trustedCertificates = options?.trustedCertificates;
@@ -434,27 +406,22 @@ export class TrustListDataType implements TrustListDataTypeOptions {
         encoder.writeByteStringArray(this.issuerCrls);
     }
     static [decode](decoder: BinaryDataDecoder): TrustListDataType {
-        const specifiedLists = decoder.readUInt32();
-        const trustedCertificates = decoder.readByteStringArray();
-        const trustedCrls = decoder.readByteStringArray();
-        const issuerCertificates = decoder.readByteStringArray();
-        const issuerCrls = decoder.readByteStringArray();
         return new TrustListDataType({
-            specifiedLists,
-            trustedCertificates,
-            trustedCrls,
-            issuerCertificates,
-            issuerCrls
+            specifiedLists: decoder.readUInt32(),
+            trustedCertificates: decoder.readByteStringArray(),
+            trustedCrls: decoder.readByteStringArray(),
+            issuerCertificates: decoder.readByteStringArray(),
+            issuerCrls: decoder.readByteStringArray()
         });
     }
 }
 export interface DecimalDataTypeOptions {
-    scale?: Int16;
-    value?: ByteString;
+    scale?: Int16 | undefined;
+    value?: ByteString | undefined;
 }
 export class DecimalDataType implements DecimalDataTypeOptions {
-    scale: Int16;
-    value?: ByteString;
+    readonly scale: Int16;
+    readonly value?: ByteString;
     constructor(options?: DecimalDataTypeOptions) {
         this.scale = options?.scale ?? 0;
         this.value = options?.value;
@@ -465,25 +432,23 @@ export class DecimalDataType implements DecimalDataTypeOptions {
         encoder.writeByteString(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): DecimalDataType {
-        const scale = decoder.readInt16();
-        const value = decoder.readByteString();
         return new DecimalDataType({
-            scale,
-            value
+            scale: decoder.readInt16(),
+            value: decoder.readByteString()
         });
     }
 }
 export interface DataTypeSchemaHeaderOptions {
-    namespaces?: UaString[];
-    structureDataTypes?: StructureDescription[];
-    enumDataTypes?: EnumDescription[];
-    simpleDataTypes?: SimpleTypeDescription[];
+    namespaces?: UaString[] | undefined;
+    structureDataTypes?: StructureDescription[] | undefined;
+    enumDataTypes?: EnumDescription[] | undefined;
+    simpleDataTypes?: SimpleTypeDescription[] | undefined;
 }
 export class DataTypeSchemaHeader implements DataTypeSchemaHeaderOptions {
-    namespaces?: UaString[];
-    structureDataTypes?: StructureDescription[];
-    enumDataTypes?: EnumDescription[];
-    simpleDataTypes?: SimpleTypeDescription[];
+    readonly namespaces?: UaString[];
+    readonly structureDataTypes?: StructureDescription[];
+    readonly enumDataTypes?: EnumDescription[];
+    readonly simpleDataTypes?: SimpleTypeDescription[];
     constructor(options?: DataTypeSchemaHeaderOptions) {
         this.namespaces = options?.namespaces;
         this.structureDataTypes = options?.structureDataTypes;
@@ -498,25 +463,21 @@ export class DataTypeSchemaHeader implements DataTypeSchemaHeaderOptions {
         encoder.writeTypeArray(this.simpleDataTypes);
     }
     static [decode](decoder: BinaryDataDecoder): DataTypeSchemaHeader {
-        const namespaces = decoder.readStringArray();
-        const structureDataTypes = decoder.readTypeArray(StructureDescription);
-        const enumDataTypes = decoder.readTypeArray(EnumDescription);
-        const simpleDataTypes = decoder.readTypeArray(SimpleTypeDescription);
         return new DataTypeSchemaHeader({
-            namespaces,
-            structureDataTypes,
-            enumDataTypes,
-            simpleDataTypes
+            namespaces: decoder.readStringArray(),
+            structureDataTypes: decoder.readTypeArray(StructureDescription),
+            enumDataTypes: decoder.readTypeArray(EnumDescription),
+            simpleDataTypes: decoder.readTypeArray(SimpleTypeDescription)
         });
     }
 }
 export interface DataTypeDescriptionOptions {
-    dataTypeId?: NodeId;
-    name?: QualifiedName;
+    dataTypeId?: NodeId | undefined;
+    name?: QualifiedName | undefined;
 }
 export class DataTypeDescription implements DataTypeDescriptionOptions {
-    dataTypeId: NodeId;
-    name: QualifiedName;
+    readonly dataTypeId: NodeId;
+    readonly name: QualifiedName;
     constructor(options?: DataTypeDescriptionOptions) {
         this.dataTypeId = options?.dataTypeId ?? NodeId.null();
         this.name = options?.name ?? new QualifiedName();
@@ -527,23 +488,21 @@ export class DataTypeDescription implements DataTypeDescriptionOptions {
         encoder.writeType(this.name);
     }
     static [decode](decoder: BinaryDataDecoder): DataTypeDescription {
-        const dataTypeId = decoder.readType(NodeId);
-        const name = decoder.readType(QualifiedName);
         return new DataTypeDescription({
-            dataTypeId,
-            name
+            dataTypeId: decoder.readType(NodeId),
+            name: decoder.readType(QualifiedName)
         });
     }
 }
 export interface StructureDescriptionOptions {
-    dataTypeId?: NodeId;
-    name?: QualifiedName;
-    structureDefinition?: StructureDefinition;
+    dataTypeId?: NodeId | undefined;
+    name?: QualifiedName | undefined;
+    structureDefinition?: StructureDefinition | undefined;
 }
 export class StructureDescription implements StructureDescriptionOptions {
-    dataTypeId: NodeId;
-    name: QualifiedName;
-    structureDefinition: StructureDefinition;
+    readonly dataTypeId: NodeId;
+    readonly name: QualifiedName;
+    readonly structureDefinition: StructureDefinition;
     constructor(options?: StructureDescriptionOptions) {
         this.dataTypeId = options?.dataTypeId ?? NodeId.null();
         this.name = options?.name ?? new QualifiedName();
@@ -556,27 +515,24 @@ export class StructureDescription implements StructureDescriptionOptions {
         encoder.writeType(this.structureDefinition);
     }
     static [decode](decoder: BinaryDataDecoder): StructureDescription {
-        const dataTypeId = decoder.readType(NodeId);
-        const name = decoder.readType(QualifiedName);
-        const structureDefinition = decoder.readType(StructureDefinition);
         return new StructureDescription({
-            dataTypeId,
-            name,
-            structureDefinition
+            dataTypeId: decoder.readType(NodeId),
+            name: decoder.readType(QualifiedName),
+            structureDefinition: decoder.readType(StructureDefinition)
         });
     }
 }
 export interface EnumDescriptionOptions {
-    dataTypeId?: NodeId;
-    name?: QualifiedName;
-    enumDefinition?: EnumDefinition;
-    builtInType?: Byte;
+    dataTypeId?: NodeId | undefined;
+    name?: QualifiedName | undefined;
+    enumDefinition?: EnumDefinition | undefined;
+    builtInType?: Byte | undefined;
 }
 export class EnumDescription implements EnumDescriptionOptions {
-    dataTypeId: NodeId;
-    name: QualifiedName;
-    enumDefinition: EnumDefinition;
-    builtInType: Byte;
+    readonly dataTypeId: NodeId;
+    readonly name: QualifiedName;
+    readonly enumDefinition: EnumDefinition;
+    readonly builtInType: Byte;
     constructor(options?: EnumDescriptionOptions) {
         this.dataTypeId = options?.dataTypeId ?? NodeId.null();
         this.name = options?.name ?? new QualifiedName();
@@ -591,29 +547,25 @@ export class EnumDescription implements EnumDescriptionOptions {
         encoder.writeByte(this.builtInType);
     }
     static [decode](decoder: BinaryDataDecoder): EnumDescription {
-        const dataTypeId = decoder.readType(NodeId);
-        const name = decoder.readType(QualifiedName);
-        const enumDefinition = decoder.readType(EnumDefinition);
-        const builtInType = decoder.readByte();
         return new EnumDescription({
-            dataTypeId,
-            name,
-            enumDefinition,
-            builtInType
+            dataTypeId: decoder.readType(NodeId),
+            name: decoder.readType(QualifiedName),
+            enumDefinition: decoder.readType(EnumDefinition),
+            builtInType: decoder.readByte()
         });
     }
 }
 export interface SimpleTypeDescriptionOptions {
-    dataTypeId?: NodeId;
-    name?: QualifiedName;
-    baseDataType?: NodeId;
-    builtInType?: Byte;
+    dataTypeId?: NodeId | undefined;
+    name?: QualifiedName | undefined;
+    baseDataType?: NodeId | undefined;
+    builtInType?: Byte | undefined;
 }
 export class SimpleTypeDescription implements SimpleTypeDescriptionOptions {
-    dataTypeId: NodeId;
-    name: QualifiedName;
-    baseDataType: NodeId;
-    builtInType: Byte;
+    readonly dataTypeId: NodeId;
+    readonly name: QualifiedName;
+    readonly baseDataType: NodeId;
+    readonly builtInType: Byte;
     constructor(options?: SimpleTypeDescriptionOptions) {
         this.dataTypeId = options?.dataTypeId ?? NodeId.null();
         this.name = options?.name ?? new QualifiedName();
@@ -628,35 +580,31 @@ export class SimpleTypeDescription implements SimpleTypeDescriptionOptions {
         encoder.writeByte(this.builtInType);
     }
     static [decode](decoder: BinaryDataDecoder): SimpleTypeDescription {
-        const dataTypeId = decoder.readType(NodeId);
-        const name = decoder.readType(QualifiedName);
-        const baseDataType = decoder.readType(NodeId);
-        const builtInType = decoder.readByte();
         return new SimpleTypeDescription({
-            dataTypeId,
-            name,
-            baseDataType,
-            builtInType
+            dataTypeId: decoder.readType(NodeId),
+            name: decoder.readType(QualifiedName),
+            baseDataType: decoder.readType(NodeId),
+            builtInType: decoder.readByte()
         });
     }
 }
 export interface UABinaryFileDataTypeOptions {
-    namespaces?: UaString[];
-    structureDataTypes?: StructureDescription[];
-    enumDataTypes?: EnumDescription[];
-    simpleDataTypes?: SimpleTypeDescription[];
-    schemaLocation?: UaString;
-    fileHeader?: KeyValuePair[];
-    body?: Variant;
+    namespaces?: UaString[] | undefined;
+    structureDataTypes?: StructureDescription[] | undefined;
+    enumDataTypes?: EnumDescription[] | undefined;
+    simpleDataTypes?: SimpleTypeDescription[] | undefined;
+    schemaLocation?: UaString | undefined;
+    fileHeader?: KeyValuePair[] | undefined;
+    body?: Variant | undefined;
 }
 export class UABinaryFileDataType implements UABinaryFileDataTypeOptions {
-    namespaces?: UaString[];
-    structureDataTypes?: StructureDescription[];
-    enumDataTypes?: EnumDescription[];
-    simpleDataTypes?: SimpleTypeDescription[];
-    schemaLocation?: UaString;
-    fileHeader?: KeyValuePair[];
-    body: Variant;
+    readonly namespaces?: UaString[];
+    readonly structureDataTypes?: StructureDescription[];
+    readonly enumDataTypes?: EnumDescription[];
+    readonly simpleDataTypes?: SimpleTypeDescription[];
+    readonly schemaLocation?: UaString;
+    readonly fileHeader?: KeyValuePair[];
+    readonly body: Variant;
     constructor(options?: UABinaryFileDataTypeOptions) {
         this.namespaces = options?.namespaces;
         this.structureDataTypes = options?.structureDataTypes;
@@ -677,21 +625,14 @@ export class UABinaryFileDataType implements UABinaryFileDataTypeOptions {
         encoder.writeType(this.body);
     }
     static [decode](decoder: BinaryDataDecoder): UABinaryFileDataType {
-        const namespaces = decoder.readStringArray();
-        const structureDataTypes = decoder.readTypeArray(StructureDescription);
-        const enumDataTypes = decoder.readTypeArray(EnumDescription);
-        const simpleDataTypes = decoder.readTypeArray(SimpleTypeDescription);
-        const schemaLocation = decoder.readString();
-        const fileHeader = decoder.readTypeArray(KeyValuePair);
-        const body = decoder.readType(Variant);
         return new UABinaryFileDataType({
-            namespaces,
-            structureDataTypes,
-            enumDataTypes,
-            simpleDataTypes,
-            schemaLocation,
-            fileHeader,
-            body
+            namespaces: decoder.readStringArray(),
+            structureDataTypes: decoder.readTypeArray(StructureDescription),
+            enumDataTypes: decoder.readTypeArray(EnumDescription),
+            simpleDataTypes: decoder.readTypeArray(SimpleTypeDescription),
+            schemaLocation: decoder.readString(),
+            fileHeader: decoder.readTypeArray(KeyValuePair),
+            body: decoder.readType(Variant)
         });
     }
 }
@@ -702,26 +643,26 @@ export enum PubSubState {
     Error = 3
 }
 export interface DataSetMetaDataTypeOptions {
-    namespaces?: UaString[];
-    structureDataTypes?: StructureDescription[];
-    enumDataTypes?: EnumDescription[];
-    simpleDataTypes?: SimpleTypeDescription[];
-    name?: UaString;
-    description?: LocalizedText;
-    fields?: FieldMetaData[];
-    dataSetClassId?: Guid;
-    configurationVersion?: ConfigurationVersionDataType;
+    namespaces?: UaString[] | undefined;
+    structureDataTypes?: StructureDescription[] | undefined;
+    enumDataTypes?: EnumDescription[] | undefined;
+    simpleDataTypes?: SimpleTypeDescription[] | undefined;
+    name?: UaString | undefined;
+    description?: LocalizedText | undefined;
+    fields?: FieldMetaData[] | undefined;
+    dataSetClassId?: Guid | undefined;
+    configurationVersion?: ConfigurationVersionDataType | undefined;
 }
 export class DataSetMetaDataType implements DataSetMetaDataTypeOptions {
-    namespaces?: UaString[];
-    structureDataTypes?: StructureDescription[];
-    enumDataTypes?: EnumDescription[];
-    simpleDataTypes?: SimpleTypeDescription[];
-    name?: UaString;
-    description: LocalizedText;
-    fields?: FieldMetaData[];
-    dataSetClassId: Guid;
-    configurationVersion: ConfigurationVersionDataType;
+    readonly namespaces?: UaString[];
+    readonly structureDataTypes?: StructureDescription[];
+    readonly enumDataTypes?: EnumDescription[];
+    readonly simpleDataTypes?: SimpleTypeDescription[];
+    readonly name?: UaString;
+    readonly description: LocalizedText;
+    readonly fields?: FieldMetaData[];
+    readonly dataSetClassId: Guid;
+    readonly configurationVersion: ConfigurationVersionDataType;
     constructor(options?: DataSetMetaDataTypeOptions) {
         this.namespaces = options?.namespaces;
         this.structureDataTypes = options?.structureDataTypes;
@@ -746,51 +687,42 @@ export class DataSetMetaDataType implements DataSetMetaDataTypeOptions {
         encoder.writeType(this.configurationVersion);
     }
     static [decode](decoder: BinaryDataDecoder): DataSetMetaDataType {
-        const namespaces = decoder.readStringArray();
-        const structureDataTypes = decoder.readTypeArray(StructureDescription);
-        const enumDataTypes = decoder.readTypeArray(EnumDescription);
-        const simpleDataTypes = decoder.readTypeArray(SimpleTypeDescription);
-        const name = decoder.readString();
-        const description = decoder.readType(LocalizedText);
-        const fields = decoder.readTypeArray(FieldMetaData);
-        const dataSetClassId = decoder.readType(Guid);
-        const configurationVersion = decoder.readType(ConfigurationVersionDataType);
         return new DataSetMetaDataType({
-            namespaces,
-            structureDataTypes,
-            enumDataTypes,
-            simpleDataTypes,
-            name,
-            description,
-            fields,
-            dataSetClassId,
-            configurationVersion
+            namespaces: decoder.readStringArray(),
+            structureDataTypes: decoder.readTypeArray(StructureDescription),
+            enumDataTypes: decoder.readTypeArray(EnumDescription),
+            simpleDataTypes: decoder.readTypeArray(SimpleTypeDescription),
+            name: decoder.readString(),
+            description: decoder.readType(LocalizedText),
+            fields: decoder.readTypeArray(FieldMetaData),
+            dataSetClassId: decoder.readType(Guid),
+            configurationVersion: decoder.readType(ConfigurationVersionDataType)
         });
     }
 }
 export interface FieldMetaDataOptions {
-    name?: UaString;
-    description?: LocalizedText;
-    fieldFlags?: DataSetFieldFlags;
-    builtInType?: Byte;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    maxStringLength?: UInt32;
-    dataSetFieldId?: Guid;
-    properties?: KeyValuePair[];
+    name?: UaString | undefined;
+    description?: LocalizedText | undefined;
+    fieldFlags?: DataSetFieldFlags | undefined;
+    builtInType?: Byte | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    maxStringLength?: UInt32 | undefined;
+    dataSetFieldId?: Guid | undefined;
+    properties?: KeyValuePair[] | undefined;
 }
 export class FieldMetaData implements FieldMetaDataOptions {
-    name?: UaString;
-    description: LocalizedText;
-    fieldFlags: DataSetFieldFlags;
-    builtInType: Byte;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    maxStringLength: UInt32;
-    dataSetFieldId: Guid;
-    properties?: KeyValuePair[];
+    readonly name?: UaString;
+    readonly description: LocalizedText;
+    readonly fieldFlags: DataSetFieldFlags;
+    readonly builtInType: Byte;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly maxStringLength: UInt32;
+    readonly dataSetFieldId: Guid;
+    readonly properties?: KeyValuePair[];
     constructor(options?: FieldMetaDataOptions) {
         this.name = options?.name;
         this.description = options?.description ?? new LocalizedText();
@@ -817,27 +749,17 @@ export class FieldMetaData implements FieldMetaDataOptions {
         encoder.writeTypeArray(this.properties);
     }
     static [decode](decoder: BinaryDataDecoder): FieldMetaData {
-        const name = decoder.readString();
-        const description = decoder.readType(LocalizedText);
-        const fieldFlags = decoder.readUInt32();
-        const builtInType = decoder.readByte();
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const maxStringLength = decoder.readUInt32();
-        const dataSetFieldId = decoder.readType(Guid);
-        const properties = decoder.readTypeArray(KeyValuePair);
         return new FieldMetaData({
-            name,
-            description,
-            fieldFlags,
-            builtInType,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            maxStringLength,
-            dataSetFieldId,
-            properties
+            name: decoder.readString(),
+            description: decoder.readType(LocalizedText),
+            fieldFlags: decoder.readUInt32(),
+            builtInType: decoder.readByte(),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            maxStringLength: decoder.readUInt32(),
+            dataSetFieldId: decoder.readType(Guid),
+            properties: decoder.readTypeArray(KeyValuePair)
         });
     }
 }
@@ -846,12 +768,12 @@ export enum DataSetFieldFlags {
     PromotedField = 1
 }
 export interface ConfigurationVersionDataTypeOptions {
-    majorVersion?: UInt32;
-    minorVersion?: UInt32;
+    majorVersion?: UInt32 | undefined;
+    minorVersion?: UInt32 | undefined;
 }
 export class ConfigurationVersionDataType implements ConfigurationVersionDataTypeOptions {
-    majorVersion: UInt32;
-    minorVersion: UInt32;
+    readonly majorVersion: UInt32;
+    readonly minorVersion: UInt32;
     constructor(options?: ConfigurationVersionDataTypeOptions) {
         this.majorVersion = options?.majorVersion ?? 0;
         this.minorVersion = options?.minorVersion ?? 0;
@@ -862,27 +784,25 @@ export class ConfigurationVersionDataType implements ConfigurationVersionDataTyp
         encoder.writeUInt32(this.minorVersion);
     }
     static [decode](decoder: BinaryDataDecoder): ConfigurationVersionDataType {
-        const majorVersion = decoder.readUInt32();
-        const minorVersion = decoder.readUInt32();
         return new ConfigurationVersionDataType({
-            majorVersion,
-            minorVersion
+            majorVersion: decoder.readUInt32(),
+            minorVersion: decoder.readUInt32()
         });
     }
 }
 export interface PublishedDataSetDataTypeOptions {
-    name?: UaString;
-    dataSetFolder?: UaString[];
-    dataSetMetaData?: DataSetMetaDataType;
-    extensionFields?: KeyValuePair[];
-    dataSetSource?: ExtensionObject;
+    name?: UaString | undefined;
+    dataSetFolder?: UaString[] | undefined;
+    dataSetMetaData?: DataSetMetaDataType | undefined;
+    extensionFields?: KeyValuePair[] | undefined;
+    dataSetSource?: ExtensionObject | undefined;
 }
 export class PublishedDataSetDataType implements PublishedDataSetDataTypeOptions {
-    name?: UaString;
-    dataSetFolder?: UaString[];
-    dataSetMetaData: DataSetMetaDataType;
-    extensionFields?: KeyValuePair[];
-    dataSetSource: ExtensionObject;
+    readonly name?: UaString;
+    readonly dataSetFolder?: UaString[];
+    readonly dataSetMetaData: DataSetMetaDataType;
+    readonly extensionFields?: KeyValuePair[];
+    readonly dataSetSource: ExtensionObject;
     constructor(options?: PublishedDataSetDataTypeOptions) {
         this.name = options?.name;
         this.dataSetFolder = options?.dataSetFolder;
@@ -899,17 +819,12 @@ export class PublishedDataSetDataType implements PublishedDataSetDataTypeOptions
         encoder.writeType(this.dataSetSource);
     }
     static [decode](decoder: BinaryDataDecoder): PublishedDataSetDataType {
-        const name = decoder.readString();
-        const dataSetFolder = decoder.readStringArray();
-        const dataSetMetaData = decoder.readType(DataSetMetaDataType);
-        const extensionFields = decoder.readTypeArray(KeyValuePair);
-        const dataSetSource = decoder.readType(ExtensionObject);
         return new PublishedDataSetDataType({
-            name,
-            dataSetFolder,
-            dataSetMetaData,
-            extensionFields,
-            dataSetSource
+            name: decoder.readString(),
+            dataSetFolder: decoder.readStringArray(),
+            dataSetMetaData: decoder.readType(DataSetMetaDataType),
+            extensionFields: decoder.readTypeArray(KeyValuePair),
+            dataSetSource: decoder.readType(ExtensionObject)
         });
     }
 }
@@ -922,24 +837,24 @@ export class PublishedDataSetSourceDataType {
     }
 }
 export interface PublishedVariableDataTypeOptions {
-    publishedVariable?: NodeId;
-    attributeId?: UInt32;
-    samplingIntervalHint?: Double;
-    deadbandType?: UInt32;
-    deadbandValue?: Double;
-    indexRange?: UaString;
-    substituteValue?: Variant;
-    metaDataProperties?: QualifiedName[];
+    publishedVariable?: NodeId | undefined;
+    attributeId?: UInt32 | undefined;
+    samplingIntervalHint?: Double | undefined;
+    deadbandType?: UInt32 | undefined;
+    deadbandValue?: Double | undefined;
+    indexRange?: UaString | undefined;
+    substituteValue?: Variant | undefined;
+    metaDataProperties?: QualifiedName[] | undefined;
 }
 export class PublishedVariableDataType implements PublishedVariableDataTypeOptions {
-    publishedVariable: NodeId;
-    attributeId: UInt32;
-    samplingIntervalHint: Double;
-    deadbandType: UInt32;
-    deadbandValue: Double;
-    indexRange?: UaString;
-    substituteValue: Variant;
-    metaDataProperties?: QualifiedName[];
+    readonly publishedVariable: NodeId;
+    readonly attributeId: UInt32;
+    readonly samplingIntervalHint: Double;
+    readonly deadbandType: UInt32;
+    readonly deadbandValue: Double;
+    readonly indexRange?: UaString;
+    readonly substituteValue: Variant;
+    readonly metaDataProperties?: QualifiedName[];
     constructor(options?: PublishedVariableDataTypeOptions) {
         this.publishedVariable = options?.publishedVariable ?? NodeId.null();
         this.attributeId = options?.attributeId ?? 0;
@@ -962,31 +877,23 @@ export class PublishedVariableDataType implements PublishedVariableDataTypeOptio
         encoder.writeTypeArray(this.metaDataProperties);
     }
     static [decode](decoder: BinaryDataDecoder): PublishedVariableDataType {
-        const publishedVariable = decoder.readType(NodeId);
-        const attributeId = decoder.readUInt32();
-        const samplingIntervalHint = decoder.readDouble();
-        const deadbandType = decoder.readUInt32();
-        const deadbandValue = decoder.readDouble();
-        const indexRange = decoder.readString();
-        const substituteValue = decoder.readType(Variant);
-        const metaDataProperties = decoder.readTypeArray(QualifiedName);
         return new PublishedVariableDataType({
-            publishedVariable,
-            attributeId,
-            samplingIntervalHint,
-            deadbandType,
-            deadbandValue,
-            indexRange,
-            substituteValue,
-            metaDataProperties
+            publishedVariable: decoder.readType(NodeId),
+            attributeId: decoder.readUInt32(),
+            samplingIntervalHint: decoder.readDouble(),
+            deadbandType: decoder.readUInt32(),
+            deadbandValue: decoder.readDouble(),
+            indexRange: decoder.readString(),
+            substituteValue: decoder.readType(Variant),
+            metaDataProperties: decoder.readTypeArray(QualifiedName)
         });
     }
 }
 export interface PublishedDataItemsDataTypeOptions {
-    publishedData?: PublishedVariableDataType[];
+    publishedData?: PublishedVariableDataType[] | undefined;
 }
 export class PublishedDataItemsDataType implements PublishedDataItemsDataTypeOptions {
-    publishedData?: PublishedVariableDataType[];
+    readonly publishedData?: PublishedVariableDataType[];
     constructor(options?: PublishedDataItemsDataTypeOptions) {
         this.publishedData = options?.publishedData;
     }
@@ -995,21 +902,20 @@ export class PublishedDataItemsDataType implements PublishedDataItemsDataTypeOpt
         encoder.writeTypeArray(this.publishedData);
     }
     static [decode](decoder: BinaryDataDecoder): PublishedDataItemsDataType {
-        const publishedData = decoder.readTypeArray(PublishedVariableDataType);
         return new PublishedDataItemsDataType({
-            publishedData
+            publishedData: decoder.readTypeArray(PublishedVariableDataType)
         });
     }
 }
 export interface PublishedEventsDataTypeOptions {
-    eventNotifier?: NodeId;
-    selectedFields?: SimpleAttributeOperand[];
-    filter?: ContentFilter;
+    eventNotifier?: NodeId | undefined;
+    selectedFields?: SimpleAttributeOperand[] | undefined;
+    filter?: ContentFilter | undefined;
 }
 export class PublishedEventsDataType implements PublishedEventsDataTypeOptions {
-    eventNotifier: NodeId;
-    selectedFields?: SimpleAttributeOperand[];
-    filter: ContentFilter;
+    readonly eventNotifier: NodeId;
+    readonly selectedFields?: SimpleAttributeOperand[];
+    readonly filter: ContentFilter;
     constructor(options?: PublishedEventsDataTypeOptions) {
         this.eventNotifier = options?.eventNotifier ?? NodeId.null();
         this.selectedFields = options?.selectedFields;
@@ -1022,13 +928,10 @@ export class PublishedEventsDataType implements PublishedEventsDataTypeOptions {
         encoder.writeType(this.filter);
     }
     static [decode](decoder: BinaryDataDecoder): PublishedEventsDataType {
-        const eventNotifier = decoder.readType(NodeId);
-        const selectedFields = decoder.readTypeArray(SimpleAttributeOperand);
-        const filter = decoder.readType(ContentFilter);
         return new PublishedEventsDataType({
-            eventNotifier,
-            selectedFields,
-            filter
+            eventNotifier: decoder.readType(NodeId),
+            selectedFields: decoder.readTypeArray(SimpleAttributeOperand),
+            filter: decoder.readType(ContentFilter)
         });
     }
 }
@@ -1042,26 +945,26 @@ export enum DataSetFieldContentMask {
     RawData = 32
 }
 export interface DataSetWriterDataTypeOptions {
-    name?: UaString;
-    enabled?: boolean;
-    dataSetWriterId?: UInt16;
-    dataSetFieldContentMask?: DataSetFieldContentMask;
-    keyFrameCount?: UInt32;
-    dataSetName?: UaString;
-    dataSetWriterProperties?: KeyValuePair[];
-    transportSettings?: ExtensionObject;
-    messageSettings?: ExtensionObject;
+    name?: UaString | undefined;
+    enabled?: boolean | undefined;
+    dataSetWriterId?: UInt16 | undefined;
+    dataSetFieldContentMask?: DataSetFieldContentMask | undefined;
+    keyFrameCount?: UInt32 | undefined;
+    dataSetName?: UaString | undefined;
+    dataSetWriterProperties?: KeyValuePair[] | undefined;
+    transportSettings?: ExtensionObject | undefined;
+    messageSettings?: ExtensionObject | undefined;
 }
 export class DataSetWriterDataType implements DataSetWriterDataTypeOptions {
-    name?: UaString;
-    enabled: boolean;
-    dataSetWriterId: UInt16;
-    dataSetFieldContentMask: DataSetFieldContentMask;
-    keyFrameCount: UInt32;
-    dataSetName?: UaString;
-    dataSetWriterProperties?: KeyValuePair[];
-    transportSettings: ExtensionObject;
-    messageSettings: ExtensionObject;
+    readonly name?: UaString;
+    readonly enabled: boolean;
+    readonly dataSetWriterId: UInt16;
+    readonly dataSetFieldContentMask: DataSetFieldContentMask;
+    readonly keyFrameCount: UInt32;
+    readonly dataSetName?: UaString;
+    readonly dataSetWriterProperties?: KeyValuePair[];
+    readonly transportSettings: ExtensionObject;
+    readonly messageSettings: ExtensionObject;
     constructor(options?: DataSetWriterDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1086,25 +989,16 @@ export class DataSetWriterDataType implements DataSetWriterDataTypeOptions {
         encoder.writeType(this.messageSettings);
     }
     static [decode](decoder: BinaryDataDecoder): DataSetWriterDataType {
-        const name = decoder.readString();
-        const enabled = decoder.readBoolean();
-        const dataSetWriterId = decoder.readUInt16();
-        const dataSetFieldContentMask = decoder.readUInt32();
-        const keyFrameCount = decoder.readUInt32();
-        const dataSetName = decoder.readString();
-        const dataSetWriterProperties = decoder.readTypeArray(KeyValuePair);
-        const transportSettings = decoder.readType(ExtensionObject);
-        const messageSettings = decoder.readType(ExtensionObject);
         return new DataSetWriterDataType({
-            name,
-            enabled,
-            dataSetWriterId,
-            dataSetFieldContentMask,
-            keyFrameCount,
-            dataSetName,
-            dataSetWriterProperties,
-            transportSettings,
-            messageSettings
+            name: decoder.readString(),
+            enabled: decoder.readBoolean(),
+            dataSetWriterId: decoder.readUInt16(),
+            dataSetFieldContentMask: decoder.readUInt32(),
+            keyFrameCount: decoder.readUInt32(),
+            dataSetName: decoder.readString(),
+            dataSetWriterProperties: decoder.readTypeArray(KeyValuePair),
+            transportSettings: decoder.readType(ExtensionObject),
+            messageSettings: decoder.readType(ExtensionObject)
         });
     }
 }
@@ -1125,22 +1019,22 @@ export class DataSetWriterMessageDataType {
     }
 }
 export interface PubSubGroupDataTypeOptions {
-    name?: UaString;
-    enabled?: boolean;
-    securityMode?: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    maxNetworkMessageSize?: UInt32;
-    groupProperties?: KeyValuePair[];
+    name?: UaString | undefined;
+    enabled?: boolean | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityGroupId?: UaString | undefined;
+    securityKeyServices?: EndpointDescription[] | undefined;
+    maxNetworkMessageSize?: UInt32 | undefined;
+    groupProperties?: KeyValuePair[] | undefined;
 }
 export class PubSubGroupDataType implements PubSubGroupDataTypeOptions {
-    name?: UaString;
-    enabled: boolean;
-    securityMode: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    maxNetworkMessageSize: UInt32;
-    groupProperties?: KeyValuePair[];
+    readonly name?: UaString;
+    readonly enabled: boolean;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityGroupId?: UaString;
+    readonly securityKeyServices?: EndpointDescription[];
+    readonly maxNetworkMessageSize: UInt32;
+    readonly groupProperties?: KeyValuePair[];
     constructor(options?: PubSubGroupDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1161,59 +1055,52 @@ export class PubSubGroupDataType implements PubSubGroupDataTypeOptions {
         encoder.writeTypeArray(this.groupProperties);
     }
     static [decode](decoder: BinaryDataDecoder): PubSubGroupDataType {
-        const name = decoder.readString();
-        const enabled = decoder.readBoolean();
-        const securityMode = decoder.readUInt32();
-        const securityGroupId = decoder.readString();
-        const securityKeyServices = decoder.readTypeArray(EndpointDescription);
-        const maxNetworkMessageSize = decoder.readUInt32();
-        const groupProperties = decoder.readTypeArray(KeyValuePair);
         return new PubSubGroupDataType({
-            name,
-            enabled,
-            securityMode,
-            securityGroupId,
-            securityKeyServices,
-            maxNetworkMessageSize,
-            groupProperties
+            name: decoder.readString(),
+            enabled: decoder.readBoolean(),
+            securityMode: decoder.readUInt32(),
+            securityGroupId: decoder.readString(),
+            securityKeyServices: decoder.readTypeArray(EndpointDescription),
+            maxNetworkMessageSize: decoder.readUInt32(),
+            groupProperties: decoder.readTypeArray(KeyValuePair)
         });
     }
 }
 export interface WriterGroupDataTypeOptions {
-    name?: UaString;
-    enabled?: boolean;
-    securityMode?: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    maxNetworkMessageSize?: UInt32;
-    groupProperties?: KeyValuePair[];
-    writerGroupId?: UInt16;
-    publishingInterval?: Double;
-    keepAliveTime?: Double;
-    priority?: Byte;
-    localeIds?: UaString[];
-    headerLayoutUri?: UaString;
-    transportSettings?: ExtensionObject;
-    messageSettings?: ExtensionObject;
-    dataSetWriters?: DataSetWriterDataType[];
+    name?: UaString | undefined;
+    enabled?: boolean | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityGroupId?: UaString | undefined;
+    securityKeyServices?: EndpointDescription[] | undefined;
+    maxNetworkMessageSize?: UInt32 | undefined;
+    groupProperties?: KeyValuePair[] | undefined;
+    writerGroupId?: UInt16 | undefined;
+    publishingInterval?: Double | undefined;
+    keepAliveTime?: Double | undefined;
+    priority?: Byte | undefined;
+    localeIds?: UaString[] | undefined;
+    headerLayoutUri?: UaString | undefined;
+    transportSettings?: ExtensionObject | undefined;
+    messageSettings?: ExtensionObject | undefined;
+    dataSetWriters?: DataSetWriterDataType[] | undefined;
 }
 export class WriterGroupDataType implements WriterGroupDataTypeOptions {
-    name?: UaString;
-    enabled: boolean;
-    securityMode: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    maxNetworkMessageSize: UInt32;
-    groupProperties?: KeyValuePair[];
-    writerGroupId: UInt16;
-    publishingInterval: Double;
-    keepAliveTime: Double;
-    priority: Byte;
-    localeIds?: UaString[];
-    headerLayoutUri?: UaString;
-    transportSettings: ExtensionObject;
-    messageSettings: ExtensionObject;
-    dataSetWriters?: DataSetWriterDataType[];
+    readonly name?: UaString;
+    readonly enabled: boolean;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityGroupId?: UaString;
+    readonly securityKeyServices?: EndpointDescription[];
+    readonly maxNetworkMessageSize: UInt32;
+    readonly groupProperties?: KeyValuePair[];
+    readonly writerGroupId: UInt16;
+    readonly publishingInterval: Double;
+    readonly keepAliveTime: Double;
+    readonly priority: Byte;
+    readonly localeIds?: UaString[];
+    readonly headerLayoutUri?: UaString;
+    readonly transportSettings: ExtensionObject;
+    readonly messageSettings: ExtensionObject;
+    readonly dataSetWriters?: DataSetWriterDataType[];
     constructor(options?: WriterGroupDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1252,39 +1139,23 @@ export class WriterGroupDataType implements WriterGroupDataTypeOptions {
         encoder.writeTypeArray(this.dataSetWriters);
     }
     static [decode](decoder: BinaryDataDecoder): WriterGroupDataType {
-        const name = decoder.readString();
-        const enabled = decoder.readBoolean();
-        const securityMode = decoder.readUInt32();
-        const securityGroupId = decoder.readString();
-        const securityKeyServices = decoder.readTypeArray(EndpointDescription);
-        const maxNetworkMessageSize = decoder.readUInt32();
-        const groupProperties = decoder.readTypeArray(KeyValuePair);
-        const writerGroupId = decoder.readUInt16();
-        const publishingInterval = decoder.readDouble();
-        const keepAliveTime = decoder.readDouble();
-        const priority = decoder.readByte();
-        const localeIds = decoder.readStringArray();
-        const headerLayoutUri = decoder.readString();
-        const transportSettings = decoder.readType(ExtensionObject);
-        const messageSettings = decoder.readType(ExtensionObject);
-        const dataSetWriters = decoder.readTypeArray(DataSetWriterDataType);
         return new WriterGroupDataType({
-            name,
-            enabled,
-            securityMode,
-            securityGroupId,
-            securityKeyServices,
-            maxNetworkMessageSize,
-            groupProperties,
-            writerGroupId,
-            publishingInterval,
-            keepAliveTime,
-            priority,
-            localeIds,
-            headerLayoutUri,
-            transportSettings,
-            messageSettings,
-            dataSetWriters
+            name: decoder.readString(),
+            enabled: decoder.readBoolean(),
+            securityMode: decoder.readUInt32(),
+            securityGroupId: decoder.readString(),
+            securityKeyServices: decoder.readTypeArray(EndpointDescription),
+            maxNetworkMessageSize: decoder.readUInt32(),
+            groupProperties: decoder.readTypeArray(KeyValuePair),
+            writerGroupId: decoder.readUInt16(),
+            publishingInterval: decoder.readDouble(),
+            keepAliveTime: decoder.readDouble(),
+            priority: decoder.readByte(),
+            localeIds: decoder.readStringArray(),
+            headerLayoutUri: decoder.readString(),
+            transportSettings: decoder.readType(ExtensionObject),
+            messageSettings: decoder.readType(ExtensionObject),
+            dataSetWriters: decoder.readTypeArray(DataSetWriterDataType)
         });
     }
 }
@@ -1305,26 +1176,26 @@ export class WriterGroupMessageDataType {
     }
 }
 export interface PubSubConnectionDataTypeOptions {
-    name?: UaString;
-    enabled?: boolean;
-    publisherId?: Variant;
-    transportProfileUri?: UaString;
-    address?: ExtensionObject;
-    connectionProperties?: KeyValuePair[];
-    transportSettings?: ExtensionObject;
-    writerGroups?: WriterGroupDataType[];
-    readerGroups?: ReaderGroupDataType[];
+    name?: UaString | undefined;
+    enabled?: boolean | undefined;
+    publisherId?: Variant | undefined;
+    transportProfileUri?: UaString | undefined;
+    address?: ExtensionObject | undefined;
+    connectionProperties?: KeyValuePair[] | undefined;
+    transportSettings?: ExtensionObject | undefined;
+    writerGroups?: WriterGroupDataType[] | undefined;
+    readerGroups?: ReaderGroupDataType[] | undefined;
 }
 export class PubSubConnectionDataType implements PubSubConnectionDataTypeOptions {
-    name?: UaString;
-    enabled: boolean;
-    publisherId: Variant;
-    transportProfileUri?: UaString;
-    address: ExtensionObject;
-    connectionProperties?: KeyValuePair[];
-    transportSettings: ExtensionObject;
-    writerGroups?: WriterGroupDataType[];
-    readerGroups?: ReaderGroupDataType[];
+    readonly name?: UaString;
+    readonly enabled: boolean;
+    readonly publisherId: Variant;
+    readonly transportProfileUri?: UaString;
+    readonly address: ExtensionObject;
+    readonly connectionProperties?: KeyValuePair[];
+    readonly transportSettings: ExtensionObject;
+    readonly writerGroups?: WriterGroupDataType[];
+    readonly readerGroups?: ReaderGroupDataType[];
     constructor(options?: PubSubConnectionDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1349,25 +1220,16 @@ export class PubSubConnectionDataType implements PubSubConnectionDataTypeOptions
         encoder.writeTypeArray(this.readerGroups);
     }
     static [decode](decoder: BinaryDataDecoder): PubSubConnectionDataType {
-        const name = decoder.readString();
-        const enabled = decoder.readBoolean();
-        const publisherId = decoder.readType(Variant);
-        const transportProfileUri = decoder.readString();
-        const address = decoder.readType(ExtensionObject);
-        const connectionProperties = decoder.readTypeArray(KeyValuePair);
-        const transportSettings = decoder.readType(ExtensionObject);
-        const writerGroups = decoder.readTypeArray(WriterGroupDataType);
-        const readerGroups = decoder.readTypeArray(ReaderGroupDataType);
         return new PubSubConnectionDataType({
-            name,
-            enabled,
-            publisherId,
-            transportProfileUri,
-            address,
-            connectionProperties,
-            transportSettings,
-            writerGroups,
-            readerGroups
+            name: decoder.readString(),
+            enabled: decoder.readBoolean(),
+            publisherId: decoder.readType(Variant),
+            transportProfileUri: decoder.readString(),
+            address: decoder.readType(ExtensionObject),
+            connectionProperties: decoder.readTypeArray(KeyValuePair),
+            transportSettings: decoder.readType(ExtensionObject),
+            writerGroups: decoder.readTypeArray(WriterGroupDataType),
+            readerGroups: decoder.readTypeArray(ReaderGroupDataType)
         });
     }
 }
@@ -1380,10 +1242,10 @@ export class ConnectionTransportDataType {
     }
 }
 export interface NetworkAddressDataTypeOptions {
-    networkInterface?: UaString;
+    networkInterface?: UaString | undefined;
 }
 export class NetworkAddressDataType implements NetworkAddressDataTypeOptions {
-    networkInterface?: UaString;
+    readonly networkInterface?: UaString;
     constructor(options?: NetworkAddressDataTypeOptions) {
         this.networkInterface = options?.networkInterface;
     }
@@ -1392,19 +1254,18 @@ export class NetworkAddressDataType implements NetworkAddressDataTypeOptions {
         encoder.writeString(this.networkInterface);
     }
     static [decode](decoder: BinaryDataDecoder): NetworkAddressDataType {
-        const networkInterface = decoder.readString();
         return new NetworkAddressDataType({
-            networkInterface
+            networkInterface: decoder.readString()
         });
     }
 }
 export interface NetworkAddressUrlDataTypeOptions {
-    networkInterface?: UaString;
-    url?: UaString;
+    networkInterface?: UaString | undefined;
+    url?: UaString | undefined;
 }
 export class NetworkAddressUrlDataType implements NetworkAddressUrlDataTypeOptions {
-    networkInterface?: UaString;
-    url?: UaString;
+    readonly networkInterface?: UaString;
+    readonly url?: UaString;
     constructor(options?: NetworkAddressUrlDataTypeOptions) {
         this.networkInterface = options?.networkInterface;
         this.url = options?.url;
@@ -1415,37 +1276,35 @@ export class NetworkAddressUrlDataType implements NetworkAddressUrlDataTypeOptio
         encoder.writeString(this.url);
     }
     static [decode](decoder: BinaryDataDecoder): NetworkAddressUrlDataType {
-        const networkInterface = decoder.readString();
-        const url = decoder.readString();
         return new NetworkAddressUrlDataType({
-            networkInterface,
-            url
+            networkInterface: decoder.readString(),
+            url: decoder.readString()
         });
     }
 }
 export interface ReaderGroupDataTypeOptions {
-    name?: UaString;
-    enabled?: boolean;
-    securityMode?: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    maxNetworkMessageSize?: UInt32;
-    groupProperties?: KeyValuePair[];
-    transportSettings?: ExtensionObject;
-    messageSettings?: ExtensionObject;
-    dataSetReaders?: DataSetReaderDataType[];
+    name?: UaString | undefined;
+    enabled?: boolean | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityGroupId?: UaString | undefined;
+    securityKeyServices?: EndpointDescription[] | undefined;
+    maxNetworkMessageSize?: UInt32 | undefined;
+    groupProperties?: KeyValuePair[] | undefined;
+    transportSettings?: ExtensionObject | undefined;
+    messageSettings?: ExtensionObject | undefined;
+    dataSetReaders?: DataSetReaderDataType[] | undefined;
 }
 export class ReaderGroupDataType implements ReaderGroupDataTypeOptions {
-    name?: UaString;
-    enabled: boolean;
-    securityMode: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    maxNetworkMessageSize: UInt32;
-    groupProperties?: KeyValuePair[];
-    transportSettings: ExtensionObject;
-    messageSettings: ExtensionObject;
-    dataSetReaders?: DataSetReaderDataType[];
+    readonly name?: UaString;
+    readonly enabled: boolean;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityGroupId?: UaString;
+    readonly securityKeyServices?: EndpointDescription[];
+    readonly maxNetworkMessageSize: UInt32;
+    readonly groupProperties?: KeyValuePair[];
+    readonly transportSettings: ExtensionObject;
+    readonly messageSettings: ExtensionObject;
+    readonly dataSetReaders?: DataSetReaderDataType[];
     constructor(options?: ReaderGroupDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1472,27 +1331,17 @@ export class ReaderGroupDataType implements ReaderGroupDataTypeOptions {
         encoder.writeTypeArray(this.dataSetReaders);
     }
     static [decode](decoder: BinaryDataDecoder): ReaderGroupDataType {
-        const name = decoder.readString();
-        const enabled = decoder.readBoolean();
-        const securityMode = decoder.readUInt32();
-        const securityGroupId = decoder.readString();
-        const securityKeyServices = decoder.readTypeArray(EndpointDescription);
-        const maxNetworkMessageSize = decoder.readUInt32();
-        const groupProperties = decoder.readTypeArray(KeyValuePair);
-        const transportSettings = decoder.readType(ExtensionObject);
-        const messageSettings = decoder.readType(ExtensionObject);
-        const dataSetReaders = decoder.readTypeArray(DataSetReaderDataType);
         return new ReaderGroupDataType({
-            name,
-            enabled,
-            securityMode,
-            securityGroupId,
-            securityKeyServices,
-            maxNetworkMessageSize,
-            groupProperties,
-            transportSettings,
-            messageSettings,
-            dataSetReaders
+            name: decoder.readString(),
+            enabled: decoder.readBoolean(),
+            securityMode: decoder.readUInt32(),
+            securityGroupId: decoder.readString(),
+            securityKeyServices: decoder.readTypeArray(EndpointDescription),
+            maxNetworkMessageSize: decoder.readUInt32(),
+            groupProperties: decoder.readTypeArray(KeyValuePair),
+            transportSettings: decoder.readType(ExtensionObject),
+            messageSettings: decoder.readType(ExtensionObject),
+            dataSetReaders: decoder.readTypeArray(DataSetReaderDataType)
         });
     }
 }
@@ -1513,42 +1362,42 @@ export class ReaderGroupMessageDataType {
     }
 }
 export interface DataSetReaderDataTypeOptions {
-    name?: UaString;
-    enabled?: boolean;
-    publisherId?: Variant;
-    writerGroupId?: UInt16;
-    dataSetWriterId?: UInt16;
-    dataSetMetaData?: DataSetMetaDataType;
-    dataSetFieldContentMask?: DataSetFieldContentMask;
-    messageReceiveTimeout?: Double;
-    keyFrameCount?: UInt32;
-    headerLayoutUri?: UaString;
-    securityMode?: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    dataSetReaderProperties?: KeyValuePair[];
-    transportSettings?: ExtensionObject;
-    messageSettings?: ExtensionObject;
-    subscribedDataSet?: ExtensionObject;
+    name?: UaString | undefined;
+    enabled?: boolean | undefined;
+    publisherId?: Variant | undefined;
+    writerGroupId?: UInt16 | undefined;
+    dataSetWriterId?: UInt16 | undefined;
+    dataSetMetaData?: DataSetMetaDataType | undefined;
+    dataSetFieldContentMask?: DataSetFieldContentMask | undefined;
+    messageReceiveTimeout?: Double | undefined;
+    keyFrameCount?: UInt32 | undefined;
+    headerLayoutUri?: UaString | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityGroupId?: UaString | undefined;
+    securityKeyServices?: EndpointDescription[] | undefined;
+    dataSetReaderProperties?: KeyValuePair[] | undefined;
+    transportSettings?: ExtensionObject | undefined;
+    messageSettings?: ExtensionObject | undefined;
+    subscribedDataSet?: ExtensionObject | undefined;
 }
 export class DataSetReaderDataType implements DataSetReaderDataTypeOptions {
-    name?: UaString;
-    enabled: boolean;
-    publisherId: Variant;
-    writerGroupId: UInt16;
-    dataSetWriterId: UInt16;
-    dataSetMetaData: DataSetMetaDataType;
-    dataSetFieldContentMask: DataSetFieldContentMask;
-    messageReceiveTimeout: Double;
-    keyFrameCount: UInt32;
-    headerLayoutUri?: UaString;
-    securityMode: MessageSecurityMode;
-    securityGroupId?: UaString;
-    securityKeyServices?: EndpointDescription[];
-    dataSetReaderProperties?: KeyValuePair[];
-    transportSettings: ExtensionObject;
-    messageSettings: ExtensionObject;
-    subscribedDataSet: ExtensionObject;
+    readonly name?: UaString;
+    readonly enabled: boolean;
+    readonly publisherId: Variant;
+    readonly writerGroupId: UInt16;
+    readonly dataSetWriterId: UInt16;
+    readonly dataSetMetaData: DataSetMetaDataType;
+    readonly dataSetFieldContentMask: DataSetFieldContentMask;
+    readonly messageReceiveTimeout: Double;
+    readonly keyFrameCount: UInt32;
+    readonly headerLayoutUri?: UaString;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityGroupId?: UaString;
+    readonly securityKeyServices?: EndpointDescription[];
+    readonly dataSetReaderProperties?: KeyValuePair[];
+    readonly transportSettings: ExtensionObject;
+    readonly messageSettings: ExtensionObject;
+    readonly subscribedDataSet: ExtensionObject;
     constructor(options?: DataSetReaderDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1589,41 +1438,24 @@ export class DataSetReaderDataType implements DataSetReaderDataTypeOptions {
         encoder.writeType(this.subscribedDataSet);
     }
     static [decode](decoder: BinaryDataDecoder): DataSetReaderDataType {
-        const name = decoder.readString();
-        const enabled = decoder.readBoolean();
-        const publisherId = decoder.readType(Variant);
-        const writerGroupId = decoder.readUInt16();
-        const dataSetWriterId = decoder.readUInt16();
-        const dataSetMetaData = decoder.readType(DataSetMetaDataType);
-        const dataSetFieldContentMask = decoder.readUInt32();
-        const messageReceiveTimeout = decoder.readDouble();
-        const keyFrameCount = decoder.readUInt32();
-        const headerLayoutUri = decoder.readString();
-        const securityMode = decoder.readUInt32();
-        const securityGroupId = decoder.readString();
-        const securityKeyServices = decoder.readTypeArray(EndpointDescription);
-        const dataSetReaderProperties = decoder.readTypeArray(KeyValuePair);
-        const transportSettings = decoder.readType(ExtensionObject);
-        const messageSettings = decoder.readType(ExtensionObject);
-        const subscribedDataSet = decoder.readType(ExtensionObject);
         return new DataSetReaderDataType({
-            name,
-            enabled,
-            publisherId,
-            writerGroupId,
-            dataSetWriterId,
-            dataSetMetaData,
-            dataSetFieldContentMask,
-            messageReceiveTimeout,
-            keyFrameCount,
-            headerLayoutUri,
-            securityMode,
-            securityGroupId,
-            securityKeyServices,
-            dataSetReaderProperties,
-            transportSettings,
-            messageSettings,
-            subscribedDataSet
+            name: decoder.readString(),
+            enabled: decoder.readBoolean(),
+            publisherId: decoder.readType(Variant),
+            writerGroupId: decoder.readUInt16(),
+            dataSetWriterId: decoder.readUInt16(),
+            dataSetMetaData: decoder.readType(DataSetMetaDataType),
+            dataSetFieldContentMask: decoder.readUInt32(),
+            messageReceiveTimeout: decoder.readDouble(),
+            keyFrameCount: decoder.readUInt32(),
+            headerLayoutUri: decoder.readString(),
+            securityMode: decoder.readUInt32(),
+            securityGroupId: decoder.readString(),
+            securityKeyServices: decoder.readTypeArray(EndpointDescription),
+            dataSetReaderProperties: decoder.readTypeArray(KeyValuePair),
+            transportSettings: decoder.readType(ExtensionObject),
+            messageSettings: decoder.readType(ExtensionObject),
+            subscribedDataSet: decoder.readType(ExtensionObject)
         });
     }
 }
@@ -1652,10 +1484,10 @@ export class SubscribedDataSetDataType {
     }
 }
 export interface TargetVariablesDataTypeOptions {
-    targetVariables?: FieldTargetDataType[];
+    targetVariables?: FieldTargetDataType[] | undefined;
 }
 export class TargetVariablesDataType implements TargetVariablesDataTypeOptions {
-    targetVariables?: FieldTargetDataType[];
+    readonly targetVariables?: FieldTargetDataType[];
     constructor(options?: TargetVariablesDataTypeOptions) {
         this.targetVariables = options?.targetVariables;
     }
@@ -1664,29 +1496,28 @@ export class TargetVariablesDataType implements TargetVariablesDataTypeOptions {
         encoder.writeTypeArray(this.targetVariables);
     }
     static [decode](decoder: BinaryDataDecoder): TargetVariablesDataType {
-        const targetVariables = decoder.readTypeArray(FieldTargetDataType);
         return new TargetVariablesDataType({
-            targetVariables
+            targetVariables: decoder.readTypeArray(FieldTargetDataType)
         });
     }
 }
 export interface FieldTargetDataTypeOptions {
-    dataSetFieldId?: Guid;
-    receiverIndexRange?: UaString;
-    targetNodeId?: NodeId;
-    attributeId?: UInt32;
-    writeIndexRange?: UaString;
-    overrideValueHandling?: OverrideValueHandling;
-    overrideValue?: Variant;
+    dataSetFieldId?: Guid | undefined;
+    receiverIndexRange?: UaString | undefined;
+    targetNodeId?: NodeId | undefined;
+    attributeId?: UInt32 | undefined;
+    writeIndexRange?: UaString | undefined;
+    overrideValueHandling?: OverrideValueHandling | undefined;
+    overrideValue?: Variant | undefined;
 }
 export class FieldTargetDataType implements FieldTargetDataTypeOptions {
-    dataSetFieldId: Guid;
-    receiverIndexRange?: UaString;
-    targetNodeId: NodeId;
-    attributeId: UInt32;
-    writeIndexRange?: UaString;
-    overrideValueHandling: OverrideValueHandling;
-    overrideValue: Variant;
+    readonly dataSetFieldId: Guid;
+    readonly receiverIndexRange?: UaString;
+    readonly targetNodeId: NodeId;
+    readonly attributeId: UInt32;
+    readonly writeIndexRange?: UaString;
+    readonly overrideValueHandling: OverrideValueHandling;
+    readonly overrideValue: Variant;
     constructor(options?: FieldTargetDataTypeOptions) {
         this.dataSetFieldId = options?.dataSetFieldId ?? new Guid();
         this.receiverIndexRange = options?.receiverIndexRange;
@@ -1707,21 +1538,14 @@ export class FieldTargetDataType implements FieldTargetDataTypeOptions {
         encoder.writeType(this.overrideValue);
     }
     static [decode](decoder: BinaryDataDecoder): FieldTargetDataType {
-        const dataSetFieldId = decoder.readType(Guid);
-        const receiverIndexRange = decoder.readString();
-        const targetNodeId = decoder.readType(NodeId);
-        const attributeId = decoder.readUInt32();
-        const writeIndexRange = decoder.readString();
-        const overrideValueHandling = decoder.readUInt32();
-        const overrideValue = decoder.readType(Variant);
         return new FieldTargetDataType({
-            dataSetFieldId,
-            receiverIndexRange,
-            targetNodeId,
-            attributeId,
-            writeIndexRange,
-            overrideValueHandling,
-            overrideValue
+            dataSetFieldId: decoder.readType(Guid),
+            receiverIndexRange: decoder.readString(),
+            targetNodeId: decoder.readType(NodeId),
+            attributeId: decoder.readUInt32(),
+            writeIndexRange: decoder.readString(),
+            overrideValueHandling: decoder.readUInt32(),
+            overrideValue: decoder.readType(Variant)
         });
     }
 }
@@ -1731,12 +1555,12 @@ export enum OverrideValueHandling {
     OverrideValue = 2
 }
 export interface SubscribedDataSetMirrorDataTypeOptions {
-    parentNodeName?: UaString;
-    rolePermissions?: RolePermissionType[];
+    parentNodeName?: UaString | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
 }
 export class SubscribedDataSetMirrorDataType implements SubscribedDataSetMirrorDataTypeOptions {
-    parentNodeName?: UaString;
-    rolePermissions?: RolePermissionType[];
+    readonly parentNodeName?: UaString;
+    readonly rolePermissions?: RolePermissionType[];
     constructor(options?: SubscribedDataSetMirrorDataTypeOptions) {
         this.parentNodeName = options?.parentNodeName;
         this.rolePermissions = options?.rolePermissions;
@@ -1747,23 +1571,21 @@ export class SubscribedDataSetMirrorDataType implements SubscribedDataSetMirrorD
         encoder.writeTypeArray(this.rolePermissions);
     }
     static [decode](decoder: BinaryDataDecoder): SubscribedDataSetMirrorDataType {
-        const parentNodeName = decoder.readString();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
         return new SubscribedDataSetMirrorDataType({
-            parentNodeName,
-            rolePermissions
+            parentNodeName: decoder.readString(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType)
         });
     }
 }
 export interface PubSubConfigurationDataTypeOptions {
-    publishedDataSets?: PublishedDataSetDataType[];
-    connections?: PubSubConnectionDataType[];
-    enabled?: boolean;
+    publishedDataSets?: PublishedDataSetDataType[] | undefined;
+    connections?: PubSubConnectionDataType[] | undefined;
+    enabled?: boolean | undefined;
 }
 export class PubSubConfigurationDataType implements PubSubConfigurationDataTypeOptions {
-    publishedDataSets?: PublishedDataSetDataType[];
-    connections?: PubSubConnectionDataType[];
-    enabled: boolean;
+    readonly publishedDataSets?: PublishedDataSetDataType[];
+    readonly connections?: PubSubConnectionDataType[];
+    readonly enabled: boolean;
     constructor(options?: PubSubConfigurationDataTypeOptions) {
         this.publishedDataSets = options?.publishedDataSets;
         this.connections = options?.connections;
@@ -1776,13 +1598,10 @@ export class PubSubConfigurationDataType implements PubSubConfigurationDataTypeO
         encoder.writeBoolean(this.enabled);
     }
     static [decode](decoder: BinaryDataDecoder): PubSubConfigurationDataType {
-        const publishedDataSets = decoder.readTypeArray(PublishedDataSetDataType);
-        const connections = decoder.readTypeArray(PubSubConnectionDataType);
-        const enabled = decoder.readBoolean();
         return new PubSubConfigurationDataType({
-            publishedDataSets,
-            connections,
-            enabled
+            publishedDataSets: decoder.readTypeArray(PublishedDataSetDataType),
+            connections: decoder.readTypeArray(PubSubConnectionDataType),
+            enabled: decoder.readBoolean()
         });
     }
 }
@@ -1806,18 +1625,18 @@ export enum UadpNetworkMessageContentMask {
     PromotedFields = 1024
 }
 export interface UadpWriterGroupMessageDataTypeOptions {
-    groupVersion?: UInt32;
-    dataSetOrdering?: DataSetOrderingType;
-    networkMessageContentMask?: UadpNetworkMessageContentMask;
-    samplingOffset?: Double;
-    publishingOffset?: Double[];
+    groupVersion?: UInt32 | undefined;
+    dataSetOrdering?: DataSetOrderingType | undefined;
+    networkMessageContentMask?: UadpNetworkMessageContentMask | undefined;
+    samplingOffset?: Double | undefined;
+    publishingOffset?: Double[] | undefined;
 }
 export class UadpWriterGroupMessageDataType implements UadpWriterGroupMessageDataTypeOptions {
-    groupVersion: UInt32;
-    dataSetOrdering: DataSetOrderingType;
-    networkMessageContentMask: UadpNetworkMessageContentMask;
-    samplingOffset: Double;
-    publishingOffset?: Double[];
+    readonly groupVersion: UInt32;
+    readonly dataSetOrdering: DataSetOrderingType;
+    readonly networkMessageContentMask: UadpNetworkMessageContentMask;
+    readonly samplingOffset: Double;
+    readonly publishingOffset?: Double[];
     constructor(options?: UadpWriterGroupMessageDataTypeOptions) {
         this.groupVersion = options?.groupVersion ?? 0;
         this.dataSetOrdering = options?.dataSetOrdering ?? DataSetOrderingType.Undefined;
@@ -1834,17 +1653,12 @@ export class UadpWriterGroupMessageDataType implements UadpWriterGroupMessageDat
         encoder.writeDoubleArray(this.publishingOffset);
     }
     static [decode](decoder: BinaryDataDecoder): UadpWriterGroupMessageDataType {
-        const groupVersion = decoder.readUInt32();
-        const dataSetOrdering = decoder.readUInt32();
-        const networkMessageContentMask = decoder.readUInt32();
-        const samplingOffset = decoder.readDouble();
-        const publishingOffset = decoder.readDoubleArray();
         return new UadpWriterGroupMessageDataType({
-            groupVersion,
-            dataSetOrdering,
-            networkMessageContentMask,
-            samplingOffset,
-            publishingOffset
+            groupVersion: decoder.readUInt32(),
+            dataSetOrdering: decoder.readUInt32(),
+            networkMessageContentMask: decoder.readUInt32(),
+            samplingOffset: decoder.readDouble(),
+            publishingOffset: decoder.readDoubleArray()
         });
     }
 }
@@ -1858,16 +1672,16 @@ export enum UadpDataSetMessageContentMask {
     SequenceNumber = 32
 }
 export interface UadpDataSetWriterMessageDataTypeOptions {
-    dataSetMessageContentMask?: UadpDataSetMessageContentMask;
-    configuredSize?: UInt16;
-    networkMessageNumber?: UInt16;
-    dataSetOffset?: UInt16;
+    dataSetMessageContentMask?: UadpDataSetMessageContentMask | undefined;
+    configuredSize?: UInt16 | undefined;
+    networkMessageNumber?: UInt16 | undefined;
+    dataSetOffset?: UInt16 | undefined;
 }
 export class UadpDataSetWriterMessageDataType implements UadpDataSetWriterMessageDataTypeOptions {
-    dataSetMessageContentMask: UadpDataSetMessageContentMask;
-    configuredSize: UInt16;
-    networkMessageNumber: UInt16;
-    dataSetOffset: UInt16;
+    readonly dataSetMessageContentMask: UadpDataSetMessageContentMask;
+    readonly configuredSize: UInt16;
+    readonly networkMessageNumber: UInt16;
+    readonly dataSetOffset: UInt16;
     constructor(options?: UadpDataSetWriterMessageDataTypeOptions) {
         this.dataSetMessageContentMask = options?.dataSetMessageContentMask ?? UadpDataSetMessageContentMask.None;
         this.configuredSize = options?.configuredSize ?? 0;
@@ -1882,39 +1696,35 @@ export class UadpDataSetWriterMessageDataType implements UadpDataSetWriterMessag
         encoder.writeUInt16(this.dataSetOffset);
     }
     static [decode](decoder: BinaryDataDecoder): UadpDataSetWriterMessageDataType {
-        const dataSetMessageContentMask = decoder.readUInt32();
-        const configuredSize = decoder.readUInt16();
-        const networkMessageNumber = decoder.readUInt16();
-        const dataSetOffset = decoder.readUInt16();
         return new UadpDataSetWriterMessageDataType({
-            dataSetMessageContentMask,
-            configuredSize,
-            networkMessageNumber,
-            dataSetOffset
+            dataSetMessageContentMask: decoder.readUInt32(),
+            configuredSize: decoder.readUInt16(),
+            networkMessageNumber: decoder.readUInt16(),
+            dataSetOffset: decoder.readUInt16()
         });
     }
 }
 export interface UadpDataSetReaderMessageDataTypeOptions {
-    groupVersion?: UInt32;
-    networkMessageNumber?: UInt16;
-    dataSetOffset?: UInt16;
-    dataSetClassId?: Guid;
-    networkMessageContentMask?: UadpNetworkMessageContentMask;
-    dataSetMessageContentMask?: UadpDataSetMessageContentMask;
-    publishingInterval?: Double;
-    receiveOffset?: Double;
-    processingOffset?: Double;
+    groupVersion?: UInt32 | undefined;
+    networkMessageNumber?: UInt16 | undefined;
+    dataSetOffset?: UInt16 | undefined;
+    dataSetClassId?: Guid | undefined;
+    networkMessageContentMask?: UadpNetworkMessageContentMask | undefined;
+    dataSetMessageContentMask?: UadpDataSetMessageContentMask | undefined;
+    publishingInterval?: Double | undefined;
+    receiveOffset?: Double | undefined;
+    processingOffset?: Double | undefined;
 }
 export class UadpDataSetReaderMessageDataType implements UadpDataSetReaderMessageDataTypeOptions {
-    groupVersion: UInt32;
-    networkMessageNumber: UInt16;
-    dataSetOffset: UInt16;
-    dataSetClassId: Guid;
-    networkMessageContentMask: UadpNetworkMessageContentMask;
-    dataSetMessageContentMask: UadpDataSetMessageContentMask;
-    publishingInterval: Double;
-    receiveOffset: Double;
-    processingOffset: Double;
+    readonly groupVersion: UInt32;
+    readonly networkMessageNumber: UInt16;
+    readonly dataSetOffset: UInt16;
+    readonly dataSetClassId: Guid;
+    readonly networkMessageContentMask: UadpNetworkMessageContentMask;
+    readonly dataSetMessageContentMask: UadpDataSetMessageContentMask;
+    readonly publishingInterval: Double;
+    readonly receiveOffset: Double;
+    readonly processingOffset: Double;
     constructor(options?: UadpDataSetReaderMessageDataTypeOptions) {
         this.groupVersion = options?.groupVersion ?? 0;
         this.networkMessageNumber = options?.networkMessageNumber ?? 0;
@@ -1939,25 +1749,16 @@ export class UadpDataSetReaderMessageDataType implements UadpDataSetReaderMessag
         encoder.writeDouble(this.processingOffset);
     }
     static [decode](decoder: BinaryDataDecoder): UadpDataSetReaderMessageDataType {
-        const groupVersion = decoder.readUInt32();
-        const networkMessageNumber = decoder.readUInt16();
-        const dataSetOffset = decoder.readUInt16();
-        const dataSetClassId = decoder.readType(Guid);
-        const networkMessageContentMask = decoder.readUInt32();
-        const dataSetMessageContentMask = decoder.readUInt32();
-        const publishingInterval = decoder.readDouble();
-        const receiveOffset = decoder.readDouble();
-        const processingOffset = decoder.readDouble();
         return new UadpDataSetReaderMessageDataType({
-            groupVersion,
-            networkMessageNumber,
-            dataSetOffset,
-            dataSetClassId,
-            networkMessageContentMask,
-            dataSetMessageContentMask,
-            publishingInterval,
-            receiveOffset,
-            processingOffset
+            groupVersion: decoder.readUInt32(),
+            networkMessageNumber: decoder.readUInt16(),
+            dataSetOffset: decoder.readUInt16(),
+            dataSetClassId: decoder.readType(Guid),
+            networkMessageContentMask: decoder.readUInt32(),
+            dataSetMessageContentMask: decoder.readUInt32(),
+            publishingInterval: decoder.readDouble(),
+            receiveOffset: decoder.readDouble(),
+            processingOffset: decoder.readDouble()
         });
     }
 }
@@ -1971,10 +1772,10 @@ export enum JsonNetworkMessageContentMask {
     ReplyTo = 32
 }
 export interface JsonWriterGroupMessageDataTypeOptions {
-    networkMessageContentMask?: JsonNetworkMessageContentMask;
+    networkMessageContentMask?: JsonNetworkMessageContentMask | undefined;
 }
 export class JsonWriterGroupMessageDataType implements JsonWriterGroupMessageDataTypeOptions {
-    networkMessageContentMask: JsonNetworkMessageContentMask;
+    readonly networkMessageContentMask: JsonNetworkMessageContentMask;
     constructor(options?: JsonWriterGroupMessageDataTypeOptions) {
         this.networkMessageContentMask = options?.networkMessageContentMask ?? JsonNetworkMessageContentMask.None;
     }
@@ -1983,9 +1784,8 @@ export class JsonWriterGroupMessageDataType implements JsonWriterGroupMessageDat
         encoder.writeUInt32(this.networkMessageContentMask);
     }
     static [decode](decoder: BinaryDataDecoder): JsonWriterGroupMessageDataType {
-        const networkMessageContentMask = decoder.readUInt32();
         return new JsonWriterGroupMessageDataType({
-            networkMessageContentMask
+            networkMessageContentMask: decoder.readUInt32()
         });
     }
 }
@@ -1998,10 +1798,10 @@ export enum JsonDataSetMessageContentMask {
     Status = 16
 }
 export interface JsonDataSetWriterMessageDataTypeOptions {
-    dataSetMessageContentMask?: JsonDataSetMessageContentMask;
+    dataSetMessageContentMask?: JsonDataSetMessageContentMask | undefined;
 }
 export class JsonDataSetWriterMessageDataType implements JsonDataSetWriterMessageDataTypeOptions {
-    dataSetMessageContentMask: JsonDataSetMessageContentMask;
+    readonly dataSetMessageContentMask: JsonDataSetMessageContentMask;
     constructor(options?: JsonDataSetWriterMessageDataTypeOptions) {
         this.dataSetMessageContentMask = options?.dataSetMessageContentMask ?? JsonDataSetMessageContentMask.None;
     }
@@ -2010,19 +1810,18 @@ export class JsonDataSetWriterMessageDataType implements JsonDataSetWriterMessag
         encoder.writeUInt32(this.dataSetMessageContentMask);
     }
     static [decode](decoder: BinaryDataDecoder): JsonDataSetWriterMessageDataType {
-        const dataSetMessageContentMask = decoder.readUInt32();
         return new JsonDataSetWriterMessageDataType({
-            dataSetMessageContentMask
+            dataSetMessageContentMask: decoder.readUInt32()
         });
     }
 }
 export interface JsonDataSetReaderMessageDataTypeOptions {
-    networkMessageContentMask?: JsonNetworkMessageContentMask;
-    dataSetMessageContentMask?: JsonDataSetMessageContentMask;
+    networkMessageContentMask?: JsonNetworkMessageContentMask | undefined;
+    dataSetMessageContentMask?: JsonDataSetMessageContentMask | undefined;
 }
 export class JsonDataSetReaderMessageDataType implements JsonDataSetReaderMessageDataTypeOptions {
-    networkMessageContentMask: JsonNetworkMessageContentMask;
-    dataSetMessageContentMask: JsonDataSetMessageContentMask;
+    readonly networkMessageContentMask: JsonNetworkMessageContentMask;
+    readonly dataSetMessageContentMask: JsonDataSetMessageContentMask;
     constructor(options?: JsonDataSetReaderMessageDataTypeOptions) {
         this.networkMessageContentMask = options?.networkMessageContentMask ?? JsonNetworkMessageContentMask.None;
         this.dataSetMessageContentMask = options?.dataSetMessageContentMask ?? JsonDataSetMessageContentMask.None;
@@ -2033,19 +1832,17 @@ export class JsonDataSetReaderMessageDataType implements JsonDataSetReaderMessag
         encoder.writeUInt32(this.dataSetMessageContentMask);
     }
     static [decode](decoder: BinaryDataDecoder): JsonDataSetReaderMessageDataType {
-        const networkMessageContentMask = decoder.readUInt32();
-        const dataSetMessageContentMask = decoder.readUInt32();
         return new JsonDataSetReaderMessageDataType({
-            networkMessageContentMask,
-            dataSetMessageContentMask
+            networkMessageContentMask: decoder.readUInt32(),
+            dataSetMessageContentMask: decoder.readUInt32()
         });
     }
 }
 export interface DatagramConnectionTransportDataTypeOptions {
-    discoveryAddress?: ExtensionObject;
+    discoveryAddress?: ExtensionObject | undefined;
 }
 export class DatagramConnectionTransportDataType implements DatagramConnectionTransportDataTypeOptions {
-    discoveryAddress: ExtensionObject;
+    readonly discoveryAddress: ExtensionObject;
     constructor(options?: DatagramConnectionTransportDataTypeOptions) {
         this.discoveryAddress = options?.discoveryAddress ?? new ExtensionObject();
     }
@@ -2054,19 +1851,18 @@ export class DatagramConnectionTransportDataType implements DatagramConnectionTr
         encoder.writeType(this.discoveryAddress);
     }
     static [decode](decoder: BinaryDataDecoder): DatagramConnectionTransportDataType {
-        const discoveryAddress = decoder.readType(ExtensionObject);
         return new DatagramConnectionTransportDataType({
-            discoveryAddress
+            discoveryAddress: decoder.readType(ExtensionObject)
         });
     }
 }
 export interface DatagramWriterGroupTransportDataTypeOptions {
-    messageRepeatCount?: Byte;
-    messageRepeatDelay?: Double;
+    messageRepeatCount?: Byte | undefined;
+    messageRepeatDelay?: Double | undefined;
 }
 export class DatagramWriterGroupTransportDataType implements DatagramWriterGroupTransportDataTypeOptions {
-    messageRepeatCount: Byte;
-    messageRepeatDelay: Double;
+    readonly messageRepeatCount: Byte;
+    readonly messageRepeatDelay: Double;
     constructor(options?: DatagramWriterGroupTransportDataTypeOptions) {
         this.messageRepeatCount = options?.messageRepeatCount ?? 0;
         this.messageRepeatDelay = options?.messageRepeatDelay ?? 0;
@@ -2077,21 +1873,19 @@ export class DatagramWriterGroupTransportDataType implements DatagramWriterGroup
         encoder.writeDouble(this.messageRepeatDelay);
     }
     static [decode](decoder: BinaryDataDecoder): DatagramWriterGroupTransportDataType {
-        const messageRepeatCount = decoder.readByte();
-        const messageRepeatDelay = decoder.readDouble();
         return new DatagramWriterGroupTransportDataType({
-            messageRepeatCount,
-            messageRepeatDelay
+            messageRepeatCount: decoder.readByte(),
+            messageRepeatDelay: decoder.readDouble()
         });
     }
 }
 export interface BrokerConnectionTransportDataTypeOptions {
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
+    resourceUri?: UaString | undefined;
+    authenticationProfileUri?: UaString | undefined;
 }
 export class BrokerConnectionTransportDataType implements BrokerConnectionTransportDataTypeOptions {
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
+    readonly resourceUri?: UaString;
+    readonly authenticationProfileUri?: UaString;
     constructor(options?: BrokerConnectionTransportDataTypeOptions) {
         this.resourceUri = options?.resourceUri;
         this.authenticationProfileUri = options?.authenticationProfileUri;
@@ -2102,11 +1896,9 @@ export class BrokerConnectionTransportDataType implements BrokerConnectionTransp
         encoder.writeString(this.authenticationProfileUri);
     }
     static [decode](decoder: BinaryDataDecoder): BrokerConnectionTransportDataType {
-        const resourceUri = decoder.readString();
-        const authenticationProfileUri = decoder.readString();
         return new BrokerConnectionTransportDataType({
-            resourceUri,
-            authenticationProfileUri
+            resourceUri: decoder.readString(),
+            authenticationProfileUri: decoder.readString()
         });
     }
 }
@@ -2118,16 +1910,16 @@ export enum BrokerTransportQualityOfService {
     ExactlyOnce = 4
 }
 export interface BrokerWriterGroupTransportDataTypeOptions {
-    queueName?: UaString;
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
-    requestedDeliveryGuarantee?: BrokerTransportQualityOfService;
+    queueName?: UaString | undefined;
+    resourceUri?: UaString | undefined;
+    authenticationProfileUri?: UaString | undefined;
+    requestedDeliveryGuarantee?: BrokerTransportQualityOfService | undefined;
 }
 export class BrokerWriterGroupTransportDataType implements BrokerWriterGroupTransportDataTypeOptions {
-    queueName?: UaString;
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
-    requestedDeliveryGuarantee: BrokerTransportQualityOfService;
+    readonly queueName?: UaString;
+    readonly resourceUri?: UaString;
+    readonly authenticationProfileUri?: UaString;
+    readonly requestedDeliveryGuarantee: BrokerTransportQualityOfService;
     constructor(options?: BrokerWriterGroupTransportDataTypeOptions) {
         this.queueName = options?.queueName;
         this.resourceUri = options?.resourceUri;
@@ -2142,33 +1934,29 @@ export class BrokerWriterGroupTransportDataType implements BrokerWriterGroupTran
         encoder.writeUInt32(this.requestedDeliveryGuarantee);
     }
     static [decode](decoder: BinaryDataDecoder): BrokerWriterGroupTransportDataType {
-        const queueName = decoder.readString();
-        const resourceUri = decoder.readString();
-        const authenticationProfileUri = decoder.readString();
-        const requestedDeliveryGuarantee = decoder.readUInt32();
         return new BrokerWriterGroupTransportDataType({
-            queueName,
-            resourceUri,
-            authenticationProfileUri,
-            requestedDeliveryGuarantee
+            queueName: decoder.readString(),
+            resourceUri: decoder.readString(),
+            authenticationProfileUri: decoder.readString(),
+            requestedDeliveryGuarantee: decoder.readUInt32()
         });
     }
 }
 export interface BrokerDataSetWriterTransportDataTypeOptions {
-    queueName?: UaString;
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
-    requestedDeliveryGuarantee?: BrokerTransportQualityOfService;
-    metaDataQueueName?: UaString;
-    metaDataUpdateTime?: Double;
+    queueName?: UaString | undefined;
+    resourceUri?: UaString | undefined;
+    authenticationProfileUri?: UaString | undefined;
+    requestedDeliveryGuarantee?: BrokerTransportQualityOfService | undefined;
+    metaDataQueueName?: UaString | undefined;
+    metaDataUpdateTime?: Double | undefined;
 }
 export class BrokerDataSetWriterTransportDataType implements BrokerDataSetWriterTransportDataTypeOptions {
-    queueName?: UaString;
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
-    requestedDeliveryGuarantee: BrokerTransportQualityOfService;
-    metaDataQueueName?: UaString;
-    metaDataUpdateTime: Double;
+    readonly queueName?: UaString;
+    readonly resourceUri?: UaString;
+    readonly authenticationProfileUri?: UaString;
+    readonly requestedDeliveryGuarantee: BrokerTransportQualityOfService;
+    readonly metaDataQueueName?: UaString;
+    readonly metaDataUpdateTime: Double;
     constructor(options?: BrokerDataSetWriterTransportDataTypeOptions) {
         this.queueName = options?.queueName;
         this.resourceUri = options?.resourceUri;
@@ -2187,35 +1975,29 @@ export class BrokerDataSetWriterTransportDataType implements BrokerDataSetWriter
         encoder.writeDouble(this.metaDataUpdateTime);
     }
     static [decode](decoder: BinaryDataDecoder): BrokerDataSetWriterTransportDataType {
-        const queueName = decoder.readString();
-        const resourceUri = decoder.readString();
-        const authenticationProfileUri = decoder.readString();
-        const requestedDeliveryGuarantee = decoder.readUInt32();
-        const metaDataQueueName = decoder.readString();
-        const metaDataUpdateTime = decoder.readDouble();
         return new BrokerDataSetWriterTransportDataType({
-            queueName,
-            resourceUri,
-            authenticationProfileUri,
-            requestedDeliveryGuarantee,
-            metaDataQueueName,
-            metaDataUpdateTime
+            queueName: decoder.readString(),
+            resourceUri: decoder.readString(),
+            authenticationProfileUri: decoder.readString(),
+            requestedDeliveryGuarantee: decoder.readUInt32(),
+            metaDataQueueName: decoder.readString(),
+            metaDataUpdateTime: decoder.readDouble()
         });
     }
 }
 export interface BrokerDataSetReaderTransportDataTypeOptions {
-    queueName?: UaString;
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
-    requestedDeliveryGuarantee?: BrokerTransportQualityOfService;
-    metaDataQueueName?: UaString;
+    queueName?: UaString | undefined;
+    resourceUri?: UaString | undefined;
+    authenticationProfileUri?: UaString | undefined;
+    requestedDeliveryGuarantee?: BrokerTransportQualityOfService | undefined;
+    metaDataQueueName?: UaString | undefined;
 }
 export class BrokerDataSetReaderTransportDataType implements BrokerDataSetReaderTransportDataTypeOptions {
-    queueName?: UaString;
-    resourceUri?: UaString;
-    authenticationProfileUri?: UaString;
-    requestedDeliveryGuarantee: BrokerTransportQualityOfService;
-    metaDataQueueName?: UaString;
+    readonly queueName?: UaString;
+    readonly resourceUri?: UaString;
+    readonly authenticationProfileUri?: UaString;
+    readonly requestedDeliveryGuarantee: BrokerTransportQualityOfService;
+    readonly metaDataQueueName?: UaString;
     constructor(options?: BrokerDataSetReaderTransportDataTypeOptions) {
         this.queueName = options?.queueName;
         this.resourceUri = options?.resourceUri;
@@ -2232,17 +2014,12 @@ export class BrokerDataSetReaderTransportDataType implements BrokerDataSetReader
         encoder.writeString(this.metaDataQueueName);
     }
     static [decode](decoder: BinaryDataDecoder): BrokerDataSetReaderTransportDataType {
-        const queueName = decoder.readString();
-        const resourceUri = decoder.readString();
-        const authenticationProfileUri = decoder.readString();
-        const requestedDeliveryGuarantee = decoder.readUInt32();
-        const metaDataQueueName = decoder.readString();
         return new BrokerDataSetReaderTransportDataType({
-            queueName,
-            resourceUri,
-            authenticationProfileUri,
-            requestedDeliveryGuarantee,
-            metaDataQueueName
+            queueName: decoder.readString(),
+            resourceUri: decoder.readString(),
+            authenticationProfileUri: decoder.readString(),
+            requestedDeliveryGuarantee: decoder.readUInt32(),
+            metaDataQueueName: decoder.readString()
         });
     }
 }
@@ -2258,12 +2035,12 @@ export enum PubSubDiagnosticsCounterClassification {
     Error = 1
 }
 export interface AliasNameDataTypeOptions {
-    aliasName?: QualifiedName;
-    referencedNodes?: ExpandedNodeId[];
+    aliasName?: QualifiedName | undefined;
+    referencedNodes?: ExpandedNodeId[] | undefined;
 }
 export class AliasNameDataType implements AliasNameDataTypeOptions {
-    aliasName: QualifiedName;
-    referencedNodes?: ExpandedNodeId[];
+    readonly aliasName: QualifiedName;
+    readonly referencedNodes?: ExpandedNodeId[];
     constructor(options?: AliasNameDataTypeOptions) {
         this.aliasName = options?.aliasName ?? new QualifiedName();
         this.referencedNodes = options?.referencedNodes;
@@ -2274,11 +2051,9 @@ export class AliasNameDataType implements AliasNameDataTypeOptions {
         encoder.writeTypeArray(this.referencedNodes);
     }
     static [decode](decoder: BinaryDataDecoder): AliasNameDataType {
-        const aliasName = decoder.readType(QualifiedName);
-        const referencedNodes = decoder.readTypeArray(ExpandedNodeId);
         return new AliasNameDataType({
-            aliasName,
-            referencedNodes
+            aliasName: decoder.readType(QualifiedName),
+            referencedNodes: decoder.readTypeArray(ExpandedNodeId)
         });
     }
 }
@@ -2357,12 +2132,12 @@ export enum AccessRestrictionType {
     ApplyRestrictionsToBrowse = 8
 }
 export interface RolePermissionTypeOptions {
-    roleId?: NodeId;
-    permissions?: PermissionType;
+    roleId?: NodeId | undefined;
+    permissions?: PermissionType | undefined;
 }
 export class RolePermissionType implements RolePermissionTypeOptions {
-    roleId: NodeId;
-    permissions: PermissionType;
+    readonly roleId: NodeId;
+    readonly permissions: PermissionType;
     constructor(options?: RolePermissionTypeOptions) {
         this.roleId = options?.roleId ?? NodeId.null();
         this.permissions = options?.permissions ?? PermissionType.None;
@@ -2373,11 +2148,9 @@ export class RolePermissionType implements RolePermissionTypeOptions {
         encoder.writeUInt32(this.permissions);
     }
     static [decode](decoder: BinaryDataDecoder): RolePermissionType {
-        const roleId = decoder.readType(NodeId);
-        const permissions = decoder.readUInt32();
         return new RolePermissionType({
-            roleId,
-            permissions
+            roleId: decoder.readType(NodeId),
+            permissions: decoder.readUInt32()
         });
     }
 }
@@ -2387,22 +2160,22 @@ export enum StructureType {
     Union = 2
 }
 export interface StructureFieldOptions {
-    name?: UaString;
-    description?: LocalizedText;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    maxStringLength?: UInt32;
-    isOptional?: boolean;
+    name?: UaString | undefined;
+    description?: LocalizedText | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    maxStringLength?: UInt32 | undefined;
+    isOptional?: boolean | undefined;
 }
 export class StructureField implements StructureFieldOptions {
-    name?: UaString;
-    description: LocalizedText;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    maxStringLength: UInt32;
-    isOptional: boolean;
+    readonly name?: UaString;
+    readonly description: LocalizedText;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly maxStringLength: UInt32;
+    readonly isOptional: boolean;
     constructor(options?: StructureFieldOptions) {
         this.name = options?.name;
         this.description = options?.description ?? new LocalizedText();
@@ -2423,35 +2196,28 @@ export class StructureField implements StructureFieldOptions {
         encoder.writeBoolean(this.isOptional);
     }
     static [decode](decoder: BinaryDataDecoder): StructureField {
-        const name = decoder.readString();
-        const description = decoder.readType(LocalizedText);
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const maxStringLength = decoder.readUInt32();
-        const isOptional = decoder.readBoolean();
         return new StructureField({
-            name,
-            description,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            maxStringLength,
-            isOptional
+            name: decoder.readString(),
+            description: decoder.readType(LocalizedText),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            maxStringLength: decoder.readUInt32(),
+            isOptional: decoder.readBoolean()
         });
     }
 }
 export interface StructureDefinitionOptions {
-    defaultEncodingId?: NodeId;
-    baseDataType?: NodeId;
-    structureType?: StructureType;
-    fields?: StructureField[];
+    defaultEncodingId?: NodeId | undefined;
+    baseDataType?: NodeId | undefined;
+    structureType?: StructureType | undefined;
+    fields?: StructureField[] | undefined;
 }
 export class StructureDefinition implements StructureDefinitionOptions {
-    defaultEncodingId: NodeId;
-    baseDataType: NodeId;
-    structureType: StructureType;
-    fields?: StructureField[];
+    readonly defaultEncodingId: NodeId;
+    readonly baseDataType: NodeId;
+    readonly structureType: StructureType;
+    readonly fields?: StructureField[];
     constructor(options?: StructureDefinitionOptions) {
         this.defaultEncodingId = options?.defaultEncodingId ?? NodeId.null();
         this.baseDataType = options?.baseDataType ?? NodeId.null();
@@ -2466,23 +2232,19 @@ export class StructureDefinition implements StructureDefinitionOptions {
         encoder.writeTypeArray(this.fields);
     }
     static [decode](decoder: BinaryDataDecoder): StructureDefinition {
-        const defaultEncodingId = decoder.readType(NodeId);
-        const baseDataType = decoder.readType(NodeId);
-        const structureType = decoder.readUInt32();
-        const fields = decoder.readTypeArray(StructureField);
         return new StructureDefinition({
-            defaultEncodingId,
-            baseDataType,
-            structureType,
-            fields
+            defaultEncodingId: decoder.readType(NodeId),
+            baseDataType: decoder.readType(NodeId),
+            structureType: decoder.readUInt32(),
+            fields: decoder.readTypeArray(StructureField)
         });
     }
 }
 export interface EnumDefinitionOptions {
-    fields?: EnumField[];
+    fields?: EnumField[] | undefined;
 }
 export class EnumDefinition implements EnumDefinitionOptions {
-    fields?: EnumField[];
+    readonly fields?: EnumField[];
     constructor(options?: EnumDefinitionOptions) {
         this.fields = options?.fields;
     }
@@ -2491,37 +2253,36 @@ export class EnumDefinition implements EnumDefinitionOptions {
         encoder.writeTypeArray(this.fields);
     }
     static [decode](decoder: BinaryDataDecoder): EnumDefinition {
-        const fields = decoder.readTypeArray(EnumField);
         return new EnumDefinition({
-            fields
+            fields: decoder.readTypeArray(EnumField)
         });
     }
 }
 export interface NodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
 }
 export class Node implements NodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
     constructor(options?: NodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2550,57 +2311,46 @@ export class Node implements NodeOptions {
         encoder.writeTypeArray(this.references);
     }
     static [decode](decoder: BinaryDataDecoder): Node {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
         return new Node({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode)
         });
     }
 }
 export interface InstanceNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
 }
 export class InstanceNode implements InstanceNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
     constructor(options?: InstanceNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2629,57 +2379,46 @@ export class InstanceNode implements InstanceNodeOptions {
         encoder.writeTypeArray(this.references);
     }
     static [decode](decoder: BinaryDataDecoder): InstanceNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
         return new InstanceNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode)
         });
     }
 }
 export interface TypeNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
 }
 export class TypeNode implements TypeNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
     constructor(options?: TypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2708,59 +2447,48 @@ export class TypeNode implements TypeNodeOptions {
         encoder.writeTypeArray(this.references);
     }
     static [decode](decoder: BinaryDataDecoder): TypeNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
         return new TypeNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode)
         });
     }
 }
 export interface ObjectNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    eventNotifier?: Byte;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    eventNotifier?: Byte | undefined;
 }
 export class ObjectNode implements ObjectNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    eventNotifier: Byte;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly eventNotifier: Byte;
     constructor(options?: ObjectNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2791,61 +2519,49 @@ export class ObjectNode implements ObjectNodeOptions {
         encoder.writeByte(this.eventNotifier);
     }
     static [decode](decoder: BinaryDataDecoder): ObjectNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const eventNotifier = decoder.readByte();
         return new ObjectNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            eventNotifier
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            eventNotifier: decoder.readByte()
         });
     }
 }
 export interface ObjectTypeNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    isAbstract?: boolean;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    isAbstract?: boolean | undefined;
 }
 export class ObjectTypeNode implements ObjectTypeNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    isAbstract: boolean;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly isAbstract: boolean;
     constructor(options?: ObjectTypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2876,77 +2592,65 @@ export class ObjectTypeNode implements ObjectTypeNodeOptions {
         encoder.writeBoolean(this.isAbstract);
     }
     static [decode](decoder: BinaryDataDecoder): ObjectTypeNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const isAbstract = decoder.readBoolean();
         return new ObjectTypeNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            isAbstract
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            isAbstract: decoder.readBoolean()
         });
     }
 }
 export interface VariableNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    value?: Variant;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    accessLevel?: Byte;
-    userAccessLevel?: Byte;
-    minimumSamplingInterval?: Double;
-    historizing?: boolean;
-    accessLevelEx?: UInt32;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    value?: Variant | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    accessLevel?: Byte | undefined;
+    userAccessLevel?: Byte | undefined;
+    minimumSamplingInterval?: Double | undefined;
+    historizing?: boolean | undefined;
+    accessLevelEx?: UInt32 | undefined;
 }
 export class VariableNode implements VariableNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    value: Variant;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    accessLevel: Byte;
-    userAccessLevel: Byte;
-    minimumSamplingInterval: Double;
-    historizing: boolean;
-    accessLevelEx: UInt32;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly value: Variant;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly accessLevel: Byte;
+    readonly userAccessLevel: Byte;
+    readonly minimumSamplingInterval: Double;
+    readonly historizing: boolean;
+    readonly accessLevelEx: UInt32;
     constructor(options?: VariableNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2993,85 +2697,65 @@ export class VariableNode implements VariableNodeOptions {
         encoder.writeUInt32(this.accessLevelEx);
     }
     static [decode](decoder: BinaryDataDecoder): VariableNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const value = decoder.readType(Variant);
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const accessLevel = decoder.readByte();
-        const userAccessLevel = decoder.readByte();
-        const minimumSamplingInterval = decoder.readDouble();
-        const historizing = decoder.readBoolean();
-        const accessLevelEx = decoder.readUInt32();
         return new VariableNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            value,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            accessLevel,
-            userAccessLevel,
-            minimumSamplingInterval,
-            historizing,
-            accessLevelEx
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            value: decoder.readType(Variant),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            accessLevel: decoder.readByte(),
+            userAccessLevel: decoder.readByte(),
+            minimumSamplingInterval: decoder.readDouble(),
+            historizing: decoder.readBoolean(),
+            accessLevelEx: decoder.readUInt32()
         });
     }
 }
 export interface VariableTypeNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    value?: Variant;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    isAbstract?: boolean;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    value?: Variant | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    isAbstract?: boolean | undefined;
 }
 export class VariableTypeNode implements VariableTypeNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    value: Variant;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    isAbstract: boolean;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly value: Variant;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly isAbstract: boolean;
     constructor(options?: VariableTypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -3110,73 +2794,57 @@ export class VariableTypeNode implements VariableTypeNodeOptions {
         encoder.writeBoolean(this.isAbstract);
     }
     static [decode](decoder: BinaryDataDecoder): VariableTypeNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const value = decoder.readType(Variant);
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const isAbstract = decoder.readBoolean();
         return new VariableTypeNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            value,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            isAbstract
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            value: decoder.readType(Variant),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            isAbstract: decoder.readBoolean()
         });
     }
 }
 export interface ReferenceTypeNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    isAbstract?: boolean;
-    symmetric?: boolean;
-    inverseName?: LocalizedText;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    isAbstract?: boolean | undefined;
+    symmetric?: boolean | undefined;
+    inverseName?: LocalizedText | undefined;
 }
 export class ReferenceTypeNode implements ReferenceTypeNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    isAbstract: boolean;
-    symmetric: boolean;
-    inverseName: LocalizedText;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly isAbstract: boolean;
+    readonly symmetric: boolean;
+    readonly inverseName: LocalizedText;
     constructor(options?: ReferenceTypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -3211,67 +2879,53 @@ export class ReferenceTypeNode implements ReferenceTypeNodeOptions {
         encoder.writeType(this.inverseName);
     }
     static [decode](decoder: BinaryDataDecoder): ReferenceTypeNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const isAbstract = decoder.readBoolean();
-        const symmetric = decoder.readBoolean();
-        const inverseName = decoder.readType(LocalizedText);
         return new ReferenceTypeNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            isAbstract,
-            symmetric,
-            inverseName
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            isAbstract: decoder.readBoolean(),
+            symmetric: decoder.readBoolean(),
+            inverseName: decoder.readType(LocalizedText)
         });
     }
 }
 export interface MethodNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    executable?: boolean;
-    userExecutable?: boolean;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    executable?: boolean | undefined;
+    userExecutable?: boolean | undefined;
 }
 export class MethodNode implements MethodNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    executable: boolean;
-    userExecutable: boolean;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly executable: boolean;
+    readonly userExecutable: boolean;
     constructor(options?: MethodNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -3304,65 +2958,52 @@ export class MethodNode implements MethodNodeOptions {
         encoder.writeBoolean(this.userExecutable);
     }
     static [decode](decoder: BinaryDataDecoder): MethodNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const executable = decoder.readBoolean();
-        const userExecutable = decoder.readBoolean();
         return new MethodNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            executable,
-            userExecutable
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            executable: decoder.readBoolean(),
+            userExecutable: decoder.readBoolean()
         });
     }
 }
 export interface ViewNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    containsNoLoops?: boolean;
-    eventNotifier?: Byte;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    containsNoLoops?: boolean | undefined;
+    eventNotifier?: Byte | undefined;
 }
 export class ViewNode implements ViewNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    containsNoLoops: boolean;
-    eventNotifier: Byte;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly containsNoLoops: boolean;
+    readonly eventNotifier: Byte;
     constructor(options?: ViewNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -3395,65 +3036,52 @@ export class ViewNode implements ViewNodeOptions {
         encoder.writeByte(this.eventNotifier);
     }
     static [decode](decoder: BinaryDataDecoder): ViewNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const containsNoLoops = decoder.readBoolean();
-        const eventNotifier = decoder.readByte();
         return new ViewNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            containsNoLoops,
-            eventNotifier
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            containsNoLoops: decoder.readBoolean(),
+            eventNotifier: decoder.readByte()
         });
     }
 }
 export interface DataTypeNodeOptions {
-    nodeId?: NodeId;
-    nodeClass?: NodeClass;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions?: UInt16;
-    references?: ReferenceNode[];
-    isAbstract?: boolean;
-    dataTypeDefinition?: ExtensionObject;
+    nodeId?: NodeId | undefined;
+    nodeClass?: NodeClass | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    rolePermissions?: RolePermissionType[] | undefined;
+    userRolePermissions?: RolePermissionType[] | undefined;
+    accessRestrictions?: UInt16 | undefined;
+    references?: ReferenceNode[] | undefined;
+    isAbstract?: boolean | undefined;
+    dataTypeDefinition?: ExtensionObject | undefined;
 }
 export class DataTypeNode implements DataTypeNodeOptions {
-    nodeId: NodeId;
-    nodeClass: NodeClass;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    rolePermissions?: RolePermissionType[];
-    userRolePermissions?: RolePermissionType[];
-    accessRestrictions: UInt16;
-    references?: ReferenceNode[];
-    isAbstract: boolean;
-    dataTypeDefinition: ExtensionObject;
+    readonly nodeId: NodeId;
+    readonly nodeClass: NodeClass;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly rolePermissions?: RolePermissionType[];
+    readonly userRolePermissions?: RolePermissionType[];
+    readonly accessRestrictions: UInt16;
+    readonly references?: ReferenceNode[];
+    readonly isAbstract: boolean;
+    readonly dataTypeDefinition: ExtensionObject;
     constructor(options?: DataTypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -3486,45 +3114,32 @@ export class DataTypeNode implements DataTypeNodeOptions {
         encoder.writeType(this.dataTypeDefinition);
     }
     static [decode](decoder: BinaryDataDecoder): DataTypeNode {
-        const nodeId = decoder.readType(NodeId);
-        const nodeClass = decoder.readUInt32();
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const rolePermissions = decoder.readTypeArray(RolePermissionType);
-        const userRolePermissions = decoder.readTypeArray(RolePermissionType);
-        const accessRestrictions = decoder.readUInt16();
-        const references = decoder.readTypeArray(ReferenceNode);
-        const isAbstract = decoder.readBoolean();
-        const dataTypeDefinition = decoder.readType(ExtensionObject);
         return new DataTypeNode({
-            nodeId,
-            nodeClass,
-            browseName,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            rolePermissions,
-            userRolePermissions,
-            accessRestrictions,
-            references,
-            isAbstract,
-            dataTypeDefinition
+            nodeId: decoder.readType(NodeId),
+            nodeClass: decoder.readUInt32(),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            userRolePermissions: decoder.readTypeArray(RolePermissionType),
+            accessRestrictions: decoder.readUInt16(),
+            references: decoder.readTypeArray(ReferenceNode),
+            isAbstract: decoder.readBoolean(),
+            dataTypeDefinition: decoder.readType(ExtensionObject)
         });
     }
 }
 export interface ReferenceNodeOptions {
-    referenceTypeId?: NodeId;
-    isInverse?: boolean;
-    targetId?: ExpandedNodeId;
+    referenceTypeId?: NodeId | undefined;
+    isInverse?: boolean | undefined;
+    targetId?: ExpandedNodeId | undefined;
 }
 export class ReferenceNode implements ReferenceNodeOptions {
-    referenceTypeId: NodeId;
-    isInverse: boolean;
-    targetId: ExpandedNodeId;
+    readonly referenceTypeId: NodeId;
+    readonly isInverse: boolean;
+    readonly targetId: ExpandedNodeId;
     constructor(options?: ReferenceNodeOptions) {
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
         this.isInverse = options?.isInverse ?? false;
@@ -3537,29 +3152,26 @@ export class ReferenceNode implements ReferenceNodeOptions {
         encoder.writeType(this.targetId);
     }
     static [decode](decoder: BinaryDataDecoder): ReferenceNode {
-        const referenceTypeId = decoder.readType(NodeId);
-        const isInverse = decoder.readBoolean();
-        const targetId = decoder.readType(ExpandedNodeId);
         return new ReferenceNode({
-            referenceTypeId,
-            isInverse,
-            targetId
+            referenceTypeId: decoder.readType(NodeId),
+            isInverse: decoder.readBoolean(),
+            targetId: decoder.readType(ExpandedNodeId)
         });
     }
 }
 export interface ArgumentOptions {
-    name?: UaString;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    description?: LocalizedText;
+    name?: UaString | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    description?: LocalizedText | undefined;
 }
 export class Argument implements ArgumentOptions {
-    name?: UaString;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    description: LocalizedText;
+    readonly name?: UaString;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly description: LocalizedText;
     constructor(options?: ArgumentOptions) {
         this.name = options?.name;
         this.dataType = options?.dataType ?? NodeId.null();
@@ -3576,29 +3188,24 @@ export class Argument implements ArgumentOptions {
         encoder.writeType(this.description);
     }
     static [decode](decoder: BinaryDataDecoder): Argument {
-        const name = decoder.readString();
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const description = decoder.readType(LocalizedText);
         return new Argument({
-            name,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            description
+            name: decoder.readString(),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            description: decoder.readType(LocalizedText)
         });
     }
 }
 export interface EnumValueTypeOptions {
-    value?: Int64;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
+    value?: Int64 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
 }
 export class EnumValueType implements EnumValueTypeOptions {
-    value: Int64;
-    displayName: LocalizedText;
-    description: LocalizedText;
+    readonly value: Int64;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
     constructor(options?: EnumValueTypeOptions) {
         this.value = options?.value ?? BigInt(0);
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -3611,27 +3218,24 @@ export class EnumValueType implements EnumValueTypeOptions {
         encoder.writeType(this.description);
     }
     static [decode](decoder: BinaryDataDecoder): EnumValueType {
-        const value = decoder.readInt64();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
         return new EnumValueType({
-            value,
-            displayName,
-            description
+            value: decoder.readInt64(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText)
         });
     }
 }
 export interface EnumFieldOptions {
-    value?: Int64;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    name?: UaString;
+    value?: Int64 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    name?: UaString | undefined;
 }
 export class EnumField implements EnumFieldOptions {
-    value: Int64;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    name?: UaString;
+    readonly value: Int64;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly name?: UaString;
     constructor(options?: EnumFieldOptions) {
         this.value = options?.value ?? BigInt(0);
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -3646,25 +3250,21 @@ export class EnumField implements EnumFieldOptions {
         encoder.writeString(this.name);
     }
     static [decode](decoder: BinaryDataDecoder): EnumField {
-        const value = decoder.readInt64();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const name = decoder.readString();
         return new EnumField({
-            value,
-            displayName,
-            description,
-            name
+            value: decoder.readInt64(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            name: decoder.readString()
         });
     }
 }
 export interface OptionSetOptions {
-    value?: ByteString;
-    validBits?: ByteString;
+    value?: ByteString | undefined;
+    validBits?: ByteString | undefined;
 }
 export class OptionSet implements OptionSetOptions {
-    value?: ByteString;
-    validBits?: ByteString;
+    readonly value?: ByteString;
+    readonly validBits?: ByteString;
     constructor(options?: OptionSetOptions) {
         this.value = options?.value;
         this.validBits = options?.validBits;
@@ -3675,11 +3275,9 @@ export class OptionSet implements OptionSetOptions {
         encoder.writeByteString(this.validBits);
     }
     static [decode](decoder: BinaryDataDecoder): OptionSet {
-        const value = decoder.readByteString();
-        const validBits = decoder.readByteString();
         return new OptionSet({
-            value,
-            validBits
+            value: decoder.readByteString(),
+            validBits: decoder.readByteString()
         });
     }
 }
@@ -3692,12 +3290,12 @@ export class Union {
     }
 }
 export interface TimeZoneDataTypeOptions {
-    offset?: Int16;
-    daylightSavingInOffset?: boolean;
+    offset?: Int16 | undefined;
+    daylightSavingInOffset?: boolean | undefined;
 }
 export class TimeZoneDataType implements TimeZoneDataTypeOptions {
-    offset: Int16;
-    daylightSavingInOffset: boolean;
+    readonly offset: Int16;
+    readonly daylightSavingInOffset: boolean;
     constructor(options?: TimeZoneDataTypeOptions) {
         this.offset = options?.offset ?? 0;
         this.daylightSavingInOffset = options?.daylightSavingInOffset ?? false;
@@ -3708,11 +3306,9 @@ export class TimeZoneDataType implements TimeZoneDataTypeOptions {
         encoder.writeBoolean(this.daylightSavingInOffset);
     }
     static [decode](decoder: BinaryDataDecoder): TimeZoneDataType {
-        const offset = decoder.readInt16();
-        const daylightSavingInOffset = decoder.readBoolean();
         return new TimeZoneDataType({
-            offset,
-            daylightSavingInOffset
+            offset: decoder.readInt16(),
+            daylightSavingInOffset: decoder.readBoolean()
         });
     }
 }
@@ -3723,22 +3319,22 @@ export enum ApplicationType {
     DiscoveryServer = 3
 }
 export interface ApplicationDescriptionOptions {
-    applicationUri?: UaString;
-    productUri?: UaString;
-    applicationName?: LocalizedText;
-    applicationType?: ApplicationType;
-    gatewayServerUri?: UaString;
-    discoveryProfileUri?: UaString;
-    discoveryUrls?: UaString[];
+    applicationUri?: UaString | undefined;
+    productUri?: UaString | undefined;
+    applicationName?: LocalizedText | undefined;
+    applicationType?: ApplicationType | undefined;
+    gatewayServerUri?: UaString | undefined;
+    discoveryProfileUri?: UaString | undefined;
+    discoveryUrls?: UaString[] | undefined;
 }
 export class ApplicationDescription implements ApplicationDescriptionOptions {
-    applicationUri?: UaString;
-    productUri?: UaString;
-    applicationName: LocalizedText;
-    applicationType: ApplicationType;
-    gatewayServerUri?: UaString;
-    discoveryProfileUri?: UaString;
-    discoveryUrls?: UaString[];
+    readonly applicationUri?: UaString;
+    readonly productUri?: UaString;
+    readonly applicationName: LocalizedText;
+    readonly applicationType: ApplicationType;
+    readonly gatewayServerUri?: UaString;
+    readonly discoveryProfileUri?: UaString;
+    readonly discoveryUrls?: UaString[];
     constructor(options?: ApplicationDescriptionOptions) {
         this.applicationUri = options?.applicationUri;
         this.productUri = options?.productUri;
@@ -3759,41 +3355,34 @@ export class ApplicationDescription implements ApplicationDescriptionOptions {
         encoder.writeStringArray(this.discoveryUrls);
     }
     static [decode](decoder: BinaryDataDecoder): ApplicationDescription {
-        const applicationUri = decoder.readString();
-        const productUri = decoder.readString();
-        const applicationName = decoder.readType(LocalizedText);
-        const applicationType = decoder.readUInt32();
-        const gatewayServerUri = decoder.readString();
-        const discoveryProfileUri = decoder.readString();
-        const discoveryUrls = decoder.readStringArray();
         return new ApplicationDescription({
-            applicationUri,
-            productUri,
-            applicationName,
-            applicationType,
-            gatewayServerUri,
-            discoveryProfileUri,
-            discoveryUrls
+            applicationUri: decoder.readString(),
+            productUri: decoder.readString(),
+            applicationName: decoder.readType(LocalizedText),
+            applicationType: decoder.readUInt32(),
+            gatewayServerUri: decoder.readString(),
+            discoveryProfileUri: decoder.readString(),
+            discoveryUrls: decoder.readStringArray()
         });
     }
 }
 export interface RequestHeaderOptions {
-    authenticationToken?: NodeId;
-    timestamp?: Date;
-    requestHandle?: UInt32;
-    returnDiagnostics?: UInt32;
-    auditEntryId?: UaString;
-    timeoutHint?: UInt32;
-    additionalHeader?: ExtensionObject;
+    authenticationToken?: NodeId | undefined;
+    timestamp?: Date | undefined;
+    requestHandle?: UInt32 | undefined;
+    returnDiagnostics?: UInt32 | undefined;
+    auditEntryId?: UaString | undefined;
+    timeoutHint?: UInt32 | undefined;
+    additionalHeader?: ExtensionObject | undefined;
 }
 export class RequestHeader implements RequestHeaderOptions {
-    authenticationToken: NodeId;
-    timestamp: Date;
-    requestHandle: UInt32;
-    returnDiagnostics: UInt32;
-    auditEntryId?: UaString;
-    timeoutHint: UInt32;
-    additionalHeader: ExtensionObject;
+    readonly authenticationToken: NodeId;
+    readonly timestamp: Date;
+    readonly requestHandle: UInt32;
+    readonly returnDiagnostics: UInt32;
+    readonly auditEntryId?: UaString;
+    readonly timeoutHint: UInt32;
+    readonly additionalHeader: ExtensionObject;
     constructor(options?: RequestHeaderOptions) {
         this.authenticationToken = options?.authenticationToken ?? NodeId.null();
         this.timestamp = options?.timestamp ?? new Date(-11644473600000);
@@ -3814,39 +3403,32 @@ export class RequestHeader implements RequestHeaderOptions {
         encoder.writeType(this.additionalHeader);
     }
     static [decode](decoder: BinaryDataDecoder): RequestHeader {
-        const authenticationToken = decoder.readType(NodeId);
-        const timestamp = decoder.readDateTime();
-        const requestHandle = decoder.readUInt32();
-        const returnDiagnostics = decoder.readUInt32();
-        const auditEntryId = decoder.readString();
-        const timeoutHint = decoder.readUInt32();
-        const additionalHeader = decoder.readType(ExtensionObject);
         return new RequestHeader({
-            authenticationToken,
-            timestamp,
-            requestHandle,
-            returnDiagnostics,
-            auditEntryId,
-            timeoutHint,
-            additionalHeader
+            authenticationToken: decoder.readType(NodeId),
+            timestamp: decoder.readDateTime(),
+            requestHandle: decoder.readUInt32(),
+            returnDiagnostics: decoder.readUInt32(),
+            auditEntryId: decoder.readString(),
+            timeoutHint: decoder.readUInt32(),
+            additionalHeader: decoder.readType(ExtensionObject)
         });
     }
 }
 export interface ResponseHeaderOptions {
-    timestamp?: Date;
-    requestHandle?: UInt32;
-    serviceResult?: StatusCode;
-    serviceDiagnostics?: DiagnosticInfo;
-    stringTable?: UaString[];
-    additionalHeader?: ExtensionObject;
+    timestamp?: Date | undefined;
+    requestHandle?: UInt32 | undefined;
+    serviceResult?: StatusCode | undefined;
+    serviceDiagnostics?: DiagnosticInfo | undefined;
+    stringTable?: UaString[] | undefined;
+    additionalHeader?: ExtensionObject | undefined;
 }
 export class ResponseHeader implements ResponseHeaderOptions {
-    timestamp: Date;
-    requestHandle: UInt32;
-    serviceResult: StatusCode;
-    serviceDiagnostics: DiagnosticInfo;
-    stringTable?: UaString[];
-    additionalHeader: ExtensionObject;
+    readonly timestamp: Date;
+    readonly requestHandle: UInt32;
+    readonly serviceResult: StatusCode;
+    readonly serviceDiagnostics: DiagnosticInfo;
+    readonly stringTable?: UaString[];
+    readonly additionalHeader: ExtensionObject;
     constructor(options?: ResponseHeaderOptions) {
         this.timestamp = options?.timestamp ?? new Date(-11644473600000);
         this.requestHandle = options?.requestHandle ?? 0;
@@ -3865,35 +3447,29 @@ export class ResponseHeader implements ResponseHeaderOptions {
         encoder.writeType(this.additionalHeader);
     }
     static [decode](decoder: BinaryDataDecoder): ResponseHeader {
-        const timestamp = decoder.readDateTime();
-        const requestHandle = decoder.readUInt32();
-        const serviceResult = decoder.readType(StatusCode);
-        const serviceDiagnostics = decoder.readType(DiagnosticInfo);
-        const stringTable = decoder.readStringArray();
-        const additionalHeader = decoder.readType(ExtensionObject);
         return new ResponseHeader({
-            timestamp,
-            requestHandle,
-            serviceResult,
-            serviceDiagnostics,
-            stringTable,
-            additionalHeader
+            timestamp: decoder.readDateTime(),
+            requestHandle: decoder.readUInt32(),
+            serviceResult: decoder.readType(StatusCode),
+            serviceDiagnostics: decoder.readType(DiagnosticInfo),
+            stringTable: decoder.readStringArray(),
+            additionalHeader: decoder.readType(ExtensionObject)
         });
     }
 }
 export interface SessionlessInvokeRequestTypeOptions {
-    urisVersion?: UInt32;
-    namespaceUris?: UaString[];
-    serverUris?: UaString[];
-    localeIds?: UaString[];
-    serviceId?: UInt32;
+    urisVersion?: UInt32 | undefined;
+    namespaceUris?: UaString[] | undefined;
+    serverUris?: UaString[] | undefined;
+    localeIds?: UaString[] | undefined;
+    serviceId?: UInt32 | undefined;
 }
 export class SessionlessInvokeRequestType implements SessionlessInvokeRequestTypeOptions {
-    urisVersion: UInt32;
-    namespaceUris?: UaString[];
-    serverUris?: UaString[];
-    localeIds?: UaString[];
-    serviceId: UInt32;
+    readonly urisVersion: UInt32;
+    readonly namespaceUris?: UaString[];
+    readonly serverUris?: UaString[];
+    readonly localeIds?: UaString[];
+    readonly serviceId: UInt32;
     constructor(options?: SessionlessInvokeRequestTypeOptions) {
         this.urisVersion = options?.urisVersion ?? 0;
         this.namespaceUris = options?.namespaceUris;
@@ -3910,29 +3486,24 @@ export class SessionlessInvokeRequestType implements SessionlessInvokeRequestTyp
         encoder.writeUInt32(this.serviceId);
     }
     static [decode](decoder: BinaryDataDecoder): SessionlessInvokeRequestType {
-        const urisVersion = decoder.readUInt32();
-        const namespaceUris = decoder.readStringArray();
-        const serverUris = decoder.readStringArray();
-        const localeIds = decoder.readStringArray();
-        const serviceId = decoder.readUInt32();
         return new SessionlessInvokeRequestType({
-            urisVersion,
-            namespaceUris,
-            serverUris,
-            localeIds,
-            serviceId
+            urisVersion: decoder.readUInt32(),
+            namespaceUris: decoder.readStringArray(),
+            serverUris: decoder.readStringArray(),
+            localeIds: decoder.readStringArray(),
+            serviceId: decoder.readUInt32()
         });
     }
 }
 export interface SessionlessInvokeResponseTypeOptions {
-    namespaceUris?: UaString[];
-    serverUris?: UaString[];
-    serviceId?: UInt32;
+    namespaceUris?: UaString[] | undefined;
+    serverUris?: UaString[] | undefined;
+    serviceId?: UInt32 | undefined;
 }
 export class SessionlessInvokeResponseType implements SessionlessInvokeResponseTypeOptions {
-    namespaceUris?: UaString[];
-    serverUris?: UaString[];
-    serviceId: UInt32;
+    readonly namespaceUris?: UaString[];
+    readonly serverUris?: UaString[];
+    readonly serviceId: UInt32;
     constructor(options?: SessionlessInvokeResponseTypeOptions) {
         this.namespaceUris = options?.namespaceUris;
         this.serverUris = options?.serverUris;
@@ -3945,27 +3516,24 @@ export class SessionlessInvokeResponseType implements SessionlessInvokeResponseT
         encoder.writeUInt32(this.serviceId);
     }
     static [decode](decoder: BinaryDataDecoder): SessionlessInvokeResponseType {
-        const namespaceUris = decoder.readStringArray();
-        const serverUris = decoder.readStringArray();
-        const serviceId = decoder.readUInt32();
         return new SessionlessInvokeResponseType({
-            namespaceUris,
-            serverUris,
-            serviceId
+            namespaceUris: decoder.readStringArray(),
+            serverUris: decoder.readStringArray(),
+            serviceId: decoder.readUInt32()
         });
     }
 }
 export interface FindServersRequestOptions {
-    requestHeader?: RequestHeader;
-    endpointUrl?: UaString;
-    localeIds?: UaString[];
-    serverUris?: UaString[];
+    requestHeader?: RequestHeader | undefined;
+    endpointUrl?: UaString | undefined;
+    localeIds?: UaString[] | undefined;
+    serverUris?: UaString[] | undefined;
 }
 export class FindServersRequest implements FindServersRequestOptions {
-    requestHeader: RequestHeader;
-    endpointUrl?: UaString;
-    localeIds?: UaString[];
-    serverUris?: UaString[];
+    readonly requestHeader: RequestHeader;
+    readonly endpointUrl?: UaString;
+    readonly localeIds?: UaString[];
+    readonly serverUris?: UaString[];
     constructor(options?: FindServersRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.endpointUrl = options?.endpointUrl;
@@ -3980,25 +3548,21 @@ export class FindServersRequest implements FindServersRequestOptions {
         encoder.writeStringArray(this.serverUris);
     }
     static [decode](decoder: BinaryDataDecoder): FindServersRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const endpointUrl = decoder.readString();
-        const localeIds = decoder.readStringArray();
-        const serverUris = decoder.readStringArray();
         return new FindServersRequest({
-            requestHeader,
-            endpointUrl,
-            localeIds,
-            serverUris
+            requestHeader: decoder.readType(RequestHeader),
+            endpointUrl: decoder.readString(),
+            localeIds: decoder.readStringArray(),
+            serverUris: decoder.readStringArray()
         });
     }
 }
 export interface FindServersResponseOptions {
-    responseHeader?: ResponseHeader;
-    servers?: ApplicationDescription[];
+    responseHeader?: ResponseHeader | undefined;
+    servers?: ApplicationDescription[] | undefined;
 }
 export class FindServersResponse implements FindServersResponseOptions {
-    responseHeader: ResponseHeader;
-    servers?: ApplicationDescription[];
+    readonly responseHeader: ResponseHeader;
+    readonly servers?: ApplicationDescription[];
     constructor(options?: FindServersResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.servers = options?.servers;
@@ -4009,25 +3573,23 @@ export class FindServersResponse implements FindServersResponseOptions {
         encoder.writeTypeArray(this.servers);
     }
     static [decode](decoder: BinaryDataDecoder): FindServersResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const servers = decoder.readTypeArray(ApplicationDescription);
         return new FindServersResponse({
-            responseHeader,
-            servers
+            responseHeader: decoder.readType(ResponseHeader),
+            servers: decoder.readTypeArray(ApplicationDescription)
         });
     }
 }
 export interface ServerOnNetworkOptions {
-    recordId?: UInt32;
-    serverName?: UaString;
-    discoveryUrl?: UaString;
-    serverCapabilities?: UaString[];
+    recordId?: UInt32 | undefined;
+    serverName?: UaString | undefined;
+    discoveryUrl?: UaString | undefined;
+    serverCapabilities?: UaString[] | undefined;
 }
 export class ServerOnNetwork implements ServerOnNetworkOptions {
-    recordId: UInt32;
-    serverName?: UaString;
-    discoveryUrl?: UaString;
-    serverCapabilities?: UaString[];
+    readonly recordId: UInt32;
+    readonly serverName?: UaString;
+    readonly discoveryUrl?: UaString;
+    readonly serverCapabilities?: UaString[];
     constructor(options?: ServerOnNetworkOptions) {
         this.recordId = options?.recordId ?? 0;
         this.serverName = options?.serverName;
@@ -4042,29 +3604,25 @@ export class ServerOnNetwork implements ServerOnNetworkOptions {
         encoder.writeStringArray(this.serverCapabilities);
     }
     static [decode](decoder: BinaryDataDecoder): ServerOnNetwork {
-        const recordId = decoder.readUInt32();
-        const serverName = decoder.readString();
-        const discoveryUrl = decoder.readString();
-        const serverCapabilities = decoder.readStringArray();
         return new ServerOnNetwork({
-            recordId,
-            serverName,
-            discoveryUrl,
-            serverCapabilities
+            recordId: decoder.readUInt32(),
+            serverName: decoder.readString(),
+            discoveryUrl: decoder.readString(),
+            serverCapabilities: decoder.readStringArray()
         });
     }
 }
 export interface FindServersOnNetworkRequestOptions {
-    requestHeader?: RequestHeader;
-    startingRecordId?: UInt32;
-    maxRecordsToReturn?: UInt32;
-    serverCapabilityFilter?: UaString[];
+    requestHeader?: RequestHeader | undefined;
+    startingRecordId?: UInt32 | undefined;
+    maxRecordsToReturn?: UInt32 | undefined;
+    serverCapabilityFilter?: UaString[] | undefined;
 }
 export class FindServersOnNetworkRequest implements FindServersOnNetworkRequestOptions {
-    requestHeader: RequestHeader;
-    startingRecordId: UInt32;
-    maxRecordsToReturn: UInt32;
-    serverCapabilityFilter?: UaString[];
+    readonly requestHeader: RequestHeader;
+    readonly startingRecordId: UInt32;
+    readonly maxRecordsToReturn: UInt32;
+    readonly serverCapabilityFilter?: UaString[];
     constructor(options?: FindServersOnNetworkRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.startingRecordId = options?.startingRecordId ?? 0;
@@ -4079,27 +3637,23 @@ export class FindServersOnNetworkRequest implements FindServersOnNetworkRequestO
         encoder.writeStringArray(this.serverCapabilityFilter);
     }
     static [decode](decoder: BinaryDataDecoder): FindServersOnNetworkRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const startingRecordId = decoder.readUInt32();
-        const maxRecordsToReturn = decoder.readUInt32();
-        const serverCapabilityFilter = decoder.readStringArray();
         return new FindServersOnNetworkRequest({
-            requestHeader,
-            startingRecordId,
-            maxRecordsToReturn,
-            serverCapabilityFilter
+            requestHeader: decoder.readType(RequestHeader),
+            startingRecordId: decoder.readUInt32(),
+            maxRecordsToReturn: decoder.readUInt32(),
+            serverCapabilityFilter: decoder.readStringArray()
         });
     }
 }
 export interface FindServersOnNetworkResponseOptions {
-    responseHeader?: ResponseHeader;
-    lastCounterResetTime?: Date;
-    servers?: ServerOnNetwork[];
+    responseHeader?: ResponseHeader | undefined;
+    lastCounterResetTime?: Date | undefined;
+    servers?: ServerOnNetwork[] | undefined;
 }
 export class FindServersOnNetworkResponse implements FindServersOnNetworkResponseOptions {
-    responseHeader: ResponseHeader;
-    lastCounterResetTime: Date;
-    servers?: ServerOnNetwork[];
+    readonly responseHeader: ResponseHeader;
+    readonly lastCounterResetTime: Date;
+    readonly servers?: ServerOnNetwork[];
     constructor(options?: FindServersOnNetworkResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.lastCounterResetTime = options?.lastCounterResetTime ?? new Date(-11644473600000);
@@ -4112,13 +3666,10 @@ export class FindServersOnNetworkResponse implements FindServersOnNetworkRespons
         encoder.writeTypeArray(this.servers);
     }
     static [decode](decoder: BinaryDataDecoder): FindServersOnNetworkResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const lastCounterResetTime = decoder.readDateTime();
-        const servers = decoder.readTypeArray(ServerOnNetwork);
         return new FindServersOnNetworkResponse({
-            responseHeader,
-            lastCounterResetTime,
-            servers
+            responseHeader: decoder.readType(ResponseHeader),
+            lastCounterResetTime: decoder.readDateTime(),
+            servers: decoder.readTypeArray(ServerOnNetwork)
         });
     }
 }
@@ -4135,18 +3686,18 @@ export enum UserTokenType {
     IssuedToken = 3
 }
 export interface UserTokenPolicyOptions {
-    policyId?: UaString;
-    tokenType?: UserTokenType;
-    issuedTokenType?: UaString;
-    issuerEndpointUrl?: UaString;
-    securityPolicyUri?: UaString;
+    policyId?: UaString | undefined;
+    tokenType?: UserTokenType | undefined;
+    issuedTokenType?: UaString | undefined;
+    issuerEndpointUrl?: UaString | undefined;
+    securityPolicyUri?: UaString | undefined;
 }
 export class UserTokenPolicy implements UserTokenPolicyOptions {
-    policyId?: UaString;
-    tokenType: UserTokenType;
-    issuedTokenType?: UaString;
-    issuerEndpointUrl?: UaString;
-    securityPolicyUri?: UaString;
+    readonly policyId?: UaString;
+    readonly tokenType: UserTokenType;
+    readonly issuedTokenType?: UaString;
+    readonly issuerEndpointUrl?: UaString;
+    readonly securityPolicyUri?: UaString;
     constructor(options?: UserTokenPolicyOptions) {
         this.policyId = options?.policyId;
         this.tokenType = options?.tokenType ?? UserTokenType.Anonymous;
@@ -4163,39 +3714,34 @@ export class UserTokenPolicy implements UserTokenPolicyOptions {
         encoder.writeString(this.securityPolicyUri);
     }
     static [decode](decoder: BinaryDataDecoder): UserTokenPolicy {
-        const policyId = decoder.readString();
-        const tokenType = decoder.readUInt32();
-        const issuedTokenType = decoder.readString();
-        const issuerEndpointUrl = decoder.readString();
-        const securityPolicyUri = decoder.readString();
         return new UserTokenPolicy({
-            policyId,
-            tokenType,
-            issuedTokenType,
-            issuerEndpointUrl,
-            securityPolicyUri
+            policyId: decoder.readString(),
+            tokenType: decoder.readUInt32(),
+            issuedTokenType: decoder.readString(),
+            issuerEndpointUrl: decoder.readString(),
+            securityPolicyUri: decoder.readString()
         });
     }
 }
 export interface EndpointDescriptionOptions {
-    endpointUrl?: UaString;
-    server?: ApplicationDescription;
-    serverCertificate?: ByteString;
-    securityMode?: MessageSecurityMode;
-    securityPolicyUri?: UaString;
-    userIdentityTokens?: UserTokenPolicy[];
-    transportProfileUri?: UaString;
-    securityLevel?: Byte;
+    endpointUrl?: UaString | undefined;
+    server?: ApplicationDescription | undefined;
+    serverCertificate?: ByteString | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityPolicyUri?: UaString | undefined;
+    userIdentityTokens?: UserTokenPolicy[] | undefined;
+    transportProfileUri?: UaString | undefined;
+    securityLevel?: Byte | undefined;
 }
 export class EndpointDescription implements EndpointDescriptionOptions {
-    endpointUrl?: UaString;
-    server: ApplicationDescription;
-    serverCertificate?: ByteString;
-    securityMode: MessageSecurityMode;
-    securityPolicyUri?: UaString;
-    userIdentityTokens?: UserTokenPolicy[];
-    transportProfileUri?: UaString;
-    securityLevel: Byte;
+    readonly endpointUrl?: UaString;
+    readonly server: ApplicationDescription;
+    readonly serverCertificate?: ByteString;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityPolicyUri?: UaString;
+    readonly userIdentityTokens?: UserTokenPolicy[];
+    readonly transportProfileUri?: UaString;
+    readonly securityLevel: Byte;
     constructor(options?: EndpointDescriptionOptions) {
         this.endpointUrl = options?.endpointUrl;
         this.server = options?.server ?? new ApplicationDescription();
@@ -4218,37 +3764,29 @@ export class EndpointDescription implements EndpointDescriptionOptions {
         encoder.writeByte(this.securityLevel);
     }
     static [decode](decoder: BinaryDataDecoder): EndpointDescription {
-        const endpointUrl = decoder.readString();
-        const server = decoder.readType(ApplicationDescription);
-        const serverCertificate = decoder.readByteString();
-        const securityMode = decoder.readUInt32();
-        const securityPolicyUri = decoder.readString();
-        const userIdentityTokens = decoder.readTypeArray(UserTokenPolicy);
-        const transportProfileUri = decoder.readString();
-        const securityLevel = decoder.readByte();
         return new EndpointDescription({
-            endpointUrl,
-            server,
-            serverCertificate,
-            securityMode,
-            securityPolicyUri,
-            userIdentityTokens,
-            transportProfileUri,
-            securityLevel
+            endpointUrl: decoder.readString(),
+            server: decoder.readType(ApplicationDescription),
+            serverCertificate: decoder.readByteString(),
+            securityMode: decoder.readUInt32(),
+            securityPolicyUri: decoder.readString(),
+            userIdentityTokens: decoder.readTypeArray(UserTokenPolicy),
+            transportProfileUri: decoder.readString(),
+            securityLevel: decoder.readByte()
         });
     }
 }
 export interface GetEndpointsRequestOptions {
-    requestHeader?: RequestHeader;
-    endpointUrl?: UaString;
-    localeIds?: UaString[];
-    profileUris?: UaString[];
+    requestHeader?: RequestHeader | undefined;
+    endpointUrl?: UaString | undefined;
+    localeIds?: UaString[] | undefined;
+    profileUris?: UaString[] | undefined;
 }
 export class GetEndpointsRequest implements GetEndpointsRequestOptions {
-    requestHeader: RequestHeader;
-    endpointUrl?: UaString;
-    localeIds?: UaString[];
-    profileUris?: UaString[];
+    readonly requestHeader: RequestHeader;
+    readonly endpointUrl?: UaString;
+    readonly localeIds?: UaString[];
+    readonly profileUris?: UaString[];
     constructor(options?: GetEndpointsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.endpointUrl = options?.endpointUrl;
@@ -4263,25 +3801,21 @@ export class GetEndpointsRequest implements GetEndpointsRequestOptions {
         encoder.writeStringArray(this.profileUris);
     }
     static [decode](decoder: BinaryDataDecoder): GetEndpointsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const endpointUrl = decoder.readString();
-        const localeIds = decoder.readStringArray();
-        const profileUris = decoder.readStringArray();
         return new GetEndpointsRequest({
-            requestHeader,
-            endpointUrl,
-            localeIds,
-            profileUris
+            requestHeader: decoder.readType(RequestHeader),
+            endpointUrl: decoder.readString(),
+            localeIds: decoder.readStringArray(),
+            profileUris: decoder.readStringArray()
         });
     }
 }
 export interface GetEndpointsResponseOptions {
-    responseHeader?: ResponseHeader;
-    endpoints?: EndpointDescription[];
+    responseHeader?: ResponseHeader | undefined;
+    endpoints?: EndpointDescription[] | undefined;
 }
 export class GetEndpointsResponse implements GetEndpointsResponseOptions {
-    responseHeader: ResponseHeader;
-    endpoints?: EndpointDescription[];
+    readonly responseHeader: ResponseHeader;
+    readonly endpoints?: EndpointDescription[];
     constructor(options?: GetEndpointsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.endpoints = options?.endpoints;
@@ -4292,33 +3826,31 @@ export class GetEndpointsResponse implements GetEndpointsResponseOptions {
         encoder.writeTypeArray(this.endpoints);
     }
     static [decode](decoder: BinaryDataDecoder): GetEndpointsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const endpoints = decoder.readTypeArray(EndpointDescription);
         return new GetEndpointsResponse({
-            responseHeader,
-            endpoints
+            responseHeader: decoder.readType(ResponseHeader),
+            endpoints: decoder.readTypeArray(EndpointDescription)
         });
     }
 }
 export interface RegisteredServerOptions {
-    serverUri?: UaString;
-    productUri?: UaString;
-    serverNames?: LocalizedText[];
-    serverType?: ApplicationType;
-    gatewayServerUri?: UaString;
-    discoveryUrls?: UaString[];
-    semaphoreFilePath?: UaString;
-    isOnline?: boolean;
+    serverUri?: UaString | undefined;
+    productUri?: UaString | undefined;
+    serverNames?: LocalizedText[] | undefined;
+    serverType?: ApplicationType | undefined;
+    gatewayServerUri?: UaString | undefined;
+    discoveryUrls?: UaString[] | undefined;
+    semaphoreFilePath?: UaString | undefined;
+    isOnline?: boolean | undefined;
 }
 export class RegisteredServer implements RegisteredServerOptions {
-    serverUri?: UaString;
-    productUri?: UaString;
-    serverNames?: LocalizedText[];
-    serverType: ApplicationType;
-    gatewayServerUri?: UaString;
-    discoveryUrls?: UaString[];
-    semaphoreFilePath?: UaString;
-    isOnline: boolean;
+    readonly serverUri?: UaString;
+    readonly productUri?: UaString;
+    readonly serverNames?: LocalizedText[];
+    readonly serverType: ApplicationType;
+    readonly gatewayServerUri?: UaString;
+    readonly discoveryUrls?: UaString[];
+    readonly semaphoreFilePath?: UaString;
+    readonly isOnline: boolean;
     constructor(options?: RegisteredServerOptions) {
         this.serverUri = options?.serverUri;
         this.productUri = options?.productUri;
@@ -4341,33 +3873,25 @@ export class RegisteredServer implements RegisteredServerOptions {
         encoder.writeBoolean(this.isOnline);
     }
     static [decode](decoder: BinaryDataDecoder): RegisteredServer {
-        const serverUri = decoder.readString();
-        const productUri = decoder.readString();
-        const serverNames = decoder.readTypeArray(LocalizedText);
-        const serverType = decoder.readUInt32();
-        const gatewayServerUri = decoder.readString();
-        const discoveryUrls = decoder.readStringArray();
-        const semaphoreFilePath = decoder.readString();
-        const isOnline = decoder.readBoolean();
         return new RegisteredServer({
-            serverUri,
-            productUri,
-            serverNames,
-            serverType,
-            gatewayServerUri,
-            discoveryUrls,
-            semaphoreFilePath,
-            isOnline
+            serverUri: decoder.readString(),
+            productUri: decoder.readString(),
+            serverNames: decoder.readTypeArray(LocalizedText),
+            serverType: decoder.readUInt32(),
+            gatewayServerUri: decoder.readString(),
+            discoveryUrls: decoder.readStringArray(),
+            semaphoreFilePath: decoder.readString(),
+            isOnline: decoder.readBoolean()
         });
     }
 }
 export interface RegisterServerRequestOptions {
-    requestHeader?: RequestHeader;
-    server?: RegisteredServer;
+    requestHeader?: RequestHeader | undefined;
+    server?: RegisteredServer | undefined;
 }
 export class RegisterServerRequest implements RegisterServerRequestOptions {
-    requestHeader: RequestHeader;
-    server: RegisteredServer;
+    readonly requestHeader: RequestHeader;
+    readonly server: RegisteredServer;
     constructor(options?: RegisterServerRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.server = options?.server ?? new RegisteredServer();
@@ -4378,19 +3902,17 @@ export class RegisterServerRequest implements RegisterServerRequestOptions {
         encoder.writeType(this.server);
     }
     static [decode](decoder: BinaryDataDecoder): RegisterServerRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const server = decoder.readType(RegisteredServer);
         return new RegisterServerRequest({
-            requestHeader,
-            server
+            requestHeader: decoder.readType(RequestHeader),
+            server: decoder.readType(RegisteredServer)
         });
     }
 }
 export interface RegisterServerResponseOptions {
-    responseHeader?: ResponseHeader;
+    responseHeader?: ResponseHeader | undefined;
 }
 export class RegisterServerResponse implements RegisterServerResponseOptions {
-    responseHeader: ResponseHeader;
+    readonly responseHeader: ResponseHeader;
     constructor(options?: RegisterServerResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
@@ -4399,9 +3921,8 @@ export class RegisterServerResponse implements RegisterServerResponseOptions {
         encoder.writeType(this.responseHeader);
     }
     static [decode](decoder: BinaryDataDecoder): RegisterServerResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
         return new RegisterServerResponse({
-            responseHeader
+            responseHeader: decoder.readType(ResponseHeader)
         });
     }
 }
@@ -4414,12 +3935,12 @@ export class DiscoveryConfiguration {
     }
 }
 export interface MdnsDiscoveryConfigurationOptions {
-    mdnsServerName?: UaString;
-    serverCapabilities?: UaString[];
+    mdnsServerName?: UaString | undefined;
+    serverCapabilities?: UaString[] | undefined;
 }
 export class MdnsDiscoveryConfiguration implements MdnsDiscoveryConfigurationOptions {
-    mdnsServerName?: UaString;
-    serverCapabilities?: UaString[];
+    readonly mdnsServerName?: UaString;
+    readonly serverCapabilities?: UaString[];
     constructor(options?: MdnsDiscoveryConfigurationOptions) {
         this.mdnsServerName = options?.mdnsServerName;
         this.serverCapabilities = options?.serverCapabilities;
@@ -4430,23 +3951,21 @@ export class MdnsDiscoveryConfiguration implements MdnsDiscoveryConfigurationOpt
         encoder.writeStringArray(this.serverCapabilities);
     }
     static [decode](decoder: BinaryDataDecoder): MdnsDiscoveryConfiguration {
-        const mdnsServerName = decoder.readString();
-        const serverCapabilities = decoder.readStringArray();
         return new MdnsDiscoveryConfiguration({
-            mdnsServerName,
-            serverCapabilities
+            mdnsServerName: decoder.readString(),
+            serverCapabilities: decoder.readStringArray()
         });
     }
 }
 export interface RegisterServer2RequestOptions {
-    requestHeader?: RequestHeader;
-    server?: RegisteredServer;
-    discoveryConfiguration?: ExtensionObject[];
+    requestHeader?: RequestHeader | undefined;
+    server?: RegisteredServer | undefined;
+    discoveryConfiguration?: ExtensionObject[] | undefined;
 }
 export class RegisterServer2Request implements RegisterServer2RequestOptions {
-    requestHeader: RequestHeader;
-    server: RegisteredServer;
-    discoveryConfiguration?: ExtensionObject[];
+    readonly requestHeader: RequestHeader;
+    readonly server: RegisteredServer;
+    readonly discoveryConfiguration?: ExtensionObject[];
     constructor(options?: RegisterServer2RequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.server = options?.server ?? new RegisteredServer();
@@ -4459,25 +3978,22 @@ export class RegisterServer2Request implements RegisterServer2RequestOptions {
         encoder.writeTypeArray(this.discoveryConfiguration);
     }
     static [decode](decoder: BinaryDataDecoder): RegisterServer2Request {
-        const requestHeader = decoder.readType(RequestHeader);
-        const server = decoder.readType(RegisteredServer);
-        const discoveryConfiguration = decoder.readTypeArray(ExtensionObject);
         return new RegisterServer2Request({
-            requestHeader,
-            server,
-            discoveryConfiguration
+            requestHeader: decoder.readType(RequestHeader),
+            server: decoder.readType(RegisteredServer),
+            discoveryConfiguration: decoder.readTypeArray(ExtensionObject)
         });
     }
 }
 export interface RegisterServer2ResponseOptions {
-    responseHeader?: ResponseHeader;
-    configurationResults?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    configurationResults?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class RegisterServer2Response implements RegisterServer2ResponseOptions {
-    responseHeader: ResponseHeader;
-    configurationResults?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly configurationResults?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: RegisterServer2ResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.configurationResults = options?.configurationResults;
@@ -4490,13 +4006,10 @@ export class RegisterServer2Response implements RegisterServer2ResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): RegisterServer2Response {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const configurationResults = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new RegisterServer2Response({
-            responseHeader,
-            configurationResults,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            configurationResults: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
@@ -4505,16 +4018,16 @@ export enum SecurityTokenRequestType {
     Renew = 1
 }
 export interface ChannelSecurityTokenOptions {
-    channelId?: UInt32;
-    tokenId?: UInt32;
-    createdAt?: Date;
-    revisedLifetime?: UInt32;
+    channelId?: UInt32 | undefined;
+    tokenId?: UInt32 | undefined;
+    createdAt?: Date | undefined;
+    revisedLifetime?: UInt32 | undefined;
 }
 export class ChannelSecurityToken implements ChannelSecurityTokenOptions {
-    channelId: UInt32;
-    tokenId: UInt32;
-    createdAt: Date;
-    revisedLifetime: UInt32;
+    readonly channelId: UInt32;
+    readonly tokenId: UInt32;
+    readonly createdAt: Date;
+    readonly revisedLifetime: UInt32;
     constructor(options?: ChannelSecurityTokenOptions) {
         this.channelId = options?.channelId ?? 0;
         this.tokenId = options?.tokenId ?? 0;
@@ -4529,33 +4042,29 @@ export class ChannelSecurityToken implements ChannelSecurityTokenOptions {
         encoder.writeUInt32(this.revisedLifetime);
     }
     static [decode](decoder: BinaryDataDecoder): ChannelSecurityToken {
-        const channelId = decoder.readUInt32();
-        const tokenId = decoder.readUInt32();
-        const createdAt = decoder.readDateTime();
-        const revisedLifetime = decoder.readUInt32();
         return new ChannelSecurityToken({
-            channelId,
-            tokenId,
-            createdAt,
-            revisedLifetime
+            channelId: decoder.readUInt32(),
+            tokenId: decoder.readUInt32(),
+            createdAt: decoder.readDateTime(),
+            revisedLifetime: decoder.readUInt32()
         });
     }
 }
 export interface OpenSecureChannelRequestOptions {
-    requestHeader?: RequestHeader;
-    clientProtocolVersion?: UInt32;
-    requestType?: SecurityTokenRequestType;
-    securityMode?: MessageSecurityMode;
-    clientNonce?: ByteString;
-    requestedLifetime?: UInt32;
+    requestHeader?: RequestHeader | undefined;
+    clientProtocolVersion?: UInt32 | undefined;
+    requestType?: SecurityTokenRequestType | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    clientNonce?: ByteString | undefined;
+    requestedLifetime?: UInt32 | undefined;
 }
 export class OpenSecureChannelRequest implements OpenSecureChannelRequestOptions {
-    requestHeader: RequestHeader;
-    clientProtocolVersion: UInt32;
-    requestType: SecurityTokenRequestType;
-    securityMode: MessageSecurityMode;
-    clientNonce?: ByteString;
-    requestedLifetime: UInt32;
+    readonly requestHeader: RequestHeader;
+    readonly clientProtocolVersion: UInt32;
+    readonly requestType: SecurityTokenRequestType;
+    readonly securityMode: MessageSecurityMode;
+    readonly clientNonce?: ByteString;
+    readonly requestedLifetime: UInt32;
     constructor(options?: OpenSecureChannelRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.clientProtocolVersion = options?.clientProtocolVersion ?? 0;
@@ -4574,33 +4083,27 @@ export class OpenSecureChannelRequest implements OpenSecureChannelRequestOptions
         encoder.writeUInt32(this.requestedLifetime);
     }
     static [decode](decoder: BinaryDataDecoder): OpenSecureChannelRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const clientProtocolVersion = decoder.readUInt32();
-        const requestType = decoder.readUInt32();
-        const securityMode = decoder.readUInt32();
-        const clientNonce = decoder.readByteString();
-        const requestedLifetime = decoder.readUInt32();
         return new OpenSecureChannelRequest({
-            requestHeader,
-            clientProtocolVersion,
-            requestType,
-            securityMode,
-            clientNonce,
-            requestedLifetime
+            requestHeader: decoder.readType(RequestHeader),
+            clientProtocolVersion: decoder.readUInt32(),
+            requestType: decoder.readUInt32(),
+            securityMode: decoder.readUInt32(),
+            clientNonce: decoder.readByteString(),
+            requestedLifetime: decoder.readUInt32()
         });
     }
 }
 export interface OpenSecureChannelResponseOptions {
-    responseHeader?: ResponseHeader;
-    serverProtocolVersion?: UInt32;
-    securityToken?: ChannelSecurityToken;
-    serverNonce?: ByteString;
+    responseHeader?: ResponseHeader | undefined;
+    serverProtocolVersion?: UInt32 | undefined;
+    securityToken?: ChannelSecurityToken | undefined;
+    serverNonce?: ByteString | undefined;
 }
 export class OpenSecureChannelResponse implements OpenSecureChannelResponseOptions {
-    responseHeader: ResponseHeader;
-    serverProtocolVersion: UInt32;
-    securityToken: ChannelSecurityToken;
-    serverNonce?: ByteString;
+    readonly responseHeader: ResponseHeader;
+    readonly serverProtocolVersion: UInt32;
+    readonly securityToken: ChannelSecurityToken;
+    readonly serverNonce?: ByteString;
     constructor(options?: OpenSecureChannelResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.serverProtocolVersion = options?.serverProtocolVersion ?? 0;
@@ -4615,23 +4118,19 @@ export class OpenSecureChannelResponse implements OpenSecureChannelResponseOptio
         encoder.writeByteString(this.serverNonce);
     }
     static [decode](decoder: BinaryDataDecoder): OpenSecureChannelResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const serverProtocolVersion = decoder.readUInt32();
-        const securityToken = decoder.readType(ChannelSecurityToken);
-        const serverNonce = decoder.readByteString();
         return new OpenSecureChannelResponse({
-            responseHeader,
-            serverProtocolVersion,
-            securityToken,
-            serverNonce
+            responseHeader: decoder.readType(ResponseHeader),
+            serverProtocolVersion: decoder.readUInt32(),
+            securityToken: decoder.readType(ChannelSecurityToken),
+            serverNonce: decoder.readByteString()
         });
     }
 }
 export interface CloseSecureChannelRequestOptions {
-    requestHeader?: RequestHeader;
+    requestHeader?: RequestHeader | undefined;
 }
 export class CloseSecureChannelRequest implements CloseSecureChannelRequestOptions {
-    requestHeader: RequestHeader;
+    readonly requestHeader: RequestHeader;
     constructor(options?: CloseSecureChannelRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
     }
@@ -4640,17 +4139,16 @@ export class CloseSecureChannelRequest implements CloseSecureChannelRequestOptio
         encoder.writeType(this.requestHeader);
     }
     static [decode](decoder: BinaryDataDecoder): CloseSecureChannelRequest {
-        const requestHeader = decoder.readType(RequestHeader);
         return new CloseSecureChannelRequest({
-            requestHeader
+            requestHeader: decoder.readType(RequestHeader)
         });
     }
 }
 export interface CloseSecureChannelResponseOptions {
-    responseHeader?: ResponseHeader;
+    responseHeader?: ResponseHeader | undefined;
 }
 export class CloseSecureChannelResponse implements CloseSecureChannelResponseOptions {
-    responseHeader: ResponseHeader;
+    readonly responseHeader: ResponseHeader;
     constructor(options?: CloseSecureChannelResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
@@ -4659,19 +4157,18 @@ export class CloseSecureChannelResponse implements CloseSecureChannelResponseOpt
         encoder.writeType(this.responseHeader);
     }
     static [decode](decoder: BinaryDataDecoder): CloseSecureChannelResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
         return new CloseSecureChannelResponse({
-            responseHeader
+            responseHeader: decoder.readType(ResponseHeader)
         });
     }
 }
 export interface SignedSoftwareCertificateOptions {
-    certificateData?: ByteString;
-    signature?: ByteString;
+    certificateData?: ByteString | undefined;
+    signature?: ByteString | undefined;
 }
 export class SignedSoftwareCertificate implements SignedSoftwareCertificateOptions {
-    certificateData?: ByteString;
-    signature?: ByteString;
+    readonly certificateData?: ByteString;
+    readonly signature?: ByteString;
     constructor(options?: SignedSoftwareCertificateOptions) {
         this.certificateData = options?.certificateData;
         this.signature = options?.signature;
@@ -4682,21 +4179,19 @@ export class SignedSoftwareCertificate implements SignedSoftwareCertificateOptio
         encoder.writeByteString(this.signature);
     }
     static [decode](decoder: BinaryDataDecoder): SignedSoftwareCertificate {
-        const certificateData = decoder.readByteString();
-        const signature = decoder.readByteString();
         return new SignedSoftwareCertificate({
-            certificateData,
-            signature
+            certificateData: decoder.readByteString(),
+            signature: decoder.readByteString()
         });
     }
 }
 export interface SignatureDataOptions {
-    algorithm?: UaString;
-    signature?: ByteString;
+    algorithm?: UaString | undefined;
+    signature?: ByteString | undefined;
 }
 export class SignatureData implements SignatureDataOptions {
-    algorithm?: UaString;
-    signature?: ByteString;
+    readonly algorithm?: UaString;
+    readonly signature?: ByteString;
     constructor(options?: SignatureDataOptions) {
         this.algorithm = options?.algorithm;
         this.signature = options?.signature;
@@ -4707,35 +4202,33 @@ export class SignatureData implements SignatureDataOptions {
         encoder.writeByteString(this.signature);
     }
     static [decode](decoder: BinaryDataDecoder): SignatureData {
-        const algorithm = decoder.readString();
-        const signature = decoder.readByteString();
         return new SignatureData({
-            algorithm,
-            signature
+            algorithm: decoder.readString(),
+            signature: decoder.readByteString()
         });
     }
 }
 export interface CreateSessionRequestOptions {
-    requestHeader?: RequestHeader;
-    clientDescription?: ApplicationDescription;
-    serverUri?: UaString;
-    endpointUrl?: UaString;
-    sessionName?: UaString;
-    clientNonce?: ByteString;
-    clientCertificate?: ByteString;
-    requestedSessionTimeout?: Double;
-    maxResponseMessageSize?: UInt32;
+    requestHeader?: RequestHeader | undefined;
+    clientDescription?: ApplicationDescription | undefined;
+    serverUri?: UaString | undefined;
+    endpointUrl?: UaString | undefined;
+    sessionName?: UaString | undefined;
+    clientNonce?: ByteString | undefined;
+    clientCertificate?: ByteString | undefined;
+    requestedSessionTimeout?: Double | undefined;
+    maxResponseMessageSize?: UInt32 | undefined;
 }
 export class CreateSessionRequest implements CreateSessionRequestOptions {
-    requestHeader: RequestHeader;
-    clientDescription: ApplicationDescription;
-    serverUri?: UaString;
-    endpointUrl?: UaString;
-    sessionName?: UaString;
-    clientNonce?: ByteString;
-    clientCertificate?: ByteString;
-    requestedSessionTimeout: Double;
-    maxResponseMessageSize: UInt32;
+    readonly requestHeader: RequestHeader;
+    readonly clientDescription: ApplicationDescription;
+    readonly serverUri?: UaString;
+    readonly endpointUrl?: UaString;
+    readonly sessionName?: UaString;
+    readonly clientNonce?: ByteString;
+    readonly clientCertificate?: ByteString;
+    readonly requestedSessionTimeout: Double;
+    readonly maxResponseMessageSize: UInt32;
     constructor(options?: CreateSessionRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.clientDescription = options?.clientDescription ?? new ApplicationDescription();
@@ -4760,51 +4253,42 @@ export class CreateSessionRequest implements CreateSessionRequestOptions {
         encoder.writeUInt32(this.maxResponseMessageSize);
     }
     static [decode](decoder: BinaryDataDecoder): CreateSessionRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const clientDescription = decoder.readType(ApplicationDescription);
-        const serverUri = decoder.readString();
-        const endpointUrl = decoder.readString();
-        const sessionName = decoder.readString();
-        const clientNonce = decoder.readByteString();
-        const clientCertificate = decoder.readByteString();
-        const requestedSessionTimeout = decoder.readDouble();
-        const maxResponseMessageSize = decoder.readUInt32();
         return new CreateSessionRequest({
-            requestHeader,
-            clientDescription,
-            serverUri,
-            endpointUrl,
-            sessionName,
-            clientNonce,
-            clientCertificate,
-            requestedSessionTimeout,
-            maxResponseMessageSize
+            requestHeader: decoder.readType(RequestHeader),
+            clientDescription: decoder.readType(ApplicationDescription),
+            serverUri: decoder.readString(),
+            endpointUrl: decoder.readString(),
+            sessionName: decoder.readString(),
+            clientNonce: decoder.readByteString(),
+            clientCertificate: decoder.readByteString(),
+            requestedSessionTimeout: decoder.readDouble(),
+            maxResponseMessageSize: decoder.readUInt32()
         });
     }
 }
 export interface CreateSessionResponseOptions {
-    responseHeader?: ResponseHeader;
-    sessionId?: NodeId;
-    authenticationToken?: NodeId;
-    revisedSessionTimeout?: Double;
-    serverNonce?: ByteString;
-    serverCertificate?: ByteString;
-    serverEndpoints?: EndpointDescription[];
-    serverSoftwareCertificates?: SignedSoftwareCertificate[];
-    serverSignature?: SignatureData;
-    maxRequestMessageSize?: UInt32;
+    responseHeader?: ResponseHeader | undefined;
+    sessionId?: NodeId | undefined;
+    authenticationToken?: NodeId | undefined;
+    revisedSessionTimeout?: Double | undefined;
+    serverNonce?: ByteString | undefined;
+    serverCertificate?: ByteString | undefined;
+    serverEndpoints?: EndpointDescription[] | undefined;
+    serverSoftwareCertificates?: SignedSoftwareCertificate[] | undefined;
+    serverSignature?: SignatureData | undefined;
+    maxRequestMessageSize?: UInt32 | undefined;
 }
 export class CreateSessionResponse implements CreateSessionResponseOptions {
-    responseHeader: ResponseHeader;
-    sessionId: NodeId;
-    authenticationToken: NodeId;
-    revisedSessionTimeout: Double;
-    serverNonce?: ByteString;
-    serverCertificate?: ByteString;
-    serverEndpoints?: EndpointDescription[];
-    serverSoftwareCertificates?: SignedSoftwareCertificate[];
-    serverSignature: SignatureData;
-    maxRequestMessageSize: UInt32;
+    readonly responseHeader: ResponseHeader;
+    readonly sessionId: NodeId;
+    readonly authenticationToken: NodeId;
+    readonly revisedSessionTimeout: Double;
+    readonly serverNonce?: ByteString;
+    readonly serverCertificate?: ByteString;
+    readonly serverEndpoints?: EndpointDescription[];
+    readonly serverSoftwareCertificates?: SignedSoftwareCertificate[];
+    readonly serverSignature: SignatureData;
+    readonly maxRequestMessageSize: UInt32;
     constructor(options?: CreateSessionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.sessionId = options?.sessionId ?? NodeId.null();
@@ -4831,35 +4315,25 @@ export class CreateSessionResponse implements CreateSessionResponseOptions {
         encoder.writeUInt32(this.maxRequestMessageSize);
     }
     static [decode](decoder: BinaryDataDecoder): CreateSessionResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const sessionId = decoder.readType(NodeId);
-        const authenticationToken = decoder.readType(NodeId);
-        const revisedSessionTimeout = decoder.readDouble();
-        const serverNonce = decoder.readByteString();
-        const serverCertificate = decoder.readByteString();
-        const serverEndpoints = decoder.readTypeArray(EndpointDescription);
-        const serverSoftwareCertificates = decoder.readTypeArray(SignedSoftwareCertificate);
-        const serverSignature = decoder.readType(SignatureData);
-        const maxRequestMessageSize = decoder.readUInt32();
         return new CreateSessionResponse({
-            responseHeader,
-            sessionId,
-            authenticationToken,
-            revisedSessionTimeout,
-            serverNonce,
-            serverCertificate,
-            serverEndpoints,
-            serverSoftwareCertificates,
-            serverSignature,
-            maxRequestMessageSize
+            responseHeader: decoder.readType(ResponseHeader),
+            sessionId: decoder.readType(NodeId),
+            authenticationToken: decoder.readType(NodeId),
+            revisedSessionTimeout: decoder.readDouble(),
+            serverNonce: decoder.readByteString(),
+            serverCertificate: decoder.readByteString(),
+            serverEndpoints: decoder.readTypeArray(EndpointDescription),
+            serverSoftwareCertificates: decoder.readTypeArray(SignedSoftwareCertificate),
+            serverSignature: decoder.readType(SignatureData),
+            maxRequestMessageSize: decoder.readUInt32()
         });
     }
 }
 export interface UserIdentityTokenOptions {
-    policyId?: UaString;
+    policyId?: UaString | undefined;
 }
 export class UserIdentityToken implements UserIdentityTokenOptions {
-    policyId?: UaString;
+    readonly policyId?: UaString;
     constructor(options?: UserIdentityTokenOptions) {
         this.policyId = options?.policyId;
     }
@@ -4868,17 +4342,16 @@ export class UserIdentityToken implements UserIdentityTokenOptions {
         encoder.writeString(this.policyId);
     }
     static [decode](decoder: BinaryDataDecoder): UserIdentityToken {
-        const policyId = decoder.readString();
         return new UserIdentityToken({
-            policyId
+            policyId: decoder.readString()
         });
     }
 }
 export interface AnonymousIdentityTokenOptions {
-    policyId?: UaString;
+    policyId?: UaString | undefined;
 }
 export class AnonymousIdentityToken implements AnonymousIdentityTokenOptions {
-    policyId?: UaString;
+    readonly policyId?: UaString;
     constructor(options?: AnonymousIdentityTokenOptions) {
         this.policyId = options?.policyId;
     }
@@ -4887,23 +4360,22 @@ export class AnonymousIdentityToken implements AnonymousIdentityTokenOptions {
         encoder.writeString(this.policyId);
     }
     static [decode](decoder: BinaryDataDecoder): AnonymousIdentityToken {
-        const policyId = decoder.readString();
         return new AnonymousIdentityToken({
-            policyId
+            policyId: decoder.readString()
         });
     }
 }
 export interface UserNameIdentityTokenOptions {
-    policyId?: UaString;
-    userName?: UaString;
-    password?: ByteString;
-    encryptionAlgorithm?: UaString;
+    policyId?: UaString | undefined;
+    userName?: UaString | undefined;
+    password?: ByteString | undefined;
+    encryptionAlgorithm?: UaString | undefined;
 }
 export class UserNameIdentityToken implements UserNameIdentityTokenOptions {
-    policyId?: UaString;
-    userName?: UaString;
-    password?: ByteString;
-    encryptionAlgorithm?: UaString;
+    readonly policyId?: UaString;
+    readonly userName?: UaString;
+    readonly password?: ByteString;
+    readonly encryptionAlgorithm?: UaString;
     constructor(options?: UserNameIdentityTokenOptions) {
         this.policyId = options?.policyId;
         this.userName = options?.userName;
@@ -4918,25 +4390,21 @@ export class UserNameIdentityToken implements UserNameIdentityTokenOptions {
         encoder.writeString(this.encryptionAlgorithm);
     }
     static [decode](decoder: BinaryDataDecoder): UserNameIdentityToken {
-        const policyId = decoder.readString();
-        const userName = decoder.readString();
-        const password = decoder.readByteString();
-        const encryptionAlgorithm = decoder.readString();
         return new UserNameIdentityToken({
-            policyId,
-            userName,
-            password,
-            encryptionAlgorithm
+            policyId: decoder.readString(),
+            userName: decoder.readString(),
+            password: decoder.readByteString(),
+            encryptionAlgorithm: decoder.readString()
         });
     }
 }
 export interface X509IdentityTokenOptions {
-    policyId?: UaString;
-    certificateData?: ByteString;
+    policyId?: UaString | undefined;
+    certificateData?: ByteString | undefined;
 }
 export class X509IdentityToken implements X509IdentityTokenOptions {
-    policyId?: UaString;
-    certificateData?: ByteString;
+    readonly policyId?: UaString;
+    readonly certificateData?: ByteString;
     constructor(options?: X509IdentityTokenOptions) {
         this.policyId = options?.policyId;
         this.certificateData = options?.certificateData;
@@ -4947,23 +4415,21 @@ export class X509IdentityToken implements X509IdentityTokenOptions {
         encoder.writeByteString(this.certificateData);
     }
     static [decode](decoder: BinaryDataDecoder): X509IdentityToken {
-        const policyId = decoder.readString();
-        const certificateData = decoder.readByteString();
         return new X509IdentityToken({
-            policyId,
-            certificateData
+            policyId: decoder.readString(),
+            certificateData: decoder.readByteString()
         });
     }
 }
 export interface IssuedIdentityTokenOptions {
-    policyId?: UaString;
-    tokenData?: ByteString;
-    encryptionAlgorithm?: UaString;
+    policyId?: UaString | undefined;
+    tokenData?: ByteString | undefined;
+    encryptionAlgorithm?: UaString | undefined;
 }
 export class IssuedIdentityToken implements IssuedIdentityTokenOptions {
-    policyId?: UaString;
-    tokenData?: ByteString;
-    encryptionAlgorithm?: UaString;
+    readonly policyId?: UaString;
+    readonly tokenData?: ByteString;
+    readonly encryptionAlgorithm?: UaString;
     constructor(options?: IssuedIdentityTokenOptions) {
         this.policyId = options?.policyId;
         this.tokenData = options?.tokenData;
@@ -4976,31 +4442,28 @@ export class IssuedIdentityToken implements IssuedIdentityTokenOptions {
         encoder.writeString(this.encryptionAlgorithm);
     }
     static [decode](decoder: BinaryDataDecoder): IssuedIdentityToken {
-        const policyId = decoder.readString();
-        const tokenData = decoder.readByteString();
-        const encryptionAlgorithm = decoder.readString();
         return new IssuedIdentityToken({
-            policyId,
-            tokenData,
-            encryptionAlgorithm
+            policyId: decoder.readString(),
+            tokenData: decoder.readByteString(),
+            encryptionAlgorithm: decoder.readString()
         });
     }
 }
 export interface ActivateSessionRequestOptions {
-    requestHeader?: RequestHeader;
-    clientSignature?: SignatureData;
-    clientSoftwareCertificates?: SignedSoftwareCertificate[];
-    localeIds?: UaString[];
-    userIdentityToken?: ExtensionObject;
-    userTokenSignature?: SignatureData;
+    requestHeader?: RequestHeader | undefined;
+    clientSignature?: SignatureData | undefined;
+    clientSoftwareCertificates?: SignedSoftwareCertificate[] | undefined;
+    localeIds?: UaString[] | undefined;
+    userIdentityToken?: ExtensionObject | undefined;
+    userTokenSignature?: SignatureData | undefined;
 }
 export class ActivateSessionRequest implements ActivateSessionRequestOptions {
-    requestHeader: RequestHeader;
-    clientSignature: SignatureData;
-    clientSoftwareCertificates?: SignedSoftwareCertificate[];
-    localeIds?: UaString[];
-    userIdentityToken: ExtensionObject;
-    userTokenSignature: SignatureData;
+    readonly requestHeader: RequestHeader;
+    readonly clientSignature: SignatureData;
+    readonly clientSoftwareCertificates?: SignedSoftwareCertificate[];
+    readonly localeIds?: UaString[];
+    readonly userIdentityToken: ExtensionObject;
+    readonly userTokenSignature: SignatureData;
     constructor(options?: ActivateSessionRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.clientSignature = options?.clientSignature ?? new SignatureData();
@@ -5019,33 +4482,27 @@ export class ActivateSessionRequest implements ActivateSessionRequestOptions {
         encoder.writeType(this.userTokenSignature);
     }
     static [decode](decoder: BinaryDataDecoder): ActivateSessionRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const clientSignature = decoder.readType(SignatureData);
-        const clientSoftwareCertificates = decoder.readTypeArray(SignedSoftwareCertificate);
-        const localeIds = decoder.readStringArray();
-        const userIdentityToken = decoder.readType(ExtensionObject);
-        const userTokenSignature = decoder.readType(SignatureData);
         return new ActivateSessionRequest({
-            requestHeader,
-            clientSignature,
-            clientSoftwareCertificates,
-            localeIds,
-            userIdentityToken,
-            userTokenSignature
+            requestHeader: decoder.readType(RequestHeader),
+            clientSignature: decoder.readType(SignatureData),
+            clientSoftwareCertificates: decoder.readTypeArray(SignedSoftwareCertificate),
+            localeIds: decoder.readStringArray(),
+            userIdentityToken: decoder.readType(ExtensionObject),
+            userTokenSignature: decoder.readType(SignatureData)
         });
     }
 }
 export interface ActivateSessionResponseOptions {
-    responseHeader?: ResponseHeader;
-    serverNonce?: ByteString;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    serverNonce?: ByteString | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class ActivateSessionResponse implements ActivateSessionResponseOptions {
-    responseHeader: ResponseHeader;
-    serverNonce?: ByteString;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly serverNonce?: ByteString;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: ActivateSessionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.serverNonce = options?.serverNonce;
@@ -5060,25 +4517,21 @@ export class ActivateSessionResponse implements ActivateSessionResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): ActivateSessionResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const serverNonce = decoder.readByteString();
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new ActivateSessionResponse({
-            responseHeader,
-            serverNonce,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            serverNonce: decoder.readByteString(),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface CloseSessionRequestOptions {
-    requestHeader?: RequestHeader;
-    deleteSubscriptions?: boolean;
+    requestHeader?: RequestHeader | undefined;
+    deleteSubscriptions?: boolean | undefined;
 }
 export class CloseSessionRequest implements CloseSessionRequestOptions {
-    requestHeader: RequestHeader;
-    deleteSubscriptions: boolean;
+    readonly requestHeader: RequestHeader;
+    readonly deleteSubscriptions: boolean;
     constructor(options?: CloseSessionRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.deleteSubscriptions = options?.deleteSubscriptions ?? false;
@@ -5089,19 +4542,17 @@ export class CloseSessionRequest implements CloseSessionRequestOptions {
         encoder.writeBoolean(this.deleteSubscriptions);
     }
     static [decode](decoder: BinaryDataDecoder): CloseSessionRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const deleteSubscriptions = decoder.readBoolean();
         return new CloseSessionRequest({
-            requestHeader,
-            deleteSubscriptions
+            requestHeader: decoder.readType(RequestHeader),
+            deleteSubscriptions: decoder.readBoolean()
         });
     }
 }
 export interface CloseSessionResponseOptions {
-    responseHeader?: ResponseHeader;
+    responseHeader?: ResponseHeader | undefined;
 }
 export class CloseSessionResponse implements CloseSessionResponseOptions {
-    responseHeader: ResponseHeader;
+    readonly responseHeader: ResponseHeader;
     constructor(options?: CloseSessionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
@@ -5110,19 +4561,18 @@ export class CloseSessionResponse implements CloseSessionResponseOptions {
         encoder.writeType(this.responseHeader);
     }
     static [decode](decoder: BinaryDataDecoder): CloseSessionResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
         return new CloseSessionResponse({
-            responseHeader
+            responseHeader: decoder.readType(ResponseHeader)
         });
     }
 }
 export interface CancelRequestOptions {
-    requestHeader?: RequestHeader;
-    requestHandle?: UInt32;
+    requestHeader?: RequestHeader | undefined;
+    requestHandle?: UInt32 | undefined;
 }
 export class CancelRequest implements CancelRequestOptions {
-    requestHeader: RequestHeader;
-    requestHandle: UInt32;
+    readonly requestHeader: RequestHeader;
+    readonly requestHandle: UInt32;
     constructor(options?: CancelRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.requestHandle = options?.requestHandle ?? 0;
@@ -5133,21 +4583,19 @@ export class CancelRequest implements CancelRequestOptions {
         encoder.writeUInt32(this.requestHandle);
     }
     static [decode](decoder: BinaryDataDecoder): CancelRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const requestHandle = decoder.readUInt32();
         return new CancelRequest({
-            requestHeader,
-            requestHandle
+            requestHeader: decoder.readType(RequestHeader),
+            requestHandle: decoder.readUInt32()
         });
     }
 }
 export interface CancelResponseOptions {
-    responseHeader?: ResponseHeader;
-    cancelCount?: UInt32;
+    responseHeader?: ResponseHeader | undefined;
+    cancelCount?: UInt32 | undefined;
 }
 export class CancelResponse implements CancelResponseOptions {
-    responseHeader: ResponseHeader;
-    cancelCount: UInt32;
+    readonly responseHeader: ResponseHeader;
+    readonly cancelCount: UInt32;
     constructor(options?: CancelResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.cancelCount = options?.cancelCount ?? 0;
@@ -5158,11 +4606,9 @@ export class CancelResponse implements CancelResponseOptions {
         encoder.writeUInt32(this.cancelCount);
     }
     static [decode](decoder: BinaryDataDecoder): CancelResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const cancelCount = decoder.readUInt32();
         return new CancelResponse({
-            responseHeader,
-            cancelCount
+            responseHeader: decoder.readType(ResponseHeader),
+            cancelCount: decoder.readUInt32()
         });
     }
 }
@@ -5204,18 +4650,18 @@ export enum NodeAttributesMask {
     View = 26501356
 }
 export interface NodeAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
 }
 export class NodeAttributes implements NodeAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
     constructor(options?: NodeAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5232,35 +4678,30 @@ export class NodeAttributes implements NodeAttributesOptions {
         encoder.writeUInt32(this.userWriteMask);
     }
     static [decode](decoder: BinaryDataDecoder): NodeAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
         return new NodeAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32()
         });
     }
 }
 export interface ObjectAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    eventNotifier?: Byte;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    eventNotifier?: Byte | undefined;
 }
 export class ObjectAttributes implements ObjectAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    eventNotifier: Byte;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly eventNotifier: Byte;
     constructor(options?: ObjectAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5279,51 +4720,45 @@ export class ObjectAttributes implements ObjectAttributesOptions {
         encoder.writeByte(this.eventNotifier);
     }
     static [decode](decoder: BinaryDataDecoder): ObjectAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const eventNotifier = decoder.readByte();
         return new ObjectAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            eventNotifier
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            eventNotifier: decoder.readByte()
         });
     }
 }
 export interface VariableAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    value?: Variant;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    accessLevel?: Byte;
-    userAccessLevel?: Byte;
-    minimumSamplingInterval?: Double;
-    historizing?: boolean;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    value?: Variant | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    accessLevel?: Byte | undefined;
+    userAccessLevel?: Byte | undefined;
+    minimumSamplingInterval?: Double | undefined;
+    historizing?: boolean | undefined;
 }
 export class VariableAttributes implements VariableAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    value: Variant;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    accessLevel: Byte;
-    userAccessLevel: Byte;
-    minimumSamplingInterval: Double;
-    historizing: boolean;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly value: Variant;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly accessLevel: Byte;
+    readonly userAccessLevel: Byte;
+    readonly minimumSamplingInterval: Double;
+    readonly historizing: boolean;
     constructor(options?: VariableAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5356,53 +4791,40 @@ export class VariableAttributes implements VariableAttributesOptions {
         encoder.writeBoolean(this.historizing);
     }
     static [decode](decoder: BinaryDataDecoder): VariableAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const value = decoder.readType(Variant);
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const accessLevel = decoder.readByte();
-        const userAccessLevel = decoder.readByte();
-        const minimumSamplingInterval = decoder.readDouble();
-        const historizing = decoder.readBoolean();
         return new VariableAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            value,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            accessLevel,
-            userAccessLevel,
-            minimumSamplingInterval,
-            historizing
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            value: decoder.readType(Variant),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            accessLevel: decoder.readByte(),
+            userAccessLevel: decoder.readByte(),
+            minimumSamplingInterval: decoder.readDouble(),
+            historizing: decoder.readBoolean()
         });
     }
 }
 export interface MethodAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    executable?: boolean;
-    userExecutable?: boolean;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    executable?: boolean | undefined;
+    userExecutable?: boolean | undefined;
 }
 export class MethodAttributes implements MethodAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    executable: boolean;
-    userExecutable: boolean;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly executable: boolean;
+    readonly userExecutable: boolean;
     constructor(options?: MethodAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5423,39 +4845,32 @@ export class MethodAttributes implements MethodAttributesOptions {
         encoder.writeBoolean(this.userExecutable);
     }
     static [decode](decoder: BinaryDataDecoder): MethodAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const executable = decoder.readBoolean();
-        const userExecutable = decoder.readBoolean();
         return new MethodAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            executable,
-            userExecutable
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            executable: decoder.readBoolean(),
+            userExecutable: decoder.readBoolean()
         });
     }
 }
 export interface ObjectTypeAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    isAbstract?: boolean;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    isAbstract?: boolean | undefined;
 }
 export class ObjectTypeAttributes implements ObjectTypeAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    isAbstract: boolean;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly isAbstract: boolean;
     constructor(options?: ObjectTypeAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5474,45 +4889,39 @@ export class ObjectTypeAttributes implements ObjectTypeAttributesOptions {
         encoder.writeBoolean(this.isAbstract);
     }
     static [decode](decoder: BinaryDataDecoder): ObjectTypeAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const isAbstract = decoder.readBoolean();
         return new ObjectTypeAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            isAbstract
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            isAbstract: decoder.readBoolean()
         });
     }
 }
 export interface VariableTypeAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    value?: Variant;
-    dataType?: NodeId;
-    valueRank?: Int32;
-    arrayDimensions?: UInt32[];
-    isAbstract?: boolean;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    value?: Variant | undefined;
+    dataType?: NodeId | undefined;
+    valueRank?: Int32 | undefined;
+    arrayDimensions?: UInt32[] | undefined;
+    isAbstract?: boolean | undefined;
 }
 export class VariableTypeAttributes implements VariableTypeAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    value: Variant;
-    dataType: NodeId;
-    valueRank: Int32;
-    arrayDimensions?: UInt32[];
-    isAbstract: boolean;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly value: Variant;
+    readonly dataType: NodeId;
+    readonly valueRank: Int32;
+    readonly arrayDimensions?: UInt32[];
+    readonly isAbstract: boolean;
     constructor(options?: VariableTypeAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5539,49 +4948,39 @@ export class VariableTypeAttributes implements VariableTypeAttributesOptions {
         encoder.writeBoolean(this.isAbstract);
     }
     static [decode](decoder: BinaryDataDecoder): VariableTypeAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const value = decoder.readType(Variant);
-        const dataType = decoder.readType(NodeId);
-        const valueRank = decoder.readInt32();
-        const arrayDimensions = decoder.readUInt32Array();
-        const isAbstract = decoder.readBoolean();
         return new VariableTypeAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            value,
-            dataType,
-            valueRank,
-            arrayDimensions,
-            isAbstract
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            value: decoder.readType(Variant),
+            dataType: decoder.readType(NodeId),
+            valueRank: decoder.readInt32(),
+            arrayDimensions: decoder.readUInt32Array(),
+            isAbstract: decoder.readBoolean()
         });
     }
 }
 export interface ReferenceTypeAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    isAbstract?: boolean;
-    symmetric?: boolean;
-    inverseName?: LocalizedText;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    isAbstract?: boolean | undefined;
+    symmetric?: boolean | undefined;
+    inverseName?: LocalizedText | undefined;
 }
 export class ReferenceTypeAttributes implements ReferenceTypeAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    isAbstract: boolean;
-    symmetric: boolean;
-    inverseName: LocalizedText;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly isAbstract: boolean;
+    readonly symmetric: boolean;
+    readonly inverseName: LocalizedText;
     constructor(options?: ReferenceTypeAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5604,41 +5003,33 @@ export class ReferenceTypeAttributes implements ReferenceTypeAttributesOptions {
         encoder.writeType(this.inverseName);
     }
     static [decode](decoder: BinaryDataDecoder): ReferenceTypeAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const isAbstract = decoder.readBoolean();
-        const symmetric = decoder.readBoolean();
-        const inverseName = decoder.readType(LocalizedText);
         return new ReferenceTypeAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            isAbstract,
-            symmetric,
-            inverseName
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            isAbstract: decoder.readBoolean(),
+            symmetric: decoder.readBoolean(),
+            inverseName: decoder.readType(LocalizedText)
         });
     }
 }
 export interface DataTypeAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    isAbstract?: boolean;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    isAbstract?: boolean | undefined;
 }
 export class DataTypeAttributes implements DataTypeAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    isAbstract: boolean;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly isAbstract: boolean;
     constructor(options?: DataTypeAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5657,39 +5048,33 @@ export class DataTypeAttributes implements DataTypeAttributesOptions {
         encoder.writeBoolean(this.isAbstract);
     }
     static [decode](decoder: BinaryDataDecoder): DataTypeAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const isAbstract = decoder.readBoolean();
         return new DataTypeAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            isAbstract
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            isAbstract: decoder.readBoolean()
         });
     }
 }
 export interface ViewAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    containsNoLoops?: boolean;
-    eventNotifier?: Byte;
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    containsNoLoops?: boolean | undefined;
+    eventNotifier?: Byte | undefined;
 }
 export class ViewAttributes implements ViewAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    containsNoLoops: boolean;
-    eventNotifier: Byte;
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly containsNoLoops: boolean;
+    readonly eventNotifier: Byte;
     constructor(options?: ViewAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5710,31 +5095,24 @@ export class ViewAttributes implements ViewAttributesOptions {
         encoder.writeByte(this.eventNotifier);
     }
     static [decode](decoder: BinaryDataDecoder): ViewAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const containsNoLoops = decoder.readBoolean();
-        const eventNotifier = decoder.readByte();
         return new ViewAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            containsNoLoops,
-            eventNotifier
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            containsNoLoops: decoder.readBoolean(),
+            eventNotifier: decoder.readByte()
         });
     }
 }
 export interface GenericAttributeValueOptions {
-    attributeId?: UInt32;
-    value?: Variant;
+    attributeId?: UInt32 | undefined;
+    value?: Variant | undefined;
 }
 export class GenericAttributeValue implements GenericAttributeValueOptions {
-    attributeId: UInt32;
-    value: Variant;
+    readonly attributeId: UInt32;
+    readonly value: Variant;
     constructor(options?: GenericAttributeValueOptions) {
         this.attributeId = options?.attributeId ?? 0;
         this.value = options?.value ?? Variant.null();
@@ -5745,29 +5123,27 @@ export class GenericAttributeValue implements GenericAttributeValueOptions {
         encoder.writeType(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): GenericAttributeValue {
-        const attributeId = decoder.readUInt32();
-        const value = decoder.readType(Variant);
         return new GenericAttributeValue({
-            attributeId,
-            value
+            attributeId: decoder.readUInt32(),
+            value: decoder.readType(Variant)
         });
     }
 }
 export interface GenericAttributesOptions {
-    specifiedAttributes?: UInt32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
-    writeMask?: UInt32;
-    userWriteMask?: UInt32;
-    attributeValues?: GenericAttributeValue[];
+    specifiedAttributes?: UInt32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
+    writeMask?: UInt32 | undefined;
+    userWriteMask?: UInt32 | undefined;
+    attributeValues?: GenericAttributeValue[] | undefined;
 }
 export class GenericAttributes implements GenericAttributesOptions {
-    specifiedAttributes: UInt32;
-    displayName: LocalizedText;
-    description: LocalizedText;
-    writeMask: UInt32;
-    userWriteMask: UInt32;
-    attributeValues?: GenericAttributeValue[];
+    readonly specifiedAttributes: UInt32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
+    readonly writeMask: UInt32;
+    readonly userWriteMask: UInt32;
+    readonly attributeValues?: GenericAttributeValue[];
     constructor(options?: GenericAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5786,39 +5162,33 @@ export class GenericAttributes implements GenericAttributesOptions {
         encoder.writeTypeArray(this.attributeValues);
     }
     static [decode](decoder: BinaryDataDecoder): GenericAttributes {
-        const specifiedAttributes = decoder.readUInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
-        const writeMask = decoder.readUInt32();
-        const userWriteMask = decoder.readUInt32();
-        const attributeValues = decoder.readTypeArray(GenericAttributeValue);
         return new GenericAttributes({
-            specifiedAttributes,
-            displayName,
-            description,
-            writeMask,
-            userWriteMask,
-            attributeValues
+            specifiedAttributes: decoder.readUInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText),
+            writeMask: decoder.readUInt32(),
+            userWriteMask: decoder.readUInt32(),
+            attributeValues: decoder.readTypeArray(GenericAttributeValue)
         });
     }
 }
 export interface AddNodesItemOptions {
-    parentNodeId?: ExpandedNodeId;
-    referenceTypeId?: NodeId;
-    requestedNewNodeId?: ExpandedNodeId;
-    browseName?: QualifiedName;
-    nodeClass?: NodeClass;
-    nodeAttributes?: ExtensionObject;
-    typeDefinition?: ExpandedNodeId;
+    parentNodeId?: ExpandedNodeId | undefined;
+    referenceTypeId?: NodeId | undefined;
+    requestedNewNodeId?: ExpandedNodeId | undefined;
+    browseName?: QualifiedName | undefined;
+    nodeClass?: NodeClass | undefined;
+    nodeAttributes?: ExtensionObject | undefined;
+    typeDefinition?: ExpandedNodeId | undefined;
 }
 export class AddNodesItem implements AddNodesItemOptions {
-    parentNodeId: ExpandedNodeId;
-    referenceTypeId: NodeId;
-    requestedNewNodeId: ExpandedNodeId;
-    browseName: QualifiedName;
-    nodeClass: NodeClass;
-    nodeAttributes: ExtensionObject;
-    typeDefinition: ExpandedNodeId;
+    readonly parentNodeId: ExpandedNodeId;
+    readonly referenceTypeId: NodeId;
+    readonly requestedNewNodeId: ExpandedNodeId;
+    readonly browseName: QualifiedName;
+    readonly nodeClass: NodeClass;
+    readonly nodeAttributes: ExtensionObject;
+    readonly typeDefinition: ExpandedNodeId;
     constructor(options?: AddNodesItemOptions) {
         this.parentNodeId = options?.parentNodeId ?? new ExpandedNodeId();
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
@@ -5839,31 +5209,24 @@ export class AddNodesItem implements AddNodesItemOptions {
         encoder.writeType(this.typeDefinition);
     }
     static [decode](decoder: BinaryDataDecoder): AddNodesItem {
-        const parentNodeId = decoder.readType(ExpandedNodeId);
-        const referenceTypeId = decoder.readType(NodeId);
-        const requestedNewNodeId = decoder.readType(ExpandedNodeId);
-        const browseName = decoder.readType(QualifiedName);
-        const nodeClass = decoder.readUInt32();
-        const nodeAttributes = decoder.readType(ExtensionObject);
-        const typeDefinition = decoder.readType(ExpandedNodeId);
         return new AddNodesItem({
-            parentNodeId,
-            referenceTypeId,
-            requestedNewNodeId,
-            browseName,
-            nodeClass,
-            nodeAttributes,
-            typeDefinition
+            parentNodeId: decoder.readType(ExpandedNodeId),
+            referenceTypeId: decoder.readType(NodeId),
+            requestedNewNodeId: decoder.readType(ExpandedNodeId),
+            browseName: decoder.readType(QualifiedName),
+            nodeClass: decoder.readUInt32(),
+            nodeAttributes: decoder.readType(ExtensionObject),
+            typeDefinition: decoder.readType(ExpandedNodeId)
         });
     }
 }
 export interface AddNodesResultOptions {
-    statusCode?: StatusCode;
-    addedNodeId?: NodeId;
+    statusCode?: StatusCode | undefined;
+    addedNodeId?: NodeId | undefined;
 }
 export class AddNodesResult implements AddNodesResultOptions {
-    statusCode: StatusCode;
-    addedNodeId: NodeId;
+    readonly statusCode: StatusCode;
+    readonly addedNodeId: NodeId;
     constructor(options?: AddNodesResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.addedNodeId = options?.addedNodeId ?? NodeId.null();
@@ -5874,21 +5237,19 @@ export class AddNodesResult implements AddNodesResultOptions {
         encoder.writeType(this.addedNodeId);
     }
     static [decode](decoder: BinaryDataDecoder): AddNodesResult {
-        const statusCode = decoder.readType(StatusCode);
-        const addedNodeId = decoder.readType(NodeId);
         return new AddNodesResult({
-            statusCode,
-            addedNodeId
+            statusCode: decoder.readType(StatusCode),
+            addedNodeId: decoder.readType(NodeId)
         });
     }
 }
 export interface AddNodesRequestOptions {
-    requestHeader?: RequestHeader;
-    nodesToAdd?: AddNodesItem[];
+    requestHeader?: RequestHeader | undefined;
+    nodesToAdd?: AddNodesItem[] | undefined;
 }
 export class AddNodesRequest implements AddNodesRequestOptions {
-    requestHeader: RequestHeader;
-    nodesToAdd?: AddNodesItem[];
+    readonly requestHeader: RequestHeader;
+    readonly nodesToAdd?: AddNodesItem[];
     constructor(options?: AddNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToAdd = options?.nodesToAdd;
@@ -5899,23 +5260,21 @@ export class AddNodesRequest implements AddNodesRequestOptions {
         encoder.writeTypeArray(this.nodesToAdd);
     }
     static [decode](decoder: BinaryDataDecoder): AddNodesRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const nodesToAdd = decoder.readTypeArray(AddNodesItem);
         return new AddNodesRequest({
-            requestHeader,
-            nodesToAdd
+            requestHeader: decoder.readType(RequestHeader),
+            nodesToAdd: decoder.readTypeArray(AddNodesItem)
         });
     }
 }
 export interface AddNodesResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: AddNodesResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: AddNodesResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class AddNodesResponse implements AddNodesResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: AddNodesResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: AddNodesResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: AddNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5928,31 +5287,28 @@ export class AddNodesResponse implements AddNodesResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): AddNodesResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(AddNodesResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new AddNodesResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(AddNodesResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface AddReferencesItemOptions {
-    sourceNodeId?: NodeId;
-    referenceTypeId?: NodeId;
-    isForward?: boolean;
-    targetServerUri?: UaString;
-    targetNodeId?: ExpandedNodeId;
-    targetNodeClass?: NodeClass;
+    sourceNodeId?: NodeId | undefined;
+    referenceTypeId?: NodeId | undefined;
+    isForward?: boolean | undefined;
+    targetServerUri?: UaString | undefined;
+    targetNodeId?: ExpandedNodeId | undefined;
+    targetNodeClass?: NodeClass | undefined;
 }
 export class AddReferencesItem implements AddReferencesItemOptions {
-    sourceNodeId: NodeId;
-    referenceTypeId: NodeId;
-    isForward: boolean;
-    targetServerUri?: UaString;
-    targetNodeId: ExpandedNodeId;
-    targetNodeClass: NodeClass;
+    readonly sourceNodeId: NodeId;
+    readonly referenceTypeId: NodeId;
+    readonly isForward: boolean;
+    readonly targetServerUri?: UaString;
+    readonly targetNodeId: ExpandedNodeId;
+    readonly targetNodeClass: NodeClass;
     constructor(options?: AddReferencesItemOptions) {
         this.sourceNodeId = options?.sourceNodeId ?? NodeId.null();
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
@@ -5971,29 +5327,23 @@ export class AddReferencesItem implements AddReferencesItemOptions {
         encoder.writeUInt32(this.targetNodeClass);
     }
     static [decode](decoder: BinaryDataDecoder): AddReferencesItem {
-        const sourceNodeId = decoder.readType(NodeId);
-        const referenceTypeId = decoder.readType(NodeId);
-        const isForward = decoder.readBoolean();
-        const targetServerUri = decoder.readString();
-        const targetNodeId = decoder.readType(ExpandedNodeId);
-        const targetNodeClass = decoder.readUInt32();
         return new AddReferencesItem({
-            sourceNodeId,
-            referenceTypeId,
-            isForward,
-            targetServerUri,
-            targetNodeId,
-            targetNodeClass
+            sourceNodeId: decoder.readType(NodeId),
+            referenceTypeId: decoder.readType(NodeId),
+            isForward: decoder.readBoolean(),
+            targetServerUri: decoder.readString(),
+            targetNodeId: decoder.readType(ExpandedNodeId),
+            targetNodeClass: decoder.readUInt32()
         });
     }
 }
 export interface AddReferencesRequestOptions {
-    requestHeader?: RequestHeader;
-    referencesToAdd?: AddReferencesItem[];
+    requestHeader?: RequestHeader | undefined;
+    referencesToAdd?: AddReferencesItem[] | undefined;
 }
 export class AddReferencesRequest implements AddReferencesRequestOptions {
-    requestHeader: RequestHeader;
-    referencesToAdd?: AddReferencesItem[];
+    readonly requestHeader: RequestHeader;
+    readonly referencesToAdd?: AddReferencesItem[];
     constructor(options?: AddReferencesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.referencesToAdd = options?.referencesToAdd;
@@ -6004,23 +5354,21 @@ export class AddReferencesRequest implements AddReferencesRequestOptions {
         encoder.writeTypeArray(this.referencesToAdd);
     }
     static [decode](decoder: BinaryDataDecoder): AddReferencesRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const referencesToAdd = decoder.readTypeArray(AddReferencesItem);
         return new AddReferencesRequest({
-            requestHeader,
-            referencesToAdd
+            requestHeader: decoder.readType(RequestHeader),
+            referencesToAdd: decoder.readTypeArray(AddReferencesItem)
         });
     }
 }
 export interface AddReferencesResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class AddReferencesResponse implements AddReferencesResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: AddReferencesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6033,23 +5381,20 @@ export class AddReferencesResponse implements AddReferencesResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): AddReferencesResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new AddReferencesResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface DeleteNodesItemOptions {
-    nodeId?: NodeId;
-    deleteTargetReferences?: boolean;
+    nodeId?: NodeId | undefined;
+    deleteTargetReferences?: boolean | undefined;
 }
 export class DeleteNodesItem implements DeleteNodesItemOptions {
-    nodeId: NodeId;
-    deleteTargetReferences: boolean;
+    readonly nodeId: NodeId;
+    readonly deleteTargetReferences: boolean;
     constructor(options?: DeleteNodesItemOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.deleteTargetReferences = options?.deleteTargetReferences ?? false;
@@ -6060,21 +5405,19 @@ export class DeleteNodesItem implements DeleteNodesItemOptions {
         encoder.writeBoolean(this.deleteTargetReferences);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteNodesItem {
-        const nodeId = decoder.readType(NodeId);
-        const deleteTargetReferences = decoder.readBoolean();
         return new DeleteNodesItem({
-            nodeId,
-            deleteTargetReferences
+            nodeId: decoder.readType(NodeId),
+            deleteTargetReferences: decoder.readBoolean()
         });
     }
 }
 export interface DeleteNodesRequestOptions {
-    requestHeader?: RequestHeader;
-    nodesToDelete?: DeleteNodesItem[];
+    requestHeader?: RequestHeader | undefined;
+    nodesToDelete?: DeleteNodesItem[] | undefined;
 }
 export class DeleteNodesRequest implements DeleteNodesRequestOptions {
-    requestHeader: RequestHeader;
-    nodesToDelete?: DeleteNodesItem[];
+    readonly requestHeader: RequestHeader;
+    readonly nodesToDelete?: DeleteNodesItem[];
     constructor(options?: DeleteNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToDelete = options?.nodesToDelete;
@@ -6085,23 +5428,21 @@ export class DeleteNodesRequest implements DeleteNodesRequestOptions {
         encoder.writeTypeArray(this.nodesToDelete);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteNodesRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const nodesToDelete = decoder.readTypeArray(DeleteNodesItem);
         return new DeleteNodesRequest({
-            requestHeader,
-            nodesToDelete
+            requestHeader: decoder.readType(RequestHeader),
+            nodesToDelete: decoder.readTypeArray(DeleteNodesItem)
         });
     }
 }
 export interface DeleteNodesResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class DeleteNodesResponse implements DeleteNodesResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: DeleteNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6114,29 +5455,26 @@ export class DeleteNodesResponse implements DeleteNodesResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteNodesResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new DeleteNodesResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface DeleteReferencesItemOptions {
-    sourceNodeId?: NodeId;
-    referenceTypeId?: NodeId;
-    isForward?: boolean;
-    targetNodeId?: ExpandedNodeId;
-    deleteBidirectional?: boolean;
+    sourceNodeId?: NodeId | undefined;
+    referenceTypeId?: NodeId | undefined;
+    isForward?: boolean | undefined;
+    targetNodeId?: ExpandedNodeId | undefined;
+    deleteBidirectional?: boolean | undefined;
 }
 export class DeleteReferencesItem implements DeleteReferencesItemOptions {
-    sourceNodeId: NodeId;
-    referenceTypeId: NodeId;
-    isForward: boolean;
-    targetNodeId: ExpandedNodeId;
-    deleteBidirectional: boolean;
+    readonly sourceNodeId: NodeId;
+    readonly referenceTypeId: NodeId;
+    readonly isForward: boolean;
+    readonly targetNodeId: ExpandedNodeId;
+    readonly deleteBidirectional: boolean;
     constructor(options?: DeleteReferencesItemOptions) {
         this.sourceNodeId = options?.sourceNodeId ?? NodeId.null();
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
@@ -6153,27 +5491,22 @@ export class DeleteReferencesItem implements DeleteReferencesItemOptions {
         encoder.writeBoolean(this.deleteBidirectional);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteReferencesItem {
-        const sourceNodeId = decoder.readType(NodeId);
-        const referenceTypeId = decoder.readType(NodeId);
-        const isForward = decoder.readBoolean();
-        const targetNodeId = decoder.readType(ExpandedNodeId);
-        const deleteBidirectional = decoder.readBoolean();
         return new DeleteReferencesItem({
-            sourceNodeId,
-            referenceTypeId,
-            isForward,
-            targetNodeId,
-            deleteBidirectional
+            sourceNodeId: decoder.readType(NodeId),
+            referenceTypeId: decoder.readType(NodeId),
+            isForward: decoder.readBoolean(),
+            targetNodeId: decoder.readType(ExpandedNodeId),
+            deleteBidirectional: decoder.readBoolean()
         });
     }
 }
 export interface DeleteReferencesRequestOptions {
-    requestHeader?: RequestHeader;
-    referencesToDelete?: DeleteReferencesItem[];
+    requestHeader?: RequestHeader | undefined;
+    referencesToDelete?: DeleteReferencesItem[] | undefined;
 }
 export class DeleteReferencesRequest implements DeleteReferencesRequestOptions {
-    requestHeader: RequestHeader;
-    referencesToDelete?: DeleteReferencesItem[];
+    readonly requestHeader: RequestHeader;
+    readonly referencesToDelete?: DeleteReferencesItem[];
     constructor(options?: DeleteReferencesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.referencesToDelete = options?.referencesToDelete;
@@ -6184,23 +5517,21 @@ export class DeleteReferencesRequest implements DeleteReferencesRequestOptions {
         encoder.writeTypeArray(this.referencesToDelete);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteReferencesRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const referencesToDelete = decoder.readTypeArray(DeleteReferencesItem);
         return new DeleteReferencesRequest({
-            requestHeader,
-            referencesToDelete
+            requestHeader: decoder.readType(RequestHeader),
+            referencesToDelete: decoder.readTypeArray(DeleteReferencesItem)
         });
     }
 }
 export interface DeleteReferencesResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class DeleteReferencesResponse implements DeleteReferencesResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: DeleteReferencesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6213,13 +5544,10 @@ export class DeleteReferencesResponse implements DeleteReferencesResponseOptions
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteReferencesResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new DeleteReferencesResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
@@ -6259,14 +5587,14 @@ export enum BrowseDirection {
     Invalid = 3
 }
 export interface ViewDescriptionOptions {
-    viewId?: NodeId;
-    timestamp?: Date;
-    viewVersion?: UInt32;
+    viewId?: NodeId | undefined;
+    timestamp?: Date | undefined;
+    viewVersion?: UInt32 | undefined;
 }
 export class ViewDescription implements ViewDescriptionOptions {
-    viewId: NodeId;
-    timestamp: Date;
-    viewVersion: UInt32;
+    readonly viewId: NodeId;
+    readonly timestamp: Date;
+    readonly viewVersion: UInt32;
     constructor(options?: ViewDescriptionOptions) {
         this.viewId = options?.viewId ?? NodeId.null();
         this.timestamp = options?.timestamp ?? new Date(-11644473600000);
@@ -6279,31 +5607,28 @@ export class ViewDescription implements ViewDescriptionOptions {
         encoder.writeUInt32(this.viewVersion);
     }
     static [decode](decoder: BinaryDataDecoder): ViewDescription {
-        const viewId = decoder.readType(NodeId);
-        const timestamp = decoder.readDateTime();
-        const viewVersion = decoder.readUInt32();
         return new ViewDescription({
-            viewId,
-            timestamp,
-            viewVersion
+            viewId: decoder.readType(NodeId),
+            timestamp: decoder.readDateTime(),
+            viewVersion: decoder.readUInt32()
         });
     }
 }
 export interface BrowseDescriptionOptions {
-    nodeId?: NodeId;
-    browseDirection?: BrowseDirection;
-    referenceTypeId?: NodeId;
-    includeSubtypes?: boolean;
-    nodeClassMask?: UInt32;
-    resultMask?: UInt32;
+    nodeId?: NodeId | undefined;
+    browseDirection?: BrowseDirection | undefined;
+    referenceTypeId?: NodeId | undefined;
+    includeSubtypes?: boolean | undefined;
+    nodeClassMask?: UInt32 | undefined;
+    resultMask?: UInt32 | undefined;
 }
 export class BrowseDescription implements BrowseDescriptionOptions {
-    nodeId: NodeId;
-    browseDirection: BrowseDirection;
-    referenceTypeId: NodeId;
-    includeSubtypes: boolean;
-    nodeClassMask: UInt32;
-    resultMask: UInt32;
+    readonly nodeId: NodeId;
+    readonly browseDirection: BrowseDirection;
+    readonly referenceTypeId: NodeId;
+    readonly includeSubtypes: boolean;
+    readonly nodeClassMask: UInt32;
+    readonly resultMask: UInt32;
     constructor(options?: BrowseDescriptionOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.browseDirection = options?.browseDirection ?? BrowseDirection.Forward;
@@ -6322,19 +5647,13 @@ export class BrowseDescription implements BrowseDescriptionOptions {
         encoder.writeUInt32(this.resultMask);
     }
     static [decode](decoder: BinaryDataDecoder): BrowseDescription {
-        const nodeId = decoder.readType(NodeId);
-        const browseDirection = decoder.readUInt32();
-        const referenceTypeId = decoder.readType(NodeId);
-        const includeSubtypes = decoder.readBoolean();
-        const nodeClassMask = decoder.readUInt32();
-        const resultMask = decoder.readUInt32();
         return new BrowseDescription({
-            nodeId,
-            browseDirection,
-            referenceTypeId,
-            includeSubtypes,
-            nodeClassMask,
-            resultMask
+            nodeId: decoder.readType(NodeId),
+            browseDirection: decoder.readUInt32(),
+            referenceTypeId: decoder.readType(NodeId),
+            includeSubtypes: decoder.readBoolean(),
+            nodeClassMask: decoder.readUInt32(),
+            resultMask: decoder.readUInt32()
         });
     }
 }
@@ -6351,22 +5670,22 @@ export enum BrowseResultMask {
     TargetInfo = 60
 }
 export interface ReferenceDescriptionOptions {
-    referenceTypeId?: NodeId;
-    isForward?: boolean;
-    nodeId?: ExpandedNodeId;
-    browseName?: QualifiedName;
-    displayName?: LocalizedText;
-    nodeClass?: NodeClass;
-    typeDefinition?: ExpandedNodeId;
+    referenceTypeId?: NodeId | undefined;
+    isForward?: boolean | undefined;
+    nodeId?: ExpandedNodeId | undefined;
+    browseName?: QualifiedName | undefined;
+    displayName?: LocalizedText | undefined;
+    nodeClass?: NodeClass | undefined;
+    typeDefinition?: ExpandedNodeId | undefined;
 }
 export class ReferenceDescription implements ReferenceDescriptionOptions {
-    referenceTypeId: NodeId;
-    isForward: boolean;
-    nodeId: ExpandedNodeId;
-    browseName: QualifiedName;
-    displayName: LocalizedText;
-    nodeClass: NodeClass;
-    typeDefinition: ExpandedNodeId;
+    readonly referenceTypeId: NodeId;
+    readonly isForward: boolean;
+    readonly nodeId: ExpandedNodeId;
+    readonly browseName: QualifiedName;
+    readonly displayName: LocalizedText;
+    readonly nodeClass: NodeClass;
+    readonly typeDefinition: ExpandedNodeId;
     constructor(options?: ReferenceDescriptionOptions) {
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
         this.isForward = options?.isForward ?? false;
@@ -6387,33 +5706,26 @@ export class ReferenceDescription implements ReferenceDescriptionOptions {
         encoder.writeType(this.typeDefinition);
     }
     static [decode](decoder: BinaryDataDecoder): ReferenceDescription {
-        const referenceTypeId = decoder.readType(NodeId);
-        const isForward = decoder.readBoolean();
-        const nodeId = decoder.readType(ExpandedNodeId);
-        const browseName = decoder.readType(QualifiedName);
-        const displayName = decoder.readType(LocalizedText);
-        const nodeClass = decoder.readUInt32();
-        const typeDefinition = decoder.readType(ExpandedNodeId);
         return new ReferenceDescription({
-            referenceTypeId,
-            isForward,
-            nodeId,
-            browseName,
-            displayName,
-            nodeClass,
-            typeDefinition
+            referenceTypeId: decoder.readType(NodeId),
+            isForward: decoder.readBoolean(),
+            nodeId: decoder.readType(ExpandedNodeId),
+            browseName: decoder.readType(QualifiedName),
+            displayName: decoder.readType(LocalizedText),
+            nodeClass: decoder.readUInt32(),
+            typeDefinition: decoder.readType(ExpandedNodeId)
         });
     }
 }
 export interface BrowseResultOptions {
-    statusCode?: StatusCode;
-    continuationPoint?: ByteString;
-    references?: ReferenceDescription[];
+    statusCode?: StatusCode | undefined;
+    continuationPoint?: ByteString | undefined;
+    references?: ReferenceDescription[] | undefined;
 }
 export class BrowseResult implements BrowseResultOptions {
-    statusCode: StatusCode;
-    continuationPoint?: ByteString;
-    references?: ReferenceDescription[];
+    readonly statusCode: StatusCode;
+    readonly continuationPoint?: ByteString;
+    readonly references?: ReferenceDescription[];
     constructor(options?: BrowseResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.continuationPoint = options?.continuationPoint;
@@ -6426,27 +5738,24 @@ export class BrowseResult implements BrowseResultOptions {
         encoder.writeTypeArray(this.references);
     }
     static [decode](decoder: BinaryDataDecoder): BrowseResult {
-        const statusCode = decoder.readType(StatusCode);
-        const continuationPoint = decoder.readByteString();
-        const references = decoder.readTypeArray(ReferenceDescription);
         return new BrowseResult({
-            statusCode,
-            continuationPoint,
-            references
+            statusCode: decoder.readType(StatusCode),
+            continuationPoint: decoder.readByteString(),
+            references: decoder.readTypeArray(ReferenceDescription)
         });
     }
 }
 export interface BrowseRequestOptions {
-    requestHeader?: RequestHeader;
-    view?: ViewDescription;
-    requestedMaxReferencesPerNode?: UInt32;
-    nodesToBrowse?: BrowseDescription[];
+    requestHeader?: RequestHeader | undefined;
+    view?: ViewDescription | undefined;
+    requestedMaxReferencesPerNode?: UInt32 | undefined;
+    nodesToBrowse?: BrowseDescription[] | undefined;
 }
 export class BrowseRequest implements BrowseRequestOptions {
-    requestHeader: RequestHeader;
-    view: ViewDescription;
-    requestedMaxReferencesPerNode: UInt32;
-    nodesToBrowse?: BrowseDescription[];
+    readonly requestHeader: RequestHeader;
+    readonly view: ViewDescription;
+    readonly requestedMaxReferencesPerNode: UInt32;
+    readonly nodesToBrowse?: BrowseDescription[];
     constructor(options?: BrowseRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.view = options?.view ?? new ViewDescription();
@@ -6461,27 +5770,23 @@ export class BrowseRequest implements BrowseRequestOptions {
         encoder.writeTypeArray(this.nodesToBrowse);
     }
     static [decode](decoder: BinaryDataDecoder): BrowseRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const view = decoder.readType(ViewDescription);
-        const requestedMaxReferencesPerNode = decoder.readUInt32();
-        const nodesToBrowse = decoder.readTypeArray(BrowseDescription);
         return new BrowseRequest({
-            requestHeader,
-            view,
-            requestedMaxReferencesPerNode,
-            nodesToBrowse
+            requestHeader: decoder.readType(RequestHeader),
+            view: decoder.readType(ViewDescription),
+            requestedMaxReferencesPerNode: decoder.readUInt32(),
+            nodesToBrowse: decoder.readTypeArray(BrowseDescription)
         });
     }
 }
 export interface BrowseResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: BrowseResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: BrowseResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class BrowseResponse implements BrowseResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: BrowseResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: BrowseResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: BrowseResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6494,25 +5799,22 @@ export class BrowseResponse implements BrowseResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): BrowseResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(BrowseResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new BrowseResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(BrowseResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface BrowseNextRequestOptions {
-    requestHeader?: RequestHeader;
-    releaseContinuationPoints?: boolean;
-    continuationPoints?: ByteString[];
+    requestHeader?: RequestHeader | undefined;
+    releaseContinuationPoints?: boolean | undefined;
+    continuationPoints?: ByteString[] | undefined;
 }
 export class BrowseNextRequest implements BrowseNextRequestOptions {
-    requestHeader: RequestHeader;
-    releaseContinuationPoints: boolean;
-    continuationPoints?: ByteString[];
+    readonly requestHeader: RequestHeader;
+    readonly releaseContinuationPoints: boolean;
+    readonly continuationPoints?: ByteString[];
     constructor(options?: BrowseNextRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.releaseContinuationPoints = options?.releaseContinuationPoints ?? false;
@@ -6525,25 +5827,22 @@ export class BrowseNextRequest implements BrowseNextRequestOptions {
         encoder.writeByteStringArray(this.continuationPoints);
     }
     static [decode](decoder: BinaryDataDecoder): BrowseNextRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const releaseContinuationPoints = decoder.readBoolean();
-        const continuationPoints = decoder.readByteStringArray();
         return new BrowseNextRequest({
-            requestHeader,
-            releaseContinuationPoints,
-            continuationPoints
+            requestHeader: decoder.readType(RequestHeader),
+            releaseContinuationPoints: decoder.readBoolean(),
+            continuationPoints: decoder.readByteStringArray()
         });
     }
 }
 export interface BrowseNextResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: BrowseResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: BrowseResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class BrowseNextResponse implements BrowseNextResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: BrowseResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: BrowseResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: BrowseNextResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6556,27 +5855,24 @@ export class BrowseNextResponse implements BrowseNextResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): BrowseNextResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(BrowseResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new BrowseNextResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(BrowseResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface RelativePathElementOptions {
-    referenceTypeId?: NodeId;
-    isInverse?: boolean;
-    includeSubtypes?: boolean;
-    targetName?: QualifiedName;
+    referenceTypeId?: NodeId | undefined;
+    isInverse?: boolean | undefined;
+    includeSubtypes?: boolean | undefined;
+    targetName?: QualifiedName | undefined;
 }
 export class RelativePathElement implements RelativePathElementOptions {
-    referenceTypeId: NodeId;
-    isInverse: boolean;
-    includeSubtypes: boolean;
-    targetName: QualifiedName;
+    readonly referenceTypeId: NodeId;
+    readonly isInverse: boolean;
+    readonly includeSubtypes: boolean;
+    readonly targetName: QualifiedName;
     constructor(options?: RelativePathElementOptions) {
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
         this.isInverse = options?.isInverse ?? false;
@@ -6591,23 +5887,19 @@ export class RelativePathElement implements RelativePathElementOptions {
         encoder.writeType(this.targetName);
     }
     static [decode](decoder: BinaryDataDecoder): RelativePathElement {
-        const referenceTypeId = decoder.readType(NodeId);
-        const isInverse = decoder.readBoolean();
-        const includeSubtypes = decoder.readBoolean();
-        const targetName = decoder.readType(QualifiedName);
         return new RelativePathElement({
-            referenceTypeId,
-            isInverse,
-            includeSubtypes,
-            targetName
+            referenceTypeId: decoder.readType(NodeId),
+            isInverse: decoder.readBoolean(),
+            includeSubtypes: decoder.readBoolean(),
+            targetName: decoder.readType(QualifiedName)
         });
     }
 }
 export interface RelativePathOptions {
-    elements?: RelativePathElement[];
+    elements?: RelativePathElement[] | undefined;
 }
 export class RelativePath implements RelativePathOptions {
-    elements?: RelativePathElement[];
+    readonly elements?: RelativePathElement[];
     constructor(options?: RelativePathOptions) {
         this.elements = options?.elements;
     }
@@ -6616,19 +5908,18 @@ export class RelativePath implements RelativePathOptions {
         encoder.writeTypeArray(this.elements);
     }
     static [decode](decoder: BinaryDataDecoder): RelativePath {
-        const elements = decoder.readTypeArray(RelativePathElement);
         return new RelativePath({
-            elements
+            elements: decoder.readTypeArray(RelativePathElement)
         });
     }
 }
 export interface BrowsePathOptions {
-    startingNode?: NodeId;
-    relativePath?: RelativePath;
+    startingNode?: NodeId | undefined;
+    relativePath?: RelativePath | undefined;
 }
 export class BrowsePath implements BrowsePathOptions {
-    startingNode: NodeId;
-    relativePath: RelativePath;
+    readonly startingNode: NodeId;
+    readonly relativePath: RelativePath;
     constructor(options?: BrowsePathOptions) {
         this.startingNode = options?.startingNode ?? NodeId.null();
         this.relativePath = options?.relativePath ?? new RelativePath();
@@ -6639,21 +5930,19 @@ export class BrowsePath implements BrowsePathOptions {
         encoder.writeType(this.relativePath);
     }
     static [decode](decoder: BinaryDataDecoder): BrowsePath {
-        const startingNode = decoder.readType(NodeId);
-        const relativePath = decoder.readType(RelativePath);
         return new BrowsePath({
-            startingNode,
-            relativePath
+            startingNode: decoder.readType(NodeId),
+            relativePath: decoder.readType(RelativePath)
         });
     }
 }
 export interface BrowsePathTargetOptions {
-    targetId?: ExpandedNodeId;
-    remainingPathIndex?: UInt32;
+    targetId?: ExpandedNodeId | undefined;
+    remainingPathIndex?: UInt32 | undefined;
 }
 export class BrowsePathTarget implements BrowsePathTargetOptions {
-    targetId: ExpandedNodeId;
-    remainingPathIndex: UInt32;
+    readonly targetId: ExpandedNodeId;
+    readonly remainingPathIndex: UInt32;
     constructor(options?: BrowsePathTargetOptions) {
         this.targetId = options?.targetId ?? new ExpandedNodeId();
         this.remainingPathIndex = options?.remainingPathIndex ?? 0;
@@ -6664,21 +5953,19 @@ export class BrowsePathTarget implements BrowsePathTargetOptions {
         encoder.writeUInt32(this.remainingPathIndex);
     }
     static [decode](decoder: BinaryDataDecoder): BrowsePathTarget {
-        const targetId = decoder.readType(ExpandedNodeId);
-        const remainingPathIndex = decoder.readUInt32();
         return new BrowsePathTarget({
-            targetId,
-            remainingPathIndex
+            targetId: decoder.readType(ExpandedNodeId),
+            remainingPathIndex: decoder.readUInt32()
         });
     }
 }
 export interface BrowsePathResultOptions {
-    statusCode?: StatusCode;
-    targets?: BrowsePathTarget[];
+    statusCode?: StatusCode | undefined;
+    targets?: BrowsePathTarget[] | undefined;
 }
 export class BrowsePathResult implements BrowsePathResultOptions {
-    statusCode: StatusCode;
-    targets?: BrowsePathTarget[];
+    readonly statusCode: StatusCode;
+    readonly targets?: BrowsePathTarget[];
     constructor(options?: BrowsePathResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.targets = options?.targets;
@@ -6689,21 +5976,19 @@ export class BrowsePathResult implements BrowsePathResultOptions {
         encoder.writeTypeArray(this.targets);
     }
     static [decode](decoder: BinaryDataDecoder): BrowsePathResult {
-        const statusCode = decoder.readType(StatusCode);
-        const targets = decoder.readTypeArray(BrowsePathTarget);
         return new BrowsePathResult({
-            statusCode,
-            targets
+            statusCode: decoder.readType(StatusCode),
+            targets: decoder.readTypeArray(BrowsePathTarget)
         });
     }
 }
 export interface TranslateBrowsePathsToNodeIdsRequestOptions {
-    requestHeader?: RequestHeader;
-    browsePaths?: BrowsePath[];
+    requestHeader?: RequestHeader | undefined;
+    browsePaths?: BrowsePath[] | undefined;
 }
 export class TranslateBrowsePathsToNodeIdsRequest implements TranslateBrowsePathsToNodeIdsRequestOptions {
-    requestHeader: RequestHeader;
-    browsePaths?: BrowsePath[];
+    readonly requestHeader: RequestHeader;
+    readonly browsePaths?: BrowsePath[];
     constructor(options?: TranslateBrowsePathsToNodeIdsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.browsePaths = options?.browsePaths;
@@ -6714,23 +5999,21 @@ export class TranslateBrowsePathsToNodeIdsRequest implements TranslateBrowsePath
         encoder.writeTypeArray(this.browsePaths);
     }
     static [decode](decoder: BinaryDataDecoder): TranslateBrowsePathsToNodeIdsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const browsePaths = decoder.readTypeArray(BrowsePath);
         return new TranslateBrowsePathsToNodeIdsRequest({
-            requestHeader,
-            browsePaths
+            requestHeader: decoder.readType(RequestHeader),
+            browsePaths: decoder.readTypeArray(BrowsePath)
         });
     }
 }
 export interface TranslateBrowsePathsToNodeIdsResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: BrowsePathResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: BrowsePathResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class TranslateBrowsePathsToNodeIdsResponse implements TranslateBrowsePathsToNodeIdsResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: BrowsePathResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: BrowsePathResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: TranslateBrowsePathsToNodeIdsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6743,23 +6026,20 @@ export class TranslateBrowsePathsToNodeIdsResponse implements TranslateBrowsePat
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): TranslateBrowsePathsToNodeIdsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(BrowsePathResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new TranslateBrowsePathsToNodeIdsResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(BrowsePathResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface RegisterNodesRequestOptions {
-    requestHeader?: RequestHeader;
-    nodesToRegister?: NodeId[];
+    requestHeader?: RequestHeader | undefined;
+    nodesToRegister?: NodeId[] | undefined;
 }
 export class RegisterNodesRequest implements RegisterNodesRequestOptions {
-    requestHeader: RequestHeader;
-    nodesToRegister?: NodeId[];
+    readonly requestHeader: RequestHeader;
+    readonly nodesToRegister?: NodeId[];
     constructor(options?: RegisterNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToRegister = options?.nodesToRegister;
@@ -6770,21 +6050,19 @@ export class RegisterNodesRequest implements RegisterNodesRequestOptions {
         encoder.writeTypeArray(this.nodesToRegister);
     }
     static [decode](decoder: BinaryDataDecoder): RegisterNodesRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const nodesToRegister = decoder.readTypeArray(NodeId);
         return new RegisterNodesRequest({
-            requestHeader,
-            nodesToRegister
+            requestHeader: decoder.readType(RequestHeader),
+            nodesToRegister: decoder.readTypeArray(NodeId)
         });
     }
 }
 export interface RegisterNodesResponseOptions {
-    responseHeader?: ResponseHeader;
-    registeredNodeIds?: NodeId[];
+    responseHeader?: ResponseHeader | undefined;
+    registeredNodeIds?: NodeId[] | undefined;
 }
 export class RegisterNodesResponse implements RegisterNodesResponseOptions {
-    responseHeader: ResponseHeader;
-    registeredNodeIds?: NodeId[];
+    readonly responseHeader: ResponseHeader;
+    readonly registeredNodeIds?: NodeId[];
     constructor(options?: RegisterNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.registeredNodeIds = options?.registeredNodeIds;
@@ -6795,21 +6073,19 @@ export class RegisterNodesResponse implements RegisterNodesResponseOptions {
         encoder.writeTypeArray(this.registeredNodeIds);
     }
     static [decode](decoder: BinaryDataDecoder): RegisterNodesResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const registeredNodeIds = decoder.readTypeArray(NodeId);
         return new RegisterNodesResponse({
-            responseHeader,
-            registeredNodeIds
+            responseHeader: decoder.readType(ResponseHeader),
+            registeredNodeIds: decoder.readTypeArray(NodeId)
         });
     }
 }
 export interface UnregisterNodesRequestOptions {
-    requestHeader?: RequestHeader;
-    nodesToUnregister?: NodeId[];
+    requestHeader?: RequestHeader | undefined;
+    nodesToUnregister?: NodeId[] | undefined;
 }
 export class UnregisterNodesRequest implements UnregisterNodesRequestOptions {
-    requestHeader: RequestHeader;
-    nodesToUnregister?: NodeId[];
+    readonly requestHeader: RequestHeader;
+    readonly nodesToUnregister?: NodeId[];
     constructor(options?: UnregisterNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToUnregister = options?.nodesToUnregister;
@@ -6820,19 +6096,17 @@ export class UnregisterNodesRequest implements UnregisterNodesRequestOptions {
         encoder.writeTypeArray(this.nodesToUnregister);
     }
     static [decode](decoder: BinaryDataDecoder): UnregisterNodesRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const nodesToUnregister = decoder.readTypeArray(NodeId);
         return new UnregisterNodesRequest({
-            requestHeader,
-            nodesToUnregister
+            requestHeader: decoder.readType(RequestHeader),
+            nodesToUnregister: decoder.readTypeArray(NodeId)
         });
     }
 }
 export interface UnregisterNodesResponseOptions {
-    responseHeader?: ResponseHeader;
+    responseHeader?: ResponseHeader | undefined;
 }
 export class UnregisterNodesResponse implements UnregisterNodesResponseOptions {
-    responseHeader: ResponseHeader;
+    readonly responseHeader: ResponseHeader;
     constructor(options?: UnregisterNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
     }
@@ -6841,33 +6115,32 @@ export class UnregisterNodesResponse implements UnregisterNodesResponseOptions {
         encoder.writeType(this.responseHeader);
     }
     static [decode](decoder: BinaryDataDecoder): UnregisterNodesResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
         return new UnregisterNodesResponse({
-            responseHeader
+            responseHeader: decoder.readType(ResponseHeader)
         });
     }
 }
 export interface EndpointConfigurationOptions {
-    operationTimeout?: Int32;
-    useBinaryEncoding?: boolean;
-    maxStringLength?: Int32;
-    maxByteStringLength?: Int32;
-    maxArrayLength?: Int32;
-    maxMessageSize?: Int32;
-    maxBufferSize?: Int32;
-    channelLifetime?: Int32;
-    securityTokenLifetime?: Int32;
+    operationTimeout?: Int32 | undefined;
+    useBinaryEncoding?: boolean | undefined;
+    maxStringLength?: Int32 | undefined;
+    maxByteStringLength?: Int32 | undefined;
+    maxArrayLength?: Int32 | undefined;
+    maxMessageSize?: Int32 | undefined;
+    maxBufferSize?: Int32 | undefined;
+    channelLifetime?: Int32 | undefined;
+    securityTokenLifetime?: Int32 | undefined;
 }
 export class EndpointConfiguration implements EndpointConfigurationOptions {
-    operationTimeout: Int32;
-    useBinaryEncoding: boolean;
-    maxStringLength: Int32;
-    maxByteStringLength: Int32;
-    maxArrayLength: Int32;
-    maxMessageSize: Int32;
-    maxBufferSize: Int32;
-    channelLifetime: Int32;
-    securityTokenLifetime: Int32;
+    readonly operationTimeout: Int32;
+    readonly useBinaryEncoding: boolean;
+    readonly maxStringLength: Int32;
+    readonly maxByteStringLength: Int32;
+    readonly maxArrayLength: Int32;
+    readonly maxMessageSize: Int32;
+    readonly maxBufferSize: Int32;
+    readonly channelLifetime: Int32;
+    readonly securityTokenLifetime: Int32;
     constructor(options?: EndpointConfigurationOptions) {
         this.operationTimeout = options?.operationTimeout ?? 0;
         this.useBinaryEncoding = options?.useBinaryEncoding ?? false;
@@ -6892,37 +6165,28 @@ export class EndpointConfiguration implements EndpointConfigurationOptions {
         encoder.writeInt32(this.securityTokenLifetime);
     }
     static [decode](decoder: BinaryDataDecoder): EndpointConfiguration {
-        const operationTimeout = decoder.readInt32();
-        const useBinaryEncoding = decoder.readBoolean();
-        const maxStringLength = decoder.readInt32();
-        const maxByteStringLength = decoder.readInt32();
-        const maxArrayLength = decoder.readInt32();
-        const maxMessageSize = decoder.readInt32();
-        const maxBufferSize = decoder.readInt32();
-        const channelLifetime = decoder.readInt32();
-        const securityTokenLifetime = decoder.readInt32();
         return new EndpointConfiguration({
-            operationTimeout,
-            useBinaryEncoding,
-            maxStringLength,
-            maxByteStringLength,
-            maxArrayLength,
-            maxMessageSize,
-            maxBufferSize,
-            channelLifetime,
-            securityTokenLifetime
+            operationTimeout: decoder.readInt32(),
+            useBinaryEncoding: decoder.readBoolean(),
+            maxStringLength: decoder.readInt32(),
+            maxByteStringLength: decoder.readInt32(),
+            maxArrayLength: decoder.readInt32(),
+            maxMessageSize: decoder.readInt32(),
+            maxBufferSize: decoder.readInt32(),
+            channelLifetime: decoder.readInt32(),
+            securityTokenLifetime: decoder.readInt32()
         });
     }
 }
 export interface QueryDataDescriptionOptions {
-    relativePath?: RelativePath;
-    attributeId?: UInt32;
-    indexRange?: UaString;
+    relativePath?: RelativePath | undefined;
+    attributeId?: UInt32 | undefined;
+    indexRange?: UaString | undefined;
 }
 export class QueryDataDescription implements QueryDataDescriptionOptions {
-    relativePath: RelativePath;
-    attributeId: UInt32;
-    indexRange?: UaString;
+    readonly relativePath: RelativePath;
+    readonly attributeId: UInt32;
+    readonly indexRange?: UaString;
     constructor(options?: QueryDataDescriptionOptions) {
         this.relativePath = options?.relativePath ?? new RelativePath();
         this.attributeId = options?.attributeId ?? 0;
@@ -6935,25 +6199,22 @@ export class QueryDataDescription implements QueryDataDescriptionOptions {
         encoder.writeString(this.indexRange);
     }
     static [decode](decoder: BinaryDataDecoder): QueryDataDescription {
-        const relativePath = decoder.readType(RelativePath);
-        const attributeId = decoder.readUInt32();
-        const indexRange = decoder.readString();
         return new QueryDataDescription({
-            relativePath,
-            attributeId,
-            indexRange
+            relativePath: decoder.readType(RelativePath),
+            attributeId: decoder.readUInt32(),
+            indexRange: decoder.readString()
         });
     }
 }
 export interface NodeTypeDescriptionOptions {
-    typeDefinitionNode?: ExpandedNodeId;
-    includeSubTypes?: boolean;
-    dataToReturn?: QueryDataDescription[];
+    typeDefinitionNode?: ExpandedNodeId | undefined;
+    includeSubTypes?: boolean | undefined;
+    dataToReturn?: QueryDataDescription[] | undefined;
 }
 export class NodeTypeDescription implements NodeTypeDescriptionOptions {
-    typeDefinitionNode: ExpandedNodeId;
-    includeSubTypes: boolean;
-    dataToReturn?: QueryDataDescription[];
+    readonly typeDefinitionNode: ExpandedNodeId;
+    readonly includeSubTypes: boolean;
+    readonly dataToReturn?: QueryDataDescription[];
     constructor(options?: NodeTypeDescriptionOptions) {
         this.typeDefinitionNode = options?.typeDefinitionNode ?? new ExpandedNodeId();
         this.includeSubTypes = options?.includeSubTypes ?? false;
@@ -6966,13 +6227,10 @@ export class NodeTypeDescription implements NodeTypeDescriptionOptions {
         encoder.writeTypeArray(this.dataToReturn);
     }
     static [decode](decoder: BinaryDataDecoder): NodeTypeDescription {
-        const typeDefinitionNode = decoder.readType(ExpandedNodeId);
-        const includeSubTypes = decoder.readBoolean();
-        const dataToReturn = decoder.readTypeArray(QueryDataDescription);
         return new NodeTypeDescription({
-            typeDefinitionNode,
-            includeSubTypes,
-            dataToReturn
+            typeDefinitionNode: decoder.readType(ExpandedNodeId),
+            includeSubTypes: decoder.readBoolean(),
+            dataToReturn: decoder.readTypeArray(QueryDataDescription)
         });
     }
 }
@@ -6997,14 +6255,14 @@ export enum FilterOperator {
     BitwiseOr = 17
 }
 export interface QueryDataSetOptions {
-    nodeId?: ExpandedNodeId;
-    typeDefinitionNode?: ExpandedNodeId;
-    values?: Variant[];
+    nodeId?: ExpandedNodeId | undefined;
+    typeDefinitionNode?: ExpandedNodeId | undefined;
+    values?: Variant[] | undefined;
 }
 export class QueryDataSet implements QueryDataSetOptions {
-    nodeId: ExpandedNodeId;
-    typeDefinitionNode: ExpandedNodeId;
-    values?: Variant[];
+    readonly nodeId: ExpandedNodeId;
+    readonly typeDefinitionNode: ExpandedNodeId;
+    readonly values?: Variant[];
     constructor(options?: QueryDataSetOptions) {
         this.nodeId = options?.nodeId ?? new ExpandedNodeId();
         this.typeDefinitionNode = options?.typeDefinitionNode ?? new ExpandedNodeId();
@@ -7017,27 +6275,24 @@ export class QueryDataSet implements QueryDataSetOptions {
         encoder.writeTypeArray(this.values);
     }
     static [decode](decoder: BinaryDataDecoder): QueryDataSet {
-        const nodeId = decoder.readType(ExpandedNodeId);
-        const typeDefinitionNode = decoder.readType(ExpandedNodeId);
-        const values = decoder.readTypeArray(Variant);
         return new QueryDataSet({
-            nodeId,
-            typeDefinitionNode,
-            values
+            nodeId: decoder.readType(ExpandedNodeId),
+            typeDefinitionNode: decoder.readType(ExpandedNodeId),
+            values: decoder.readTypeArray(Variant)
         });
     }
 }
 export interface NodeReferenceOptions {
-    nodeId?: NodeId;
-    referenceTypeId?: NodeId;
-    isForward?: boolean;
-    referencedNodeIds?: NodeId[];
+    nodeId?: NodeId | undefined;
+    referenceTypeId?: NodeId | undefined;
+    isForward?: boolean | undefined;
+    referencedNodeIds?: NodeId[] | undefined;
 }
 export class NodeReference implements NodeReferenceOptions {
-    nodeId: NodeId;
-    referenceTypeId: NodeId;
-    isForward: boolean;
-    referencedNodeIds?: NodeId[];
+    readonly nodeId: NodeId;
+    readonly referenceTypeId: NodeId;
+    readonly isForward: boolean;
+    readonly referencedNodeIds?: NodeId[];
     constructor(options?: NodeReferenceOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
@@ -7052,25 +6307,21 @@ export class NodeReference implements NodeReferenceOptions {
         encoder.writeTypeArray(this.referencedNodeIds);
     }
     static [decode](decoder: BinaryDataDecoder): NodeReference {
-        const nodeId = decoder.readType(NodeId);
-        const referenceTypeId = decoder.readType(NodeId);
-        const isForward = decoder.readBoolean();
-        const referencedNodeIds = decoder.readTypeArray(NodeId);
         return new NodeReference({
-            nodeId,
-            referenceTypeId,
-            isForward,
-            referencedNodeIds
+            nodeId: decoder.readType(NodeId),
+            referenceTypeId: decoder.readType(NodeId),
+            isForward: decoder.readBoolean(),
+            referencedNodeIds: decoder.readTypeArray(NodeId)
         });
     }
 }
 export interface ContentFilterElementOptions {
-    filterOperator?: FilterOperator;
-    filterOperands?: ExtensionObject[];
+    filterOperator?: FilterOperator | undefined;
+    filterOperands?: ExtensionObject[] | undefined;
 }
 export class ContentFilterElement implements ContentFilterElementOptions {
-    filterOperator: FilterOperator;
-    filterOperands?: ExtensionObject[];
+    readonly filterOperator: FilterOperator;
+    readonly filterOperands?: ExtensionObject[];
     constructor(options?: ContentFilterElementOptions) {
         this.filterOperator = options?.filterOperator ?? FilterOperator.Equals;
         this.filterOperands = options?.filterOperands;
@@ -7081,19 +6332,17 @@ export class ContentFilterElement implements ContentFilterElementOptions {
         encoder.writeTypeArray(this.filterOperands);
     }
     static [decode](decoder: BinaryDataDecoder): ContentFilterElement {
-        const filterOperator = decoder.readUInt32();
-        const filterOperands = decoder.readTypeArray(ExtensionObject);
         return new ContentFilterElement({
-            filterOperator,
-            filterOperands
+            filterOperator: decoder.readUInt32(),
+            filterOperands: decoder.readTypeArray(ExtensionObject)
         });
     }
 }
 export interface ContentFilterOptions {
-    elements?: ContentFilterElement[];
+    elements?: ContentFilterElement[] | undefined;
 }
 export class ContentFilter implements ContentFilterOptions {
-    elements?: ContentFilterElement[];
+    readonly elements?: ContentFilterElement[];
     constructor(options?: ContentFilterOptions) {
         this.elements = options?.elements;
     }
@@ -7102,9 +6351,8 @@ export class ContentFilter implements ContentFilterOptions {
         encoder.writeTypeArray(this.elements);
     }
     static [decode](decoder: BinaryDataDecoder): ContentFilter {
-        const elements = decoder.readTypeArray(ContentFilterElement);
         return new ContentFilter({
-            elements
+            elements: decoder.readTypeArray(ContentFilterElement)
         });
     }
 }
@@ -7117,10 +6365,10 @@ export class FilterOperand {
     }
 }
 export interface ElementOperandOptions {
-    index?: UInt32;
+    index?: UInt32 | undefined;
 }
 export class ElementOperand implements ElementOperandOptions {
-    index: UInt32;
+    readonly index: UInt32;
     constructor(options?: ElementOperandOptions) {
         this.index = options?.index ?? 0;
     }
@@ -7129,17 +6377,16 @@ export class ElementOperand implements ElementOperandOptions {
         encoder.writeUInt32(this.index);
     }
     static [decode](decoder: BinaryDataDecoder): ElementOperand {
-        const index = decoder.readUInt32();
         return new ElementOperand({
-            index
+            index: decoder.readUInt32()
         });
     }
 }
 export interface LiteralOperandOptions {
-    value?: Variant;
+    value?: Variant | undefined;
 }
 export class LiteralOperand implements LiteralOperandOptions {
-    value: Variant;
+    readonly value: Variant;
     constructor(options?: LiteralOperandOptions) {
         this.value = options?.value ?? Variant.null();
     }
@@ -7148,25 +6395,24 @@ export class LiteralOperand implements LiteralOperandOptions {
         encoder.writeType(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): LiteralOperand {
-        const value = decoder.readType(Variant);
         return new LiteralOperand({
-            value
+            value: decoder.readType(Variant)
         });
     }
 }
 export interface AttributeOperandOptions {
-    nodeId?: NodeId;
-    alias?: UaString;
-    browsePath?: RelativePath;
-    attributeId?: UInt32;
-    indexRange?: UaString;
+    nodeId?: NodeId | undefined;
+    alias?: UaString | undefined;
+    browsePath?: RelativePath | undefined;
+    attributeId?: UInt32 | undefined;
+    indexRange?: UaString | undefined;
 }
 export class AttributeOperand implements AttributeOperandOptions {
-    nodeId: NodeId;
-    alias?: UaString;
-    browsePath: RelativePath;
-    attributeId: UInt32;
-    indexRange?: UaString;
+    readonly nodeId: NodeId;
+    readonly alias?: UaString;
+    readonly browsePath: RelativePath;
+    readonly attributeId: UInt32;
+    readonly indexRange?: UaString;
     constructor(options?: AttributeOperandOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.alias = options?.alias;
@@ -7183,31 +6429,26 @@ export class AttributeOperand implements AttributeOperandOptions {
         encoder.writeString(this.indexRange);
     }
     static [decode](decoder: BinaryDataDecoder): AttributeOperand {
-        const nodeId = decoder.readType(NodeId);
-        const alias = decoder.readString();
-        const browsePath = decoder.readType(RelativePath);
-        const attributeId = decoder.readUInt32();
-        const indexRange = decoder.readString();
         return new AttributeOperand({
-            nodeId,
-            alias,
-            browsePath,
-            attributeId,
-            indexRange
+            nodeId: decoder.readType(NodeId),
+            alias: decoder.readString(),
+            browsePath: decoder.readType(RelativePath),
+            attributeId: decoder.readUInt32(),
+            indexRange: decoder.readString()
         });
     }
 }
 export interface SimpleAttributeOperandOptions {
-    typeDefinitionId?: NodeId;
-    browsePath?: QualifiedName[];
-    attributeId?: UInt32;
-    indexRange?: UaString;
+    typeDefinitionId?: NodeId | undefined;
+    browsePath?: QualifiedName[] | undefined;
+    attributeId?: UInt32 | undefined;
+    indexRange?: UaString | undefined;
 }
 export class SimpleAttributeOperand implements SimpleAttributeOperandOptions {
-    typeDefinitionId: NodeId;
-    browsePath?: QualifiedName[];
-    attributeId: UInt32;
-    indexRange?: UaString;
+    readonly typeDefinitionId: NodeId;
+    readonly browsePath?: QualifiedName[];
+    readonly attributeId: UInt32;
+    readonly indexRange?: UaString;
     constructor(options?: SimpleAttributeOperandOptions) {
         this.typeDefinitionId = options?.typeDefinitionId ?? NodeId.null();
         this.browsePath = options?.browsePath;
@@ -7222,27 +6463,23 @@ export class SimpleAttributeOperand implements SimpleAttributeOperandOptions {
         encoder.writeString(this.indexRange);
     }
     static [decode](decoder: BinaryDataDecoder): SimpleAttributeOperand {
-        const typeDefinitionId = decoder.readType(NodeId);
-        const browsePath = decoder.readTypeArray(QualifiedName);
-        const attributeId = decoder.readUInt32();
-        const indexRange = decoder.readString();
         return new SimpleAttributeOperand({
-            typeDefinitionId,
-            browsePath,
-            attributeId,
-            indexRange
+            typeDefinitionId: decoder.readType(NodeId),
+            browsePath: decoder.readTypeArray(QualifiedName),
+            attributeId: decoder.readUInt32(),
+            indexRange: decoder.readString()
         });
     }
 }
 export interface ContentFilterElementResultOptions {
-    statusCode?: StatusCode;
-    operandStatusCodes?: StatusCode[];
-    operandDiagnosticInfos?: DiagnosticInfo[];
+    statusCode?: StatusCode | undefined;
+    operandStatusCodes?: StatusCode[] | undefined;
+    operandDiagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class ContentFilterElementResult implements ContentFilterElementResultOptions {
-    statusCode: StatusCode;
-    operandStatusCodes?: StatusCode[];
-    operandDiagnosticInfos?: DiagnosticInfo[];
+    readonly statusCode: StatusCode;
+    readonly operandStatusCodes?: StatusCode[];
+    readonly operandDiagnosticInfos?: DiagnosticInfo[];
     constructor(options?: ContentFilterElementResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.operandStatusCodes = options?.operandStatusCodes;
@@ -7255,23 +6492,20 @@ export class ContentFilterElementResult implements ContentFilterElementResultOpt
         encoder.writeTypeArray(this.operandDiagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): ContentFilterElementResult {
-        const statusCode = decoder.readType(StatusCode);
-        const operandStatusCodes = decoder.readTypeArray(StatusCode);
-        const operandDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new ContentFilterElementResult({
-            statusCode,
-            operandStatusCodes,
-            operandDiagnosticInfos
+            statusCode: decoder.readType(StatusCode),
+            operandStatusCodes: decoder.readTypeArray(StatusCode),
+            operandDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface ContentFilterResultOptions {
-    elementResults?: ContentFilterElementResult[];
-    elementDiagnosticInfos?: DiagnosticInfo[];
+    elementResults?: ContentFilterElementResult[] | undefined;
+    elementDiagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class ContentFilterResult implements ContentFilterResultOptions {
-    elementResults?: ContentFilterElementResult[];
-    elementDiagnosticInfos?: DiagnosticInfo[];
+    readonly elementResults?: ContentFilterElementResult[];
+    readonly elementDiagnosticInfos?: DiagnosticInfo[];
     constructor(options?: ContentFilterResultOptions) {
         this.elementResults = options?.elementResults;
         this.elementDiagnosticInfos = options?.elementDiagnosticInfos;
@@ -7282,23 +6516,21 @@ export class ContentFilterResult implements ContentFilterResultOptions {
         encoder.writeTypeArray(this.elementDiagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): ContentFilterResult {
-        const elementResults = decoder.readTypeArray(ContentFilterElementResult);
-        const elementDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new ContentFilterResult({
-            elementResults,
-            elementDiagnosticInfos
+            elementResults: decoder.readTypeArray(ContentFilterElementResult),
+            elementDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface ParsingResultOptions {
-    statusCode?: StatusCode;
-    dataStatusCodes?: StatusCode[];
-    dataDiagnosticInfos?: DiagnosticInfo[];
+    statusCode?: StatusCode | undefined;
+    dataStatusCodes?: StatusCode[] | undefined;
+    dataDiagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class ParsingResult implements ParsingResultOptions {
-    statusCode: StatusCode;
-    dataStatusCodes?: StatusCode[];
-    dataDiagnosticInfos?: DiagnosticInfo[];
+    readonly statusCode: StatusCode;
+    readonly dataStatusCodes?: StatusCode[];
+    readonly dataDiagnosticInfos?: DiagnosticInfo[];
     constructor(options?: ParsingResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.dataStatusCodes = options?.dataStatusCodes;
@@ -7311,31 +6543,28 @@ export class ParsingResult implements ParsingResultOptions {
         encoder.writeTypeArray(this.dataDiagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): ParsingResult {
-        const statusCode = decoder.readType(StatusCode);
-        const dataStatusCodes = decoder.readTypeArray(StatusCode);
-        const dataDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new ParsingResult({
-            statusCode,
-            dataStatusCodes,
-            dataDiagnosticInfos
+            statusCode: decoder.readType(StatusCode),
+            dataStatusCodes: decoder.readTypeArray(StatusCode),
+            dataDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface QueryFirstRequestOptions {
-    requestHeader?: RequestHeader;
-    view?: ViewDescription;
-    nodeTypes?: NodeTypeDescription[];
-    filter?: ContentFilter;
-    maxDataSetsToReturn?: UInt32;
-    maxReferencesToReturn?: UInt32;
+    requestHeader?: RequestHeader | undefined;
+    view?: ViewDescription | undefined;
+    nodeTypes?: NodeTypeDescription[] | undefined;
+    filter?: ContentFilter | undefined;
+    maxDataSetsToReturn?: UInt32 | undefined;
+    maxReferencesToReturn?: UInt32 | undefined;
 }
 export class QueryFirstRequest implements QueryFirstRequestOptions {
-    requestHeader: RequestHeader;
-    view: ViewDescription;
-    nodeTypes?: NodeTypeDescription[];
-    filter: ContentFilter;
-    maxDataSetsToReturn: UInt32;
-    maxReferencesToReturn: UInt32;
+    readonly requestHeader: RequestHeader;
+    readonly view: ViewDescription;
+    readonly nodeTypes?: NodeTypeDescription[];
+    readonly filter: ContentFilter;
+    readonly maxDataSetsToReturn: UInt32;
+    readonly maxReferencesToReturn: UInt32;
     constructor(options?: QueryFirstRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.view = options?.view ?? new ViewDescription();
@@ -7354,37 +6583,31 @@ export class QueryFirstRequest implements QueryFirstRequestOptions {
         encoder.writeUInt32(this.maxReferencesToReturn);
     }
     static [decode](decoder: BinaryDataDecoder): QueryFirstRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const view = decoder.readType(ViewDescription);
-        const nodeTypes = decoder.readTypeArray(NodeTypeDescription);
-        const filter = decoder.readType(ContentFilter);
-        const maxDataSetsToReturn = decoder.readUInt32();
-        const maxReferencesToReturn = decoder.readUInt32();
         return new QueryFirstRequest({
-            requestHeader,
-            view,
-            nodeTypes,
-            filter,
-            maxDataSetsToReturn,
-            maxReferencesToReturn
+            requestHeader: decoder.readType(RequestHeader),
+            view: decoder.readType(ViewDescription),
+            nodeTypes: decoder.readTypeArray(NodeTypeDescription),
+            filter: decoder.readType(ContentFilter),
+            maxDataSetsToReturn: decoder.readUInt32(),
+            maxReferencesToReturn: decoder.readUInt32()
         });
     }
 }
 export interface QueryFirstResponseOptions {
-    responseHeader?: ResponseHeader;
-    queryDataSets?: QueryDataSet[];
-    continuationPoint?: ByteString;
-    parsingResults?: ParsingResult[];
-    diagnosticInfos?: DiagnosticInfo[];
-    filterResult?: ContentFilterResult;
+    responseHeader?: ResponseHeader | undefined;
+    queryDataSets?: QueryDataSet[] | undefined;
+    continuationPoint?: ByteString | undefined;
+    parsingResults?: ParsingResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    filterResult?: ContentFilterResult | undefined;
 }
 export class QueryFirstResponse implements QueryFirstResponseOptions {
-    responseHeader: ResponseHeader;
-    queryDataSets?: QueryDataSet[];
-    continuationPoint?: ByteString;
-    parsingResults?: ParsingResult[];
-    diagnosticInfos?: DiagnosticInfo[];
-    filterResult: ContentFilterResult;
+    readonly responseHeader: ResponseHeader;
+    readonly queryDataSets?: QueryDataSet[];
+    readonly continuationPoint?: ByteString;
+    readonly parsingResults?: ParsingResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly filterResult: ContentFilterResult;
     constructor(options?: QueryFirstResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.queryDataSets = options?.queryDataSets;
@@ -7403,31 +6626,25 @@ export class QueryFirstResponse implements QueryFirstResponseOptions {
         encoder.writeType(this.filterResult);
     }
     static [decode](decoder: BinaryDataDecoder): QueryFirstResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const queryDataSets = decoder.readTypeArray(QueryDataSet);
-        const continuationPoint = decoder.readByteString();
-        const parsingResults = decoder.readTypeArray(ParsingResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
-        const filterResult = decoder.readType(ContentFilterResult);
         return new QueryFirstResponse({
-            responseHeader,
-            queryDataSets,
-            continuationPoint,
-            parsingResults,
-            diagnosticInfos,
-            filterResult
+            responseHeader: decoder.readType(ResponseHeader),
+            queryDataSets: decoder.readTypeArray(QueryDataSet),
+            continuationPoint: decoder.readByteString(),
+            parsingResults: decoder.readTypeArray(ParsingResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo),
+            filterResult: decoder.readType(ContentFilterResult)
         });
     }
 }
 export interface QueryNextRequestOptions {
-    requestHeader?: RequestHeader;
-    releaseContinuationPoint?: boolean;
-    continuationPoint?: ByteString;
+    requestHeader?: RequestHeader | undefined;
+    releaseContinuationPoint?: boolean | undefined;
+    continuationPoint?: ByteString | undefined;
 }
 export class QueryNextRequest implements QueryNextRequestOptions {
-    requestHeader: RequestHeader;
-    releaseContinuationPoint: boolean;
-    continuationPoint?: ByteString;
+    readonly requestHeader: RequestHeader;
+    readonly releaseContinuationPoint: boolean;
+    readonly continuationPoint?: ByteString;
     constructor(options?: QueryNextRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.releaseContinuationPoint = options?.releaseContinuationPoint ?? false;
@@ -7440,25 +6657,22 @@ export class QueryNextRequest implements QueryNextRequestOptions {
         encoder.writeByteString(this.continuationPoint);
     }
     static [decode](decoder: BinaryDataDecoder): QueryNextRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const releaseContinuationPoint = decoder.readBoolean();
-        const continuationPoint = decoder.readByteString();
         return new QueryNextRequest({
-            requestHeader,
-            releaseContinuationPoint,
-            continuationPoint
+            requestHeader: decoder.readType(RequestHeader),
+            releaseContinuationPoint: decoder.readBoolean(),
+            continuationPoint: decoder.readByteString()
         });
     }
 }
 export interface QueryNextResponseOptions {
-    responseHeader?: ResponseHeader;
-    queryDataSets?: QueryDataSet[];
-    revisedContinuationPoint?: ByteString;
+    responseHeader?: ResponseHeader | undefined;
+    queryDataSets?: QueryDataSet[] | undefined;
+    revisedContinuationPoint?: ByteString | undefined;
 }
 export class QueryNextResponse implements QueryNextResponseOptions {
-    responseHeader: ResponseHeader;
-    queryDataSets?: QueryDataSet[];
-    revisedContinuationPoint?: ByteString;
+    readonly responseHeader: ResponseHeader;
+    readonly queryDataSets?: QueryDataSet[];
+    readonly revisedContinuationPoint?: ByteString;
     constructor(options?: QueryNextResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.queryDataSets = options?.queryDataSets;
@@ -7471,13 +6685,10 @@ export class QueryNextResponse implements QueryNextResponseOptions {
         encoder.writeByteString(this.revisedContinuationPoint);
     }
     static [decode](decoder: BinaryDataDecoder): QueryNextResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const queryDataSets = decoder.readTypeArray(QueryDataSet);
-        const revisedContinuationPoint = decoder.readByteString();
         return new QueryNextResponse({
-            responseHeader,
-            queryDataSets,
-            revisedContinuationPoint
+            responseHeader: decoder.readType(ResponseHeader),
+            queryDataSets: decoder.readTypeArray(QueryDataSet),
+            revisedContinuationPoint: decoder.readByteString()
         });
     }
 }
@@ -7489,16 +6700,16 @@ export enum TimestampsToReturn {
     Invalid = 4
 }
 export interface ReadValueIdOptions {
-    nodeId?: NodeId;
-    attributeId?: UInt32;
-    indexRange?: UaString;
-    dataEncoding?: QualifiedName;
+    nodeId?: NodeId | undefined;
+    attributeId?: UInt32 | undefined;
+    indexRange?: UaString | undefined;
+    dataEncoding?: QualifiedName | undefined;
 }
 export class ReadValueId implements ReadValueIdOptions {
-    nodeId: NodeId;
-    attributeId: UInt32;
-    indexRange?: UaString;
-    dataEncoding: QualifiedName;
+    readonly nodeId: NodeId;
+    readonly attributeId: UInt32;
+    readonly indexRange?: UaString;
+    readonly dataEncoding: QualifiedName;
     constructor(options?: ReadValueIdOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.attributeId = options?.attributeId ?? 0;
@@ -7513,29 +6724,25 @@ export class ReadValueId implements ReadValueIdOptions {
         encoder.writeType(this.dataEncoding);
     }
     static [decode](decoder: BinaryDataDecoder): ReadValueId {
-        const nodeId = decoder.readType(NodeId);
-        const attributeId = decoder.readUInt32();
-        const indexRange = decoder.readString();
-        const dataEncoding = decoder.readType(QualifiedName);
         return new ReadValueId({
-            nodeId,
-            attributeId,
-            indexRange,
-            dataEncoding
+            nodeId: decoder.readType(NodeId),
+            attributeId: decoder.readUInt32(),
+            indexRange: decoder.readString(),
+            dataEncoding: decoder.readType(QualifiedName)
         });
     }
 }
 export interface ReadRequestOptions {
-    requestHeader?: RequestHeader;
-    maxAge?: Double;
-    timestampsToReturn?: TimestampsToReturn;
-    nodesToRead?: ReadValueId[];
+    requestHeader?: RequestHeader | undefined;
+    maxAge?: Double | undefined;
+    timestampsToReturn?: TimestampsToReturn | undefined;
+    nodesToRead?: ReadValueId[] | undefined;
 }
 export class ReadRequest implements ReadRequestOptions {
-    requestHeader: RequestHeader;
-    maxAge: Double;
-    timestampsToReturn: TimestampsToReturn;
-    nodesToRead?: ReadValueId[];
+    readonly requestHeader: RequestHeader;
+    readonly maxAge: Double;
+    readonly timestampsToReturn: TimestampsToReturn;
+    readonly nodesToRead?: ReadValueId[];
     constructor(options?: ReadRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.maxAge = options?.maxAge ?? 0;
@@ -7550,27 +6757,23 @@ export class ReadRequest implements ReadRequestOptions {
         encoder.writeTypeArray(this.nodesToRead);
     }
     static [decode](decoder: BinaryDataDecoder): ReadRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const maxAge = decoder.readDouble();
-        const timestampsToReturn = decoder.readUInt32();
-        const nodesToRead = decoder.readTypeArray(ReadValueId);
         return new ReadRequest({
-            requestHeader,
-            maxAge,
-            timestampsToReturn,
-            nodesToRead
+            requestHeader: decoder.readType(RequestHeader),
+            maxAge: decoder.readDouble(),
+            timestampsToReturn: decoder.readUInt32(),
+            nodesToRead: decoder.readTypeArray(ReadValueId)
         });
     }
 }
 export interface ReadResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: DataValue[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: DataValue[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class ReadResponse implements ReadResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: DataValue[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: DataValue[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: ReadResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -7583,27 +6786,24 @@ export class ReadResponse implements ReadResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): ReadResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(DataValue);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new ReadResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(DataValue),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface HistoryReadValueIdOptions {
-    nodeId?: NodeId;
-    indexRange?: UaString;
-    dataEncoding?: QualifiedName;
-    continuationPoint?: ByteString;
+    nodeId?: NodeId | undefined;
+    indexRange?: UaString | undefined;
+    dataEncoding?: QualifiedName | undefined;
+    continuationPoint?: ByteString | undefined;
 }
 export class HistoryReadValueId implements HistoryReadValueIdOptions {
-    nodeId: NodeId;
-    indexRange?: UaString;
-    dataEncoding: QualifiedName;
-    continuationPoint?: ByteString;
+    readonly nodeId: NodeId;
+    readonly indexRange?: UaString;
+    readonly dataEncoding: QualifiedName;
+    readonly continuationPoint?: ByteString;
     constructor(options?: HistoryReadValueIdOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.indexRange = options?.indexRange;
@@ -7618,27 +6818,23 @@ export class HistoryReadValueId implements HistoryReadValueIdOptions {
         encoder.writeByteString(this.continuationPoint);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryReadValueId {
-        const nodeId = decoder.readType(NodeId);
-        const indexRange = decoder.readString();
-        const dataEncoding = decoder.readType(QualifiedName);
-        const continuationPoint = decoder.readByteString();
         return new HistoryReadValueId({
-            nodeId,
-            indexRange,
-            dataEncoding,
-            continuationPoint
+            nodeId: decoder.readType(NodeId),
+            indexRange: decoder.readString(),
+            dataEncoding: decoder.readType(QualifiedName),
+            continuationPoint: decoder.readByteString()
         });
     }
 }
 export interface HistoryReadResultOptions {
-    statusCode?: StatusCode;
-    continuationPoint?: ByteString;
-    historyData?: ExtensionObject;
+    statusCode?: StatusCode | undefined;
+    continuationPoint?: ByteString | undefined;
+    historyData?: ExtensionObject | undefined;
 }
 export class HistoryReadResult implements HistoryReadResultOptions {
-    statusCode: StatusCode;
-    continuationPoint?: ByteString;
-    historyData: ExtensionObject;
+    readonly statusCode: StatusCode;
+    readonly continuationPoint?: ByteString;
+    readonly historyData: ExtensionObject;
     constructor(options?: HistoryReadResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.continuationPoint = options?.continuationPoint;
@@ -7651,13 +6847,10 @@ export class HistoryReadResult implements HistoryReadResultOptions {
         encoder.writeType(this.historyData);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryReadResult {
-        const statusCode = decoder.readType(StatusCode);
-        const continuationPoint = decoder.readByteString();
-        const historyData = decoder.readType(ExtensionObject);
         return new HistoryReadResult({
-            statusCode,
-            continuationPoint,
-            historyData
+            statusCode: decoder.readType(StatusCode),
+            continuationPoint: decoder.readByteString(),
+            historyData: decoder.readType(ExtensionObject)
         });
     }
 }
@@ -7670,16 +6863,16 @@ export class HistoryReadDetails {
     }
 }
 export interface ReadEventDetailsOptions {
-    numValuesPerNode?: UInt32;
-    startTime?: Date;
-    endTime?: Date;
-    filter?: EventFilter;
+    numValuesPerNode?: UInt32 | undefined;
+    startTime?: Date | undefined;
+    endTime?: Date | undefined;
+    filter?: EventFilter | undefined;
 }
 export class ReadEventDetails implements ReadEventDetailsOptions {
-    numValuesPerNode: UInt32;
-    startTime: Date;
-    endTime: Date;
-    filter: EventFilter;
+    readonly numValuesPerNode: UInt32;
+    readonly startTime: Date;
+    readonly endTime: Date;
+    readonly filter: EventFilter;
     constructor(options?: ReadEventDetailsOptions) {
         this.numValuesPerNode = options?.numValuesPerNode ?? 0;
         this.startTime = options?.startTime ?? new Date(-11644473600000);
@@ -7694,31 +6887,27 @@ export class ReadEventDetails implements ReadEventDetailsOptions {
         encoder.writeType(this.filter);
     }
     static [decode](decoder: BinaryDataDecoder): ReadEventDetails {
-        const numValuesPerNode = decoder.readUInt32();
-        const startTime = decoder.readDateTime();
-        const endTime = decoder.readDateTime();
-        const filter = decoder.readType(EventFilter);
         return new ReadEventDetails({
-            numValuesPerNode,
-            startTime,
-            endTime,
-            filter
+            numValuesPerNode: decoder.readUInt32(),
+            startTime: decoder.readDateTime(),
+            endTime: decoder.readDateTime(),
+            filter: decoder.readType(EventFilter)
         });
     }
 }
 export interface ReadRawModifiedDetailsOptions {
-    isReadModified?: boolean;
-    startTime?: Date;
-    endTime?: Date;
-    numValuesPerNode?: UInt32;
-    returnBounds?: boolean;
+    isReadModified?: boolean | undefined;
+    startTime?: Date | undefined;
+    endTime?: Date | undefined;
+    numValuesPerNode?: UInt32 | undefined;
+    returnBounds?: boolean | undefined;
 }
 export class ReadRawModifiedDetails implements ReadRawModifiedDetailsOptions {
-    isReadModified: boolean;
-    startTime: Date;
-    endTime: Date;
-    numValuesPerNode: UInt32;
-    returnBounds: boolean;
+    readonly isReadModified: boolean;
+    readonly startTime: Date;
+    readonly endTime: Date;
+    readonly numValuesPerNode: UInt32;
+    readonly returnBounds: boolean;
     constructor(options?: ReadRawModifiedDetailsOptions) {
         this.isReadModified = options?.isReadModified ?? false;
         this.startTime = options?.startTime ?? new Date(-11644473600000);
@@ -7735,33 +6924,28 @@ export class ReadRawModifiedDetails implements ReadRawModifiedDetailsOptions {
         encoder.writeBoolean(this.returnBounds);
     }
     static [decode](decoder: BinaryDataDecoder): ReadRawModifiedDetails {
-        const isReadModified = decoder.readBoolean();
-        const startTime = decoder.readDateTime();
-        const endTime = decoder.readDateTime();
-        const numValuesPerNode = decoder.readUInt32();
-        const returnBounds = decoder.readBoolean();
         return new ReadRawModifiedDetails({
-            isReadModified,
-            startTime,
-            endTime,
-            numValuesPerNode,
-            returnBounds
+            isReadModified: decoder.readBoolean(),
+            startTime: decoder.readDateTime(),
+            endTime: decoder.readDateTime(),
+            numValuesPerNode: decoder.readUInt32(),
+            returnBounds: decoder.readBoolean()
         });
     }
 }
 export interface ReadProcessedDetailsOptions {
-    startTime?: Date;
-    endTime?: Date;
-    processingInterval?: Double;
-    aggregateType?: NodeId[];
-    aggregateConfiguration?: AggregateConfiguration;
+    startTime?: Date | undefined;
+    endTime?: Date | undefined;
+    processingInterval?: Double | undefined;
+    aggregateType?: NodeId[] | undefined;
+    aggregateConfiguration?: AggregateConfiguration | undefined;
 }
 export class ReadProcessedDetails implements ReadProcessedDetailsOptions {
-    startTime: Date;
-    endTime: Date;
-    processingInterval: Double;
-    aggregateType?: NodeId[];
-    aggregateConfiguration: AggregateConfiguration;
+    readonly startTime: Date;
+    readonly endTime: Date;
+    readonly processingInterval: Double;
+    readonly aggregateType?: NodeId[];
+    readonly aggregateConfiguration: AggregateConfiguration;
     constructor(options?: ReadProcessedDetailsOptions) {
         this.startTime = options?.startTime ?? new Date(-11644473600000);
         this.endTime = options?.endTime ?? new Date(-11644473600000);
@@ -7778,27 +6962,22 @@ export class ReadProcessedDetails implements ReadProcessedDetailsOptions {
         encoder.writeType(this.aggregateConfiguration);
     }
     static [decode](decoder: BinaryDataDecoder): ReadProcessedDetails {
-        const startTime = decoder.readDateTime();
-        const endTime = decoder.readDateTime();
-        const processingInterval = decoder.readDouble();
-        const aggregateType = decoder.readTypeArray(NodeId);
-        const aggregateConfiguration = decoder.readType(AggregateConfiguration);
         return new ReadProcessedDetails({
-            startTime,
-            endTime,
-            processingInterval,
-            aggregateType,
-            aggregateConfiguration
+            startTime: decoder.readDateTime(),
+            endTime: decoder.readDateTime(),
+            processingInterval: decoder.readDouble(),
+            aggregateType: decoder.readTypeArray(NodeId),
+            aggregateConfiguration: decoder.readType(AggregateConfiguration)
         });
     }
 }
 export interface ReadAtTimeDetailsOptions {
-    reqTimes?: Date[];
-    useSimpleBounds?: boolean;
+    reqTimes?: Date[] | undefined;
+    useSimpleBounds?: boolean | undefined;
 }
 export class ReadAtTimeDetails implements ReadAtTimeDetailsOptions {
-    reqTimes?: Date[];
-    useSimpleBounds: boolean;
+    readonly reqTimes?: Date[];
+    readonly useSimpleBounds: boolean;
     constructor(options?: ReadAtTimeDetailsOptions) {
         this.reqTimes = options?.reqTimes;
         this.useSimpleBounds = options?.useSimpleBounds ?? false;
@@ -7809,19 +6988,17 @@ export class ReadAtTimeDetails implements ReadAtTimeDetailsOptions {
         encoder.writeBoolean(this.useSimpleBounds);
     }
     static [decode](decoder: BinaryDataDecoder): ReadAtTimeDetails {
-        const reqTimes = decoder.readDateTimeArray();
-        const useSimpleBounds = decoder.readBoolean();
         return new ReadAtTimeDetails({
-            reqTimes,
-            useSimpleBounds
+            reqTimes: decoder.readDateTimeArray(),
+            useSimpleBounds: decoder.readBoolean()
         });
     }
 }
 export interface ReadAnnotationDataDetailsOptions {
-    reqTimes?: Date[];
+    reqTimes?: Date[] | undefined;
 }
 export class ReadAnnotationDataDetails implements ReadAnnotationDataDetailsOptions {
-    reqTimes?: Date[];
+    readonly reqTimes?: Date[];
     constructor(options?: ReadAnnotationDataDetailsOptions) {
         this.reqTimes = options?.reqTimes;
     }
@@ -7830,17 +7007,16 @@ export class ReadAnnotationDataDetails implements ReadAnnotationDataDetailsOptio
         encoder.writeDateTimeArray(this.reqTimes);
     }
     static [decode](decoder: BinaryDataDecoder): ReadAnnotationDataDetails {
-        const reqTimes = decoder.readDateTimeArray();
         return new ReadAnnotationDataDetails({
-            reqTimes
+            reqTimes: decoder.readDateTimeArray()
         });
     }
 }
 export interface HistoryDataOptions {
-    dataValues?: DataValue[];
+    dataValues?: DataValue[] | undefined;
 }
 export class HistoryData implements HistoryDataOptions {
-    dataValues?: DataValue[];
+    readonly dataValues?: DataValue[];
     constructor(options?: HistoryDataOptions) {
         this.dataValues = options?.dataValues;
     }
@@ -7849,21 +7025,20 @@ export class HistoryData implements HistoryDataOptions {
         encoder.writeTypeArray(this.dataValues);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryData {
-        const dataValues = decoder.readTypeArray(DataValue);
         return new HistoryData({
-            dataValues
+            dataValues: decoder.readTypeArray(DataValue)
         });
     }
 }
 export interface ModificationInfoOptions {
-    modificationTime?: Date;
-    updateType?: HistoryUpdateType;
-    userName?: UaString;
+    modificationTime?: Date | undefined;
+    updateType?: HistoryUpdateType | undefined;
+    userName?: UaString | undefined;
 }
 export class ModificationInfo implements ModificationInfoOptions {
-    modificationTime: Date;
-    updateType: HistoryUpdateType;
-    userName?: UaString;
+    readonly modificationTime: Date;
+    readonly updateType: HistoryUpdateType;
+    readonly userName?: UaString;
     constructor(options?: ModificationInfoOptions) {
         this.modificationTime = options?.modificationTime ?? new Date(-11644473600000);
         this.updateType = options?.updateType ?? HistoryUpdateType.Insert;
@@ -7876,23 +7051,20 @@ export class ModificationInfo implements ModificationInfoOptions {
         encoder.writeString(this.userName);
     }
     static [decode](decoder: BinaryDataDecoder): ModificationInfo {
-        const modificationTime = decoder.readDateTime();
-        const updateType = decoder.readUInt32();
-        const userName = decoder.readString();
         return new ModificationInfo({
-            modificationTime,
-            updateType,
-            userName
+            modificationTime: decoder.readDateTime(),
+            updateType: decoder.readUInt32(),
+            userName: decoder.readString()
         });
     }
 }
 export interface HistoryModifiedDataOptions {
-    dataValues?: DataValue[];
-    modificationInfos?: ModificationInfo[];
+    dataValues?: DataValue[] | undefined;
+    modificationInfos?: ModificationInfo[] | undefined;
 }
 export class HistoryModifiedData implements HistoryModifiedDataOptions {
-    dataValues?: DataValue[];
-    modificationInfos?: ModificationInfo[];
+    readonly dataValues?: DataValue[];
+    readonly modificationInfos?: ModificationInfo[];
     constructor(options?: HistoryModifiedDataOptions) {
         this.dataValues = options?.dataValues;
         this.modificationInfos = options?.modificationInfos;
@@ -7903,19 +7075,17 @@ export class HistoryModifiedData implements HistoryModifiedDataOptions {
         encoder.writeTypeArray(this.modificationInfos);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryModifiedData {
-        const dataValues = decoder.readTypeArray(DataValue);
-        const modificationInfos = decoder.readTypeArray(ModificationInfo);
         return new HistoryModifiedData({
-            dataValues,
-            modificationInfos
+            dataValues: decoder.readTypeArray(DataValue),
+            modificationInfos: decoder.readTypeArray(ModificationInfo)
         });
     }
 }
 export interface HistoryEventOptions {
-    events?: HistoryEventFieldList[];
+    events?: HistoryEventFieldList[] | undefined;
 }
 export class HistoryEvent implements HistoryEventOptions {
-    events?: HistoryEventFieldList[];
+    readonly events?: HistoryEventFieldList[];
     constructor(options?: HistoryEventOptions) {
         this.events = options?.events;
     }
@@ -7924,25 +7094,24 @@ export class HistoryEvent implements HistoryEventOptions {
         encoder.writeTypeArray(this.events);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryEvent {
-        const events = decoder.readTypeArray(HistoryEventFieldList);
         return new HistoryEvent({
-            events
+            events: decoder.readTypeArray(HistoryEventFieldList)
         });
     }
 }
 export interface HistoryReadRequestOptions {
-    requestHeader?: RequestHeader;
-    historyReadDetails?: ExtensionObject;
-    timestampsToReturn?: TimestampsToReturn;
-    releaseContinuationPoints?: boolean;
-    nodesToRead?: HistoryReadValueId[];
+    requestHeader?: RequestHeader | undefined;
+    historyReadDetails?: ExtensionObject | undefined;
+    timestampsToReturn?: TimestampsToReturn | undefined;
+    releaseContinuationPoints?: boolean | undefined;
+    nodesToRead?: HistoryReadValueId[] | undefined;
 }
 export class HistoryReadRequest implements HistoryReadRequestOptions {
-    requestHeader: RequestHeader;
-    historyReadDetails: ExtensionObject;
-    timestampsToReturn: TimestampsToReturn;
-    releaseContinuationPoints: boolean;
-    nodesToRead?: HistoryReadValueId[];
+    readonly requestHeader: RequestHeader;
+    readonly historyReadDetails: ExtensionObject;
+    readonly timestampsToReturn: TimestampsToReturn;
+    readonly releaseContinuationPoints: boolean;
+    readonly nodesToRead?: HistoryReadValueId[];
     constructor(options?: HistoryReadRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.historyReadDetails = options?.historyReadDetails ?? new ExtensionObject();
@@ -7959,29 +7128,24 @@ export class HistoryReadRequest implements HistoryReadRequestOptions {
         encoder.writeTypeArray(this.nodesToRead);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryReadRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const historyReadDetails = decoder.readType(ExtensionObject);
-        const timestampsToReturn = decoder.readUInt32();
-        const releaseContinuationPoints = decoder.readBoolean();
-        const nodesToRead = decoder.readTypeArray(HistoryReadValueId);
         return new HistoryReadRequest({
-            requestHeader,
-            historyReadDetails,
-            timestampsToReturn,
-            releaseContinuationPoints,
-            nodesToRead
+            requestHeader: decoder.readType(RequestHeader),
+            historyReadDetails: decoder.readType(ExtensionObject),
+            timestampsToReturn: decoder.readUInt32(),
+            releaseContinuationPoints: decoder.readBoolean(),
+            nodesToRead: decoder.readTypeArray(HistoryReadValueId)
         });
     }
 }
 export interface HistoryReadResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: HistoryReadResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: HistoryReadResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class HistoryReadResponse implements HistoryReadResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: HistoryReadResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: HistoryReadResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: HistoryReadResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -7994,27 +7158,24 @@ export class HistoryReadResponse implements HistoryReadResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryReadResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(HistoryReadResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new HistoryReadResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(HistoryReadResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface WriteValueOptions {
-    nodeId?: NodeId;
-    attributeId?: UInt32;
-    indexRange?: UaString;
-    value?: DataValue;
+    nodeId?: NodeId | undefined;
+    attributeId?: UInt32 | undefined;
+    indexRange?: UaString | undefined;
+    value?: DataValue | undefined;
 }
 export class WriteValue implements WriteValueOptions {
-    nodeId: NodeId;
-    attributeId: UInt32;
-    indexRange?: UaString;
-    value: DataValue;
+    readonly nodeId: NodeId;
+    readonly attributeId: UInt32;
+    readonly indexRange?: UaString;
+    readonly value: DataValue;
     constructor(options?: WriteValueOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.attributeId = options?.attributeId ?? 0;
@@ -8029,25 +7190,21 @@ export class WriteValue implements WriteValueOptions {
         encoder.writeType(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): WriteValue {
-        const nodeId = decoder.readType(NodeId);
-        const attributeId = decoder.readUInt32();
-        const indexRange = decoder.readString();
-        const value = decoder.readType(DataValue);
         return new WriteValue({
-            nodeId,
-            attributeId,
-            indexRange,
-            value
+            nodeId: decoder.readType(NodeId),
+            attributeId: decoder.readUInt32(),
+            indexRange: decoder.readString(),
+            value: decoder.readType(DataValue)
         });
     }
 }
 export interface WriteRequestOptions {
-    requestHeader?: RequestHeader;
-    nodesToWrite?: WriteValue[];
+    requestHeader?: RequestHeader | undefined;
+    nodesToWrite?: WriteValue[] | undefined;
 }
 export class WriteRequest implements WriteRequestOptions {
-    requestHeader: RequestHeader;
-    nodesToWrite?: WriteValue[];
+    readonly requestHeader: RequestHeader;
+    readonly nodesToWrite?: WriteValue[];
     constructor(options?: WriteRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToWrite = options?.nodesToWrite;
@@ -8058,23 +7215,21 @@ export class WriteRequest implements WriteRequestOptions {
         encoder.writeTypeArray(this.nodesToWrite);
     }
     static [decode](decoder: BinaryDataDecoder): WriteRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const nodesToWrite = decoder.readTypeArray(WriteValue);
         return new WriteRequest({
-            requestHeader,
-            nodesToWrite
+            requestHeader: decoder.readType(RequestHeader),
+            nodesToWrite: decoder.readTypeArray(WriteValue)
         });
     }
 }
 export interface WriteResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class WriteResponse implements WriteResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: WriteResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8087,21 +7242,18 @@ export class WriteResponse implements WriteResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): WriteResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new WriteResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface HistoryUpdateDetailsOptions {
-    nodeId?: NodeId;
+    nodeId?: NodeId | undefined;
 }
 export class HistoryUpdateDetails implements HistoryUpdateDetailsOptions {
-    nodeId: NodeId;
+    readonly nodeId: NodeId;
     constructor(options?: HistoryUpdateDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
     }
@@ -8110,9 +7262,8 @@ export class HistoryUpdateDetails implements HistoryUpdateDetailsOptions {
         encoder.writeType(this.nodeId);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryUpdateDetails {
-        const nodeId = decoder.readType(NodeId);
         return new HistoryUpdateDetails({
-            nodeId
+            nodeId: decoder.readType(NodeId)
         });
     }
 }
@@ -8129,14 +7280,14 @@ export enum PerformUpdateType {
     Remove = 4
 }
 export interface UpdateDataDetailsOptions {
-    nodeId?: NodeId;
-    performInsertReplace?: PerformUpdateType;
-    updateValues?: DataValue[];
+    nodeId?: NodeId | undefined;
+    performInsertReplace?: PerformUpdateType | undefined;
+    updateValues?: DataValue[] | undefined;
 }
 export class UpdateDataDetails implements UpdateDataDetailsOptions {
-    nodeId: NodeId;
-    performInsertReplace: PerformUpdateType;
-    updateValues?: DataValue[];
+    readonly nodeId: NodeId;
+    readonly performInsertReplace: PerformUpdateType;
+    readonly updateValues?: DataValue[];
     constructor(options?: UpdateDataDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
@@ -8149,25 +7300,22 @@ export class UpdateDataDetails implements UpdateDataDetailsOptions {
         encoder.writeTypeArray(this.updateValues);
     }
     static [decode](decoder: BinaryDataDecoder): UpdateDataDetails {
-        const nodeId = decoder.readType(NodeId);
-        const performInsertReplace = decoder.readUInt32();
-        const updateValues = decoder.readTypeArray(DataValue);
         return new UpdateDataDetails({
-            nodeId,
-            performInsertReplace,
-            updateValues
+            nodeId: decoder.readType(NodeId),
+            performInsertReplace: decoder.readUInt32(),
+            updateValues: decoder.readTypeArray(DataValue)
         });
     }
 }
 export interface UpdateStructureDataDetailsOptions {
-    nodeId?: NodeId;
-    performInsertReplace?: PerformUpdateType;
-    updateValues?: DataValue[];
+    nodeId?: NodeId | undefined;
+    performInsertReplace?: PerformUpdateType | undefined;
+    updateValues?: DataValue[] | undefined;
 }
 export class UpdateStructureDataDetails implements UpdateStructureDataDetailsOptions {
-    nodeId: NodeId;
-    performInsertReplace: PerformUpdateType;
-    updateValues?: DataValue[];
+    readonly nodeId: NodeId;
+    readonly performInsertReplace: PerformUpdateType;
+    readonly updateValues?: DataValue[];
     constructor(options?: UpdateStructureDataDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
@@ -8180,27 +7328,24 @@ export class UpdateStructureDataDetails implements UpdateStructureDataDetailsOpt
         encoder.writeTypeArray(this.updateValues);
     }
     static [decode](decoder: BinaryDataDecoder): UpdateStructureDataDetails {
-        const nodeId = decoder.readType(NodeId);
-        const performInsertReplace = decoder.readUInt32();
-        const updateValues = decoder.readTypeArray(DataValue);
         return new UpdateStructureDataDetails({
-            nodeId,
-            performInsertReplace,
-            updateValues
+            nodeId: decoder.readType(NodeId),
+            performInsertReplace: decoder.readUInt32(),
+            updateValues: decoder.readTypeArray(DataValue)
         });
     }
 }
 export interface UpdateEventDetailsOptions {
-    nodeId?: NodeId;
-    performInsertReplace?: PerformUpdateType;
-    filter?: EventFilter;
-    eventData?: HistoryEventFieldList[];
+    nodeId?: NodeId | undefined;
+    performInsertReplace?: PerformUpdateType | undefined;
+    filter?: EventFilter | undefined;
+    eventData?: HistoryEventFieldList[] | undefined;
 }
 export class UpdateEventDetails implements UpdateEventDetailsOptions {
-    nodeId: NodeId;
-    performInsertReplace: PerformUpdateType;
-    filter: EventFilter;
-    eventData?: HistoryEventFieldList[];
+    readonly nodeId: NodeId;
+    readonly performInsertReplace: PerformUpdateType;
+    readonly filter: EventFilter;
+    readonly eventData?: HistoryEventFieldList[];
     constructor(options?: UpdateEventDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
@@ -8215,29 +7360,25 @@ export class UpdateEventDetails implements UpdateEventDetailsOptions {
         encoder.writeTypeArray(this.eventData);
     }
     static [decode](decoder: BinaryDataDecoder): UpdateEventDetails {
-        const nodeId = decoder.readType(NodeId);
-        const performInsertReplace = decoder.readUInt32();
-        const filter = decoder.readType(EventFilter);
-        const eventData = decoder.readTypeArray(HistoryEventFieldList);
         return new UpdateEventDetails({
-            nodeId,
-            performInsertReplace,
-            filter,
-            eventData
+            nodeId: decoder.readType(NodeId),
+            performInsertReplace: decoder.readUInt32(),
+            filter: decoder.readType(EventFilter),
+            eventData: decoder.readTypeArray(HistoryEventFieldList)
         });
     }
 }
 export interface DeleteRawModifiedDetailsOptions {
-    nodeId?: NodeId;
-    isDeleteModified?: boolean;
-    startTime?: Date;
-    endTime?: Date;
+    nodeId?: NodeId | undefined;
+    isDeleteModified?: boolean | undefined;
+    startTime?: Date | undefined;
+    endTime?: Date | undefined;
 }
 export class DeleteRawModifiedDetails implements DeleteRawModifiedDetailsOptions {
-    nodeId: NodeId;
-    isDeleteModified: boolean;
-    startTime: Date;
-    endTime: Date;
+    readonly nodeId: NodeId;
+    readonly isDeleteModified: boolean;
+    readonly startTime: Date;
+    readonly endTime: Date;
     constructor(options?: DeleteRawModifiedDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.isDeleteModified = options?.isDeleteModified ?? false;
@@ -8252,25 +7393,21 @@ export class DeleteRawModifiedDetails implements DeleteRawModifiedDetailsOptions
         encoder.writeDateTime(this.endTime);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteRawModifiedDetails {
-        const nodeId = decoder.readType(NodeId);
-        const isDeleteModified = decoder.readBoolean();
-        const startTime = decoder.readDateTime();
-        const endTime = decoder.readDateTime();
         return new DeleteRawModifiedDetails({
-            nodeId,
-            isDeleteModified,
-            startTime,
-            endTime
+            nodeId: decoder.readType(NodeId),
+            isDeleteModified: decoder.readBoolean(),
+            startTime: decoder.readDateTime(),
+            endTime: decoder.readDateTime()
         });
     }
 }
 export interface DeleteAtTimeDetailsOptions {
-    nodeId?: NodeId;
-    reqTimes?: Date[];
+    nodeId?: NodeId | undefined;
+    reqTimes?: Date[] | undefined;
 }
 export class DeleteAtTimeDetails implements DeleteAtTimeDetailsOptions {
-    nodeId: NodeId;
-    reqTimes?: Date[];
+    readonly nodeId: NodeId;
+    readonly reqTimes?: Date[];
     constructor(options?: DeleteAtTimeDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.reqTimes = options?.reqTimes;
@@ -8281,21 +7418,19 @@ export class DeleteAtTimeDetails implements DeleteAtTimeDetailsOptions {
         encoder.writeDateTimeArray(this.reqTimes);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteAtTimeDetails {
-        const nodeId = decoder.readType(NodeId);
-        const reqTimes = decoder.readDateTimeArray();
         return new DeleteAtTimeDetails({
-            nodeId,
-            reqTimes
+            nodeId: decoder.readType(NodeId),
+            reqTimes: decoder.readDateTimeArray()
         });
     }
 }
 export interface DeleteEventDetailsOptions {
-    nodeId?: NodeId;
-    eventIds?: ByteString[];
+    nodeId?: NodeId | undefined;
+    eventIds?: ByteString[] | undefined;
 }
 export class DeleteEventDetails implements DeleteEventDetailsOptions {
-    nodeId: NodeId;
-    eventIds?: ByteString[];
+    readonly nodeId: NodeId;
+    readonly eventIds?: ByteString[];
     constructor(options?: DeleteEventDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.eventIds = options?.eventIds;
@@ -8306,23 +7441,21 @@ export class DeleteEventDetails implements DeleteEventDetailsOptions {
         encoder.writeByteStringArray(this.eventIds);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteEventDetails {
-        const nodeId = decoder.readType(NodeId);
-        const eventIds = decoder.readByteStringArray();
         return new DeleteEventDetails({
-            nodeId,
-            eventIds
+            nodeId: decoder.readType(NodeId),
+            eventIds: decoder.readByteStringArray()
         });
     }
 }
 export interface HistoryUpdateResultOptions {
-    statusCode?: StatusCode;
-    operationResults?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    statusCode?: StatusCode | undefined;
+    operationResults?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class HistoryUpdateResult implements HistoryUpdateResultOptions {
-    statusCode: StatusCode;
-    operationResults?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly statusCode: StatusCode;
+    readonly operationResults?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: HistoryUpdateResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.operationResults = options?.operationResults;
@@ -8335,23 +7468,20 @@ export class HistoryUpdateResult implements HistoryUpdateResultOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryUpdateResult {
-        const statusCode = decoder.readType(StatusCode);
-        const operationResults = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new HistoryUpdateResult({
-            statusCode,
-            operationResults,
-            diagnosticInfos
+            statusCode: decoder.readType(StatusCode),
+            operationResults: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface HistoryUpdateRequestOptions {
-    requestHeader?: RequestHeader;
-    historyUpdateDetails?: ExtensionObject[];
+    requestHeader?: RequestHeader | undefined;
+    historyUpdateDetails?: ExtensionObject[] | undefined;
 }
 export class HistoryUpdateRequest implements HistoryUpdateRequestOptions {
-    requestHeader: RequestHeader;
-    historyUpdateDetails?: ExtensionObject[];
+    readonly requestHeader: RequestHeader;
+    readonly historyUpdateDetails?: ExtensionObject[];
     constructor(options?: HistoryUpdateRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.historyUpdateDetails = options?.historyUpdateDetails;
@@ -8362,23 +7492,21 @@ export class HistoryUpdateRequest implements HistoryUpdateRequestOptions {
         encoder.writeTypeArray(this.historyUpdateDetails);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryUpdateRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const historyUpdateDetails = decoder.readTypeArray(ExtensionObject);
         return new HistoryUpdateRequest({
-            requestHeader,
-            historyUpdateDetails
+            requestHeader: decoder.readType(RequestHeader),
+            historyUpdateDetails: decoder.readTypeArray(ExtensionObject)
         });
     }
 }
 export interface HistoryUpdateResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: HistoryUpdateResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: HistoryUpdateResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class HistoryUpdateResponse implements HistoryUpdateResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: HistoryUpdateResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: HistoryUpdateResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: HistoryUpdateResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8391,25 +7519,22 @@ export class HistoryUpdateResponse implements HistoryUpdateResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryUpdateResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(HistoryUpdateResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new HistoryUpdateResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(HistoryUpdateResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface CallMethodRequestOptions {
-    objectId?: NodeId;
-    methodId?: NodeId;
-    inputArguments?: Variant[];
+    objectId?: NodeId | undefined;
+    methodId?: NodeId | undefined;
+    inputArguments?: Variant[] | undefined;
 }
 export class CallMethodRequest implements CallMethodRequestOptions {
-    objectId: NodeId;
-    methodId: NodeId;
-    inputArguments?: Variant[];
+    readonly objectId: NodeId;
+    readonly methodId: NodeId;
+    readonly inputArguments?: Variant[];
     constructor(options?: CallMethodRequestOptions) {
         this.objectId = options?.objectId ?? NodeId.null();
         this.methodId = options?.methodId ?? NodeId.null();
@@ -8422,27 +7547,24 @@ export class CallMethodRequest implements CallMethodRequestOptions {
         encoder.writeTypeArray(this.inputArguments);
     }
     static [decode](decoder: BinaryDataDecoder): CallMethodRequest {
-        const objectId = decoder.readType(NodeId);
-        const methodId = decoder.readType(NodeId);
-        const inputArguments = decoder.readTypeArray(Variant);
         return new CallMethodRequest({
-            objectId,
-            methodId,
-            inputArguments
+            objectId: decoder.readType(NodeId),
+            methodId: decoder.readType(NodeId),
+            inputArguments: decoder.readTypeArray(Variant)
         });
     }
 }
 export interface CallMethodResultOptions {
-    statusCode?: StatusCode;
-    inputArgumentResults?: StatusCode[];
-    inputArgumentDiagnosticInfos?: DiagnosticInfo[];
-    outputArguments?: Variant[];
+    statusCode?: StatusCode | undefined;
+    inputArgumentResults?: StatusCode[] | undefined;
+    inputArgumentDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    outputArguments?: Variant[] | undefined;
 }
 export class CallMethodResult implements CallMethodResultOptions {
-    statusCode: StatusCode;
-    inputArgumentResults?: StatusCode[];
-    inputArgumentDiagnosticInfos?: DiagnosticInfo[];
-    outputArguments?: Variant[];
+    readonly statusCode: StatusCode;
+    readonly inputArgumentResults?: StatusCode[];
+    readonly inputArgumentDiagnosticInfos?: DiagnosticInfo[];
+    readonly outputArguments?: Variant[];
     constructor(options?: CallMethodResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.inputArgumentResults = options?.inputArgumentResults;
@@ -8457,25 +7579,21 @@ export class CallMethodResult implements CallMethodResultOptions {
         encoder.writeTypeArray(this.outputArguments);
     }
     static [decode](decoder: BinaryDataDecoder): CallMethodResult {
-        const statusCode = decoder.readType(StatusCode);
-        const inputArgumentResults = decoder.readTypeArray(StatusCode);
-        const inputArgumentDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
-        const outputArguments = decoder.readTypeArray(Variant);
         return new CallMethodResult({
-            statusCode,
-            inputArgumentResults,
-            inputArgumentDiagnosticInfos,
-            outputArguments
+            statusCode: decoder.readType(StatusCode),
+            inputArgumentResults: decoder.readTypeArray(StatusCode),
+            inputArgumentDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo),
+            outputArguments: decoder.readTypeArray(Variant)
         });
     }
 }
 export interface CallRequestOptions {
-    requestHeader?: RequestHeader;
-    methodsToCall?: CallMethodRequest[];
+    requestHeader?: RequestHeader | undefined;
+    methodsToCall?: CallMethodRequest[] | undefined;
 }
 export class CallRequest implements CallRequestOptions {
-    requestHeader: RequestHeader;
-    methodsToCall?: CallMethodRequest[];
+    readonly requestHeader: RequestHeader;
+    readonly methodsToCall?: CallMethodRequest[];
     constructor(options?: CallRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.methodsToCall = options?.methodsToCall;
@@ -8486,23 +7604,21 @@ export class CallRequest implements CallRequestOptions {
         encoder.writeTypeArray(this.methodsToCall);
     }
     static [decode](decoder: BinaryDataDecoder): CallRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const methodsToCall = decoder.readTypeArray(CallMethodRequest);
         return new CallRequest({
-            requestHeader,
-            methodsToCall
+            requestHeader: decoder.readType(RequestHeader),
+            methodsToCall: decoder.readTypeArray(CallMethodRequest)
         });
     }
 }
 export interface CallResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: CallMethodResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: CallMethodResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class CallResponse implements CallResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: CallMethodResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: CallMethodResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: CallResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8515,13 +7631,10 @@ export class CallResponse implements CallResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): CallResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(CallMethodResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new CallResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(CallMethodResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
@@ -8549,14 +7662,14 @@ export class MonitoringFilter {
     }
 }
 export interface DataChangeFilterOptions {
-    trigger?: DataChangeTrigger;
-    deadbandType?: UInt32;
-    deadbandValue?: Double;
+    trigger?: DataChangeTrigger | undefined;
+    deadbandType?: UInt32 | undefined;
+    deadbandValue?: Double | undefined;
 }
 export class DataChangeFilter implements DataChangeFilterOptions {
-    trigger: DataChangeTrigger;
-    deadbandType: UInt32;
-    deadbandValue: Double;
+    readonly trigger: DataChangeTrigger;
+    readonly deadbandType: UInt32;
+    readonly deadbandValue: Double;
     constructor(options?: DataChangeFilterOptions) {
         this.trigger = options?.trigger ?? DataChangeTrigger.Status;
         this.deadbandType = options?.deadbandType ?? 0;
@@ -8569,23 +7682,20 @@ export class DataChangeFilter implements DataChangeFilterOptions {
         encoder.writeDouble(this.deadbandValue);
     }
     static [decode](decoder: BinaryDataDecoder): DataChangeFilter {
-        const trigger = decoder.readUInt32();
-        const deadbandType = decoder.readUInt32();
-        const deadbandValue = decoder.readDouble();
         return new DataChangeFilter({
-            trigger,
-            deadbandType,
-            deadbandValue
+            trigger: decoder.readUInt32(),
+            deadbandType: decoder.readUInt32(),
+            deadbandValue: decoder.readDouble()
         });
     }
 }
 export interface EventFilterOptions {
-    selectClauses?: SimpleAttributeOperand[];
-    whereClause?: ContentFilter;
+    selectClauses?: SimpleAttributeOperand[] | undefined;
+    whereClause?: ContentFilter | undefined;
 }
 export class EventFilter implements EventFilterOptions {
-    selectClauses?: SimpleAttributeOperand[];
-    whereClause: ContentFilter;
+    readonly selectClauses?: SimpleAttributeOperand[];
+    readonly whereClause: ContentFilter;
     constructor(options?: EventFilterOptions) {
         this.selectClauses = options?.selectClauses;
         this.whereClause = options?.whereClause ?? new ContentFilter();
@@ -8596,27 +7706,25 @@ export class EventFilter implements EventFilterOptions {
         encoder.writeType(this.whereClause);
     }
     static [decode](decoder: BinaryDataDecoder): EventFilter {
-        const selectClauses = decoder.readTypeArray(SimpleAttributeOperand);
-        const whereClause = decoder.readType(ContentFilter);
         return new EventFilter({
-            selectClauses,
-            whereClause
+            selectClauses: decoder.readTypeArray(SimpleAttributeOperand),
+            whereClause: decoder.readType(ContentFilter)
         });
     }
 }
 export interface AggregateConfigurationOptions {
-    useServerCapabilitiesDefaults?: boolean;
-    treatUncertainAsBad?: boolean;
-    percentDataBad?: Byte;
-    percentDataGood?: Byte;
-    useSlopedExtrapolation?: boolean;
+    useServerCapabilitiesDefaults?: boolean | undefined;
+    treatUncertainAsBad?: boolean | undefined;
+    percentDataBad?: Byte | undefined;
+    percentDataGood?: Byte | undefined;
+    useSlopedExtrapolation?: boolean | undefined;
 }
 export class AggregateConfiguration implements AggregateConfigurationOptions {
-    useServerCapabilitiesDefaults: boolean;
-    treatUncertainAsBad: boolean;
-    percentDataBad: Byte;
-    percentDataGood: Byte;
-    useSlopedExtrapolation: boolean;
+    readonly useServerCapabilitiesDefaults: boolean;
+    readonly treatUncertainAsBad: boolean;
+    readonly percentDataBad: Byte;
+    readonly percentDataGood: Byte;
+    readonly useSlopedExtrapolation: boolean;
     constructor(options?: AggregateConfigurationOptions) {
         this.useServerCapabilitiesDefaults = options?.useServerCapabilitiesDefaults ?? false;
         this.treatUncertainAsBad = options?.treatUncertainAsBad ?? false;
@@ -8633,31 +7741,26 @@ export class AggregateConfiguration implements AggregateConfigurationOptions {
         encoder.writeBoolean(this.useSlopedExtrapolation);
     }
     static [decode](decoder: BinaryDataDecoder): AggregateConfiguration {
-        const useServerCapabilitiesDefaults = decoder.readBoolean();
-        const treatUncertainAsBad = decoder.readBoolean();
-        const percentDataBad = decoder.readByte();
-        const percentDataGood = decoder.readByte();
-        const useSlopedExtrapolation = decoder.readBoolean();
         return new AggregateConfiguration({
-            useServerCapabilitiesDefaults,
-            treatUncertainAsBad,
-            percentDataBad,
-            percentDataGood,
-            useSlopedExtrapolation
+            useServerCapabilitiesDefaults: decoder.readBoolean(),
+            treatUncertainAsBad: decoder.readBoolean(),
+            percentDataBad: decoder.readByte(),
+            percentDataGood: decoder.readByte(),
+            useSlopedExtrapolation: decoder.readBoolean()
         });
     }
 }
 export interface AggregateFilterOptions {
-    startTime?: Date;
-    aggregateType?: NodeId;
-    processingInterval?: Double;
-    aggregateConfiguration?: AggregateConfiguration;
+    startTime?: Date | undefined;
+    aggregateType?: NodeId | undefined;
+    processingInterval?: Double | undefined;
+    aggregateConfiguration?: AggregateConfiguration | undefined;
 }
 export class AggregateFilter implements AggregateFilterOptions {
-    startTime: Date;
-    aggregateType: NodeId;
-    processingInterval: Double;
-    aggregateConfiguration: AggregateConfiguration;
+    readonly startTime: Date;
+    readonly aggregateType: NodeId;
+    readonly processingInterval: Double;
+    readonly aggregateConfiguration: AggregateConfiguration;
     constructor(options?: AggregateFilterOptions) {
         this.startTime = options?.startTime ?? new Date(-11644473600000);
         this.aggregateType = options?.aggregateType ?? NodeId.null();
@@ -8672,15 +7775,11 @@ export class AggregateFilter implements AggregateFilterOptions {
         encoder.writeType(this.aggregateConfiguration);
     }
     static [decode](decoder: BinaryDataDecoder): AggregateFilter {
-        const startTime = decoder.readDateTime();
-        const aggregateType = decoder.readType(NodeId);
-        const processingInterval = decoder.readDouble();
-        const aggregateConfiguration = decoder.readType(AggregateConfiguration);
         return new AggregateFilter({
-            startTime,
-            aggregateType,
-            processingInterval,
-            aggregateConfiguration
+            startTime: decoder.readDateTime(),
+            aggregateType: decoder.readType(NodeId),
+            processingInterval: decoder.readDouble(),
+            aggregateConfiguration: decoder.readType(AggregateConfiguration)
         });
     }
 }
@@ -8693,14 +7792,14 @@ export class MonitoringFilterResult {
     }
 }
 export interface EventFilterResultOptions {
-    selectClauseResults?: StatusCode[];
-    selectClauseDiagnosticInfos?: DiagnosticInfo[];
-    whereClauseResult?: ContentFilterResult;
+    selectClauseResults?: StatusCode[] | undefined;
+    selectClauseDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    whereClauseResult?: ContentFilterResult | undefined;
 }
 export class EventFilterResult implements EventFilterResultOptions {
-    selectClauseResults?: StatusCode[];
-    selectClauseDiagnosticInfos?: DiagnosticInfo[];
-    whereClauseResult: ContentFilterResult;
+    readonly selectClauseResults?: StatusCode[];
+    readonly selectClauseDiagnosticInfos?: DiagnosticInfo[];
+    readonly whereClauseResult: ContentFilterResult;
     constructor(options?: EventFilterResultOptions) {
         this.selectClauseResults = options?.selectClauseResults;
         this.selectClauseDiagnosticInfos = options?.selectClauseDiagnosticInfos;
@@ -8713,25 +7812,22 @@ export class EventFilterResult implements EventFilterResultOptions {
         encoder.writeType(this.whereClauseResult);
     }
     static [decode](decoder: BinaryDataDecoder): EventFilterResult {
-        const selectClauseResults = decoder.readTypeArray(StatusCode);
-        const selectClauseDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
-        const whereClauseResult = decoder.readType(ContentFilterResult);
         return new EventFilterResult({
-            selectClauseResults,
-            selectClauseDiagnosticInfos,
-            whereClauseResult
+            selectClauseResults: decoder.readTypeArray(StatusCode),
+            selectClauseDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo),
+            whereClauseResult: decoder.readType(ContentFilterResult)
         });
     }
 }
 export interface AggregateFilterResultOptions {
-    revisedStartTime?: Date;
-    revisedProcessingInterval?: Double;
-    revisedAggregateConfiguration?: AggregateConfiguration;
+    revisedStartTime?: Date | undefined;
+    revisedProcessingInterval?: Double | undefined;
+    revisedAggregateConfiguration?: AggregateConfiguration | undefined;
 }
 export class AggregateFilterResult implements AggregateFilterResultOptions {
-    revisedStartTime: Date;
-    revisedProcessingInterval: Double;
-    revisedAggregateConfiguration: AggregateConfiguration;
+    readonly revisedStartTime: Date;
+    readonly revisedProcessingInterval: Double;
+    readonly revisedAggregateConfiguration: AggregateConfiguration;
     constructor(options?: AggregateFilterResultOptions) {
         this.revisedStartTime = options?.revisedStartTime ?? new Date(-11644473600000);
         this.revisedProcessingInterval = options?.revisedProcessingInterval ?? 0;
@@ -8744,29 +7840,26 @@ export class AggregateFilterResult implements AggregateFilterResultOptions {
         encoder.writeType(this.revisedAggregateConfiguration);
     }
     static [decode](decoder: BinaryDataDecoder): AggregateFilterResult {
-        const revisedStartTime = decoder.readDateTime();
-        const revisedProcessingInterval = decoder.readDouble();
-        const revisedAggregateConfiguration = decoder.readType(AggregateConfiguration);
         return new AggregateFilterResult({
-            revisedStartTime,
-            revisedProcessingInterval,
-            revisedAggregateConfiguration
+            revisedStartTime: decoder.readDateTime(),
+            revisedProcessingInterval: decoder.readDouble(),
+            revisedAggregateConfiguration: decoder.readType(AggregateConfiguration)
         });
     }
 }
 export interface MonitoringParametersOptions {
-    clientHandle?: UInt32;
-    samplingInterval?: Double;
-    filter?: ExtensionObject;
-    queueSize?: UInt32;
-    discardOldest?: boolean;
+    clientHandle?: UInt32 | undefined;
+    samplingInterval?: Double | undefined;
+    filter?: ExtensionObject | undefined;
+    queueSize?: UInt32 | undefined;
+    discardOldest?: boolean | undefined;
 }
 export class MonitoringParameters implements MonitoringParametersOptions {
-    clientHandle: UInt32;
-    samplingInterval: Double;
-    filter: ExtensionObject;
-    queueSize: UInt32;
-    discardOldest: boolean;
+    readonly clientHandle: UInt32;
+    readonly samplingInterval: Double;
+    readonly filter: ExtensionObject;
+    readonly queueSize: UInt32;
+    readonly discardOldest: boolean;
     constructor(options?: MonitoringParametersOptions) {
         this.clientHandle = options?.clientHandle ?? 0;
         this.samplingInterval = options?.samplingInterval ?? 0;
@@ -8783,29 +7876,24 @@ export class MonitoringParameters implements MonitoringParametersOptions {
         encoder.writeBoolean(this.discardOldest);
     }
     static [decode](decoder: BinaryDataDecoder): MonitoringParameters {
-        const clientHandle = decoder.readUInt32();
-        const samplingInterval = decoder.readDouble();
-        const filter = decoder.readType(ExtensionObject);
-        const queueSize = decoder.readUInt32();
-        const discardOldest = decoder.readBoolean();
         return new MonitoringParameters({
-            clientHandle,
-            samplingInterval,
-            filter,
-            queueSize,
-            discardOldest
+            clientHandle: decoder.readUInt32(),
+            samplingInterval: decoder.readDouble(),
+            filter: decoder.readType(ExtensionObject),
+            queueSize: decoder.readUInt32(),
+            discardOldest: decoder.readBoolean()
         });
     }
 }
 export interface MonitoredItemCreateRequestOptions {
-    itemToMonitor?: ReadValueId;
-    monitoringMode?: MonitoringMode;
-    requestedParameters?: MonitoringParameters;
+    itemToMonitor?: ReadValueId | undefined;
+    monitoringMode?: MonitoringMode | undefined;
+    requestedParameters?: MonitoringParameters | undefined;
 }
 export class MonitoredItemCreateRequest implements MonitoredItemCreateRequestOptions {
-    itemToMonitor: ReadValueId;
-    monitoringMode: MonitoringMode;
-    requestedParameters: MonitoringParameters;
+    readonly itemToMonitor: ReadValueId;
+    readonly monitoringMode: MonitoringMode;
+    readonly requestedParameters: MonitoringParameters;
     constructor(options?: MonitoredItemCreateRequestOptions) {
         this.itemToMonitor = options?.itemToMonitor ?? new ReadValueId();
         this.monitoringMode = options?.monitoringMode ?? MonitoringMode.Disabled;
@@ -8818,29 +7906,26 @@ export class MonitoredItemCreateRequest implements MonitoredItemCreateRequestOpt
         encoder.writeType(this.requestedParameters);
     }
     static [decode](decoder: BinaryDataDecoder): MonitoredItemCreateRequest {
-        const itemToMonitor = decoder.readType(ReadValueId);
-        const monitoringMode = decoder.readUInt32();
-        const requestedParameters = decoder.readType(MonitoringParameters);
         return new MonitoredItemCreateRequest({
-            itemToMonitor,
-            monitoringMode,
-            requestedParameters
+            itemToMonitor: decoder.readType(ReadValueId),
+            monitoringMode: decoder.readUInt32(),
+            requestedParameters: decoder.readType(MonitoringParameters)
         });
     }
 }
 export interface MonitoredItemCreateResultOptions {
-    statusCode?: StatusCode;
-    monitoredItemId?: UInt32;
-    revisedSamplingInterval?: Double;
-    revisedQueueSize?: UInt32;
-    filterResult?: ExtensionObject;
+    statusCode?: StatusCode | undefined;
+    monitoredItemId?: UInt32 | undefined;
+    revisedSamplingInterval?: Double | undefined;
+    revisedQueueSize?: UInt32 | undefined;
+    filterResult?: ExtensionObject | undefined;
 }
 export class MonitoredItemCreateResult implements MonitoredItemCreateResultOptions {
-    statusCode: StatusCode;
-    monitoredItemId: UInt32;
-    revisedSamplingInterval: Double;
-    revisedQueueSize: UInt32;
-    filterResult: ExtensionObject;
+    readonly statusCode: StatusCode;
+    readonly monitoredItemId: UInt32;
+    readonly revisedSamplingInterval: Double;
+    readonly revisedQueueSize: UInt32;
+    readonly filterResult: ExtensionObject;
     constructor(options?: MonitoredItemCreateResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.monitoredItemId = options?.monitoredItemId ?? 0;
@@ -8857,31 +7942,26 @@ export class MonitoredItemCreateResult implements MonitoredItemCreateResultOptio
         encoder.writeType(this.filterResult);
     }
     static [decode](decoder: BinaryDataDecoder): MonitoredItemCreateResult {
-        const statusCode = decoder.readType(StatusCode);
-        const monitoredItemId = decoder.readUInt32();
-        const revisedSamplingInterval = decoder.readDouble();
-        const revisedQueueSize = decoder.readUInt32();
-        const filterResult = decoder.readType(ExtensionObject);
         return new MonitoredItemCreateResult({
-            statusCode,
-            monitoredItemId,
-            revisedSamplingInterval,
-            revisedQueueSize,
-            filterResult
+            statusCode: decoder.readType(StatusCode),
+            monitoredItemId: decoder.readUInt32(),
+            revisedSamplingInterval: decoder.readDouble(),
+            revisedQueueSize: decoder.readUInt32(),
+            filterResult: decoder.readType(ExtensionObject)
         });
     }
 }
 export interface CreateMonitoredItemsRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    timestampsToReturn?: TimestampsToReturn;
-    itemsToCreate?: MonitoredItemCreateRequest[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    timestampsToReturn?: TimestampsToReturn | undefined;
+    itemsToCreate?: MonitoredItemCreateRequest[] | undefined;
 }
 export class CreateMonitoredItemsRequest implements CreateMonitoredItemsRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    timestampsToReturn: TimestampsToReturn;
-    itemsToCreate?: MonitoredItemCreateRequest[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly timestampsToReturn: TimestampsToReturn;
+    readonly itemsToCreate?: MonitoredItemCreateRequest[];
     constructor(options?: CreateMonitoredItemsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -8896,27 +7976,23 @@ export class CreateMonitoredItemsRequest implements CreateMonitoredItemsRequestO
         encoder.writeTypeArray(this.itemsToCreate);
     }
     static [decode](decoder: BinaryDataDecoder): CreateMonitoredItemsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const timestampsToReturn = decoder.readUInt32();
-        const itemsToCreate = decoder.readTypeArray(MonitoredItemCreateRequest);
         return new CreateMonitoredItemsRequest({
-            requestHeader,
-            subscriptionId,
-            timestampsToReturn,
-            itemsToCreate
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            timestampsToReturn: decoder.readUInt32(),
+            itemsToCreate: decoder.readTypeArray(MonitoredItemCreateRequest)
         });
     }
 }
 export interface CreateMonitoredItemsResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: MonitoredItemCreateResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: MonitoredItemCreateResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class CreateMonitoredItemsResponse implements CreateMonitoredItemsResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: MonitoredItemCreateResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: MonitoredItemCreateResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: CreateMonitoredItemsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8929,23 +8005,20 @@ export class CreateMonitoredItemsResponse implements CreateMonitoredItemsRespons
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): CreateMonitoredItemsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(MonitoredItemCreateResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new CreateMonitoredItemsResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(MonitoredItemCreateResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface MonitoredItemModifyRequestOptions {
-    monitoredItemId?: UInt32;
-    requestedParameters?: MonitoringParameters;
+    monitoredItemId?: UInt32 | undefined;
+    requestedParameters?: MonitoringParameters | undefined;
 }
 export class MonitoredItemModifyRequest implements MonitoredItemModifyRequestOptions {
-    monitoredItemId: UInt32;
-    requestedParameters: MonitoringParameters;
+    readonly monitoredItemId: UInt32;
+    readonly requestedParameters: MonitoringParameters;
     constructor(options?: MonitoredItemModifyRequestOptions) {
         this.monitoredItemId = options?.monitoredItemId ?? 0;
         this.requestedParameters = options?.requestedParameters ?? new MonitoringParameters();
@@ -8956,25 +8029,23 @@ export class MonitoredItemModifyRequest implements MonitoredItemModifyRequestOpt
         encoder.writeType(this.requestedParameters);
     }
     static [decode](decoder: BinaryDataDecoder): MonitoredItemModifyRequest {
-        const monitoredItemId = decoder.readUInt32();
-        const requestedParameters = decoder.readType(MonitoringParameters);
         return new MonitoredItemModifyRequest({
-            monitoredItemId,
-            requestedParameters
+            monitoredItemId: decoder.readUInt32(),
+            requestedParameters: decoder.readType(MonitoringParameters)
         });
     }
 }
 export interface MonitoredItemModifyResultOptions {
-    statusCode?: StatusCode;
-    revisedSamplingInterval?: Double;
-    revisedQueueSize?: UInt32;
-    filterResult?: ExtensionObject;
+    statusCode?: StatusCode | undefined;
+    revisedSamplingInterval?: Double | undefined;
+    revisedQueueSize?: UInt32 | undefined;
+    filterResult?: ExtensionObject | undefined;
 }
 export class MonitoredItemModifyResult implements MonitoredItemModifyResultOptions {
-    statusCode: StatusCode;
-    revisedSamplingInterval: Double;
-    revisedQueueSize: UInt32;
-    filterResult: ExtensionObject;
+    readonly statusCode: StatusCode;
+    readonly revisedSamplingInterval: Double;
+    readonly revisedQueueSize: UInt32;
+    readonly filterResult: ExtensionObject;
     constructor(options?: MonitoredItemModifyResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.revisedSamplingInterval = options?.revisedSamplingInterval ?? 0;
@@ -8989,29 +8060,25 @@ export class MonitoredItemModifyResult implements MonitoredItemModifyResultOptio
         encoder.writeType(this.filterResult);
     }
     static [decode](decoder: BinaryDataDecoder): MonitoredItemModifyResult {
-        const statusCode = decoder.readType(StatusCode);
-        const revisedSamplingInterval = decoder.readDouble();
-        const revisedQueueSize = decoder.readUInt32();
-        const filterResult = decoder.readType(ExtensionObject);
         return new MonitoredItemModifyResult({
-            statusCode,
-            revisedSamplingInterval,
-            revisedQueueSize,
-            filterResult
+            statusCode: decoder.readType(StatusCode),
+            revisedSamplingInterval: decoder.readDouble(),
+            revisedQueueSize: decoder.readUInt32(),
+            filterResult: decoder.readType(ExtensionObject)
         });
     }
 }
 export interface ModifyMonitoredItemsRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    timestampsToReturn?: TimestampsToReturn;
-    itemsToModify?: MonitoredItemModifyRequest[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    timestampsToReturn?: TimestampsToReturn | undefined;
+    itemsToModify?: MonitoredItemModifyRequest[] | undefined;
 }
 export class ModifyMonitoredItemsRequest implements ModifyMonitoredItemsRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    timestampsToReturn: TimestampsToReturn;
-    itemsToModify?: MonitoredItemModifyRequest[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly timestampsToReturn: TimestampsToReturn;
+    readonly itemsToModify?: MonitoredItemModifyRequest[];
     constructor(options?: ModifyMonitoredItemsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9026,27 +8093,23 @@ export class ModifyMonitoredItemsRequest implements ModifyMonitoredItemsRequestO
         encoder.writeTypeArray(this.itemsToModify);
     }
     static [decode](decoder: BinaryDataDecoder): ModifyMonitoredItemsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const timestampsToReturn = decoder.readUInt32();
-        const itemsToModify = decoder.readTypeArray(MonitoredItemModifyRequest);
         return new ModifyMonitoredItemsRequest({
-            requestHeader,
-            subscriptionId,
-            timestampsToReturn,
-            itemsToModify
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            timestampsToReturn: decoder.readUInt32(),
+            itemsToModify: decoder.readTypeArray(MonitoredItemModifyRequest)
         });
     }
 }
 export interface ModifyMonitoredItemsResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: MonitoredItemModifyResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: MonitoredItemModifyResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class ModifyMonitoredItemsResponse implements ModifyMonitoredItemsResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: MonitoredItemModifyResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: MonitoredItemModifyResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: ModifyMonitoredItemsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -9059,27 +8122,24 @@ export class ModifyMonitoredItemsResponse implements ModifyMonitoredItemsRespons
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): ModifyMonitoredItemsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(MonitoredItemModifyResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new ModifyMonitoredItemsResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(MonitoredItemModifyResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface SetMonitoringModeRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    monitoringMode?: MonitoringMode;
-    monitoredItemIds?: UInt32[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    monitoringMode?: MonitoringMode | undefined;
+    monitoredItemIds?: UInt32[] | undefined;
 }
 export class SetMonitoringModeRequest implements SetMonitoringModeRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    monitoringMode: MonitoringMode;
-    monitoredItemIds?: UInt32[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly monitoringMode: MonitoringMode;
+    readonly monitoredItemIds?: UInt32[];
     constructor(options?: SetMonitoringModeRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9094,27 +8154,23 @@ export class SetMonitoringModeRequest implements SetMonitoringModeRequestOptions
         encoder.writeUInt32Array(this.monitoredItemIds);
     }
     static [decode](decoder: BinaryDataDecoder): SetMonitoringModeRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const monitoringMode = decoder.readUInt32();
-        const monitoredItemIds = decoder.readUInt32Array();
         return new SetMonitoringModeRequest({
-            requestHeader,
-            subscriptionId,
-            monitoringMode,
-            monitoredItemIds
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            monitoringMode: decoder.readUInt32(),
+            monitoredItemIds: decoder.readUInt32Array()
         });
     }
 }
 export interface SetMonitoringModeResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class SetMonitoringModeResponse implements SetMonitoringModeResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: SetMonitoringModeResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -9127,29 +8183,26 @@ export class SetMonitoringModeResponse implements SetMonitoringModeResponseOptio
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): SetMonitoringModeResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new SetMonitoringModeResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface SetTriggeringRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    triggeringItemId?: UInt32;
-    linksToAdd?: UInt32[];
-    linksToRemove?: UInt32[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    triggeringItemId?: UInt32 | undefined;
+    linksToAdd?: UInt32[] | undefined;
+    linksToRemove?: UInt32[] | undefined;
 }
 export class SetTriggeringRequest implements SetTriggeringRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    triggeringItemId: UInt32;
-    linksToAdd?: UInt32[];
-    linksToRemove?: UInt32[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly triggeringItemId: UInt32;
+    readonly linksToAdd?: UInt32[];
+    readonly linksToRemove?: UInt32[];
     constructor(options?: SetTriggeringRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9166,33 +8219,28 @@ export class SetTriggeringRequest implements SetTriggeringRequestOptions {
         encoder.writeUInt32Array(this.linksToRemove);
     }
     static [decode](decoder: BinaryDataDecoder): SetTriggeringRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const triggeringItemId = decoder.readUInt32();
-        const linksToAdd = decoder.readUInt32Array();
-        const linksToRemove = decoder.readUInt32Array();
         return new SetTriggeringRequest({
-            requestHeader,
-            subscriptionId,
-            triggeringItemId,
-            linksToAdd,
-            linksToRemove
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            triggeringItemId: decoder.readUInt32(),
+            linksToAdd: decoder.readUInt32Array(),
+            linksToRemove: decoder.readUInt32Array()
         });
     }
 }
 export interface SetTriggeringResponseOptions {
-    responseHeader?: ResponseHeader;
-    addResults?: StatusCode[];
-    addDiagnosticInfos?: DiagnosticInfo[];
-    removeResults?: StatusCode[];
-    removeDiagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    addResults?: StatusCode[] | undefined;
+    addDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    removeResults?: StatusCode[] | undefined;
+    removeDiagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class SetTriggeringResponse implements SetTriggeringResponseOptions {
-    responseHeader: ResponseHeader;
-    addResults?: StatusCode[];
-    addDiagnosticInfos?: DiagnosticInfo[];
-    removeResults?: StatusCode[];
-    removeDiagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly addResults?: StatusCode[];
+    readonly addDiagnosticInfos?: DiagnosticInfo[];
+    readonly removeResults?: StatusCode[];
+    readonly removeDiagnosticInfos?: DiagnosticInfo[];
     constructor(options?: SetTriggeringResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.addResults = options?.addResults;
@@ -9209,29 +8257,24 @@ export class SetTriggeringResponse implements SetTriggeringResponseOptions {
         encoder.writeTypeArray(this.removeDiagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): SetTriggeringResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const addResults = decoder.readTypeArray(StatusCode);
-        const addDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
-        const removeResults = decoder.readTypeArray(StatusCode);
-        const removeDiagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new SetTriggeringResponse({
-            responseHeader,
-            addResults,
-            addDiagnosticInfos,
-            removeResults,
-            removeDiagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            addResults: decoder.readTypeArray(StatusCode),
+            addDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo),
+            removeResults: decoder.readTypeArray(StatusCode),
+            removeDiagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface DeleteMonitoredItemsRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    monitoredItemIds?: UInt32[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    monitoredItemIds?: UInt32[] | undefined;
 }
 export class DeleteMonitoredItemsRequest implements DeleteMonitoredItemsRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    monitoredItemIds?: UInt32[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly monitoredItemIds?: UInt32[];
     constructor(options?: DeleteMonitoredItemsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9244,25 +8287,22 @@ export class DeleteMonitoredItemsRequest implements DeleteMonitoredItemsRequestO
         encoder.writeUInt32Array(this.monitoredItemIds);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteMonitoredItemsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const monitoredItemIds = decoder.readUInt32Array();
         return new DeleteMonitoredItemsRequest({
-            requestHeader,
-            subscriptionId,
-            monitoredItemIds
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            monitoredItemIds: decoder.readUInt32Array()
         });
     }
 }
 export interface DeleteMonitoredItemsResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class DeleteMonitoredItemsResponse implements DeleteMonitoredItemsResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: DeleteMonitoredItemsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -9275,33 +8315,30 @@ export class DeleteMonitoredItemsResponse implements DeleteMonitoredItemsRespons
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteMonitoredItemsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new DeleteMonitoredItemsResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface CreateSubscriptionRequestOptions {
-    requestHeader?: RequestHeader;
-    requestedPublishingInterval?: Double;
-    requestedLifetimeCount?: UInt32;
-    requestedMaxKeepAliveCount?: UInt32;
-    maxNotificationsPerPublish?: UInt32;
-    publishingEnabled?: boolean;
-    priority?: Byte;
+    requestHeader?: RequestHeader | undefined;
+    requestedPublishingInterval?: Double | undefined;
+    requestedLifetimeCount?: UInt32 | undefined;
+    requestedMaxKeepAliveCount?: UInt32 | undefined;
+    maxNotificationsPerPublish?: UInt32 | undefined;
+    publishingEnabled?: boolean | undefined;
+    priority?: Byte | undefined;
 }
 export class CreateSubscriptionRequest implements CreateSubscriptionRequestOptions {
-    requestHeader: RequestHeader;
-    requestedPublishingInterval: Double;
-    requestedLifetimeCount: UInt32;
-    requestedMaxKeepAliveCount: UInt32;
-    maxNotificationsPerPublish: UInt32;
-    publishingEnabled: boolean;
-    priority: Byte;
+    readonly requestHeader: RequestHeader;
+    readonly requestedPublishingInterval: Double;
+    readonly requestedLifetimeCount: UInt32;
+    readonly requestedMaxKeepAliveCount: UInt32;
+    readonly maxNotificationsPerPublish: UInt32;
+    readonly publishingEnabled: boolean;
+    readonly priority: Byte;
     constructor(options?: CreateSubscriptionRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.requestedPublishingInterval = options?.requestedPublishingInterval ?? 0;
@@ -9322,37 +8359,30 @@ export class CreateSubscriptionRequest implements CreateSubscriptionRequestOptio
         encoder.writeByte(this.priority);
     }
     static [decode](decoder: BinaryDataDecoder): CreateSubscriptionRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const requestedPublishingInterval = decoder.readDouble();
-        const requestedLifetimeCount = decoder.readUInt32();
-        const requestedMaxKeepAliveCount = decoder.readUInt32();
-        const maxNotificationsPerPublish = decoder.readUInt32();
-        const publishingEnabled = decoder.readBoolean();
-        const priority = decoder.readByte();
         return new CreateSubscriptionRequest({
-            requestHeader,
-            requestedPublishingInterval,
-            requestedLifetimeCount,
-            requestedMaxKeepAliveCount,
-            maxNotificationsPerPublish,
-            publishingEnabled,
-            priority
+            requestHeader: decoder.readType(RequestHeader),
+            requestedPublishingInterval: decoder.readDouble(),
+            requestedLifetimeCount: decoder.readUInt32(),
+            requestedMaxKeepAliveCount: decoder.readUInt32(),
+            maxNotificationsPerPublish: decoder.readUInt32(),
+            publishingEnabled: decoder.readBoolean(),
+            priority: decoder.readByte()
         });
     }
 }
 export interface CreateSubscriptionResponseOptions {
-    responseHeader?: ResponseHeader;
-    subscriptionId?: UInt32;
-    revisedPublishingInterval?: Double;
-    revisedLifetimeCount?: UInt32;
-    revisedMaxKeepAliveCount?: UInt32;
+    responseHeader?: ResponseHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    revisedPublishingInterval?: Double | undefined;
+    revisedLifetimeCount?: UInt32 | undefined;
+    revisedMaxKeepAliveCount?: UInt32 | undefined;
 }
 export class CreateSubscriptionResponse implements CreateSubscriptionResponseOptions {
-    responseHeader: ResponseHeader;
-    subscriptionId: UInt32;
-    revisedPublishingInterval: Double;
-    revisedLifetimeCount: UInt32;
-    revisedMaxKeepAliveCount: UInt32;
+    readonly responseHeader: ResponseHeader;
+    readonly subscriptionId: UInt32;
+    readonly revisedPublishingInterval: Double;
+    readonly revisedLifetimeCount: UInt32;
+    readonly revisedMaxKeepAliveCount: UInt32;
     constructor(options?: CreateSubscriptionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9369,37 +8399,32 @@ export class CreateSubscriptionResponse implements CreateSubscriptionResponseOpt
         encoder.writeUInt32(this.revisedMaxKeepAliveCount);
     }
     static [decode](decoder: BinaryDataDecoder): CreateSubscriptionResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const subscriptionId = decoder.readUInt32();
-        const revisedPublishingInterval = decoder.readDouble();
-        const revisedLifetimeCount = decoder.readUInt32();
-        const revisedMaxKeepAliveCount = decoder.readUInt32();
         return new CreateSubscriptionResponse({
-            responseHeader,
-            subscriptionId,
-            revisedPublishingInterval,
-            revisedLifetimeCount,
-            revisedMaxKeepAliveCount
+            responseHeader: decoder.readType(ResponseHeader),
+            subscriptionId: decoder.readUInt32(),
+            revisedPublishingInterval: decoder.readDouble(),
+            revisedLifetimeCount: decoder.readUInt32(),
+            revisedMaxKeepAliveCount: decoder.readUInt32()
         });
     }
 }
 export interface ModifySubscriptionRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    requestedPublishingInterval?: Double;
-    requestedLifetimeCount?: UInt32;
-    requestedMaxKeepAliveCount?: UInt32;
-    maxNotificationsPerPublish?: UInt32;
-    priority?: Byte;
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    requestedPublishingInterval?: Double | undefined;
+    requestedLifetimeCount?: UInt32 | undefined;
+    requestedMaxKeepAliveCount?: UInt32 | undefined;
+    maxNotificationsPerPublish?: UInt32 | undefined;
+    priority?: Byte | undefined;
 }
 export class ModifySubscriptionRequest implements ModifySubscriptionRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    requestedPublishingInterval: Double;
-    requestedLifetimeCount: UInt32;
-    requestedMaxKeepAliveCount: UInt32;
-    maxNotificationsPerPublish: UInt32;
-    priority: Byte;
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly requestedPublishingInterval: Double;
+    readonly requestedLifetimeCount: UInt32;
+    readonly requestedMaxKeepAliveCount: UInt32;
+    readonly maxNotificationsPerPublish: UInt32;
+    readonly priority: Byte;
     constructor(options?: ModifySubscriptionRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9420,35 +8445,28 @@ export class ModifySubscriptionRequest implements ModifySubscriptionRequestOptio
         encoder.writeByte(this.priority);
     }
     static [decode](decoder: BinaryDataDecoder): ModifySubscriptionRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const requestedPublishingInterval = decoder.readDouble();
-        const requestedLifetimeCount = decoder.readUInt32();
-        const requestedMaxKeepAliveCount = decoder.readUInt32();
-        const maxNotificationsPerPublish = decoder.readUInt32();
-        const priority = decoder.readByte();
         return new ModifySubscriptionRequest({
-            requestHeader,
-            subscriptionId,
-            requestedPublishingInterval,
-            requestedLifetimeCount,
-            requestedMaxKeepAliveCount,
-            maxNotificationsPerPublish,
-            priority
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            requestedPublishingInterval: decoder.readDouble(),
+            requestedLifetimeCount: decoder.readUInt32(),
+            requestedMaxKeepAliveCount: decoder.readUInt32(),
+            maxNotificationsPerPublish: decoder.readUInt32(),
+            priority: decoder.readByte()
         });
     }
 }
 export interface ModifySubscriptionResponseOptions {
-    responseHeader?: ResponseHeader;
-    revisedPublishingInterval?: Double;
-    revisedLifetimeCount?: UInt32;
-    revisedMaxKeepAliveCount?: UInt32;
+    responseHeader?: ResponseHeader | undefined;
+    revisedPublishingInterval?: Double | undefined;
+    revisedLifetimeCount?: UInt32 | undefined;
+    revisedMaxKeepAliveCount?: UInt32 | undefined;
 }
 export class ModifySubscriptionResponse implements ModifySubscriptionResponseOptions {
-    responseHeader: ResponseHeader;
-    revisedPublishingInterval: Double;
-    revisedLifetimeCount: UInt32;
-    revisedMaxKeepAliveCount: UInt32;
+    readonly responseHeader: ResponseHeader;
+    readonly revisedPublishingInterval: Double;
+    readonly revisedLifetimeCount: UInt32;
+    readonly revisedMaxKeepAliveCount: UInt32;
     constructor(options?: ModifySubscriptionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.revisedPublishingInterval = options?.revisedPublishingInterval ?? 0;
@@ -9463,27 +8481,23 @@ export class ModifySubscriptionResponse implements ModifySubscriptionResponseOpt
         encoder.writeUInt32(this.revisedMaxKeepAliveCount);
     }
     static [decode](decoder: BinaryDataDecoder): ModifySubscriptionResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const revisedPublishingInterval = decoder.readDouble();
-        const revisedLifetimeCount = decoder.readUInt32();
-        const revisedMaxKeepAliveCount = decoder.readUInt32();
         return new ModifySubscriptionResponse({
-            responseHeader,
-            revisedPublishingInterval,
-            revisedLifetimeCount,
-            revisedMaxKeepAliveCount
+            responseHeader: decoder.readType(ResponseHeader),
+            revisedPublishingInterval: decoder.readDouble(),
+            revisedLifetimeCount: decoder.readUInt32(),
+            revisedMaxKeepAliveCount: decoder.readUInt32()
         });
     }
 }
 export interface SetPublishingModeRequestOptions {
-    requestHeader?: RequestHeader;
-    publishingEnabled?: boolean;
-    subscriptionIds?: UInt32[];
+    requestHeader?: RequestHeader | undefined;
+    publishingEnabled?: boolean | undefined;
+    subscriptionIds?: UInt32[] | undefined;
 }
 export class SetPublishingModeRequest implements SetPublishingModeRequestOptions {
-    requestHeader: RequestHeader;
-    publishingEnabled: boolean;
-    subscriptionIds?: UInt32[];
+    readonly requestHeader: RequestHeader;
+    readonly publishingEnabled: boolean;
+    readonly subscriptionIds?: UInt32[];
     constructor(options?: SetPublishingModeRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.publishingEnabled = options?.publishingEnabled ?? false;
@@ -9496,25 +8510,22 @@ export class SetPublishingModeRequest implements SetPublishingModeRequestOptions
         encoder.writeUInt32Array(this.subscriptionIds);
     }
     static [decode](decoder: BinaryDataDecoder): SetPublishingModeRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const publishingEnabled = decoder.readBoolean();
-        const subscriptionIds = decoder.readUInt32Array();
         return new SetPublishingModeRequest({
-            requestHeader,
-            publishingEnabled,
-            subscriptionIds
+            requestHeader: decoder.readType(RequestHeader),
+            publishingEnabled: decoder.readBoolean(),
+            subscriptionIds: decoder.readUInt32Array()
         });
     }
 }
 export interface SetPublishingModeResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class SetPublishingModeResponse implements SetPublishingModeResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: SetPublishingModeResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -9527,25 +8538,22 @@ export class SetPublishingModeResponse implements SetPublishingModeResponseOptio
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): SetPublishingModeResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new SetPublishingModeResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface NotificationMessageOptions {
-    sequenceNumber?: UInt32;
-    publishTime?: Date;
-    notificationData?: ExtensionObject[];
+    sequenceNumber?: UInt32 | undefined;
+    publishTime?: Date | undefined;
+    notificationData?: ExtensionObject[] | undefined;
 }
 export class NotificationMessage implements NotificationMessageOptions {
-    sequenceNumber: UInt32;
-    publishTime: Date;
-    notificationData?: ExtensionObject[];
+    readonly sequenceNumber: UInt32;
+    readonly publishTime: Date;
+    readonly notificationData?: ExtensionObject[];
     constructor(options?: NotificationMessageOptions) {
         this.sequenceNumber = options?.sequenceNumber ?? 0;
         this.publishTime = options?.publishTime ?? new Date(-11644473600000);
@@ -9558,13 +8566,10 @@ export class NotificationMessage implements NotificationMessageOptions {
         encoder.writeTypeArray(this.notificationData);
     }
     static [decode](decoder: BinaryDataDecoder): NotificationMessage {
-        const sequenceNumber = decoder.readUInt32();
-        const publishTime = decoder.readDateTime();
-        const notificationData = decoder.readTypeArray(ExtensionObject);
         return new NotificationMessage({
-            sequenceNumber,
-            publishTime,
-            notificationData
+            sequenceNumber: decoder.readUInt32(),
+            publishTime: decoder.readDateTime(),
+            notificationData: decoder.readTypeArray(ExtensionObject)
         });
     }
 }
@@ -9577,12 +8582,12 @@ export class NotificationData {
     }
 }
 export interface DataChangeNotificationOptions {
-    monitoredItems?: MonitoredItemNotification[];
-    diagnosticInfos?: DiagnosticInfo[];
+    monitoredItems?: MonitoredItemNotification[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class DataChangeNotification implements DataChangeNotificationOptions {
-    monitoredItems?: MonitoredItemNotification[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly monitoredItems?: MonitoredItemNotification[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: DataChangeNotificationOptions) {
         this.monitoredItems = options?.monitoredItems;
         this.diagnosticInfos = options?.diagnosticInfos;
@@ -9593,21 +8598,19 @@ export class DataChangeNotification implements DataChangeNotificationOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): DataChangeNotification {
-        const monitoredItems = decoder.readTypeArray(MonitoredItemNotification);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new DataChangeNotification({
-            monitoredItems,
-            diagnosticInfos
+            monitoredItems: decoder.readTypeArray(MonitoredItemNotification),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface MonitoredItemNotificationOptions {
-    clientHandle?: UInt32;
-    value?: DataValue;
+    clientHandle?: UInt32 | undefined;
+    value?: DataValue | undefined;
 }
 export class MonitoredItemNotification implements MonitoredItemNotificationOptions {
-    clientHandle: UInt32;
-    value: DataValue;
+    readonly clientHandle: UInt32;
+    readonly value: DataValue;
     constructor(options?: MonitoredItemNotificationOptions) {
         this.clientHandle = options?.clientHandle ?? 0;
         this.value = options?.value ?? new DataValue();
@@ -9618,19 +8621,17 @@ export class MonitoredItemNotification implements MonitoredItemNotificationOptio
         encoder.writeType(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): MonitoredItemNotification {
-        const clientHandle = decoder.readUInt32();
-        const value = decoder.readType(DataValue);
         return new MonitoredItemNotification({
-            clientHandle,
-            value
+            clientHandle: decoder.readUInt32(),
+            value: decoder.readType(DataValue)
         });
     }
 }
 export interface EventNotificationListOptions {
-    events?: EventFieldList[];
+    events?: EventFieldList[] | undefined;
 }
 export class EventNotificationList implements EventNotificationListOptions {
-    events?: EventFieldList[];
+    readonly events?: EventFieldList[];
     constructor(options?: EventNotificationListOptions) {
         this.events = options?.events;
     }
@@ -9639,19 +8640,18 @@ export class EventNotificationList implements EventNotificationListOptions {
         encoder.writeTypeArray(this.events);
     }
     static [decode](decoder: BinaryDataDecoder): EventNotificationList {
-        const events = decoder.readTypeArray(EventFieldList);
         return new EventNotificationList({
-            events
+            events: decoder.readTypeArray(EventFieldList)
         });
     }
 }
 export interface EventFieldListOptions {
-    clientHandle?: UInt32;
-    eventFields?: Variant[];
+    clientHandle?: UInt32 | undefined;
+    eventFields?: Variant[] | undefined;
 }
 export class EventFieldList implements EventFieldListOptions {
-    clientHandle: UInt32;
-    eventFields?: Variant[];
+    readonly clientHandle: UInt32;
+    readonly eventFields?: Variant[];
     constructor(options?: EventFieldListOptions) {
         this.clientHandle = options?.clientHandle ?? 0;
         this.eventFields = options?.eventFields;
@@ -9662,19 +8662,17 @@ export class EventFieldList implements EventFieldListOptions {
         encoder.writeTypeArray(this.eventFields);
     }
     static [decode](decoder: BinaryDataDecoder): EventFieldList {
-        const clientHandle = decoder.readUInt32();
-        const eventFields = decoder.readTypeArray(Variant);
         return new EventFieldList({
-            clientHandle,
-            eventFields
+            clientHandle: decoder.readUInt32(),
+            eventFields: decoder.readTypeArray(Variant)
         });
     }
 }
 export interface HistoryEventFieldListOptions {
-    eventFields?: Variant[];
+    eventFields?: Variant[] | undefined;
 }
 export class HistoryEventFieldList implements HistoryEventFieldListOptions {
-    eventFields?: Variant[];
+    readonly eventFields?: Variant[];
     constructor(options?: HistoryEventFieldListOptions) {
         this.eventFields = options?.eventFields;
     }
@@ -9683,19 +8681,18 @@ export class HistoryEventFieldList implements HistoryEventFieldListOptions {
         encoder.writeTypeArray(this.eventFields);
     }
     static [decode](decoder: BinaryDataDecoder): HistoryEventFieldList {
-        const eventFields = decoder.readTypeArray(Variant);
         return new HistoryEventFieldList({
-            eventFields
+            eventFields: decoder.readTypeArray(Variant)
         });
     }
 }
 export interface StatusChangeNotificationOptions {
-    status?: StatusCode;
-    diagnosticInfo?: DiagnosticInfo;
+    status?: StatusCode | undefined;
+    diagnosticInfo?: DiagnosticInfo | undefined;
 }
 export class StatusChangeNotification implements StatusChangeNotificationOptions {
-    status: StatusCode;
-    diagnosticInfo: DiagnosticInfo;
+    readonly status: StatusCode;
+    readonly diagnosticInfo: DiagnosticInfo;
     constructor(options?: StatusChangeNotificationOptions) {
         this.status = options?.status ?? StatusCode.Good;
         this.diagnosticInfo = options?.diagnosticInfo ?? new DiagnosticInfo();
@@ -9706,21 +8703,19 @@ export class StatusChangeNotification implements StatusChangeNotificationOptions
         encoder.writeType(this.diagnosticInfo);
     }
     static [decode](decoder: BinaryDataDecoder): StatusChangeNotification {
-        const status = decoder.readType(StatusCode);
-        const diagnosticInfo = decoder.readType(DiagnosticInfo);
         return new StatusChangeNotification({
-            status,
-            diagnosticInfo
+            status: decoder.readType(StatusCode),
+            diagnosticInfo: decoder.readType(DiagnosticInfo)
         });
     }
 }
 export interface SubscriptionAcknowledgementOptions {
-    subscriptionId?: UInt32;
-    sequenceNumber?: UInt32;
+    subscriptionId?: UInt32 | undefined;
+    sequenceNumber?: UInt32 | undefined;
 }
 export class SubscriptionAcknowledgement implements SubscriptionAcknowledgementOptions {
-    subscriptionId: UInt32;
-    sequenceNumber: UInt32;
+    readonly subscriptionId: UInt32;
+    readonly sequenceNumber: UInt32;
     constructor(options?: SubscriptionAcknowledgementOptions) {
         this.subscriptionId = options?.subscriptionId ?? 0;
         this.sequenceNumber = options?.sequenceNumber ?? 0;
@@ -9731,21 +8726,19 @@ export class SubscriptionAcknowledgement implements SubscriptionAcknowledgementO
         encoder.writeUInt32(this.sequenceNumber);
     }
     static [decode](decoder: BinaryDataDecoder): SubscriptionAcknowledgement {
-        const subscriptionId = decoder.readUInt32();
-        const sequenceNumber = decoder.readUInt32();
         return new SubscriptionAcknowledgement({
-            subscriptionId,
-            sequenceNumber
+            subscriptionId: decoder.readUInt32(),
+            sequenceNumber: decoder.readUInt32()
         });
     }
 }
 export interface PublishRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionAcknowledgements?: SubscriptionAcknowledgement[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionAcknowledgements?: SubscriptionAcknowledgement[] | undefined;
 }
 export class PublishRequest implements PublishRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionAcknowledgements?: SubscriptionAcknowledgement[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionAcknowledgements?: SubscriptionAcknowledgement[];
     constructor(options?: PublishRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionAcknowledgements = options?.subscriptionAcknowledgements;
@@ -9756,31 +8749,29 @@ export class PublishRequest implements PublishRequestOptions {
         encoder.writeTypeArray(this.subscriptionAcknowledgements);
     }
     static [decode](decoder: BinaryDataDecoder): PublishRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionAcknowledgements = decoder.readTypeArray(SubscriptionAcknowledgement);
         return new PublishRequest({
-            requestHeader,
-            subscriptionAcknowledgements
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionAcknowledgements: decoder.readTypeArray(SubscriptionAcknowledgement)
         });
     }
 }
 export interface PublishResponseOptions {
-    responseHeader?: ResponseHeader;
-    subscriptionId?: UInt32;
-    availableSequenceNumbers?: UInt32[];
-    moreNotifications?: boolean;
-    notificationMessage?: NotificationMessage;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    availableSequenceNumbers?: UInt32[] | undefined;
+    moreNotifications?: boolean | undefined;
+    notificationMessage?: NotificationMessage | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class PublishResponse implements PublishResponseOptions {
-    responseHeader: ResponseHeader;
-    subscriptionId: UInt32;
-    availableSequenceNumbers?: UInt32[];
-    moreNotifications: boolean;
-    notificationMessage: NotificationMessage;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly subscriptionId: UInt32;
+    readonly availableSequenceNumbers?: UInt32[];
+    readonly moreNotifications: boolean;
+    readonly notificationMessage: NotificationMessage;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: PublishResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9801,33 +8792,26 @@ export class PublishResponse implements PublishResponseOptions {
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): PublishResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const subscriptionId = decoder.readUInt32();
-        const availableSequenceNumbers = decoder.readUInt32Array();
-        const moreNotifications = decoder.readBoolean();
-        const notificationMessage = decoder.readType(NotificationMessage);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new PublishResponse({
-            responseHeader,
-            subscriptionId,
-            availableSequenceNumbers,
-            moreNotifications,
-            notificationMessage,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            subscriptionId: decoder.readUInt32(),
+            availableSequenceNumbers: decoder.readUInt32Array(),
+            moreNotifications: decoder.readBoolean(),
+            notificationMessage: decoder.readType(NotificationMessage),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface RepublishRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionId?: UInt32;
-    retransmitSequenceNumber?: UInt32;
+    requestHeader?: RequestHeader | undefined;
+    subscriptionId?: UInt32 | undefined;
+    retransmitSequenceNumber?: UInt32 | undefined;
 }
 export class RepublishRequest implements RepublishRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionId: UInt32;
-    retransmitSequenceNumber: UInt32;
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionId: UInt32;
+    readonly retransmitSequenceNumber: UInt32;
     constructor(options?: RepublishRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -9840,23 +8824,20 @@ export class RepublishRequest implements RepublishRequestOptions {
         encoder.writeUInt32(this.retransmitSequenceNumber);
     }
     static [decode](decoder: BinaryDataDecoder): RepublishRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionId = decoder.readUInt32();
-        const retransmitSequenceNumber = decoder.readUInt32();
         return new RepublishRequest({
-            requestHeader,
-            subscriptionId,
-            retransmitSequenceNumber
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionId: decoder.readUInt32(),
+            retransmitSequenceNumber: decoder.readUInt32()
         });
     }
 }
 export interface RepublishResponseOptions {
-    responseHeader?: ResponseHeader;
-    notificationMessage?: NotificationMessage;
+    responseHeader?: ResponseHeader | undefined;
+    notificationMessage?: NotificationMessage | undefined;
 }
 export class RepublishResponse implements RepublishResponseOptions {
-    responseHeader: ResponseHeader;
-    notificationMessage: NotificationMessage;
+    readonly responseHeader: ResponseHeader;
+    readonly notificationMessage: NotificationMessage;
     constructor(options?: RepublishResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.notificationMessage = options?.notificationMessage ?? new NotificationMessage();
@@ -9867,21 +8848,19 @@ export class RepublishResponse implements RepublishResponseOptions {
         encoder.writeType(this.notificationMessage);
     }
     static [decode](decoder: BinaryDataDecoder): RepublishResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const notificationMessage = decoder.readType(NotificationMessage);
         return new RepublishResponse({
-            responseHeader,
-            notificationMessage
+            responseHeader: decoder.readType(ResponseHeader),
+            notificationMessage: decoder.readType(NotificationMessage)
         });
     }
 }
 export interface TransferResultOptions {
-    statusCode?: StatusCode;
-    availableSequenceNumbers?: UInt32[];
+    statusCode?: StatusCode | undefined;
+    availableSequenceNumbers?: UInt32[] | undefined;
 }
 export class TransferResult implements TransferResultOptions {
-    statusCode: StatusCode;
-    availableSequenceNumbers?: UInt32[];
+    readonly statusCode: StatusCode;
+    readonly availableSequenceNumbers?: UInt32[];
     constructor(options?: TransferResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.availableSequenceNumbers = options?.availableSequenceNumbers;
@@ -9892,23 +8871,21 @@ export class TransferResult implements TransferResultOptions {
         encoder.writeUInt32Array(this.availableSequenceNumbers);
     }
     static [decode](decoder: BinaryDataDecoder): TransferResult {
-        const statusCode = decoder.readType(StatusCode);
-        const availableSequenceNumbers = decoder.readUInt32Array();
         return new TransferResult({
-            statusCode,
-            availableSequenceNumbers
+            statusCode: decoder.readType(StatusCode),
+            availableSequenceNumbers: decoder.readUInt32Array()
         });
     }
 }
 export interface TransferSubscriptionsRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionIds?: UInt32[];
-    sendInitialValues?: boolean;
+    requestHeader?: RequestHeader | undefined;
+    subscriptionIds?: UInt32[] | undefined;
+    sendInitialValues?: boolean | undefined;
 }
 export class TransferSubscriptionsRequest implements TransferSubscriptionsRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionIds?: UInt32[];
-    sendInitialValues: boolean;
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionIds?: UInt32[];
+    readonly sendInitialValues: boolean;
     constructor(options?: TransferSubscriptionsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionIds = options?.subscriptionIds;
@@ -9921,25 +8898,22 @@ export class TransferSubscriptionsRequest implements TransferSubscriptionsReques
         encoder.writeBoolean(this.sendInitialValues);
     }
     static [decode](decoder: BinaryDataDecoder): TransferSubscriptionsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionIds = decoder.readUInt32Array();
-        const sendInitialValues = decoder.readBoolean();
         return new TransferSubscriptionsRequest({
-            requestHeader,
-            subscriptionIds,
-            sendInitialValues
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionIds: decoder.readUInt32Array(),
+            sendInitialValues: decoder.readBoolean()
         });
     }
 }
 export interface TransferSubscriptionsResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: TransferResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: TransferResult[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class TransferSubscriptionsResponse implements TransferSubscriptionsResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: TransferResult[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: TransferResult[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: TransferSubscriptionsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -9952,23 +8926,20 @@ export class TransferSubscriptionsResponse implements TransferSubscriptionsRespo
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): TransferSubscriptionsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(TransferResult);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new TransferSubscriptionsResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(TransferResult),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface DeleteSubscriptionsRequestOptions {
-    requestHeader?: RequestHeader;
-    subscriptionIds?: UInt32[];
+    requestHeader?: RequestHeader | undefined;
+    subscriptionIds?: UInt32[] | undefined;
 }
 export class DeleteSubscriptionsRequest implements DeleteSubscriptionsRequestOptions {
-    requestHeader: RequestHeader;
-    subscriptionIds?: UInt32[];
+    readonly requestHeader: RequestHeader;
+    readonly subscriptionIds?: UInt32[];
     constructor(options?: DeleteSubscriptionsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionIds = options?.subscriptionIds;
@@ -9979,23 +8950,21 @@ export class DeleteSubscriptionsRequest implements DeleteSubscriptionsRequestOpt
         encoder.writeUInt32Array(this.subscriptionIds);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteSubscriptionsRequest {
-        const requestHeader = decoder.readType(RequestHeader);
-        const subscriptionIds = decoder.readUInt32Array();
         return new DeleteSubscriptionsRequest({
-            requestHeader,
-            subscriptionIds
+            requestHeader: decoder.readType(RequestHeader),
+            subscriptionIds: decoder.readUInt32Array()
         });
     }
 }
 export interface DeleteSubscriptionsResponseOptions {
-    responseHeader?: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    responseHeader?: ResponseHeader | undefined;
+    results?: StatusCode[] | undefined;
+    diagnosticInfos?: DiagnosticInfo[] | undefined;
 }
 export class DeleteSubscriptionsResponse implements DeleteSubscriptionsResponseOptions {
-    responseHeader: ResponseHeader;
-    results?: StatusCode[];
-    diagnosticInfos?: DiagnosticInfo[];
+    readonly responseHeader: ResponseHeader;
+    readonly results?: StatusCode[];
+    readonly diagnosticInfos?: DiagnosticInfo[];
     constructor(options?: DeleteSubscriptionsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -10008,31 +8977,28 @@ export class DeleteSubscriptionsResponse implements DeleteSubscriptionsResponseO
         encoder.writeTypeArray(this.diagnosticInfos);
     }
     static [decode](decoder: BinaryDataDecoder): DeleteSubscriptionsResponse {
-        const responseHeader = decoder.readType(ResponseHeader);
-        const results = decoder.readTypeArray(StatusCode);
-        const diagnosticInfos = decoder.readTypeArray(DiagnosticInfo);
         return new DeleteSubscriptionsResponse({
-            responseHeader,
-            results,
-            diagnosticInfos
+            responseHeader: decoder.readType(ResponseHeader),
+            results: decoder.readTypeArray(StatusCode),
+            diagnosticInfos: decoder.readTypeArray(DiagnosticInfo)
         });
     }
 }
 export interface BuildInfoOptions {
-    productUri?: UaString;
-    manufacturerName?: UaString;
-    productName?: UaString;
-    softwareVersion?: UaString;
-    buildNumber?: UaString;
-    buildDate?: Date;
+    productUri?: UaString | undefined;
+    manufacturerName?: UaString | undefined;
+    productName?: UaString | undefined;
+    softwareVersion?: UaString | undefined;
+    buildNumber?: UaString | undefined;
+    buildDate?: Date | undefined;
 }
 export class BuildInfo implements BuildInfoOptions {
-    productUri?: UaString;
-    manufacturerName?: UaString;
-    productName?: UaString;
-    softwareVersion?: UaString;
-    buildNumber?: UaString;
-    buildDate: Date;
+    readonly productUri?: UaString;
+    readonly manufacturerName?: UaString;
+    readonly productName?: UaString;
+    readonly softwareVersion?: UaString;
+    readonly buildNumber?: UaString;
+    readonly buildDate: Date;
     constructor(options?: BuildInfoOptions) {
         this.productUri = options?.productUri;
         this.manufacturerName = options?.manufacturerName;
@@ -10051,19 +9017,13 @@ export class BuildInfo implements BuildInfoOptions {
         encoder.writeDateTime(this.buildDate);
     }
     static [decode](decoder: BinaryDataDecoder): BuildInfo {
-        const productUri = decoder.readString();
-        const manufacturerName = decoder.readString();
-        const productName = decoder.readString();
-        const softwareVersion = decoder.readString();
-        const buildNumber = decoder.readString();
-        const buildDate = decoder.readDateTime();
         return new BuildInfo({
-            productUri,
-            manufacturerName,
-            productName,
-            softwareVersion,
-            buildNumber,
-            buildDate
+            productUri: decoder.readString(),
+            manufacturerName: decoder.readString(),
+            productName: decoder.readString(),
+            softwareVersion: decoder.readString(),
+            buildNumber: decoder.readString(),
+            buildDate: decoder.readDateTime()
         });
     }
 }
@@ -10086,14 +9046,14 @@ export enum ServerState {
     Unknown = 7
 }
 export interface RedundantServerDataTypeOptions {
-    serverId?: UaString;
-    serviceLevel?: Byte;
-    serverState?: ServerState;
+    serverId?: UaString | undefined;
+    serviceLevel?: Byte | undefined;
+    serverState?: ServerState | undefined;
 }
 export class RedundantServerDataType implements RedundantServerDataTypeOptions {
-    serverId?: UaString;
-    serviceLevel: Byte;
-    serverState: ServerState;
+    readonly serverId?: UaString;
+    readonly serviceLevel: Byte;
+    readonly serverState: ServerState;
     constructor(options?: RedundantServerDataTypeOptions) {
         this.serverId = options?.serverId;
         this.serviceLevel = options?.serviceLevel ?? 0;
@@ -10106,21 +9066,18 @@ export class RedundantServerDataType implements RedundantServerDataTypeOptions {
         encoder.writeUInt32(this.serverState);
     }
     static [decode](decoder: BinaryDataDecoder): RedundantServerDataType {
-        const serverId = decoder.readString();
-        const serviceLevel = decoder.readByte();
-        const serverState = decoder.readUInt32();
         return new RedundantServerDataType({
-            serverId,
-            serviceLevel,
-            serverState
+            serverId: decoder.readString(),
+            serviceLevel: decoder.readByte(),
+            serverState: decoder.readUInt32()
         });
     }
 }
 export interface EndpointUrlListDataTypeOptions {
-    endpointUrlList?: UaString[];
+    endpointUrlList?: UaString[] | undefined;
 }
 export class EndpointUrlListDataType implements EndpointUrlListDataTypeOptions {
-    endpointUrlList?: UaString[];
+    readonly endpointUrlList?: UaString[];
     constructor(options?: EndpointUrlListDataTypeOptions) {
         this.endpointUrlList = options?.endpointUrlList;
     }
@@ -10129,19 +9086,18 @@ export class EndpointUrlListDataType implements EndpointUrlListDataTypeOptions {
         encoder.writeStringArray(this.endpointUrlList);
     }
     static [decode](decoder: BinaryDataDecoder): EndpointUrlListDataType {
-        const endpointUrlList = decoder.readStringArray();
         return new EndpointUrlListDataType({
-            endpointUrlList
+            endpointUrlList: decoder.readStringArray()
         });
     }
 }
 export interface NetworkGroupDataTypeOptions {
-    serverUri?: UaString;
-    networkPaths?: EndpointUrlListDataType[];
+    serverUri?: UaString | undefined;
+    networkPaths?: EndpointUrlListDataType[] | undefined;
 }
 export class NetworkGroupDataType implements NetworkGroupDataTypeOptions {
-    serverUri?: UaString;
-    networkPaths?: EndpointUrlListDataType[];
+    readonly serverUri?: UaString;
+    readonly networkPaths?: EndpointUrlListDataType[];
     constructor(options?: NetworkGroupDataTypeOptions) {
         this.serverUri = options?.serverUri;
         this.networkPaths = options?.networkPaths;
@@ -10152,25 +9108,23 @@ export class NetworkGroupDataType implements NetworkGroupDataTypeOptions {
         encoder.writeTypeArray(this.networkPaths);
     }
     static [decode](decoder: BinaryDataDecoder): NetworkGroupDataType {
-        const serverUri = decoder.readString();
-        const networkPaths = decoder.readTypeArray(EndpointUrlListDataType);
         return new NetworkGroupDataType({
-            serverUri,
-            networkPaths
+            serverUri: decoder.readString(),
+            networkPaths: decoder.readTypeArray(EndpointUrlListDataType)
         });
     }
 }
 export interface SamplingIntervalDiagnosticsDataTypeOptions {
-    samplingInterval?: Double;
-    monitoredItemCount?: UInt32;
-    maxMonitoredItemCount?: UInt32;
-    disabledMonitoredItemCount?: UInt32;
+    samplingInterval?: Double | undefined;
+    monitoredItemCount?: UInt32 | undefined;
+    maxMonitoredItemCount?: UInt32 | undefined;
+    disabledMonitoredItemCount?: UInt32 | undefined;
 }
 export class SamplingIntervalDiagnosticsDataType implements SamplingIntervalDiagnosticsDataTypeOptions {
-    samplingInterval: Double;
-    monitoredItemCount: UInt32;
-    maxMonitoredItemCount: UInt32;
-    disabledMonitoredItemCount: UInt32;
+    readonly samplingInterval: Double;
+    readonly monitoredItemCount: UInt32;
+    readonly maxMonitoredItemCount: UInt32;
+    readonly disabledMonitoredItemCount: UInt32;
     constructor(options?: SamplingIntervalDiagnosticsDataTypeOptions) {
         this.samplingInterval = options?.samplingInterval ?? 0;
         this.monitoredItemCount = options?.monitoredItemCount ?? 0;
@@ -10185,45 +9139,41 @@ export class SamplingIntervalDiagnosticsDataType implements SamplingIntervalDiag
         encoder.writeUInt32(this.disabledMonitoredItemCount);
     }
     static [decode](decoder: BinaryDataDecoder): SamplingIntervalDiagnosticsDataType {
-        const samplingInterval = decoder.readDouble();
-        const monitoredItemCount = decoder.readUInt32();
-        const maxMonitoredItemCount = decoder.readUInt32();
-        const disabledMonitoredItemCount = decoder.readUInt32();
         return new SamplingIntervalDiagnosticsDataType({
-            samplingInterval,
-            monitoredItemCount,
-            maxMonitoredItemCount,
-            disabledMonitoredItemCount
+            samplingInterval: decoder.readDouble(),
+            monitoredItemCount: decoder.readUInt32(),
+            maxMonitoredItemCount: decoder.readUInt32(),
+            disabledMonitoredItemCount: decoder.readUInt32()
         });
     }
 }
 export interface ServerDiagnosticsSummaryDataTypeOptions {
-    serverViewCount?: UInt32;
-    currentSessionCount?: UInt32;
-    cumulatedSessionCount?: UInt32;
-    securityRejectedSessionCount?: UInt32;
-    rejectedSessionCount?: UInt32;
-    sessionTimeoutCount?: UInt32;
-    sessionAbortCount?: UInt32;
-    currentSubscriptionCount?: UInt32;
-    cumulatedSubscriptionCount?: UInt32;
-    publishingIntervalCount?: UInt32;
-    securityRejectedRequestsCount?: UInt32;
-    rejectedRequestsCount?: UInt32;
+    serverViewCount?: UInt32 | undefined;
+    currentSessionCount?: UInt32 | undefined;
+    cumulatedSessionCount?: UInt32 | undefined;
+    securityRejectedSessionCount?: UInt32 | undefined;
+    rejectedSessionCount?: UInt32 | undefined;
+    sessionTimeoutCount?: UInt32 | undefined;
+    sessionAbortCount?: UInt32 | undefined;
+    currentSubscriptionCount?: UInt32 | undefined;
+    cumulatedSubscriptionCount?: UInt32 | undefined;
+    publishingIntervalCount?: UInt32 | undefined;
+    securityRejectedRequestsCount?: UInt32 | undefined;
+    rejectedRequestsCount?: UInt32 | undefined;
 }
 export class ServerDiagnosticsSummaryDataType implements ServerDiagnosticsSummaryDataTypeOptions {
-    serverViewCount: UInt32;
-    currentSessionCount: UInt32;
-    cumulatedSessionCount: UInt32;
-    securityRejectedSessionCount: UInt32;
-    rejectedSessionCount: UInt32;
-    sessionTimeoutCount: UInt32;
-    sessionAbortCount: UInt32;
-    currentSubscriptionCount: UInt32;
-    cumulatedSubscriptionCount: UInt32;
-    publishingIntervalCount: UInt32;
-    securityRejectedRequestsCount: UInt32;
-    rejectedRequestsCount: UInt32;
+    readonly serverViewCount: UInt32;
+    readonly currentSessionCount: UInt32;
+    readonly cumulatedSessionCount: UInt32;
+    readonly securityRejectedSessionCount: UInt32;
+    readonly rejectedSessionCount: UInt32;
+    readonly sessionTimeoutCount: UInt32;
+    readonly sessionAbortCount: UInt32;
+    readonly currentSubscriptionCount: UInt32;
+    readonly cumulatedSubscriptionCount: UInt32;
+    readonly publishingIntervalCount: UInt32;
+    readonly securityRejectedRequestsCount: UInt32;
+    readonly rejectedRequestsCount: UInt32;
     constructor(options?: ServerDiagnosticsSummaryDataTypeOptions) {
         this.serverViewCount = options?.serverViewCount ?? 0;
         this.currentSessionCount = options?.currentSessionCount ?? 0;
@@ -10254,49 +9204,37 @@ export class ServerDiagnosticsSummaryDataType implements ServerDiagnosticsSummar
         encoder.writeUInt32(this.rejectedRequestsCount);
     }
     static [decode](decoder: BinaryDataDecoder): ServerDiagnosticsSummaryDataType {
-        const serverViewCount = decoder.readUInt32();
-        const currentSessionCount = decoder.readUInt32();
-        const cumulatedSessionCount = decoder.readUInt32();
-        const securityRejectedSessionCount = decoder.readUInt32();
-        const rejectedSessionCount = decoder.readUInt32();
-        const sessionTimeoutCount = decoder.readUInt32();
-        const sessionAbortCount = decoder.readUInt32();
-        const currentSubscriptionCount = decoder.readUInt32();
-        const cumulatedSubscriptionCount = decoder.readUInt32();
-        const publishingIntervalCount = decoder.readUInt32();
-        const securityRejectedRequestsCount = decoder.readUInt32();
-        const rejectedRequestsCount = decoder.readUInt32();
         return new ServerDiagnosticsSummaryDataType({
-            serverViewCount,
-            currentSessionCount,
-            cumulatedSessionCount,
-            securityRejectedSessionCount,
-            rejectedSessionCount,
-            sessionTimeoutCount,
-            sessionAbortCount,
-            currentSubscriptionCount,
-            cumulatedSubscriptionCount,
-            publishingIntervalCount,
-            securityRejectedRequestsCount,
-            rejectedRequestsCount
+            serverViewCount: decoder.readUInt32(),
+            currentSessionCount: decoder.readUInt32(),
+            cumulatedSessionCount: decoder.readUInt32(),
+            securityRejectedSessionCount: decoder.readUInt32(),
+            rejectedSessionCount: decoder.readUInt32(),
+            sessionTimeoutCount: decoder.readUInt32(),
+            sessionAbortCount: decoder.readUInt32(),
+            currentSubscriptionCount: decoder.readUInt32(),
+            cumulatedSubscriptionCount: decoder.readUInt32(),
+            publishingIntervalCount: decoder.readUInt32(),
+            securityRejectedRequestsCount: decoder.readUInt32(),
+            rejectedRequestsCount: decoder.readUInt32()
         });
     }
 }
 export interface ServerStatusDataTypeOptions {
-    startTime?: Date;
-    currentTime?: Date;
-    state?: ServerState;
-    buildInfo?: BuildInfo;
-    secondsTillShutdown?: UInt32;
-    shutdownReason?: LocalizedText;
+    startTime?: Date | undefined;
+    currentTime?: Date | undefined;
+    state?: ServerState | undefined;
+    buildInfo?: BuildInfo | undefined;
+    secondsTillShutdown?: UInt32 | undefined;
+    shutdownReason?: LocalizedText | undefined;
 }
 export class ServerStatusDataType implements ServerStatusDataTypeOptions {
-    startTime: Date;
-    currentTime: Date;
-    state: ServerState;
-    buildInfo: BuildInfo;
-    secondsTillShutdown: UInt32;
-    shutdownReason: LocalizedText;
+    readonly startTime: Date;
+    readonly currentTime: Date;
+    readonly state: ServerState;
+    readonly buildInfo: BuildInfo;
+    readonly secondsTillShutdown: UInt32;
+    readonly shutdownReason: LocalizedText;
     constructor(options?: ServerStatusDataTypeOptions) {
         this.startTime = options?.startTime ?? new Date(-11644473600000);
         this.currentTime = options?.currentTime ?? new Date(-11644473600000);
@@ -10315,111 +9253,105 @@ export class ServerStatusDataType implements ServerStatusDataTypeOptions {
         encoder.writeType(this.shutdownReason);
     }
     static [decode](decoder: BinaryDataDecoder): ServerStatusDataType {
-        const startTime = decoder.readDateTime();
-        const currentTime = decoder.readDateTime();
-        const state = decoder.readUInt32();
-        const buildInfo = decoder.readType(BuildInfo);
-        const secondsTillShutdown = decoder.readUInt32();
-        const shutdownReason = decoder.readType(LocalizedText);
         return new ServerStatusDataType({
-            startTime,
-            currentTime,
-            state,
-            buildInfo,
-            secondsTillShutdown,
-            shutdownReason
+            startTime: decoder.readDateTime(),
+            currentTime: decoder.readDateTime(),
+            state: decoder.readUInt32(),
+            buildInfo: decoder.readType(BuildInfo),
+            secondsTillShutdown: decoder.readUInt32(),
+            shutdownReason: decoder.readType(LocalizedText)
         });
     }
 }
 export interface SessionDiagnosticsDataTypeOptions {
-    sessionId?: NodeId;
-    sessionName?: UaString;
-    clientDescription?: ApplicationDescription;
-    serverUri?: UaString;
-    endpointUrl?: UaString;
-    localeIds?: UaString[];
-    actualSessionTimeout?: Double;
-    maxResponseMessageSize?: UInt32;
-    clientConnectionTime?: Date;
-    clientLastContactTime?: Date;
-    currentSubscriptionsCount?: UInt32;
-    currentMonitoredItemsCount?: UInt32;
-    currentPublishRequestsInQueue?: UInt32;
-    totalRequestCount?: ServiceCounterDataType;
-    unauthorizedRequestCount?: UInt32;
-    readCount?: ServiceCounterDataType;
-    historyReadCount?: ServiceCounterDataType;
-    writeCount?: ServiceCounterDataType;
-    historyUpdateCount?: ServiceCounterDataType;
-    callCount?: ServiceCounterDataType;
-    createMonitoredItemsCount?: ServiceCounterDataType;
-    modifyMonitoredItemsCount?: ServiceCounterDataType;
-    setMonitoringModeCount?: ServiceCounterDataType;
-    setTriggeringCount?: ServiceCounterDataType;
-    deleteMonitoredItemsCount?: ServiceCounterDataType;
-    createSubscriptionCount?: ServiceCounterDataType;
-    modifySubscriptionCount?: ServiceCounterDataType;
-    setPublishingModeCount?: ServiceCounterDataType;
-    publishCount?: ServiceCounterDataType;
-    republishCount?: ServiceCounterDataType;
-    transferSubscriptionsCount?: ServiceCounterDataType;
-    deleteSubscriptionsCount?: ServiceCounterDataType;
-    addNodesCount?: ServiceCounterDataType;
-    addReferencesCount?: ServiceCounterDataType;
-    deleteNodesCount?: ServiceCounterDataType;
-    deleteReferencesCount?: ServiceCounterDataType;
-    browseCount?: ServiceCounterDataType;
-    browseNextCount?: ServiceCounterDataType;
-    translateBrowsePathsToNodeIdsCount?: ServiceCounterDataType;
-    queryFirstCount?: ServiceCounterDataType;
-    queryNextCount?: ServiceCounterDataType;
-    registerNodesCount?: ServiceCounterDataType;
-    unregisterNodesCount?: ServiceCounterDataType;
+    sessionId?: NodeId | undefined;
+    sessionName?: UaString | undefined;
+    clientDescription?: ApplicationDescription | undefined;
+    serverUri?: UaString | undefined;
+    endpointUrl?: UaString | undefined;
+    localeIds?: UaString[] | undefined;
+    actualSessionTimeout?: Double | undefined;
+    maxResponseMessageSize?: UInt32 | undefined;
+    clientConnectionTime?: Date | undefined;
+    clientLastContactTime?: Date | undefined;
+    currentSubscriptionsCount?: UInt32 | undefined;
+    currentMonitoredItemsCount?: UInt32 | undefined;
+    currentPublishRequestsInQueue?: UInt32 | undefined;
+    totalRequestCount?: ServiceCounterDataType | undefined;
+    unauthorizedRequestCount?: UInt32 | undefined;
+    readCount?: ServiceCounterDataType | undefined;
+    historyReadCount?: ServiceCounterDataType | undefined;
+    writeCount?: ServiceCounterDataType | undefined;
+    historyUpdateCount?: ServiceCounterDataType | undefined;
+    callCount?: ServiceCounterDataType | undefined;
+    createMonitoredItemsCount?: ServiceCounterDataType | undefined;
+    modifyMonitoredItemsCount?: ServiceCounterDataType | undefined;
+    setMonitoringModeCount?: ServiceCounterDataType | undefined;
+    setTriggeringCount?: ServiceCounterDataType | undefined;
+    deleteMonitoredItemsCount?: ServiceCounterDataType | undefined;
+    createSubscriptionCount?: ServiceCounterDataType | undefined;
+    modifySubscriptionCount?: ServiceCounterDataType | undefined;
+    setPublishingModeCount?: ServiceCounterDataType | undefined;
+    publishCount?: ServiceCounterDataType | undefined;
+    republishCount?: ServiceCounterDataType | undefined;
+    transferSubscriptionsCount?: ServiceCounterDataType | undefined;
+    deleteSubscriptionsCount?: ServiceCounterDataType | undefined;
+    addNodesCount?: ServiceCounterDataType | undefined;
+    addReferencesCount?: ServiceCounterDataType | undefined;
+    deleteNodesCount?: ServiceCounterDataType | undefined;
+    deleteReferencesCount?: ServiceCounterDataType | undefined;
+    browseCount?: ServiceCounterDataType | undefined;
+    browseNextCount?: ServiceCounterDataType | undefined;
+    translateBrowsePathsToNodeIdsCount?: ServiceCounterDataType | undefined;
+    queryFirstCount?: ServiceCounterDataType | undefined;
+    queryNextCount?: ServiceCounterDataType | undefined;
+    registerNodesCount?: ServiceCounterDataType | undefined;
+    unregisterNodesCount?: ServiceCounterDataType | undefined;
 }
 export class SessionDiagnosticsDataType implements SessionDiagnosticsDataTypeOptions {
-    sessionId: NodeId;
-    sessionName?: UaString;
-    clientDescription: ApplicationDescription;
-    serverUri?: UaString;
-    endpointUrl?: UaString;
-    localeIds?: UaString[];
-    actualSessionTimeout: Double;
-    maxResponseMessageSize: UInt32;
-    clientConnectionTime: Date;
-    clientLastContactTime: Date;
-    currentSubscriptionsCount: UInt32;
-    currentMonitoredItemsCount: UInt32;
-    currentPublishRequestsInQueue: UInt32;
-    totalRequestCount: ServiceCounterDataType;
-    unauthorizedRequestCount: UInt32;
-    readCount: ServiceCounterDataType;
-    historyReadCount: ServiceCounterDataType;
-    writeCount: ServiceCounterDataType;
-    historyUpdateCount: ServiceCounterDataType;
-    callCount: ServiceCounterDataType;
-    createMonitoredItemsCount: ServiceCounterDataType;
-    modifyMonitoredItemsCount: ServiceCounterDataType;
-    setMonitoringModeCount: ServiceCounterDataType;
-    setTriggeringCount: ServiceCounterDataType;
-    deleteMonitoredItemsCount: ServiceCounterDataType;
-    createSubscriptionCount: ServiceCounterDataType;
-    modifySubscriptionCount: ServiceCounterDataType;
-    setPublishingModeCount: ServiceCounterDataType;
-    publishCount: ServiceCounterDataType;
-    republishCount: ServiceCounterDataType;
-    transferSubscriptionsCount: ServiceCounterDataType;
-    deleteSubscriptionsCount: ServiceCounterDataType;
-    addNodesCount: ServiceCounterDataType;
-    addReferencesCount: ServiceCounterDataType;
-    deleteNodesCount: ServiceCounterDataType;
-    deleteReferencesCount: ServiceCounterDataType;
-    browseCount: ServiceCounterDataType;
-    browseNextCount: ServiceCounterDataType;
-    translateBrowsePathsToNodeIdsCount: ServiceCounterDataType;
-    queryFirstCount: ServiceCounterDataType;
-    queryNextCount: ServiceCounterDataType;
-    registerNodesCount: ServiceCounterDataType;
-    unregisterNodesCount: ServiceCounterDataType;
+    readonly sessionId: NodeId;
+    readonly sessionName?: UaString;
+    readonly clientDescription: ApplicationDescription;
+    readonly serverUri?: UaString;
+    readonly endpointUrl?: UaString;
+    readonly localeIds?: UaString[];
+    readonly actualSessionTimeout: Double;
+    readonly maxResponseMessageSize: UInt32;
+    readonly clientConnectionTime: Date;
+    readonly clientLastContactTime: Date;
+    readonly currentSubscriptionsCount: UInt32;
+    readonly currentMonitoredItemsCount: UInt32;
+    readonly currentPublishRequestsInQueue: UInt32;
+    readonly totalRequestCount: ServiceCounterDataType;
+    readonly unauthorizedRequestCount: UInt32;
+    readonly readCount: ServiceCounterDataType;
+    readonly historyReadCount: ServiceCounterDataType;
+    readonly writeCount: ServiceCounterDataType;
+    readonly historyUpdateCount: ServiceCounterDataType;
+    readonly callCount: ServiceCounterDataType;
+    readonly createMonitoredItemsCount: ServiceCounterDataType;
+    readonly modifyMonitoredItemsCount: ServiceCounterDataType;
+    readonly setMonitoringModeCount: ServiceCounterDataType;
+    readonly setTriggeringCount: ServiceCounterDataType;
+    readonly deleteMonitoredItemsCount: ServiceCounterDataType;
+    readonly createSubscriptionCount: ServiceCounterDataType;
+    readonly modifySubscriptionCount: ServiceCounterDataType;
+    readonly setPublishingModeCount: ServiceCounterDataType;
+    readonly publishCount: ServiceCounterDataType;
+    readonly republishCount: ServiceCounterDataType;
+    readonly transferSubscriptionsCount: ServiceCounterDataType;
+    readonly deleteSubscriptionsCount: ServiceCounterDataType;
+    readonly addNodesCount: ServiceCounterDataType;
+    readonly addReferencesCount: ServiceCounterDataType;
+    readonly deleteNodesCount: ServiceCounterDataType;
+    readonly deleteReferencesCount: ServiceCounterDataType;
+    readonly browseCount: ServiceCounterDataType;
+    readonly browseNextCount: ServiceCounterDataType;
+    readonly translateBrowsePathsToNodeIdsCount: ServiceCounterDataType;
+    readonly queryFirstCount: ServiceCounterDataType;
+    readonly queryNextCount: ServiceCounterDataType;
+    readonly registerNodesCount: ServiceCounterDataType;
+    readonly unregisterNodesCount: ServiceCounterDataType;
     constructor(options?: SessionDiagnosticsDataTypeOptions) {
         this.sessionId = options?.sessionId ?? NodeId.null();
         this.sessionName = options?.sessionName;
@@ -10512,117 +9444,74 @@ export class SessionDiagnosticsDataType implements SessionDiagnosticsDataTypeOpt
         encoder.writeType(this.unregisterNodesCount);
     }
     static [decode](decoder: BinaryDataDecoder): SessionDiagnosticsDataType {
-        const sessionId = decoder.readType(NodeId);
-        const sessionName = decoder.readString();
-        const clientDescription = decoder.readType(ApplicationDescription);
-        const serverUri = decoder.readString();
-        const endpointUrl = decoder.readString();
-        const localeIds = decoder.readStringArray();
-        const actualSessionTimeout = decoder.readDouble();
-        const maxResponseMessageSize = decoder.readUInt32();
-        const clientConnectionTime = decoder.readDateTime();
-        const clientLastContactTime = decoder.readDateTime();
-        const currentSubscriptionsCount = decoder.readUInt32();
-        const currentMonitoredItemsCount = decoder.readUInt32();
-        const currentPublishRequestsInQueue = decoder.readUInt32();
-        const totalRequestCount = decoder.readType(ServiceCounterDataType);
-        const unauthorizedRequestCount = decoder.readUInt32();
-        const readCount = decoder.readType(ServiceCounterDataType);
-        const historyReadCount = decoder.readType(ServiceCounterDataType);
-        const writeCount = decoder.readType(ServiceCounterDataType);
-        const historyUpdateCount = decoder.readType(ServiceCounterDataType);
-        const callCount = decoder.readType(ServiceCounterDataType);
-        const createMonitoredItemsCount = decoder.readType(ServiceCounterDataType);
-        const modifyMonitoredItemsCount = decoder.readType(ServiceCounterDataType);
-        const setMonitoringModeCount = decoder.readType(ServiceCounterDataType);
-        const setTriggeringCount = decoder.readType(ServiceCounterDataType);
-        const deleteMonitoredItemsCount = decoder.readType(ServiceCounterDataType);
-        const createSubscriptionCount = decoder.readType(ServiceCounterDataType);
-        const modifySubscriptionCount = decoder.readType(ServiceCounterDataType);
-        const setPublishingModeCount = decoder.readType(ServiceCounterDataType);
-        const publishCount = decoder.readType(ServiceCounterDataType);
-        const republishCount = decoder.readType(ServiceCounterDataType);
-        const transferSubscriptionsCount = decoder.readType(ServiceCounterDataType);
-        const deleteSubscriptionsCount = decoder.readType(ServiceCounterDataType);
-        const addNodesCount = decoder.readType(ServiceCounterDataType);
-        const addReferencesCount = decoder.readType(ServiceCounterDataType);
-        const deleteNodesCount = decoder.readType(ServiceCounterDataType);
-        const deleteReferencesCount = decoder.readType(ServiceCounterDataType);
-        const browseCount = decoder.readType(ServiceCounterDataType);
-        const browseNextCount = decoder.readType(ServiceCounterDataType);
-        const translateBrowsePathsToNodeIdsCount = decoder.readType(ServiceCounterDataType);
-        const queryFirstCount = decoder.readType(ServiceCounterDataType);
-        const queryNextCount = decoder.readType(ServiceCounterDataType);
-        const registerNodesCount = decoder.readType(ServiceCounterDataType);
-        const unregisterNodesCount = decoder.readType(ServiceCounterDataType);
         return new SessionDiagnosticsDataType({
-            sessionId,
-            sessionName,
-            clientDescription,
-            serverUri,
-            endpointUrl,
-            localeIds,
-            actualSessionTimeout,
-            maxResponseMessageSize,
-            clientConnectionTime,
-            clientLastContactTime,
-            currentSubscriptionsCount,
-            currentMonitoredItemsCount,
-            currentPublishRequestsInQueue,
-            totalRequestCount,
-            unauthorizedRequestCount,
-            readCount,
-            historyReadCount,
-            writeCount,
-            historyUpdateCount,
-            callCount,
-            createMonitoredItemsCount,
-            modifyMonitoredItemsCount,
-            setMonitoringModeCount,
-            setTriggeringCount,
-            deleteMonitoredItemsCount,
-            createSubscriptionCount,
-            modifySubscriptionCount,
-            setPublishingModeCount,
-            publishCount,
-            republishCount,
-            transferSubscriptionsCount,
-            deleteSubscriptionsCount,
-            addNodesCount,
-            addReferencesCount,
-            deleteNodesCount,
-            deleteReferencesCount,
-            browseCount,
-            browseNextCount,
-            translateBrowsePathsToNodeIdsCount,
-            queryFirstCount,
-            queryNextCount,
-            registerNodesCount,
-            unregisterNodesCount
+            sessionId: decoder.readType(NodeId),
+            sessionName: decoder.readString(),
+            clientDescription: decoder.readType(ApplicationDescription),
+            serverUri: decoder.readString(),
+            endpointUrl: decoder.readString(),
+            localeIds: decoder.readStringArray(),
+            actualSessionTimeout: decoder.readDouble(),
+            maxResponseMessageSize: decoder.readUInt32(),
+            clientConnectionTime: decoder.readDateTime(),
+            clientLastContactTime: decoder.readDateTime(),
+            currentSubscriptionsCount: decoder.readUInt32(),
+            currentMonitoredItemsCount: decoder.readUInt32(),
+            currentPublishRequestsInQueue: decoder.readUInt32(),
+            totalRequestCount: decoder.readType(ServiceCounterDataType),
+            unauthorizedRequestCount: decoder.readUInt32(),
+            readCount: decoder.readType(ServiceCounterDataType),
+            historyReadCount: decoder.readType(ServiceCounterDataType),
+            writeCount: decoder.readType(ServiceCounterDataType),
+            historyUpdateCount: decoder.readType(ServiceCounterDataType),
+            callCount: decoder.readType(ServiceCounterDataType),
+            createMonitoredItemsCount: decoder.readType(ServiceCounterDataType),
+            modifyMonitoredItemsCount: decoder.readType(ServiceCounterDataType),
+            setMonitoringModeCount: decoder.readType(ServiceCounterDataType),
+            setTriggeringCount: decoder.readType(ServiceCounterDataType),
+            deleteMonitoredItemsCount: decoder.readType(ServiceCounterDataType),
+            createSubscriptionCount: decoder.readType(ServiceCounterDataType),
+            modifySubscriptionCount: decoder.readType(ServiceCounterDataType),
+            setPublishingModeCount: decoder.readType(ServiceCounterDataType),
+            publishCount: decoder.readType(ServiceCounterDataType),
+            republishCount: decoder.readType(ServiceCounterDataType),
+            transferSubscriptionsCount: decoder.readType(ServiceCounterDataType),
+            deleteSubscriptionsCount: decoder.readType(ServiceCounterDataType),
+            addNodesCount: decoder.readType(ServiceCounterDataType),
+            addReferencesCount: decoder.readType(ServiceCounterDataType),
+            deleteNodesCount: decoder.readType(ServiceCounterDataType),
+            deleteReferencesCount: decoder.readType(ServiceCounterDataType),
+            browseCount: decoder.readType(ServiceCounterDataType),
+            browseNextCount: decoder.readType(ServiceCounterDataType),
+            translateBrowsePathsToNodeIdsCount: decoder.readType(ServiceCounterDataType),
+            queryFirstCount: decoder.readType(ServiceCounterDataType),
+            queryNextCount: decoder.readType(ServiceCounterDataType),
+            registerNodesCount: decoder.readType(ServiceCounterDataType),
+            unregisterNodesCount: decoder.readType(ServiceCounterDataType)
         });
     }
 }
 export interface SessionSecurityDiagnosticsDataTypeOptions {
-    sessionId?: NodeId;
-    clientUserIdOfSession?: UaString;
-    clientUserIdHistory?: UaString[];
-    authenticationMechanism?: UaString;
-    encoding?: UaString;
-    transportProtocol?: UaString;
-    securityMode?: MessageSecurityMode;
-    securityPolicyUri?: UaString;
-    clientCertificate?: ByteString;
+    sessionId?: NodeId | undefined;
+    clientUserIdOfSession?: UaString | undefined;
+    clientUserIdHistory?: UaString[] | undefined;
+    authenticationMechanism?: UaString | undefined;
+    encoding?: UaString | undefined;
+    transportProtocol?: UaString | undefined;
+    securityMode?: MessageSecurityMode | undefined;
+    securityPolicyUri?: UaString | undefined;
+    clientCertificate?: ByteString | undefined;
 }
 export class SessionSecurityDiagnosticsDataType implements SessionSecurityDiagnosticsDataTypeOptions {
-    sessionId: NodeId;
-    clientUserIdOfSession?: UaString;
-    clientUserIdHistory?: UaString[];
-    authenticationMechanism?: UaString;
-    encoding?: UaString;
-    transportProtocol?: UaString;
-    securityMode: MessageSecurityMode;
-    securityPolicyUri?: UaString;
-    clientCertificate?: ByteString;
+    readonly sessionId: NodeId;
+    readonly clientUserIdOfSession?: UaString;
+    readonly clientUserIdHistory?: UaString[];
+    readonly authenticationMechanism?: UaString;
+    readonly encoding?: UaString;
+    readonly transportProtocol?: UaString;
+    readonly securityMode: MessageSecurityMode;
+    readonly securityPolicyUri?: UaString;
+    readonly clientCertificate?: ByteString;
     constructor(options?: SessionSecurityDiagnosticsDataTypeOptions) {
         this.sessionId = options?.sessionId ?? NodeId.null();
         this.clientUserIdOfSession = options?.clientUserIdOfSession;
@@ -10647,35 +9536,26 @@ export class SessionSecurityDiagnosticsDataType implements SessionSecurityDiagno
         encoder.writeByteString(this.clientCertificate);
     }
     static [decode](decoder: BinaryDataDecoder): SessionSecurityDiagnosticsDataType {
-        const sessionId = decoder.readType(NodeId);
-        const clientUserIdOfSession = decoder.readString();
-        const clientUserIdHistory = decoder.readStringArray();
-        const authenticationMechanism = decoder.readString();
-        const encoding = decoder.readString();
-        const transportProtocol = decoder.readString();
-        const securityMode = decoder.readUInt32();
-        const securityPolicyUri = decoder.readString();
-        const clientCertificate = decoder.readByteString();
         return new SessionSecurityDiagnosticsDataType({
-            sessionId,
-            clientUserIdOfSession,
-            clientUserIdHistory,
-            authenticationMechanism,
-            encoding,
-            transportProtocol,
-            securityMode,
-            securityPolicyUri,
-            clientCertificate
+            sessionId: decoder.readType(NodeId),
+            clientUserIdOfSession: decoder.readString(),
+            clientUserIdHistory: decoder.readStringArray(),
+            authenticationMechanism: decoder.readString(),
+            encoding: decoder.readString(),
+            transportProtocol: decoder.readString(),
+            securityMode: decoder.readUInt32(),
+            securityPolicyUri: decoder.readString(),
+            clientCertificate: decoder.readByteString()
         });
     }
 }
 export interface ServiceCounterDataTypeOptions {
-    totalCount?: UInt32;
-    errorCount?: UInt32;
+    totalCount?: UInt32 | undefined;
+    errorCount?: UInt32 | undefined;
 }
 export class ServiceCounterDataType implements ServiceCounterDataTypeOptions {
-    totalCount: UInt32;
-    errorCount: UInt32;
+    readonly totalCount: UInt32;
+    readonly errorCount: UInt32;
     constructor(options?: ServiceCounterDataTypeOptions) {
         this.totalCount = options?.totalCount ?? 0;
         this.errorCount = options?.errorCount ?? 0;
@@ -10686,21 +9566,19 @@ export class ServiceCounterDataType implements ServiceCounterDataTypeOptions {
         encoder.writeUInt32(this.errorCount);
     }
     static [decode](decoder: BinaryDataDecoder): ServiceCounterDataType {
-        const totalCount = decoder.readUInt32();
-        const errorCount = decoder.readUInt32();
         return new ServiceCounterDataType({
-            totalCount,
-            errorCount
+            totalCount: decoder.readUInt32(),
+            errorCount: decoder.readUInt32()
         });
     }
 }
 export interface StatusResultOptions {
-    statusCode?: StatusCode;
-    diagnosticInfo?: DiagnosticInfo;
+    statusCode?: StatusCode | undefined;
+    diagnosticInfo?: DiagnosticInfo | undefined;
 }
 export class StatusResult implements StatusResultOptions {
-    statusCode: StatusCode;
-    diagnosticInfo: DiagnosticInfo;
+    readonly statusCode: StatusCode;
+    readonly diagnosticInfo: DiagnosticInfo;
     constructor(options?: StatusResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.diagnosticInfo = options?.diagnosticInfo ?? new DiagnosticInfo();
@@ -10711,79 +9589,77 @@ export class StatusResult implements StatusResultOptions {
         encoder.writeType(this.diagnosticInfo);
     }
     static [decode](decoder: BinaryDataDecoder): StatusResult {
-        const statusCode = decoder.readType(StatusCode);
-        const diagnosticInfo = decoder.readType(DiagnosticInfo);
         return new StatusResult({
-            statusCode,
-            diagnosticInfo
+            statusCode: decoder.readType(StatusCode),
+            diagnosticInfo: decoder.readType(DiagnosticInfo)
         });
     }
 }
 export interface SubscriptionDiagnosticsDataTypeOptions {
-    sessionId?: NodeId;
-    subscriptionId?: UInt32;
-    priority?: Byte;
-    publishingInterval?: Double;
-    maxKeepAliveCount?: UInt32;
-    maxLifetimeCount?: UInt32;
-    maxNotificationsPerPublish?: UInt32;
-    publishingEnabled?: boolean;
-    modifyCount?: UInt32;
-    enableCount?: UInt32;
-    disableCount?: UInt32;
-    republishRequestCount?: UInt32;
-    republishMessageRequestCount?: UInt32;
-    republishMessageCount?: UInt32;
-    transferRequestCount?: UInt32;
-    transferredToAltClientCount?: UInt32;
-    transferredToSameClientCount?: UInt32;
-    publishRequestCount?: UInt32;
-    dataChangeNotificationsCount?: UInt32;
-    eventNotificationsCount?: UInt32;
-    notificationsCount?: UInt32;
-    latePublishRequestCount?: UInt32;
-    currentKeepAliveCount?: UInt32;
-    currentLifetimeCount?: UInt32;
-    unacknowledgedMessageCount?: UInt32;
-    discardedMessageCount?: UInt32;
-    monitoredItemCount?: UInt32;
-    disabledMonitoredItemCount?: UInt32;
-    monitoringQueueOverflowCount?: UInt32;
-    nextSequenceNumber?: UInt32;
-    eventQueueOverFlowCount?: UInt32;
+    sessionId?: NodeId | undefined;
+    subscriptionId?: UInt32 | undefined;
+    priority?: Byte | undefined;
+    publishingInterval?: Double | undefined;
+    maxKeepAliveCount?: UInt32 | undefined;
+    maxLifetimeCount?: UInt32 | undefined;
+    maxNotificationsPerPublish?: UInt32 | undefined;
+    publishingEnabled?: boolean | undefined;
+    modifyCount?: UInt32 | undefined;
+    enableCount?: UInt32 | undefined;
+    disableCount?: UInt32 | undefined;
+    republishRequestCount?: UInt32 | undefined;
+    republishMessageRequestCount?: UInt32 | undefined;
+    republishMessageCount?: UInt32 | undefined;
+    transferRequestCount?: UInt32 | undefined;
+    transferredToAltClientCount?: UInt32 | undefined;
+    transferredToSameClientCount?: UInt32 | undefined;
+    publishRequestCount?: UInt32 | undefined;
+    dataChangeNotificationsCount?: UInt32 | undefined;
+    eventNotificationsCount?: UInt32 | undefined;
+    notificationsCount?: UInt32 | undefined;
+    latePublishRequestCount?: UInt32 | undefined;
+    currentKeepAliveCount?: UInt32 | undefined;
+    currentLifetimeCount?: UInt32 | undefined;
+    unacknowledgedMessageCount?: UInt32 | undefined;
+    discardedMessageCount?: UInt32 | undefined;
+    monitoredItemCount?: UInt32 | undefined;
+    disabledMonitoredItemCount?: UInt32 | undefined;
+    monitoringQueueOverflowCount?: UInt32 | undefined;
+    nextSequenceNumber?: UInt32 | undefined;
+    eventQueueOverFlowCount?: UInt32 | undefined;
 }
 export class SubscriptionDiagnosticsDataType implements SubscriptionDiagnosticsDataTypeOptions {
-    sessionId: NodeId;
-    subscriptionId: UInt32;
-    priority: Byte;
-    publishingInterval: Double;
-    maxKeepAliveCount: UInt32;
-    maxLifetimeCount: UInt32;
-    maxNotificationsPerPublish: UInt32;
-    publishingEnabled: boolean;
-    modifyCount: UInt32;
-    enableCount: UInt32;
-    disableCount: UInt32;
-    republishRequestCount: UInt32;
-    republishMessageRequestCount: UInt32;
-    republishMessageCount: UInt32;
-    transferRequestCount: UInt32;
-    transferredToAltClientCount: UInt32;
-    transferredToSameClientCount: UInt32;
-    publishRequestCount: UInt32;
-    dataChangeNotificationsCount: UInt32;
-    eventNotificationsCount: UInt32;
-    notificationsCount: UInt32;
-    latePublishRequestCount: UInt32;
-    currentKeepAliveCount: UInt32;
-    currentLifetimeCount: UInt32;
-    unacknowledgedMessageCount: UInt32;
-    discardedMessageCount: UInt32;
-    monitoredItemCount: UInt32;
-    disabledMonitoredItemCount: UInt32;
-    monitoringQueueOverflowCount: UInt32;
-    nextSequenceNumber: UInt32;
-    eventQueueOverFlowCount: UInt32;
+    readonly sessionId: NodeId;
+    readonly subscriptionId: UInt32;
+    readonly priority: Byte;
+    readonly publishingInterval: Double;
+    readonly maxKeepAliveCount: UInt32;
+    readonly maxLifetimeCount: UInt32;
+    readonly maxNotificationsPerPublish: UInt32;
+    readonly publishingEnabled: boolean;
+    readonly modifyCount: UInt32;
+    readonly enableCount: UInt32;
+    readonly disableCount: UInt32;
+    readonly republishRequestCount: UInt32;
+    readonly republishMessageRequestCount: UInt32;
+    readonly republishMessageCount: UInt32;
+    readonly transferRequestCount: UInt32;
+    readonly transferredToAltClientCount: UInt32;
+    readonly transferredToSameClientCount: UInt32;
+    readonly publishRequestCount: UInt32;
+    readonly dataChangeNotificationsCount: UInt32;
+    readonly eventNotificationsCount: UInt32;
+    readonly notificationsCount: UInt32;
+    readonly latePublishRequestCount: UInt32;
+    readonly currentKeepAliveCount: UInt32;
+    readonly currentLifetimeCount: UInt32;
+    readonly unacknowledgedMessageCount: UInt32;
+    readonly discardedMessageCount: UInt32;
+    readonly monitoredItemCount: UInt32;
+    readonly disabledMonitoredItemCount: UInt32;
+    readonly monitoringQueueOverflowCount: UInt32;
+    readonly nextSequenceNumber: UInt32;
+    readonly eventQueueOverFlowCount: UInt32;
     constructor(options?: SubscriptionDiagnosticsDataTypeOptions) {
         this.sessionId = options?.sessionId ?? NodeId.null();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -10852,69 +9728,38 @@ export class SubscriptionDiagnosticsDataType implements SubscriptionDiagnosticsD
         encoder.writeUInt32(this.eventQueueOverFlowCount);
     }
     static [decode](decoder: BinaryDataDecoder): SubscriptionDiagnosticsDataType {
-        const sessionId = decoder.readType(NodeId);
-        const subscriptionId = decoder.readUInt32();
-        const priority = decoder.readByte();
-        const publishingInterval = decoder.readDouble();
-        const maxKeepAliveCount = decoder.readUInt32();
-        const maxLifetimeCount = decoder.readUInt32();
-        const maxNotificationsPerPublish = decoder.readUInt32();
-        const publishingEnabled = decoder.readBoolean();
-        const modifyCount = decoder.readUInt32();
-        const enableCount = decoder.readUInt32();
-        const disableCount = decoder.readUInt32();
-        const republishRequestCount = decoder.readUInt32();
-        const republishMessageRequestCount = decoder.readUInt32();
-        const republishMessageCount = decoder.readUInt32();
-        const transferRequestCount = decoder.readUInt32();
-        const transferredToAltClientCount = decoder.readUInt32();
-        const transferredToSameClientCount = decoder.readUInt32();
-        const publishRequestCount = decoder.readUInt32();
-        const dataChangeNotificationsCount = decoder.readUInt32();
-        const eventNotificationsCount = decoder.readUInt32();
-        const notificationsCount = decoder.readUInt32();
-        const latePublishRequestCount = decoder.readUInt32();
-        const currentKeepAliveCount = decoder.readUInt32();
-        const currentLifetimeCount = decoder.readUInt32();
-        const unacknowledgedMessageCount = decoder.readUInt32();
-        const discardedMessageCount = decoder.readUInt32();
-        const monitoredItemCount = decoder.readUInt32();
-        const disabledMonitoredItemCount = decoder.readUInt32();
-        const monitoringQueueOverflowCount = decoder.readUInt32();
-        const nextSequenceNumber = decoder.readUInt32();
-        const eventQueueOverFlowCount = decoder.readUInt32();
         return new SubscriptionDiagnosticsDataType({
-            sessionId,
-            subscriptionId,
-            priority,
-            publishingInterval,
-            maxKeepAliveCount,
-            maxLifetimeCount,
-            maxNotificationsPerPublish,
-            publishingEnabled,
-            modifyCount,
-            enableCount,
-            disableCount,
-            republishRequestCount,
-            republishMessageRequestCount,
-            republishMessageCount,
-            transferRequestCount,
-            transferredToAltClientCount,
-            transferredToSameClientCount,
-            publishRequestCount,
-            dataChangeNotificationsCount,
-            eventNotificationsCount,
-            notificationsCount,
-            latePublishRequestCount,
-            currentKeepAliveCount,
-            currentLifetimeCount,
-            unacknowledgedMessageCount,
-            discardedMessageCount,
-            monitoredItemCount,
-            disabledMonitoredItemCount,
-            monitoringQueueOverflowCount,
-            nextSequenceNumber,
-            eventQueueOverFlowCount
+            sessionId: decoder.readType(NodeId),
+            subscriptionId: decoder.readUInt32(),
+            priority: decoder.readByte(),
+            publishingInterval: decoder.readDouble(),
+            maxKeepAliveCount: decoder.readUInt32(),
+            maxLifetimeCount: decoder.readUInt32(),
+            maxNotificationsPerPublish: decoder.readUInt32(),
+            publishingEnabled: decoder.readBoolean(),
+            modifyCount: decoder.readUInt32(),
+            enableCount: decoder.readUInt32(),
+            disableCount: decoder.readUInt32(),
+            republishRequestCount: decoder.readUInt32(),
+            republishMessageRequestCount: decoder.readUInt32(),
+            republishMessageCount: decoder.readUInt32(),
+            transferRequestCount: decoder.readUInt32(),
+            transferredToAltClientCount: decoder.readUInt32(),
+            transferredToSameClientCount: decoder.readUInt32(),
+            publishRequestCount: decoder.readUInt32(),
+            dataChangeNotificationsCount: decoder.readUInt32(),
+            eventNotificationsCount: decoder.readUInt32(),
+            notificationsCount: decoder.readUInt32(),
+            latePublishRequestCount: decoder.readUInt32(),
+            currentKeepAliveCount: decoder.readUInt32(),
+            currentLifetimeCount: decoder.readUInt32(),
+            unacknowledgedMessageCount: decoder.readUInt32(),
+            discardedMessageCount: decoder.readUInt32(),
+            monitoredItemCount: decoder.readUInt32(),
+            disabledMonitoredItemCount: decoder.readUInt32(),
+            monitoringQueueOverflowCount: decoder.readUInt32(),
+            nextSequenceNumber: decoder.readUInt32(),
+            eventQueueOverFlowCount: decoder.readUInt32()
         });
     }
 }
@@ -10926,14 +9771,14 @@ export enum ModelChangeStructureVerbMask {
     DataTypeChanged = 16
 }
 export interface ModelChangeStructureDataTypeOptions {
-    affected?: NodeId;
-    affectedType?: NodeId;
-    verb?: Byte;
+    affected?: NodeId | undefined;
+    affectedType?: NodeId | undefined;
+    verb?: Byte | undefined;
 }
 export class ModelChangeStructureDataType implements ModelChangeStructureDataTypeOptions {
-    affected: NodeId;
-    affectedType: NodeId;
-    verb: Byte;
+    readonly affected: NodeId;
+    readonly affectedType: NodeId;
+    readonly verb: Byte;
     constructor(options?: ModelChangeStructureDataTypeOptions) {
         this.affected = options?.affected ?? NodeId.null();
         this.affectedType = options?.affectedType ?? NodeId.null();
@@ -10946,23 +9791,20 @@ export class ModelChangeStructureDataType implements ModelChangeStructureDataTyp
         encoder.writeByte(this.verb);
     }
     static [decode](decoder: BinaryDataDecoder): ModelChangeStructureDataType {
-        const affected = decoder.readType(NodeId);
-        const affectedType = decoder.readType(NodeId);
-        const verb = decoder.readByte();
         return new ModelChangeStructureDataType({
-            affected,
-            affectedType,
-            verb
+            affected: decoder.readType(NodeId),
+            affectedType: decoder.readType(NodeId),
+            verb: decoder.readByte()
         });
     }
 }
 export interface SemanticChangeStructureDataTypeOptions {
-    affected?: NodeId;
-    affectedType?: NodeId;
+    affected?: NodeId | undefined;
+    affectedType?: NodeId | undefined;
 }
 export class SemanticChangeStructureDataType implements SemanticChangeStructureDataTypeOptions {
-    affected: NodeId;
-    affectedType: NodeId;
+    readonly affected: NodeId;
+    readonly affectedType: NodeId;
     constructor(options?: SemanticChangeStructureDataTypeOptions) {
         this.affected = options?.affected ?? NodeId.null();
         this.affectedType = options?.affectedType ?? NodeId.null();
@@ -10973,21 +9815,19 @@ export class SemanticChangeStructureDataType implements SemanticChangeStructureD
         encoder.writeType(this.affectedType);
     }
     static [decode](decoder: BinaryDataDecoder): SemanticChangeStructureDataType {
-        const affected = decoder.readType(NodeId);
-        const affectedType = decoder.readType(NodeId);
         return new SemanticChangeStructureDataType({
-            affected,
-            affectedType
+            affected: decoder.readType(NodeId),
+            affectedType: decoder.readType(NodeId)
         });
     }
 }
 export interface RangeOptions {
-    low?: Double;
-    high?: Double;
+    low?: Double | undefined;
+    high?: Double | undefined;
 }
 export class Range implements RangeOptions {
-    low: Double;
-    high: Double;
+    readonly low: Double;
+    readonly high: Double;
     constructor(options?: RangeOptions) {
         this.low = options?.low ?? 0;
         this.high = options?.high ?? 0;
@@ -10998,25 +9838,23 @@ export class Range implements RangeOptions {
         encoder.writeDouble(this.high);
     }
     static [decode](decoder: BinaryDataDecoder): Range {
-        const low = decoder.readDouble();
-        const high = decoder.readDouble();
         return new Range({
-            low,
-            high
+            low: decoder.readDouble(),
+            high: decoder.readDouble()
         });
     }
 }
 export interface EUInformationOptions {
-    namespaceUri?: UaString;
-    unitId?: Int32;
-    displayName?: LocalizedText;
-    description?: LocalizedText;
+    namespaceUri?: UaString | undefined;
+    unitId?: Int32 | undefined;
+    displayName?: LocalizedText | undefined;
+    description?: LocalizedText | undefined;
 }
 export class EUInformation implements EUInformationOptions {
-    namespaceUri?: UaString;
-    unitId: Int32;
-    displayName: LocalizedText;
-    description: LocalizedText;
+    readonly namespaceUri?: UaString;
+    readonly unitId: Int32;
+    readonly displayName: LocalizedText;
+    readonly description: LocalizedText;
     constructor(options?: EUInformationOptions) {
         this.namespaceUri = options?.namespaceUri;
         this.unitId = options?.unitId ?? 0;
@@ -11031,15 +9869,11 @@ export class EUInformation implements EUInformationOptions {
         encoder.writeType(this.description);
     }
     static [decode](decoder: BinaryDataDecoder): EUInformation {
-        const namespaceUri = decoder.readString();
-        const unitId = decoder.readInt32();
-        const displayName = decoder.readType(LocalizedText);
-        const description = decoder.readType(LocalizedText);
         return new EUInformation({
-            namespaceUri,
-            unitId,
-            displayName,
-            description
+            namespaceUri: decoder.readString(),
+            unitId: decoder.readInt32(),
+            displayName: decoder.readType(LocalizedText),
+            description: decoder.readType(LocalizedText)
         });
     }
 }
@@ -11049,12 +9883,12 @@ export enum AxisScaleEnumeration {
     Ln = 2
 }
 export interface ComplexNumberTypeOptions {
-    real?: Float;
-    imaginary?: Float;
+    real?: Float | undefined;
+    imaginary?: Float | undefined;
 }
 export class ComplexNumberType implements ComplexNumberTypeOptions {
-    real: Float;
-    imaginary: Float;
+    readonly real: Float;
+    readonly imaginary: Float;
     constructor(options?: ComplexNumberTypeOptions) {
         this.real = options?.real ?? 0;
         this.imaginary = options?.imaginary ?? 0;
@@ -11065,21 +9899,19 @@ export class ComplexNumberType implements ComplexNumberTypeOptions {
         encoder.writeFloat(this.imaginary);
     }
     static [decode](decoder: BinaryDataDecoder): ComplexNumberType {
-        const real = decoder.readFloat();
-        const imaginary = decoder.readFloat();
         return new ComplexNumberType({
-            real,
-            imaginary
+            real: decoder.readFloat(),
+            imaginary: decoder.readFloat()
         });
     }
 }
 export interface DoubleComplexNumberTypeOptions {
-    real?: Double;
-    imaginary?: Double;
+    real?: Double | undefined;
+    imaginary?: Double | undefined;
 }
 export class DoubleComplexNumberType implements DoubleComplexNumberTypeOptions {
-    real: Double;
-    imaginary: Double;
+    readonly real: Double;
+    readonly imaginary: Double;
     constructor(options?: DoubleComplexNumberTypeOptions) {
         this.real = options?.real ?? 0;
         this.imaginary = options?.imaginary ?? 0;
@@ -11090,27 +9922,25 @@ export class DoubleComplexNumberType implements DoubleComplexNumberTypeOptions {
         encoder.writeDouble(this.imaginary);
     }
     static [decode](decoder: BinaryDataDecoder): DoubleComplexNumberType {
-        const real = decoder.readDouble();
-        const imaginary = decoder.readDouble();
         return new DoubleComplexNumberType({
-            real,
-            imaginary
+            real: decoder.readDouble(),
+            imaginary: decoder.readDouble()
         });
     }
 }
 export interface AxisInformationOptions {
-    engineeringUnits?: EUInformation;
-    euRange?: Range;
-    title?: LocalizedText;
-    axisScaleType?: AxisScaleEnumeration;
-    axisSteps?: Double[];
+    engineeringUnits?: EUInformation | undefined;
+    euRange?: Range | undefined;
+    title?: LocalizedText | undefined;
+    axisScaleType?: AxisScaleEnumeration | undefined;
+    axisSteps?: Double[] | undefined;
 }
 export class AxisInformation implements AxisInformationOptions {
-    engineeringUnits: EUInformation;
-    euRange: Range;
-    title: LocalizedText;
-    axisScaleType: AxisScaleEnumeration;
-    axisSteps?: Double[];
+    readonly engineeringUnits: EUInformation;
+    readonly euRange: Range;
+    readonly title: LocalizedText;
+    readonly axisScaleType: AxisScaleEnumeration;
+    readonly axisSteps?: Double[];
     constructor(options?: AxisInformationOptions) {
         this.engineeringUnits = options?.engineeringUnits ?? new EUInformation();
         this.euRange = options?.euRange ?? new Range();
@@ -11127,27 +9957,22 @@ export class AxisInformation implements AxisInformationOptions {
         encoder.writeDoubleArray(this.axisSteps);
     }
     static [decode](decoder: BinaryDataDecoder): AxisInformation {
-        const engineeringUnits = decoder.readType(EUInformation);
-        const euRange = decoder.readType(Range);
-        const title = decoder.readType(LocalizedText);
-        const axisScaleType = decoder.readUInt32();
-        const axisSteps = decoder.readDoubleArray();
         return new AxisInformation({
-            engineeringUnits,
-            euRange,
-            title,
-            axisScaleType,
-            axisSteps
+            engineeringUnits: decoder.readType(EUInformation),
+            euRange: decoder.readType(Range),
+            title: decoder.readType(LocalizedText),
+            axisScaleType: decoder.readUInt32(),
+            axisSteps: decoder.readDoubleArray()
         });
     }
 }
 export interface XVTypeOptions {
-    x?: Double;
-    value?: Float;
+    x?: Double | undefined;
+    value?: Float | undefined;
 }
 export class XVType implements XVTypeOptions {
-    x: Double;
-    value: Float;
+    readonly x: Double;
+    readonly value: Float;
     constructor(options?: XVTypeOptions) {
         this.x = options?.x ?? 0;
         this.value = options?.value ?? 0;
@@ -11158,37 +9983,35 @@ export class XVType implements XVTypeOptions {
         encoder.writeFloat(this.value);
     }
     static [decode](decoder: BinaryDataDecoder): XVType {
-        const x = decoder.readDouble();
-        const value = decoder.readFloat();
         return new XVType({
-            x,
-            value
+            x: decoder.readDouble(),
+            value: decoder.readFloat()
         });
     }
 }
 export interface ProgramDiagnosticDataTypeOptions {
-    createSessionId?: NodeId;
-    createClientName?: UaString;
-    invocationCreationTime?: Date;
-    lastTransitionTime?: Date;
-    lastMethodCall?: UaString;
-    lastMethodSessionId?: NodeId;
-    lastMethodInputArguments?: Argument[];
-    lastMethodOutputArguments?: Argument[];
-    lastMethodCallTime?: Date;
-    lastMethodReturnStatus?: StatusResult;
+    createSessionId?: NodeId | undefined;
+    createClientName?: UaString | undefined;
+    invocationCreationTime?: Date | undefined;
+    lastTransitionTime?: Date | undefined;
+    lastMethodCall?: UaString | undefined;
+    lastMethodSessionId?: NodeId | undefined;
+    lastMethodInputArguments?: Argument[] | undefined;
+    lastMethodOutputArguments?: Argument[] | undefined;
+    lastMethodCallTime?: Date | undefined;
+    lastMethodReturnStatus?: StatusResult | undefined;
 }
 export class ProgramDiagnosticDataType implements ProgramDiagnosticDataTypeOptions {
-    createSessionId: NodeId;
-    createClientName?: UaString;
-    invocationCreationTime: Date;
-    lastTransitionTime: Date;
-    lastMethodCall?: UaString;
-    lastMethodSessionId: NodeId;
-    lastMethodInputArguments?: Argument[];
-    lastMethodOutputArguments?: Argument[];
-    lastMethodCallTime: Date;
-    lastMethodReturnStatus: StatusResult;
+    readonly createSessionId: NodeId;
+    readonly createClientName?: UaString;
+    readonly invocationCreationTime: Date;
+    readonly lastTransitionTime: Date;
+    readonly lastMethodCall?: UaString;
+    readonly lastMethodSessionId: NodeId;
+    readonly lastMethodInputArguments?: Argument[];
+    readonly lastMethodOutputArguments?: Argument[];
+    readonly lastMethodCallTime: Date;
+    readonly lastMethodReturnStatus: StatusResult;
     constructor(options?: ProgramDiagnosticDataTypeOptions) {
         this.createSessionId = options?.createSessionId ?? NodeId.null();
         this.createClientName = options?.createClientName;
@@ -11215,57 +10038,47 @@ export class ProgramDiagnosticDataType implements ProgramDiagnosticDataTypeOptio
         encoder.writeType(this.lastMethodReturnStatus);
     }
     static [decode](decoder: BinaryDataDecoder): ProgramDiagnosticDataType {
-        const createSessionId = decoder.readType(NodeId);
-        const createClientName = decoder.readString();
-        const invocationCreationTime = decoder.readDateTime();
-        const lastTransitionTime = decoder.readDateTime();
-        const lastMethodCall = decoder.readString();
-        const lastMethodSessionId = decoder.readType(NodeId);
-        const lastMethodInputArguments = decoder.readTypeArray(Argument);
-        const lastMethodOutputArguments = decoder.readTypeArray(Argument);
-        const lastMethodCallTime = decoder.readDateTime();
-        const lastMethodReturnStatus = decoder.readType(StatusResult);
         return new ProgramDiagnosticDataType({
-            createSessionId,
-            createClientName,
-            invocationCreationTime,
-            lastTransitionTime,
-            lastMethodCall,
-            lastMethodSessionId,
-            lastMethodInputArguments,
-            lastMethodOutputArguments,
-            lastMethodCallTime,
-            lastMethodReturnStatus
+            createSessionId: decoder.readType(NodeId),
+            createClientName: decoder.readString(),
+            invocationCreationTime: decoder.readDateTime(),
+            lastTransitionTime: decoder.readDateTime(),
+            lastMethodCall: decoder.readString(),
+            lastMethodSessionId: decoder.readType(NodeId),
+            lastMethodInputArguments: decoder.readTypeArray(Argument),
+            lastMethodOutputArguments: decoder.readTypeArray(Argument),
+            lastMethodCallTime: decoder.readDateTime(),
+            lastMethodReturnStatus: decoder.readType(StatusResult)
         });
     }
 }
 export interface ProgramDiagnostic2DataTypeOptions {
-    createSessionId?: NodeId;
-    createClientName?: UaString;
-    invocationCreationTime?: Date;
-    lastTransitionTime?: Date;
-    lastMethodCall?: UaString;
-    lastMethodSessionId?: NodeId;
-    lastMethodInputArguments?: Argument[];
-    lastMethodOutputArguments?: Argument[];
-    lastMethodInputValues?: Variant[];
-    lastMethodOutputValues?: Variant[];
-    lastMethodCallTime?: Date;
-    lastMethodReturnStatus?: StatusResult;
+    createSessionId?: NodeId | undefined;
+    createClientName?: UaString | undefined;
+    invocationCreationTime?: Date | undefined;
+    lastTransitionTime?: Date | undefined;
+    lastMethodCall?: UaString | undefined;
+    lastMethodSessionId?: NodeId | undefined;
+    lastMethodInputArguments?: Argument[] | undefined;
+    lastMethodOutputArguments?: Argument[] | undefined;
+    lastMethodInputValues?: Variant[] | undefined;
+    lastMethodOutputValues?: Variant[] | undefined;
+    lastMethodCallTime?: Date | undefined;
+    lastMethodReturnStatus?: StatusResult | undefined;
 }
 export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOptions {
-    createSessionId: NodeId;
-    createClientName?: UaString;
-    invocationCreationTime: Date;
-    lastTransitionTime: Date;
-    lastMethodCall?: UaString;
-    lastMethodSessionId: NodeId;
-    lastMethodInputArguments?: Argument[];
-    lastMethodOutputArguments?: Argument[];
-    lastMethodInputValues?: Variant[];
-    lastMethodOutputValues?: Variant[];
-    lastMethodCallTime: Date;
-    lastMethodReturnStatus: StatusResult;
+    readonly createSessionId: NodeId;
+    readonly createClientName?: UaString;
+    readonly invocationCreationTime: Date;
+    readonly lastTransitionTime: Date;
+    readonly lastMethodCall?: UaString;
+    readonly lastMethodSessionId: NodeId;
+    readonly lastMethodInputArguments?: Argument[];
+    readonly lastMethodOutputArguments?: Argument[];
+    readonly lastMethodInputValues?: Variant[];
+    readonly lastMethodOutputValues?: Variant[];
+    readonly lastMethodCallTime: Date;
+    readonly lastMethodReturnStatus: StatusResult;
     constructor(options?: ProgramDiagnostic2DataTypeOptions) {
         this.createSessionId = options?.createSessionId ?? NodeId.null();
         this.createClientName = options?.createClientName;
@@ -11296,43 +10109,31 @@ export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOpt
         encoder.writeType(this.lastMethodReturnStatus);
     }
     static [decode](decoder: BinaryDataDecoder): ProgramDiagnostic2DataType {
-        const createSessionId = decoder.readType(NodeId);
-        const createClientName = decoder.readString();
-        const invocationCreationTime = decoder.readDateTime();
-        const lastTransitionTime = decoder.readDateTime();
-        const lastMethodCall = decoder.readString();
-        const lastMethodSessionId = decoder.readType(NodeId);
-        const lastMethodInputArguments = decoder.readTypeArray(Argument);
-        const lastMethodOutputArguments = decoder.readTypeArray(Argument);
-        const lastMethodInputValues = decoder.readTypeArray(Variant);
-        const lastMethodOutputValues = decoder.readTypeArray(Variant);
-        const lastMethodCallTime = decoder.readDateTime();
-        const lastMethodReturnStatus = decoder.readType(StatusResult);
         return new ProgramDiagnostic2DataType({
-            createSessionId,
-            createClientName,
-            invocationCreationTime,
-            lastTransitionTime,
-            lastMethodCall,
-            lastMethodSessionId,
-            lastMethodInputArguments,
-            lastMethodOutputArguments,
-            lastMethodInputValues,
-            lastMethodOutputValues,
-            lastMethodCallTime,
-            lastMethodReturnStatus
+            createSessionId: decoder.readType(NodeId),
+            createClientName: decoder.readString(),
+            invocationCreationTime: decoder.readDateTime(),
+            lastTransitionTime: decoder.readDateTime(),
+            lastMethodCall: decoder.readString(),
+            lastMethodSessionId: decoder.readType(NodeId),
+            lastMethodInputArguments: decoder.readTypeArray(Argument),
+            lastMethodOutputArguments: decoder.readTypeArray(Argument),
+            lastMethodInputValues: decoder.readTypeArray(Variant),
+            lastMethodOutputValues: decoder.readTypeArray(Variant),
+            lastMethodCallTime: decoder.readDateTime(),
+            lastMethodReturnStatus: decoder.readType(StatusResult)
         });
     }
 }
 export interface AnnotationOptions {
-    message?: UaString;
-    userName?: UaString;
-    annotationTime?: Date;
+    message?: UaString | undefined;
+    userName?: UaString | undefined;
+    annotationTime?: Date | undefined;
 }
 export class Annotation implements AnnotationOptions {
-    message?: UaString;
-    userName?: UaString;
-    annotationTime: Date;
+    readonly message?: UaString;
+    readonly userName?: UaString;
+    readonly annotationTime: Date;
     constructor(options?: AnnotationOptions) {
         this.message = options?.message;
         this.userName = options?.userName;
@@ -11345,13 +10146,10 @@ export class Annotation implements AnnotationOptions {
         encoder.writeDateTime(this.annotationTime);
     }
     static [decode](decoder: BinaryDataDecoder): Annotation {
-        const message = decoder.readString();
-        const userName = decoder.readString();
-        const annotationTime = decoder.readDateTime();
         return new Annotation({
-            message,
-            userName,
-            annotationTime
+            message: decoder.readString(),
+            userName: decoder.readString(),
+            annotationTime: decoder.readDateTime()
         });
     }
 }

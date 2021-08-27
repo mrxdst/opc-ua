@@ -289,7 +289,7 @@ async function createTypes(): Promise<void> {
       return nonComputedFields.map((field) => {
         return factory.createPropertyDeclaration(
           undefined,
-          undefined,
+          [factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
           field.propertyName,
           field.nullable ? factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
           factory.createTypeReferenceNode(field.mappedTypeName),
@@ -321,10 +321,13 @@ async function createTypes(): Promise<void> {
     function createOptionsInterface(): ts.InterfaceDeclaration {
       const interfaceMembers = nonComputedFields.map(field => {
         return factory.createPropertySignature(
-          undefined,
+          [],
           factory.createIdentifier(field.propertyName),
           factory.createToken(ts.SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(field.mappedTypeName)
+          factory.createUnionTypeNode([
+            factory.createTypeReferenceNode(field.mappedTypeName),
+            factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)
+          ])
         );
       });
 
@@ -428,41 +431,27 @@ async function createTypes(): Promise<void> {
     }
 
     function createDecodeFunction(): ts.MethodDeclaration {
-      const statements = nonComputedFields.map(field => {
-        const decoderFn = 'read' + mapEncoderDecoderFunction(field.mappedTypeName);
+      const constructorParameters: ts.ObjectLiteralExpression[] = [];
+      if (nonComputedFields.length) {
+        constructorParameters.push(
+          factory.createObjectLiteralExpression(
+            nonComputedFields.map(field => {
+              const decoderFn = 'read' + mapEncoderDecoderFunction(field.mappedTypeName);
 
-        const readFunctionParameters: ts.Expression[] = [];
-        if (decoderFn.startsWith('readType')) {
-          readFunctionParameters.push(factory.createIdentifier(field.mappedTypeName.replace(/\[\]$/, '')));
-        }
+              const readFunctionParameters: ts.Expression[] = [];
+              if (decoderFn.startsWith('readType')) {
+                readFunctionParameters.push(factory.createIdentifier(field.mappedTypeName.replace(/\[\]$/, '')));
+              }
 
-        return factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [factory.createVariableDeclaration(
-              factory.createIdentifier(field.propertyName),
-              undefined,
-              undefined,
-              factory.createCallExpression(
+              const expr = factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                   factory.createIdentifier('decoder'),
                   factory.createIdentifier(decoderFn)
                 ),
                 undefined,
                 readFunctionParameters
-              )
-            )],
-            ts.NodeFlags.Const
-          )
-        );
-      });
-      
-      const constructorParameters: ts.ObjectLiteralExpression[] = [];
-      if (nonComputedFields.length) {
-        constructorParameters.push(
-          factory.createObjectLiteralExpression(
-            nonComputedFields.map(field => {
-              return factory.createShorthandPropertyAssignment(field.propertyName);
+              );
+              return factory.createPropertyAssignment(field.propertyName, expr);
             }),
             true
           )
@@ -487,7 +476,6 @@ async function createTypes(): Promise<void> {
         factory.createTypeReferenceNode(name),
         factory.createBlock(
           [
-            ...statements,
             factory.createReturnStatement(factory.createNewExpression(
               factory.createIdentifier(name),
               undefined,

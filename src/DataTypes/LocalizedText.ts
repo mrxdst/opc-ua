@@ -8,17 +8,17 @@ const textMask = 0x02;
 
 export interface LocalizedTextOptions {
   /** The locale. */
-  locale?: string;
+  locale?: string | undefined;
   /** The text in the specified locale. */
-  text?: string;
+  text?: string | undefined;
 }
 
 /** A string qualified with a namespace index. */
 export class LocalizedText implements LocalizedTextOptions {
   /** The locale. */
-  locale?: string;
+  readonly locale: string | undefined;
   /** The text in the specified locale. */
-  text?: string;
+  readonly text: string | undefined;
 
   constructor (options?: LocalizedTextOptions) {
     this.locale = options?.locale;

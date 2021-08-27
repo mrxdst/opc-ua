@@ -8,18 +8,18 @@ import { StatusCode } from './StatusCode';
 import { NodeIds } from './NodeIds';
 
 export interface GuidOptions {
-  data1?: UInt32;
-  data2?: UInt16;
-  data3?: UInt16;
-  data4?: Uint8Array;
+  data1?: UInt32 | undefined;
+  data2?: UInt16 | undefined;
+  data3?: UInt16 | undefined;
+  data4?: Uint8Array | undefined;
 }
 
 /** A Globally Unique Identifier. */
 export class Guid implements GuidOptions {
-  data1: UInt32;
-  data2: UInt16;
-  data3: UInt16;
-  data4: Uint8Array;
+  readonly data1: UInt32;
+  readonly data2: UInt16;
+  readonly data3: UInt16;
+  readonly data4: Uint8Array;
 
   constructor(options?: GuidOptions) {
     this.data1 = options?.data1 ?? 0;
