@@ -48,8 +48,14 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
     super();
     this.#endpointUrl = options.endpointUrl;
 
-    const url = new URL(this.endpointUrl);
-    switch (url.protocol) {
+    let url = new URL(this.endpointUrl);
+
+    // Workaround chrome/electron broken url parsing.
+    const protocol = url.protocol;
+    url = new URL(url.toString().replace(`${protocol}//`, 'http://'));
+    const href = url.toString().replace('http://', `${protocol}//`);
+
+    switch (protocol) {
       case 'opc.tcp:': {
         this.#transportProtocol = new ClientTcpTransport({
           host: url.hostname,
@@ -63,7 +69,7 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
       case 'opc.ws:':
       case 'opc.wss:': {
         this.#transportProtocol = new ClientWssTransport({
-          url: url.toString().replace(/^opc\./, ''),
+          url: href.replace(/^opc\./, ''),
           openTimeout: options.openTimeout
         });
         break;
@@ -132,7 +138,7 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
         }
       } catch (e) {
         this.#state = OpenState.Closed;
-        this.#transportProtocol.close(e);
+        this.#transportProtocol.close(e as UaError);
         throw e;
       }
     });
@@ -196,13 +202,13 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
       }
     } catch (e) {
       hadError = true;
-      this.#transportProtocol.close(e);
+      this.#transportProtocol.close(e as UaError);
     } finally {
       if (!hadError) {
         this.#dataStream.readableLength && this.#onMessage(new Uint8Array(0));
       }
     }
-  }
+  };
 
   #onClose = (error?: UaError): void => {
     this.#state = OpenState.Closed;
@@ -217,7 +223,7 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
       this.emit('error', error);
     }
     this.emit('close');
-  }
+  };
 
   close(error?: UaError): void {
     this.#transportProtocol.close(error);

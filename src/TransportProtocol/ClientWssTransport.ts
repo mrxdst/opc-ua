@@ -76,7 +76,7 @@ export class ClientWssTransport extends (EventEmitter as new () => TypedEmitter<
     this.#socket?.removeEventListener('message', this.#onMessage);
     this.#socket = undefined;
     this.emit('close');
-  }
+  };
 
   #onError = (event: Event | ErrorEvent): void => {
     this.#socket?.removeEventListener('close', this.#onClose);
@@ -85,12 +85,12 @@ export class ClientWssTransport extends (EventEmitter as new () => TypedEmitter<
     this.#socket = undefined;
     const e = new UaError({code: StatusCode.BadCommunicationError, reason: 'message' in event ? event.message : undefined});
     this.emit('error', e);
-  }
+  };
 
   #onMessage = (event: Event): void => {
-    const data = new Uint8Array((event as MessageEvent).data);
+    const data = new Uint8Array((event as MessageEvent<number>).data);
     this.emit('message', data);
-  }
+  };
 
   write(data: Uint8Array): Promise<void> {
     return new Promise((resolve, reject) => {

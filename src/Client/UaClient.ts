@@ -307,7 +307,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
       }
     }
     debug('Session activated');
-  }
+  };
 
   async closeSessionAndDisconnect(): Promise<void> {
     this.emit('disconnecting');
@@ -524,13 +524,13 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
     await Promise.resolve();
 
     this.#startPublish();
-  }
+  };
 
   #ensureSubscription = (subscription: Subscription): void => {
     if (!this.#subscriptions.has(subscription)) {
       throw new UaError({code: StatusCode.BadObjectDeleted, reason: "Subscription is deleted or doesn't belong to this client"});
     }
-  }
+  };
 
   #startPublish = (): void => {
     if (this.#publishLoopTimer !== undefined) {
@@ -574,7 +574,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
         this.#publishLoopTimer = setTimeout(() => void(publishLoop()), minInterval) as unknown as number;
       }
     };   
-  }
+  };
 
   #startKeepAlive = (): void => {
     if (this.#keepAliveTimer !== undefined) {
@@ -609,7 +609,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
       }
       this.#keepAliveTimer = setTimeout(() => void(keepAlive()), 5000) as unknown as number;
     };   
-  }
+  };
 
   async [sendStandardRequest](requestType: Decodable & {new(options: Record<string, unknown>): Request}, request?: Request): Promise<Response> {
     if (this.#sessionState !== SessionState.Activated) {
@@ -628,7 +628,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
 
   #sendRawRequest = async (request: Request): Promise<Response> => {
     return await this.#secureConversation.sendRequest(request);
-  }
+  };
 
   #newRequestHeader = (request?: Request): RequestHeader => {
     return new RequestHeader({
@@ -637,7 +637,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
       timestamp: new Date(),
       timeoutHint: request?.requestHeader?.timeoutHint || this.timeout
     });
-  }
+  };
 
   #startReconnect = (): void => {
     
@@ -659,7 +659,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
     };
 
     setTimeout(() => void(reconnect()));
-  }
+  };
 
   #onClose = (error?: UaError): void => {
     const connected = this.connected;
@@ -677,5 +677,5 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
     }
     
     this.#startReconnect();
-  }
+  };
 }

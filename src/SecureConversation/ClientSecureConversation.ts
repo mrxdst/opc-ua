@@ -325,16 +325,16 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
         deferredResponse.resolve(decodedType);
       }
     } catch (e) {
-      this.#transport.close(e);
+      this.#transport.close(e as UaError);
     }
-  }
+  };
 
   #newRequestHeader = (): RequestHeader => {
     return new RequestHeader({
       timestamp: new Date(),
       timeoutHint: this.openTimeout
     });
-  }
+  };
 
   #renewSecurityToken = async (): Promise<void> => {
     try {
@@ -359,7 +359,7 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
       const e = _e as Error;
       this.#transport.close(e instanceof UaError ? e : new UaError({code: StatusCode.BadCommunicationError, reason: e.message}));
     }
-  }
+  };
 
   #onClose = (error?: UaError): void => {
     if (error) {
@@ -381,7 +381,7 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
       this.emit('error', error);
     }
     this.emit('close');
-  }
+  };
 
   async close(error?: UaError): Promise<void> {
     const _request = new CloseSecureChannelRequest({

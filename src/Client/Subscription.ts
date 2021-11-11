@@ -456,11 +456,11 @@ export class Subscription extends (EventEmitter as new () => TypedEmitter<Subscr
     if (!this.#monitoredItems.has(monitoredItem)) {
       throw new UaError({code: StatusCode.BadObjectDeleted, reason: "MonitoredItem is deleted or doesn't belong to this subscription"});
     }
-  }
+  };
 
   #ensureNotDeleted = (): void => {
     if (this.deleted) {
       throw new UaError({code: StatusCode.BadObjectDeleted});
     }
-  }
+  };
 }

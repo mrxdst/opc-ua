@@ -76,18 +76,18 @@ export class ClientTcpTransport extends (EventEmitter as new () => TypedEmitter<
     this.#socket?.destroy();
     this.#socket = undefined;
     this.emit('close');
-  }
+  };
 
   #onError = (e: Error): void => {
     this.#socket?.removeAllListeners();
     this.#socket?.destroy();
     this.#socket = undefined;
     this.emit('error', new UaError({code: StatusCode.BadCommunicationError, reason: e.message}));
-  }
+  };
 
   #onData = (data: Uint8Array): void => {
     this.emit('message', data);
-  }
+  };
 
   write(data: Uint8Array): Promise<void> {
     return new Promise((resolve, reject) => {

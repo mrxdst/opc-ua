@@ -225,5 +225,5 @@ export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<Monit
     if (this.deleted) {
       throw new UaError({code: StatusCode.BadObjectDeleted});
     }
-  }
+  };
 }
