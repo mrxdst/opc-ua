@@ -29,25 +29,8 @@ export type { GuidOptions } from './DataTypes/Guid';
 export { LocalizedText } from './DataTypes/LocalizedText';
 export type { LocalizedTextOptions } from './DataTypes/LocalizedText';
 
-export { 
-  NodeId,
-  ByteStringNodeId,
-  FourByteNodeId,
-  GuidNodeId,
-  NumericNodeId,
-  StringNodeId,
-  TwoByteNodeId
-} from './DataTypes/NodeId';
-export type { 
-  NodeIdOptions,
-  NodeIdTypeToValueType,
-  ByteStringNodeIdOptions,
-  FourByteNodeIdOptions,
-  GuidNodeIdOptions,
-  NumericNodeIdOptions,
-  StringNodeIdOptions,
-  TwoByteNodeIdOptions
-} from './DataTypes/NodeId';
+export { NodeId } from './DataTypes/NodeId';
+export type { NodeIdOptions, NodeIdValueType, SimpleNodeIdType } from './DataTypes/NodeId';
 
 export { NodeIds } from './DataTypes/NodeIds';
 
@@ -63,8 +46,8 @@ export type { ServiceFaultOptions } from './DataTypes/ServiceFault';
 
 export { StatusCode, StatusCodeSeverity } from './DataTypes/StatusCode';
 
-export { Variant, VariantTypeId } from './DataTypes/Variant';
-export type { VariantValueType, VariantValue, VariantOptions, VariantTypedArrayType } from './DataTypes/Variant';
+export { Variant, VariantTypeId, VariantType } from './DataTypes/Variant';
+export type { VariantValueType, VariantValue, VariantOptions, VariantArrayType, VariantNdArrayType, VariantScalarType } from './DataTypes/Variant';
 
 export { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding';
 export type { Encodable, Decodable } from './BinaryDataEncoding';
@@ -92,6 +75,4 @@ export {
   isUInt64,
   uaStringToByteString,
   byteStringToUaString,
-  isNdArray,
-  isTypedArray
 } from './util';

@@ -13,8 +13,6 @@ import { DataValue } from './DataTypes/DataValue';
 import { Variant } from './DataTypes/Variant';
 import { DiagnosticInfo } from './DataTypes/DiagnosticInfo';
 
-export type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | BigUint64Array | BigInt64Array | Float32Array | Float64Array;
-
 export enum OpenState {
   Closed,
   Opening,

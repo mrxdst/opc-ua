@@ -1,4 +1,4 @@
-import { Variant, isVariantValue, VariantTypeId, readVariantValue, writeVariantValue } from './Variant';
+import { Variant, isVariantValue, VariantTypeId, readVariantValue, writeVariantValue, VariantType } from './Variant';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
 import { Guid } from './Guid';
 import { NodeId } from './NodeId';
@@ -15,19 +15,10 @@ import { UaError } from '../UaError';
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();
 
-  encoder.writeType(new Variant({typeId: VariantTypeId.Null, value: undefined}));
-  encoder.writeType(new Variant({typeId: VariantTypeId.Boolean, value: true}));
-  encoder.writeType(new Variant({typeId: VariantTypeId.Boolean, isArray: true, value: [true, false]}));
-  encoder.writeType(new Variant({typeId: VariantTypeId.Int32, isArray: true, value: ndarray([1,2,3,4,5,6,7,8], [2,2,2])}));
-  encoder.writeType(new Variant({typeId: VariantTypeId.Int32, isArray: true, value: ndarray([1,2,3,4,5,6,7,8], [2,2,2,2])}));
-
-  expect(() => encoder.writeType(new Variant({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    typeId: VariantTypeId.Variant, value: new Variant({
-      typeId: VariantTypeId.Boolean, value: true
-    })
-  }))).toThrowError(UaError);
+  encoder.writeType(new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Null, value: undefined}));
+  encoder.writeType(new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Boolean, value: true}));
+  encoder.writeType(new Variant({type: VariantType.Array, typeId: VariantTypeId.Boolean, value: [true, false]}));
+  encoder.writeType(new Variant({type: VariantType.NdArray, typeId: VariantTypeId.Int32, value: ndarray([1,2,3,4,5,6,7,8], [2,2,2])}));
 
   const decoder = new BinaryDataDecoder(encoder.finish());
 
@@ -35,7 +26,6 @@ test('Encode/Decode', () => {
   expect(decoder.readType(Variant).value).toBe(true);
   expect(decoder.readType(Variant).value).toStrictEqual([true, false]);
   expect(decoder.readType(Variant).value).toStrictEqual(ndarray([1,2,3,4,5,6,7,8], [2,2,2]));
-  expect(() => decoder.readType(Variant)).toThrowError(UaError);
 });
 
 test('isVariantValue', () => {
@@ -63,7 +53,7 @@ test('isVariantValue', () => {
   expect(isVariantValue(VariantTypeId.LocalizedText, new LocalizedText())).toBe(true);
   expect(isVariantValue(VariantTypeId.ExtensionObject, new ExtensionObject({typeId: NodeId.parse('i=1')}))).toBe(true);
   expect(isVariantValue(VariantTypeId.DataValue, new DataValue())).toBe(true);
-  expect(isVariantValue(VariantTypeId.Variant, new Variant({typeId: VariantTypeId.Boolean, value: true}))).toBe(true);
+  expect(isVariantValue(VariantTypeId.Variant, new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Boolean, value: true}))).toBe(true);
   expect(isVariantValue(VariantTypeId.DiagnosticInfo, new DiagnosticInfo())).toBe(true);
 
   expect(() => isVariantValue(255 as VariantTypeId, 1)).toThrowError(UaError);
@@ -95,7 +85,7 @@ test('Read/Write VariantValue', () => {
   writeVariantValue(encoder, VariantTypeId.LocalizedText, new LocalizedText());
   writeVariantValue(encoder, VariantTypeId.ExtensionObject, new ExtensionObject({typeId: NodeId.parse('i=1')}));
   writeVariantValue(encoder, VariantTypeId.DataValue, new DataValue());
-  writeVariantValue(encoder, VariantTypeId.Variant, new Variant({typeId: VariantTypeId.Boolean, value: true}));
+  writeVariantValue(encoder, VariantTypeId.Variant, new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Boolean, value: true}));
   writeVariantValue(encoder, VariantTypeId.DiagnosticInfo, new DiagnosticInfo());
 
   expect(() => writeVariantValue(encoder, VariantTypeId.Boolean as VariantTypeId.Byte, 1)).toThrowError(UaError);

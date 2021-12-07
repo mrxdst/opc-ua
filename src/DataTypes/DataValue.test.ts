@@ -1,6 +1,6 @@
 import { DataValue } from './DataValue';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { Variant, VariantTypeId } from './Variant';
+import { Variant, VariantType, VariantTypeId } from './Variant';
 import { StatusCode } from './StatusCode';
 
 test('Encode/Decode', () => {
@@ -8,7 +8,7 @@ test('Encode/Decode', () => {
 
   encoder.writeType(new DataValue());
   encoder.writeType(new DataValue({
-    value: new Variant({typeId: VariantTypeId.Boolean, value: true}),
+    value: new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Boolean, value: true}),
     status: StatusCode.BadInternalError
   }));
   encoder.writeType(new DataValue({

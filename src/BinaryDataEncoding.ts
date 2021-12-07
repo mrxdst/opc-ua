@@ -2,7 +2,7 @@ import { Byte, ByteString, Double, Float, Int16, Int32, Int64, SByte, UaString, 
 import { StatusCode } from './DataTypes/StatusCode';
 import { decode, encode } from './symbols';
 import { UaError } from './UaError';
-import { dateToFileTime, fileTimeToDate, clampSByte, clampByte, clampInt16, clampUInt16, clampInt32, clampUInt32, clampInt64, clampUInt64 } from './util';
+import { dateToFileTime, fileTimeToDate, clampSByte, clampByte, clampInt16, clampUInt16, clampInt32, clampUInt32, clampInt64, clampUInt64, uaStringToByteString, byteStringToUaString } from './util';
 
 enum DataTypeSize {
   SByte = 1,
@@ -139,12 +139,12 @@ export class BinaryDataEncoder {
   }
 
   writeString(value: UaString): void {
-    const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : undefined;
+    const bytes = uaStringToByteString(value);
     this.writeByteString(bytes);
   }
 
   writeFixedLengthString(value: string): void {
-    const bytes = new TextEncoder().encode(value);
+    const bytes = uaStringToByteString(value);
     this.writeBytes(bytes);
   }
 
@@ -452,15 +452,12 @@ export class BinaryDataDecoder {
 
   readString(): UaString {
     const bytes = this.readByteString();
-    if (!bytes) {
-      return undefined;
-    }
-    return new TextDecoder().decode(bytes);
+    return byteStringToUaString(bytes);
   }
 
   readFixedLengthString(byteLength: number): string {
     const bytes = this.readBytes(byteLength);
-    return new TextDecoder().decode(bytes);
+    return byteStringToUaString(bytes);
   }
 
   readDateTime(): Date {

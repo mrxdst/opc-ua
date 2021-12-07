@@ -1,5 +1,4 @@
-import { DecodableType, TypedArray } from './types';
-import { NdArray } from 'ndarray';
+import { DecodableType } from './types';
 import {
   SByte,
   Byte,
@@ -169,28 +168,6 @@ export function dateToFileTime(date: Date | number): bigint {
 export function fileTimeToDate(filetime: bigint): Date {
   const timestamp = filetime / BigInt(10000) - BigInt(11644473600000);
   return new Date(Number(timestamp));
-}
-
-export function isTypedArray(obj: unknown): obj is TypedArray {
-  return obj instanceof Int8Array ||
-    obj instanceof Uint8Array ||
-    obj instanceof Int16Array ||
-    obj instanceof Uint16Array ||
-    obj instanceof Int32Array ||
-    obj instanceof Uint32Array ||
-    obj instanceof Uint8ClampedArray ||
-    obj instanceof BigUint64Array ||
-    obj instanceof BigInt64Array ||
-    obj instanceof Float32Array ||
-    obj instanceof Float64Array;
-}
-
-export function isNdArray<T extends []>(obj: unknown): obj is NdArray<T> {
-  return new Object(obj) === obj
-    && 'data' in obj
-    && 'shape' in obj
-    && 'stride' in obj
-    && 'offset' in obj;
 }
 
 export function isEncodable(value: unknown): value is Encodable {

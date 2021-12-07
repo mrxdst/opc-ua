@@ -1,20 +1,19 @@
 import { Guid } from './Guid';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
 import { Byte, ByteString, UaString, UInt16, UInt32 } from './Primitives';
-import { NodeIdType } from './Generated';
 import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols';
-import { isByte, isByteString, isUaString, isUInt16, isUInt32 } from '../util';
+import { byteStringToUaString, isByte, isByteString, isUaString, isUInt16, isUInt32, uaStringToByteString } from '../util';
 import { UaError } from '../UaError';
 import { StatusCode } from './StatusCode';
 import { NodeIds } from './NodeIds';
+import { NodeIdType } from './Generated';
 
 const namespaceUriFlagMask = 0x80;
 const serverIndexFlagMask = 0x40;
 
-export interface NodeIdOptions<
-  N extends NodeIdType = NodeIdType,
-  V extends NodeIdTypeToValueType<N> = NodeIdTypeToValueType<N>
-> {
+export type SimpleNodeIdType = NodeIdType.Numeric | NodeIdType.String | NodeIdType.ByteString | NodeIdType.Guid;
+
+export interface NodeIdOptions<N extends SimpleNodeIdType = SimpleNodeIdType, V extends NodeIdValueType<N> = NodeIdValueType<N>> {
   /**
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
@@ -24,26 +23,20 @@ export interface NodeIdOptions<
   identifierType: N;
   /** The identifier for a node in the address space of an OPC UA Server. */
   value: V;
-  /** Used internaly by ExpandedNodeId. */
+  /** Used internally by ExpandedNodeId. */
   [namespaceUriFlag]?: boolean | undefined;
-  /** Used internaly by ExpandedNodeId. */
+  /** Used internally by ExpandedNodeId. */
   [serverIndexFlag]?: boolean | undefined;
 }
 
-export type NodeIdTypeToValueType<T> = 
-  T extends NodeIdType.TwoByte ? Byte :
-  T extends NodeIdType.FourByte ? UInt16 :
+export type NodeIdValueType<T extends SimpleNodeIdType = SimpleNodeIdType> = 
   T extends NodeIdType.Numeric ? UInt32 :
   T extends NodeIdType.String ? UaString :
   T extends NodeIdType.Guid ? Guid :
-  T extends NodeIdType.ByteString ? ByteString :
-  never;
+  T extends NodeIdType.ByteString ? ByteString : never;
 
 /** An identifier for a node in a UA server address space. */
-export class NodeId<
-  N extends NodeIdType = NodeIdType,
-  V extends NodeIdTypeToValueType<N> = NodeIdTypeToValueType<N>
-> implements NodeIdOptions<N, V> {
+export class NodeId<N extends SimpleNodeIdType = SimpleNodeIdType, V extends NodeIdValueType<N> = NodeIdValueType<N>> implements NodeIdOptions<N, V> {
   /**
    * The index for a namespace URI.  
    * An index of 0 is used for OPC UA defined NodeIds.
@@ -64,6 +57,74 @@ export class NodeId<
     this.value = options.value;
     this[namespaceUriFlag] = options[namespaceUriFlag];
     this[serverIndexFlag] = options[serverIndexFlag];
+
+    switch (this.identifierType) {
+      case NodeIdType.TwoByte:
+      case NodeIdType.FourByte: {
+        // Just in case.
+        this.identifierType = NodeIdType.Numeric as N;
+      }
+      // eslint-disable-next-line no-fallthrough
+      case NodeIdType.Numeric: {
+        if (!isUInt32(this.value) || !isUInt16(this.namespace)) {
+          throw new UaError({ code: StatusCode.BadNodeIdInvalid });
+        }
+        break;
+      }
+      case NodeIdType.String: {
+        if (!isUaString(this.value) || !isUInt16(this.namespace) || (this.value && this.value.length > 4096)) {
+          throw new UaError({ code: StatusCode.BadNodeIdInvalid });
+        }
+        break;
+      }
+      case NodeIdType.Guid: {
+        if (!(this.value instanceof Guid) || !isUInt16(this.namespace)) {
+          throw new UaError({ code: StatusCode.BadNodeIdInvalid });
+        }
+        break;
+      }
+      case NodeIdType.ByteString: {
+        if (!isByteString(this.value) || !isUInt16(this.namespace) || (this.value && this.value.byteLength > 4096)) {
+          throw new UaError({ code: StatusCode.BadNodeIdInvalid });
+        }
+        break;
+      }
+      default: {
+        throw new UaError({ code: StatusCode.BadNodeIdInvalid });
+      }
+    }
+  }
+
+  toString(): string {
+    switch (this.identifierType) {
+      case NodeIdType.Numeric: {
+        if (!this.namespace) {
+          return `i=${this.value as number}`;
+        }
+        return `ns=${this.namespace};i=${this.value as number}`;
+      }
+      case NodeIdType.String: {
+        if (!this.namespace) {
+          return `s=${(this.value as UaString) ?? ''}`;
+        }
+        return `ns=${this.namespace};s=${(this.value as UaString) ?? ''}`;
+      }
+      case NodeIdType.Guid: {
+        if (!this.namespace) {
+          return `g={${(this.value as Guid).toString()}}`;
+        }
+        return `ns=${this.namespace};g={${(this.value as Guid).toString()}}`;
+      }
+      case NodeIdType.ByteString: {
+        if (!this.namespace) {
+          return `b=${byteStringToUaString(this.value as ByteString) ?? ''}`;
+        }
+        return `ns=${this.namespace};b=${byteStringToUaString(this.value as ByteString) ?? ''}`;
+      }
+      default: {
+        return 'Invalid NodeId';
+      }
+    }
   }
   
   /** Parses the string or number to a NodeId. */
@@ -72,15 +133,8 @@ export class NodeId<
       if (!isUInt32(str)) {
         throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: 'Numeric identifier out of range'});
       }
-      let identifierType = NodeIdType.Numeric;
-      if (isByte(str)) {
-        identifierType = NodeIdType.TwoByte;
-      } else if (isUInt16(str)) {
-        identifierType = NodeIdType.FourByte;
-      }
       return new NodeId({
-        identifierType,
-        namespace: 0,
+        identifierType: NodeIdType.Numeric,
         value: str
       });
     }
@@ -103,14 +157,8 @@ export class NodeId<
       if (!isUInt32(value)) {
         throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: 'Identifier value out of range'});
       }
-      let identifierType = NodeIdType.Numeric;
-      if (isByte(value) && namespace === 0) {
-        identifierType = NodeIdType.TwoByte;
-      } else if (isUInt16(value) && isByte(namespace)) {
-        identifierType = NodeIdType.FourByte;
-      }
       return new NodeId({
-        identifierType,
+        identifierType: NodeIdType.Numeric,
         namespace,
         value
       });
@@ -131,14 +179,14 @@ export class NodeId<
 
     const byteStringMatch = /^b=(.*)$/.exec(id);
     if (byteStringMatch) {
-      const value = new TextEncoder().encode(byteStringMatch[1]);
-      if (value.byteLength > 4096) {
+      const value = uaStringToByteString(byteStringMatch[1]);
+      if (value && value.byteLength > 4096) {
         throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: 'Identifier value out of range'});
       }
       return new NodeId({
         identifierType: NodeIdType.ByteString,
         namespace,
-        value: new TextEncoder().encode(byteStringMatch[1])
+        value
       });
     }
 
@@ -156,75 +204,7 @@ export class NodeId<
 
   /** Return a new null NodeId */
   static null(): NodeId {
-    return new NodeId({identifierType: NodeIdType.TwoByte, value: 0});
-  }
-
-  toString(): string {
-    switch (this.identifierType) {
-      case NodeIdType.TwoByte: {
-        if (!isByte(this.value)) {
-          return 'Invalid NodeId';
-        }
-        return `i=${this.value}`;
-      }
-      case NodeIdType.FourByte: {
-        if (!isUInt16(this.value) || !isByte(this.namespace)) {
-          return 'Invalid NodeId';
-        }
-        if (!this.namespace) {
-          return `i=${this.value}`;
-        }
-        return `ns=${this.namespace};i=${this.value}`;
-      }
-      case NodeIdType.Numeric: {
-        if (!isUInt32(this.value) || !isUInt16(this.namespace)) {
-          return 'Invalid NodeId';
-        }
-        if (!this.namespace) {
-          return `i=${this.value}`;
-        }
-        return `ns=${this.namespace};i=${this.value}`;
-      }
-      case NodeIdType.String: {
-        if (!isUaString(this.value) || !isUInt16(this.namespace)) {
-          return 'Invalid NodeId';
-        }
-        const text = (this.value ?? '');
-        if (text.length > 4096) {
-          return 'Invalid NodeId';
-        }
-        if (!this.namespace) {
-          return `s=${text}`;
-        }
-        return `ns=${this.namespace};s=${text}`;
-      }
-      case NodeIdType.Guid: {
-        if (!(this.value instanceof Guid) || !isUInt16(this.namespace)) {
-          return 'Invalid NodeId';
-        }
-        if (!this.namespace) {
-          return `g={${this.value.toString()}}`;
-        }
-        return `ns=${this.namespace};g={${this.value.toString()}}`;
-      }
-      case NodeIdType.ByteString: {
-        if ((!(this.value instanceof Uint8Array) && this.value !== undefined) || !isUInt16(this.namespace)) {
-          return 'Invalid NodeId';
-        }
-        const value = (this.value as Uint8Array) ?? new Uint8Array();
-        if (value.byteLength > 4096) {
-          return 'Invalid NodeId';
-        }
-        const text = new TextDecoder().decode(value);
-        if (!this.namespace) {
-          return `b=${text}`;
-        }
-        return `ns=${this.namespace};b=${text}`;
-      }
-      default: {
-        return 'Invalid NodeId';
-      }
-    }
+    return new NodeId({identifierType: NodeIdType.Numeric, value: 0});
   }
 
   isNull(): boolean {
@@ -245,69 +225,82 @@ export class NodeId<
   static [typeId] = NodeIds.NodeId as const;
 
   [encode](encoder: BinaryDataEncoder): void {
-    let identifierType: Byte = this.identifierType;
-    if (this[namespaceUriFlag]) {
-      identifierType |= namespaceUriFlagMask;
-    }
-    if (this[serverIndexFlag]) {
-      identifierType |= serverIndexFlagMask;
-    }
-    encoder.writeByte(identifierType);
-
     switch (this.identifierType) {
-      case NodeIdType.TwoByte: {
-        if (typeof this.value !== 'number') {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
-        }
-        encoder.writeByte(this.value);
-        break;
-      }
-      case NodeIdType.FourByte: {
-        if (typeof this.value !== 'number') {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
-        }
-        encoder.writeByte(this.namespace);
-        encoder.writeUInt16(this.value);
-        break;
-      }
       case NodeIdType.Numeric: {
-        if (typeof this.value !== 'number') {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
+        if (this.namespace === 0 && isByte(this.value)) {
+          let identifierType: Byte = NodeIdType.TwoByte;
+          if (this[namespaceUriFlag]) {
+            identifierType |= namespaceUriFlagMask;
+          }
+          if (this[serverIndexFlag]) {
+            identifierType |= serverIndexFlagMask;
+          }
+          encoder.writeByte(identifierType);
+          encoder.writeByte(this.value);
         }
-        encoder.writeUInt16(this.namespace);
-        encoder.writeUInt32(this.value);
+        else if (isByte(this.namespace) && isUInt16(this.value)) {
+          let identifierType: Byte = NodeIdType.FourByte;
+          if (this[namespaceUriFlag]) {
+            identifierType |= namespaceUriFlagMask;
+          }
+          if (this[serverIndexFlag]) {
+            identifierType |= serverIndexFlagMask;
+          }
+          encoder.writeByte(identifierType);
+          encoder.writeByte(this.namespace);
+          encoder.writeUInt16(this.value);
+        }
+        else {
+          let identifierType: Byte = this.identifierType;
+          if (this[namespaceUriFlag]) {
+            identifierType |= namespaceUriFlagMask;
+          }
+          if (this[serverIndexFlag]) {
+            identifierType |= serverIndexFlagMask;
+          }
+          encoder.writeByte(identifierType);
+          encoder.writeUInt16(this.namespace);
+          encoder.writeUInt32(this.value as UInt32);
+        }
         break;
       }
       case NodeIdType.String: {
-        if (!isUaString(this.value)) {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
+        let identifierType: Byte = this.identifierType;
+        if (this[namespaceUriFlag]) {
+          identifierType |= namespaceUriFlagMask;
         }
-        let value = this.value as UaString;
-        if ((value?.length ?? 0) > 4096) {
-          value = value?.substring(0, 4096);
+        if (this[serverIndexFlag]) {
+          identifierType |= serverIndexFlagMask;
         }
+        encoder.writeByte(identifierType);
         encoder.writeUInt16(this.namespace);
-        encoder.writeString(value);
+        encoder.writeString(this.value as UaString);
         break;
       }
       case NodeIdType.Guid: {
-        if (!(this.value instanceof Guid)) {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
+        let identifierType: Byte = this.identifierType;
+        if (this[namespaceUriFlag]) {
+          identifierType |= namespaceUriFlagMask;
         }
+        if (this[serverIndexFlag]) {
+          identifierType |= serverIndexFlagMask;
+        }
+        encoder.writeByte(identifierType);
         encoder.writeUInt16(this.namespace);
-        encoder.writeType(this.value);
+        encoder.writeType(this.value as Guid);
         break;
       }
       case NodeIdType.ByteString: {
-        if (!isByteString(this.value)) {
-          throw new UaError({code: StatusCode.BadNodeIdInvalid, reason: `Value doesn't match IdentifierType`});
+        let identifierType: Byte = this.identifierType;
+        if (this[namespaceUriFlag]) {
+          identifierType |= namespaceUriFlagMask;
         }
-        let value = this.value as ByteString;
-        if ((value?.byteLength ?? 0) > 4096) {
-          value = value?.slice(0, 4096);
+        if (this[serverIndexFlag]) {
+          identifierType |= serverIndexFlagMask;
         }
+        encoder.writeByte(identifierType);
         encoder.writeUInt16(this.namespace);
-        encoder.writeByteString(value);
+        encoder.writeByteString(this.value as ByteString);
         break;
       }
       default: {
@@ -332,14 +325,16 @@ export class NodeId<
     }
   
     let namespace: UInt16 = 0;
-    let value: NodeIdTypeToValueType<NodeIdType>;
+    let value: NodeIdValueType;
 
     switch (identifierType) {
       case NodeIdType.TwoByte: {
+        identifierType = NodeIdType.Numeric;
         value = decoder.readByte();
         break;
       }
       case NodeIdType.FourByte: {
+        identifierType = NodeIdType.Numeric;
         namespace = decoder.readByte();
         value = decoder.readUInt16();
         break;
@@ -368,134 +363,12 @@ export class NodeId<
         throw new UaError({code: StatusCode.BadDecodingError, reason: 'Invalid IdentifierType'});
       }
     }
-
     return new NodeId({
       identifierType,
       namespace,
       value,
       [namespaceUriFlag]: namespaceUriFlagSet,
       [serverIndexFlag]: serverIndexFlagSet
-    });
-  }
-}
-
-export interface TwoByteNodeIdOptions {
-  /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.TwoByte> | undefined;
-}
-
-/** An identifier for a node in a UA server address space. */
-export class TwoByteNodeId extends NodeId<NodeIdType.TwoByte> {
-  constructor(options?: TwoByteNodeIdOptions) {
-    super({
-      value: options?.value ?? 0,
-      namespace: 0,
-      identifierType: NodeIdType.TwoByte
-    });
-  }
-}
-
-export interface FourByteNodeIdOptions {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
-  namespace?: Byte | undefined;
-  /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.FourByte> | undefined;
-}
-
-/** An identifier for a node in a UA server address space. */
-export class FourByteNodeId extends NodeId<NodeIdType.FourByte> {
-  constructor(options?: FourByteNodeIdOptions) {
-    super({
-      value: options?.value ?? 0,
-      namespace: options?.namespace ?? 0,
-      identifierType: NodeIdType.FourByte
-    });
-  }
-}
-
-export interface NumericNodeIdOptions {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
-  namespace?: UInt16 | undefined;
-  /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.Numeric> | undefined;
-}
-
-/** An identifier for a node in a UA server address space. */
-export class NumericNodeId extends NodeId<NodeIdType.Numeric> {
-  constructor(options?: NumericNodeIdOptions) {
-    super({
-      value: options?.value ?? 0,
-      namespace: options?.namespace ?? 0,
-      identifierType: NodeIdType.Numeric
-    });
-  }
-}
-
-export interface StringNodeIdOptions {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
-  namespace?: UInt16 | undefined;
-  /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.String> | undefined;
-}
-
-/** An identifier for a node in a UA server address space. */
-export class StringNodeId extends NodeId<NodeIdType.String> {
-  constructor(options?: StringNodeIdOptions) {
-    super({
-      value: options?.value,
-      namespace: options?.namespace ?? 0,
-      identifierType: NodeIdType.String
-    });
-  }
-}
-
-export interface GuidNodeIdOptions {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
-  namespace?: UInt16 | undefined;
-  /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.Guid> | undefined;
-}
-
-/** An identifier for a node in a UA server address space. */
-export class GuidNodeId extends NodeId<NodeIdType.Guid> {
-  constructor(options?: GuidNodeIdOptions) {
-    super({
-      value: options?.value ?? new Guid(),
-      namespace: options?.namespace ?? 0,
-      identifierType: NodeIdType.Guid
-    });
-  }
-}
-
-export interface ByteStringNodeIdOptions {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
-  namespace?: UInt16 | undefined;
-  /** The identifier for a node in the address space of an OPC UA Server. */
-  value?: NodeIdTypeToValueType<NodeIdType.ByteString> | undefined;
-}
-
-/** An identifier for a node in a UA server address space. */
-export class ByteStringNodeId extends NodeId<NodeIdType.ByteString> {
-  constructor(options?: ByteStringNodeIdOptions) {
-    super({
-      value: options?.value,
-      namespace: options?.namespace ?? 0,
-      identifierType: NodeIdType.ByteString
     });
   }
 }

@@ -8,8 +8,7 @@ import {
   clampInt32,
   clampUInt32,
   clampInt64,
-  clampUInt64,
-  isTypedArray
+  clampUInt64
 } from './util';
 
 test('FileTime', () => {
@@ -34,17 +33,4 @@ test('DataTypeConvertion', () => {
   expect(clampInt64(BigInt(10))).toBe(BigInt(10));
   expect(clampUInt64(BigInt('0xFFFFFFFFFFFFFFFFF'))).toBe(BigInt('0xFFFFFFFFFFFFFFFF'));
   expect(clampUInt64(BigInt(-10))).toBe(BigInt(0));
-});
-
-test('isTypedArray', () => {
-  expect(isTypedArray([])).toBe(false);
-  expect(isTypedArray(new Int8Array())).toBe(true);
-  expect(isTypedArray(new Uint8Array())).toBe(true);
-  expect(isTypedArray(new Int16Array())).toBe(true);
-  expect(isTypedArray(new Uint16Array())).toBe(true);
-  expect(isTypedArray(new Int32Array())).toBe(true);
-  expect(isTypedArray(new Uint32Array())).toBe(true);
-  expect(isTypedArray(new Uint8ClampedArray())).toBe(true);
-  expect(isTypedArray(new Float32Array())).toBe(true);
-  expect(isTypedArray(new Float64Array())).toBe(true);
 });
