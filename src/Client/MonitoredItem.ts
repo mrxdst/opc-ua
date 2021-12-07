@@ -49,7 +49,7 @@ interface MonitoredItemInternals {
 
 export interface MonitoredItemEvents {
   value: (value: DataValue) => void;
-  event: (eventFields?: Variant[]) => void;
+  event: (eventFields?: ReadonlyArray<Variant>) => void;
   deleted: () => void;
 }
 
@@ -109,8 +109,8 @@ export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<Monit
   get value(): DataValue { return this.#value; }
   #value: DataValue = new DataValue();
   /** The last received event fields of the MonitoredItem. */
-  get eventFields(): Variant[] | undefined {return this.#eventFields; }
-  #eventFields?: Variant[];
+  get eventFields(): ReadonlyArray<Variant> | undefined {return this.#eventFields; }
+  #eventFields?: ReadonlyArray<Variant>;
   /** The MonitoredItem is deleted. */
   get deleted(): boolean { return this.#deleted; }
   #deleted = false;
@@ -193,7 +193,7 @@ export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<Monit
     this.emit('value', value);
   }
 
-  [handleEvent](eventFields?: Variant[]): void {
+  [handleEvent](eventFields?: ReadonlyArray<Variant>): void {
     debug(`[${this.clientHandle}] Handling event fields`);
     this.#eventFields = eventFields;
     this.emit('event', eventFields);

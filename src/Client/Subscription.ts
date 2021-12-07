@@ -236,7 +236,7 @@ export class Subscription extends (EventEmitter as new () => TypedEmitter<Subscr
   }
 
   /** This Service is used to modify MonitoredItems of a Subscription. */
-  async modifyMonitoredItems(itemsToModify: MonitoredItem[], requestedParameters: MonitoringParameters[], request?: ModifyMonitoredItemsRequest): Promise<ModifyMonitoredItemsResponse> {
+  async modifyMonitoredItems(itemsToModify: ReadonlyArray<MonitoredItem>, requestedParameters: ReadonlyArray<MonitoringParameters>, request?: ModifyMonitoredItemsRequest): Promise<ModifyMonitoredItemsResponse> {
     this.#ensureNotDeleted();
     if (itemsToModify.length !== requestedParameters.length) {
       throw new UaError({code: StatusCode.BadInvalidArgument, reason: 'ItemsToModify and RequestedParameters are not the same length'});
@@ -277,7 +277,7 @@ export class Subscription extends (EventEmitter as new () => TypedEmitter<Subscr
   }
 
   /** This Service is used to set the monitoring mode for one or more MonitoredItems of a Subscription. */
-  async setMonitoringMode(monitoredItems: MonitoredItem[], request?: SetMonitoringModeRequest): Promise<SetMonitoringModeResponse> {
+  async setMonitoringMode(monitoredItems: ReadonlyArray<MonitoredItem>, request?: SetMonitoringModeRequest): Promise<SetMonitoringModeResponse> {
     monitoredItems = [...monitoredItems];
     this.#ensureNotDeleted();
     const _request = new SetMonitoringModeRequest({
@@ -305,7 +305,7 @@ export class Subscription extends (EventEmitter as new () => TypedEmitter<Subscr
   }
 
   /** This Service is used to remove one or more MonitoredItems of a Subscription. */
-  async deleteMonitoredItems(monitoredItems: MonitoredItem[], request?: DeleteMonitoredItemsRequest): Promise<DeleteMonitoredItemsResponse> {
+  async deleteMonitoredItems(monitoredItems: ReadonlyArray<MonitoredItem>, request?: DeleteMonitoredItemsRequest): Promise<DeleteMonitoredItemsResponse> {
     monitoredItems = [...monitoredItems];
     this.#ensureNotDeleted();
     const _request = new DeleteMonitoredItemsRequest({

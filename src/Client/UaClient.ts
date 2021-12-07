@@ -415,7 +415,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
   }
 
   /** This Service is used to enable sending of Notifications on one or more Subscriptions. */
-  async setPublishingMode(subscriptions: Subscription[], request?: SetPublishingModeRequest): Promise<SetPublishingModeResponse> {
+  async setPublishingMode(subscriptions: ReadonlyArray<Subscription>, request?: SetPublishingModeRequest): Promise<SetPublishingModeResponse> {
     subscriptions = [...subscriptions];
     const _request = new SetPublishingModeRequest({
       ...request,
@@ -443,7 +443,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
   }
 
   /** This Service is used to transfer a Subscription and its MonitoredItems from one Session to another. */
-  async transferSubscriptions(subscriptions: Subscription[], request?: TransferSubscriptionsRequest): Promise<TransferSubscriptionsResponse> {
+  async transferSubscriptions(subscriptions: ReadonlyArray<Subscription>, request?: TransferSubscriptionsRequest): Promise<TransferSubscriptionsResponse> {
     subscriptions = [...subscriptions];
     const _request = new TransferSubscriptionsRequest({
       ...request,
@@ -470,7 +470,7 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
   }
 
   /** This Service is invoked to delete one or more Subscriptions that belong to the Client’s Session. */
-  async deleteSubscriptions(subscriptions: Subscription[], request?: DeleteSubscriptionsRequest): Promise<DeleteSubscriptionsResponse> {
+  async deleteSubscriptions(subscriptions: ReadonlyArray<Subscription>, request?: DeleteSubscriptionsRequest): Promise<DeleteSubscriptionsResponse> {
     subscriptions = [...subscriptions];
     const _request = new DeleteSubscriptionsRequest({
       ...request,

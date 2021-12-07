@@ -185,7 +185,7 @@ async function createTypes(): Promise<void> {
 
       
         if (lengthField) {
-          mappedTypeName += '[]';
+          mappedTypeName = `ReadonlyArray<${mappedTypeName}>`;
         }
         
         const defaultValue = mapDefaultValue(mappedTypeName);
@@ -440,7 +440,9 @@ async function createTypes(): Promise<void> {
 
               const readFunctionParameters: ts.Expression[] = [];
               if (decoderFn.startsWith('readType')) {
-                readFunctionParameters.push(factory.createIdentifier(field.mappedTypeName.replace(/\[\]$/, '')));
+                const isArray = field.mappedTypeName.startsWith('ReadonlyArray');
+                const mappedTypeName = isArray ? field.mappedTypeName.substring(14, field.mappedTypeName.length - 1) : field.mappedTypeName;
+                readFunctionParameters.push(factory.createIdentifier(mappedTypeName));
               }
 
               const expr = factory.createCallExpression(
@@ -488,8 +490,8 @@ async function createTypes(): Promise<void> {
     }
 
     function mapEncoderDecoderFunction(mappedTypeName: string): string {
-      const isArray = mappedTypeName.endsWith('[]');
-      mappedTypeName = mappedTypeName.replace(/\[\]$/, '');
+      const isArray = mappedTypeName.startsWith('ReadonlyArray');
+      mappedTypeName = isArray ? mappedTypeName.substring(14, mappedTypeName.length - 1) : mappedTypeName;
 
       let fn: string;
       switch (mappedTypeName) {

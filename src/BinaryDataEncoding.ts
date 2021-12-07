@@ -31,7 +31,8 @@ const maxFiletime = BigInt('2650467743990000000');
 const encoderInitialSize = 64;
 
 export class BinaryDataEncoder {
-  #buff: Uint8Array;
+  #bytes: Uint8Array;
+  #dv: DataView;
   #byteOffset = 0;
 
   get encodedBytes(): number {
@@ -39,91 +40,88 @@ export class BinaryDataEncoder {
   }
 
   constructor() {
-    this.#buff = new Uint8Array(encoderInitialSize);
+    this.#bytes = new Uint8Array(encoderInitialSize);
+    this.#dv = new DataView(this.#bytes.buffer);
+  }
+
+  #growBuffer(byteLength: number): void {
+    if (this.#bytes.byteLength >= this.#byteOffset + byteLength) {
+      return;
+    }
+
+    let newSize = this.#bytes.byteLength;
+    do {
+      newSize *= 2;
+    } while (newSize < this.#byteOffset + byteLength);
+    const temp = new Uint8Array(newSize);
+    temp.set(this.#bytes);
+    this.#bytes = temp;
+    this.#dv = new DataView(this.#bytes.buffer);
   }
 
   writeSByte(value: SByte): void {
-    const buff = new Uint8Array(DataTypeSize.SByte);
-    const dv = new DataView(buff.buffer);
-    dv.setInt8(0, clampSByte(value));
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.SByte);
+    this.#dv.setInt8(this.#byteOffset, clampSByte(value));
+    this.#byteOffset += DataTypeSize.SByte;
   }
 
   writeByte(value: Byte): void {
-    const buff = new Uint8Array(DataTypeSize.Byte);
-    const dv = new DataView(buff.buffer);
-    dv.setUint8(0, clampByte(value));
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.Byte);
+    this.#dv.setUint8(this.#byteOffset, clampByte(value));
+    this.#byteOffset += DataTypeSize.Byte;
   }
 
   writeInt16(value: Int16): void {
-    const buff = new Uint8Array(DataTypeSize.Int16);
-    const dv = new DataView(buff.buffer);
-    dv.setInt16(0, clampInt16(value), true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.Int16);
+    this.#dv.setInt16(this.#byteOffset, clampInt16(value), true);
+    this.#byteOffset += DataTypeSize.Int16;
   }
 
   writeUInt16(value: UInt16): void {
-    const buff = new Uint8Array(DataTypeSize.UInt16);
-    const dv = new DataView(buff.buffer);
-    dv.setUint16(0, clampUInt16(value), true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.UInt16);
+    this.#dv.setUint16(this.#byteOffset, clampUInt16(value), true);
+    this.#byteOffset += DataTypeSize.UInt16;
   }
 
   writeInt32(value: Int32): void {
-    const buff = new Uint8Array(DataTypeSize.Int32);
-    const dv = new DataView(buff.buffer);
-    dv.setInt32(0, clampInt32(value), true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.Int32);
+    this.#dv.setInt32(this.#byteOffset, clampInt32(value), true);
+    this.#byteOffset += DataTypeSize.Int32;
   }
 
   writeUInt32(value: UInt32): void {
-    const buff = new Uint8Array(DataTypeSize.UInt32);
-    const dv = new DataView(buff.buffer);
-    dv.setUint32(0, clampUInt32(value), true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.UInt32);
+    this.#dv.setUint32(this.#byteOffset, clampUInt32(value), true);
+    this.#byteOffset += DataTypeSize.UInt32;
   }
 
   writeInt64(value: Int64): void {
-    const buff = new Uint8Array(DataTypeSize.Int64);
-    const dv = new DataView(buff.buffer);
-    dv.setBigInt64(0, clampInt64(value), true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.Int64);
+    this.#dv.setBigInt64(this.#byteOffset, clampInt64(value), true);
+    this.#byteOffset += DataTypeSize.Int64;
   }
 
   writeUInt64(value: UInt64): void {
-    const buff = new Uint8Array(DataTypeSize.UInt64);
-    const dv = new DataView(buff.buffer);
-    dv.setBigUint64(0, clampUInt64(value), true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.UInt64);
+    this.#dv.setBigUint64(this.#byteOffset, clampUInt64(value), true);
+    this.#byteOffset += DataTypeSize.UInt64;
   }
 
   writeFloat(value: Float): void {
-    const buff = new Uint8Array(DataTypeSize.Float);
-    const dv = new DataView(buff.buffer);
-    dv.setFloat32(0, value, true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.Float);
+    this.#dv.setFloat32(this.#byteOffset, value, true);
+    this.#byteOffset += DataTypeSize.Float;
   }
 
   writeDouble(value: Double): void {
-    const buff = new Uint8Array(DataTypeSize.Double);
-    const dv = new DataView(buff.buffer);
-    dv.setFloat64(0, value, true);
-    this.writeBytes(buff);
+    this.#growBuffer(DataTypeSize.Double);
+    this.#dv.setFloat64(this.#byteOffset, value, true);
+    this.#byteOffset += DataTypeSize.Double;
   }
 
   writeBytes(value: Uint8Array): void {
-    if (this.#buff.byteLength < this.#byteOffset + value.byteLength) {
-      let newSize = this.#buff.byteLength;
-      do {
-        newSize *= 2;
-      } while (newSize < this.#byteOffset + value.byteLength);
-      const _new = new Uint8Array(newSize);
-      _new.set(this.#buff);
-      this.#buff = _new;
-    }
-
-    this.#buff.set(value, this.#byteOffset);
+    this.#growBuffer(value.byteLength);
+    this.#bytes.set(value, this.#byteOffset);
     this.#byteOffset += value.byteLength;
   }
 
@@ -132,7 +130,7 @@ export class BinaryDataEncoder {
   }
 
   writeByteString(value: ByteString): void {
-    if (value === undefined) {
+    if (!value) {
       this.writeInt32(-1);
       return;
     }
@@ -141,7 +139,7 @@ export class BinaryDataEncoder {
   }
 
   writeString(value: UaString): void {
-    const bytes = value !== undefined ? new TextEncoder().encode(value) : undefined;
+    const bytes = typeof value === 'string' ? new TextEncoder().encode(value) : undefined;
     this.writeByteString(bytes);
   }
 
@@ -171,152 +169,184 @@ export class BinaryDataEncoder {
     value[encode](this);
   }
 
-  writeSByteArray(values: SByte[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeSByte(values[i] as SByte);
-      }
+  writeSByteArray(values: ReadonlyArray<SByte> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeSByte(values[i] as SByte);
     }
   }
 
-  writeByteArray(values: Byte[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeByte(values[i] as Byte);
-      }
+  writeByteArray(values: ReadonlyArray<Byte> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeByte(values[i] as Byte);
     }
   }
 
-  writeInt16Array(values: Int16[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeInt16(values[i] as Int16);
-      }
+  writeInt16Array(values: ReadonlyArray<Int16> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeInt16(values[i] as Int16);
     }
   }
 
-  writeUInt16Array(values: UInt16[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeUInt16(values[i] as UInt16);
-      }
+  writeUInt16Array(values: ReadonlyArray<UInt16> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeUInt16(values[i] as UInt16);
     }
   }
 
-  writeInt32Array(values: Int32[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeInt32(values[i] as Int32);
-      }
+  writeInt32Array(values: ReadonlyArray<Int32> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeInt32(values[i] as Int32);
     }
   }
 
-  writeUInt32Array(values: UInt32[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeUInt32(values[i] as UInt32);
-      }
+  writeUInt32Array(values: ReadonlyArray<UInt32> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeUInt32(values[i] as UInt32);
     }
   }
 
-  writeInt64Array(values: Int64[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeInt64(values[i] as Int64);
-      }
+  writeInt64Array(values: ReadonlyArray<Int64> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeInt64(values[i] as Int64);
     }
   }
 
-  writeUInt64Array(values: UInt64[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeUInt64(values[i] as UInt64);
-      }
+  writeUInt64Array(values: ReadonlyArray<UInt64> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeUInt64(values[i] as UInt64);
     }
   }
 
-  writeFloatArray(values: Float[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeFloat(values[i] as Float);
-      }
+  writeFloatArray(values: ReadonlyArray<Float> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeFloat(values[i] as Float);
     }
   }
 
-  writeDoubleArray(values: Double[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeDouble(values[i] as Double);
-      }
+  writeDoubleArray(values: ReadonlyArray<Double> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeDouble(values[i] as Double);
     }
   }
 
-  writeBooleanArray(values: boolean[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeBoolean(values[i] as boolean);
-      }
+  writeBooleanArray(values: ReadonlyArray<boolean> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeBoolean(values[i] as boolean);
     }
   }
 
-  writeByteStringArray(values: ByteString[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeByteString(values[i]);
-      }
+  writeByteStringArray(values: ReadonlyArray<ByteString> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeByteString(values[i]);
     }
   }
 
-  writeStringArray(values: UaString[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeString(values[i]);
-      }
+  writeStringArray(values: ReadonlyArray<UaString> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeString(values[i]);
     }
   }
 
-  writeDateTimeArray(values: Date[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeDateTime(values[i] as Date);
-      }
+  writeDateTimeArray(values: ReadonlyArray<Date> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeDateTime(values[i] as Date);
     }
   }
 
-  writeXmlElementArray(values: XmlElement[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeXmlElement(values[i]);
-      }
+  writeXmlElementArray(values: ReadonlyArray<XmlElement> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeXmlElement(values[i]);
     }
   }
 
-  writeTypeArray(values: Encodable[] | undefined): void {
-    this.writeInt32(values ? values.length : -1);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        this.writeType(values[i] as Encodable);
-      }
+  writeTypeArray(values: ReadonlyArray<Encodable> | undefined): void {
+    if (!values) {
+      this.writeInt32(-1);
+      return;
+    }
+    this.writeInt32(values.length);
+    for (let i = 0; i < values.length; i++) {
+      this.writeType(values[i] as Encodable);
     }
   }
 
   finish(): Uint8Array {
-    return new Uint8Array(this.#buff.buffer, 0, this.#byteOffset);
+    return new Uint8Array(this.#bytes.buffer, 0, this.#byteOffset);
   }
 
   static encodeType(value: Encodable): Uint8Array {

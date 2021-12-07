@@ -64,10 +64,10 @@ export class KeyValuePair implements KeyValuePairOptions {
     }
 }
 export interface AdditionalParametersTypeOptions {
-    parameters?: KeyValuePair[] | undefined;
+    parameters?: ReadonlyArray<KeyValuePair> | undefined;
 }
 export class AdditionalParametersType implements AdditionalParametersTypeOptions {
-    readonly parameters?: KeyValuePair[];
+    readonly parameters?: ReadonlyArray<KeyValuePair>;
     constructor(options?: AdditionalParametersTypeOptions) {
         this.parameters = options?.parameters;
     }
@@ -379,17 +379,17 @@ export enum TrustListMasks {
 }
 export interface TrustListDataTypeOptions {
     specifiedLists?: UInt32 | undefined;
-    trustedCertificates?: ByteString[] | undefined;
-    trustedCrls?: ByteString[] | undefined;
-    issuerCertificates?: ByteString[] | undefined;
-    issuerCrls?: ByteString[] | undefined;
+    trustedCertificates?: ReadonlyArray<ByteString> | undefined;
+    trustedCrls?: ReadonlyArray<ByteString> | undefined;
+    issuerCertificates?: ReadonlyArray<ByteString> | undefined;
+    issuerCrls?: ReadonlyArray<ByteString> | undefined;
 }
 export class TrustListDataType implements TrustListDataTypeOptions {
     readonly specifiedLists: UInt32;
-    readonly trustedCertificates?: ByteString[];
-    readonly trustedCrls?: ByteString[];
-    readonly issuerCertificates?: ByteString[];
-    readonly issuerCrls?: ByteString[];
+    readonly trustedCertificates?: ReadonlyArray<ByteString>;
+    readonly trustedCrls?: ReadonlyArray<ByteString>;
+    readonly issuerCertificates?: ReadonlyArray<ByteString>;
+    readonly issuerCrls?: ReadonlyArray<ByteString>;
     constructor(options?: TrustListDataTypeOptions) {
         this.specifiedLists = options?.specifiedLists ?? 0;
         this.trustedCertificates = options?.trustedCertificates;
@@ -439,16 +439,16 @@ export class DecimalDataType implements DecimalDataTypeOptions {
     }
 }
 export interface DataTypeSchemaHeaderOptions {
-    namespaces?: UaString[] | undefined;
-    structureDataTypes?: StructureDescription[] | undefined;
-    enumDataTypes?: EnumDescription[] | undefined;
-    simpleDataTypes?: SimpleTypeDescription[] | undefined;
+    namespaces?: ReadonlyArray<UaString> | undefined;
+    structureDataTypes?: ReadonlyArray<StructureDescription> | undefined;
+    enumDataTypes?: ReadonlyArray<EnumDescription> | undefined;
+    simpleDataTypes?: ReadonlyArray<SimpleTypeDescription> | undefined;
 }
 export class DataTypeSchemaHeader implements DataTypeSchemaHeaderOptions {
-    readonly namespaces?: UaString[];
-    readonly structureDataTypes?: StructureDescription[];
-    readonly enumDataTypes?: EnumDescription[];
-    readonly simpleDataTypes?: SimpleTypeDescription[];
+    readonly namespaces?: ReadonlyArray<UaString>;
+    readonly structureDataTypes?: ReadonlyArray<StructureDescription>;
+    readonly enumDataTypes?: ReadonlyArray<EnumDescription>;
+    readonly simpleDataTypes?: ReadonlyArray<SimpleTypeDescription>;
     constructor(options?: DataTypeSchemaHeaderOptions) {
         this.namespaces = options?.namespaces;
         this.structureDataTypes = options?.structureDataTypes;
@@ -589,21 +589,21 @@ export class SimpleTypeDescription implements SimpleTypeDescriptionOptions {
     }
 }
 export interface UABinaryFileDataTypeOptions {
-    namespaces?: UaString[] | undefined;
-    structureDataTypes?: StructureDescription[] | undefined;
-    enumDataTypes?: EnumDescription[] | undefined;
-    simpleDataTypes?: SimpleTypeDescription[] | undefined;
+    namespaces?: ReadonlyArray<UaString> | undefined;
+    structureDataTypes?: ReadonlyArray<StructureDescription> | undefined;
+    enumDataTypes?: ReadonlyArray<EnumDescription> | undefined;
+    simpleDataTypes?: ReadonlyArray<SimpleTypeDescription> | undefined;
     schemaLocation?: UaString | undefined;
-    fileHeader?: KeyValuePair[] | undefined;
+    fileHeader?: ReadonlyArray<KeyValuePair> | undefined;
     body?: Variant | undefined;
 }
 export class UABinaryFileDataType implements UABinaryFileDataTypeOptions {
-    readonly namespaces?: UaString[];
-    readonly structureDataTypes?: StructureDescription[];
-    readonly enumDataTypes?: EnumDescription[];
-    readonly simpleDataTypes?: SimpleTypeDescription[];
+    readonly namespaces?: ReadonlyArray<UaString>;
+    readonly structureDataTypes?: ReadonlyArray<StructureDescription>;
+    readonly enumDataTypes?: ReadonlyArray<EnumDescription>;
+    readonly simpleDataTypes?: ReadonlyArray<SimpleTypeDescription>;
     readonly schemaLocation?: UaString;
-    readonly fileHeader?: KeyValuePair[];
+    readonly fileHeader?: ReadonlyArray<KeyValuePair>;
     readonly body: Variant;
     constructor(options?: UABinaryFileDataTypeOptions) {
         this.namespaces = options?.namespaces;
@@ -643,24 +643,24 @@ export enum PubSubState {
     Error = 3
 }
 export interface DataSetMetaDataTypeOptions {
-    namespaces?: UaString[] | undefined;
-    structureDataTypes?: StructureDescription[] | undefined;
-    enumDataTypes?: EnumDescription[] | undefined;
-    simpleDataTypes?: SimpleTypeDescription[] | undefined;
+    namespaces?: ReadonlyArray<UaString> | undefined;
+    structureDataTypes?: ReadonlyArray<StructureDescription> | undefined;
+    enumDataTypes?: ReadonlyArray<EnumDescription> | undefined;
+    simpleDataTypes?: ReadonlyArray<SimpleTypeDescription> | undefined;
     name?: UaString | undefined;
     description?: LocalizedText | undefined;
-    fields?: FieldMetaData[] | undefined;
+    fields?: ReadonlyArray<FieldMetaData> | undefined;
     dataSetClassId?: Guid | undefined;
     configurationVersion?: ConfigurationVersionDataType | undefined;
 }
 export class DataSetMetaDataType implements DataSetMetaDataTypeOptions {
-    readonly namespaces?: UaString[];
-    readonly structureDataTypes?: StructureDescription[];
-    readonly enumDataTypes?: EnumDescription[];
-    readonly simpleDataTypes?: SimpleTypeDescription[];
+    readonly namespaces?: ReadonlyArray<UaString>;
+    readonly structureDataTypes?: ReadonlyArray<StructureDescription>;
+    readonly enumDataTypes?: ReadonlyArray<EnumDescription>;
+    readonly simpleDataTypes?: ReadonlyArray<SimpleTypeDescription>;
     readonly name?: UaString;
     readonly description: LocalizedText;
-    readonly fields?: FieldMetaData[];
+    readonly fields?: ReadonlyArray<FieldMetaData>;
     readonly dataSetClassId: Guid;
     readonly configurationVersion: ConfigurationVersionDataType;
     constructor(options?: DataSetMetaDataTypeOptions) {
@@ -707,10 +707,10 @@ export interface FieldMetaDataOptions {
     builtInType?: Byte | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     maxStringLength?: UInt32 | undefined;
     dataSetFieldId?: Guid | undefined;
-    properties?: KeyValuePair[] | undefined;
+    properties?: ReadonlyArray<KeyValuePair> | undefined;
 }
 export class FieldMetaData implements FieldMetaDataOptions {
     readonly name?: UaString;
@@ -719,10 +719,10 @@ export class FieldMetaData implements FieldMetaDataOptions {
     readonly builtInType: Byte;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly maxStringLength: UInt32;
     readonly dataSetFieldId: Guid;
-    readonly properties?: KeyValuePair[];
+    readonly properties?: ReadonlyArray<KeyValuePair>;
     constructor(options?: FieldMetaDataOptions) {
         this.name = options?.name;
         this.description = options?.description ?? new LocalizedText();
@@ -792,16 +792,16 @@ export class ConfigurationVersionDataType implements ConfigurationVersionDataTyp
 }
 export interface PublishedDataSetDataTypeOptions {
     name?: UaString | undefined;
-    dataSetFolder?: UaString[] | undefined;
+    dataSetFolder?: ReadonlyArray<UaString> | undefined;
     dataSetMetaData?: DataSetMetaDataType | undefined;
-    extensionFields?: KeyValuePair[] | undefined;
+    extensionFields?: ReadonlyArray<KeyValuePair> | undefined;
     dataSetSource?: ExtensionObject | undefined;
 }
 export class PublishedDataSetDataType implements PublishedDataSetDataTypeOptions {
     readonly name?: UaString;
-    readonly dataSetFolder?: UaString[];
+    readonly dataSetFolder?: ReadonlyArray<UaString>;
     readonly dataSetMetaData: DataSetMetaDataType;
-    readonly extensionFields?: KeyValuePair[];
+    readonly extensionFields?: ReadonlyArray<KeyValuePair>;
     readonly dataSetSource: ExtensionObject;
     constructor(options?: PublishedDataSetDataTypeOptions) {
         this.name = options?.name;
@@ -844,7 +844,7 @@ export interface PublishedVariableDataTypeOptions {
     deadbandValue?: Double | undefined;
     indexRange?: UaString | undefined;
     substituteValue?: Variant | undefined;
-    metaDataProperties?: QualifiedName[] | undefined;
+    metaDataProperties?: ReadonlyArray<QualifiedName> | undefined;
 }
 export class PublishedVariableDataType implements PublishedVariableDataTypeOptions {
     readonly publishedVariable: NodeId;
@@ -854,7 +854,7 @@ export class PublishedVariableDataType implements PublishedVariableDataTypeOptio
     readonly deadbandValue: Double;
     readonly indexRange?: UaString;
     readonly substituteValue: Variant;
-    readonly metaDataProperties?: QualifiedName[];
+    readonly metaDataProperties?: ReadonlyArray<QualifiedName>;
     constructor(options?: PublishedVariableDataTypeOptions) {
         this.publishedVariable = options?.publishedVariable ?? NodeId.null();
         this.attributeId = options?.attributeId ?? 0;
@@ -890,10 +890,10 @@ export class PublishedVariableDataType implements PublishedVariableDataTypeOptio
     }
 }
 export interface PublishedDataItemsDataTypeOptions {
-    publishedData?: PublishedVariableDataType[] | undefined;
+    publishedData?: ReadonlyArray<PublishedVariableDataType> | undefined;
 }
 export class PublishedDataItemsDataType implements PublishedDataItemsDataTypeOptions {
-    readonly publishedData?: PublishedVariableDataType[];
+    readonly publishedData?: ReadonlyArray<PublishedVariableDataType>;
     constructor(options?: PublishedDataItemsDataTypeOptions) {
         this.publishedData = options?.publishedData;
     }
@@ -909,12 +909,12 @@ export class PublishedDataItemsDataType implements PublishedDataItemsDataTypeOpt
 }
 export interface PublishedEventsDataTypeOptions {
     eventNotifier?: NodeId | undefined;
-    selectedFields?: SimpleAttributeOperand[] | undefined;
+    selectedFields?: ReadonlyArray<SimpleAttributeOperand> | undefined;
     filter?: ContentFilter | undefined;
 }
 export class PublishedEventsDataType implements PublishedEventsDataTypeOptions {
     readonly eventNotifier: NodeId;
-    readonly selectedFields?: SimpleAttributeOperand[];
+    readonly selectedFields?: ReadonlyArray<SimpleAttributeOperand>;
     readonly filter: ContentFilter;
     constructor(options?: PublishedEventsDataTypeOptions) {
         this.eventNotifier = options?.eventNotifier ?? NodeId.null();
@@ -951,7 +951,7 @@ export interface DataSetWriterDataTypeOptions {
     dataSetFieldContentMask?: DataSetFieldContentMask | undefined;
     keyFrameCount?: UInt32 | undefined;
     dataSetName?: UaString | undefined;
-    dataSetWriterProperties?: KeyValuePair[] | undefined;
+    dataSetWriterProperties?: ReadonlyArray<KeyValuePair> | undefined;
     transportSettings?: ExtensionObject | undefined;
     messageSettings?: ExtensionObject | undefined;
 }
@@ -962,7 +962,7 @@ export class DataSetWriterDataType implements DataSetWriterDataTypeOptions {
     readonly dataSetFieldContentMask: DataSetFieldContentMask;
     readonly keyFrameCount: UInt32;
     readonly dataSetName?: UaString;
-    readonly dataSetWriterProperties?: KeyValuePair[];
+    readonly dataSetWriterProperties?: ReadonlyArray<KeyValuePair>;
     readonly transportSettings: ExtensionObject;
     readonly messageSettings: ExtensionObject;
     constructor(options?: DataSetWriterDataTypeOptions) {
@@ -1023,18 +1023,18 @@ export interface PubSubGroupDataTypeOptions {
     enabled?: boolean | undefined;
     securityMode?: MessageSecurityMode | undefined;
     securityGroupId?: UaString | undefined;
-    securityKeyServices?: EndpointDescription[] | undefined;
+    securityKeyServices?: ReadonlyArray<EndpointDescription> | undefined;
     maxNetworkMessageSize?: UInt32 | undefined;
-    groupProperties?: KeyValuePair[] | undefined;
+    groupProperties?: ReadonlyArray<KeyValuePair> | undefined;
 }
 export class PubSubGroupDataType implements PubSubGroupDataTypeOptions {
     readonly name?: UaString;
     readonly enabled: boolean;
     readonly securityMode: MessageSecurityMode;
     readonly securityGroupId?: UaString;
-    readonly securityKeyServices?: EndpointDescription[];
+    readonly securityKeyServices?: ReadonlyArray<EndpointDescription>;
     readonly maxNetworkMessageSize: UInt32;
-    readonly groupProperties?: KeyValuePair[];
+    readonly groupProperties?: ReadonlyArray<KeyValuePair>;
     constructor(options?: PubSubGroupDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1071,36 +1071,36 @@ export interface WriterGroupDataTypeOptions {
     enabled?: boolean | undefined;
     securityMode?: MessageSecurityMode | undefined;
     securityGroupId?: UaString | undefined;
-    securityKeyServices?: EndpointDescription[] | undefined;
+    securityKeyServices?: ReadonlyArray<EndpointDescription> | undefined;
     maxNetworkMessageSize?: UInt32 | undefined;
-    groupProperties?: KeyValuePair[] | undefined;
+    groupProperties?: ReadonlyArray<KeyValuePair> | undefined;
     writerGroupId?: UInt16 | undefined;
     publishingInterval?: Double | undefined;
     keepAliveTime?: Double | undefined;
     priority?: Byte | undefined;
-    localeIds?: UaString[] | undefined;
+    localeIds?: ReadonlyArray<UaString> | undefined;
     headerLayoutUri?: UaString | undefined;
     transportSettings?: ExtensionObject | undefined;
     messageSettings?: ExtensionObject | undefined;
-    dataSetWriters?: DataSetWriterDataType[] | undefined;
+    dataSetWriters?: ReadonlyArray<DataSetWriterDataType> | undefined;
 }
 export class WriterGroupDataType implements WriterGroupDataTypeOptions {
     readonly name?: UaString;
     readonly enabled: boolean;
     readonly securityMode: MessageSecurityMode;
     readonly securityGroupId?: UaString;
-    readonly securityKeyServices?: EndpointDescription[];
+    readonly securityKeyServices?: ReadonlyArray<EndpointDescription>;
     readonly maxNetworkMessageSize: UInt32;
-    readonly groupProperties?: KeyValuePair[];
+    readonly groupProperties?: ReadonlyArray<KeyValuePair>;
     readonly writerGroupId: UInt16;
     readonly publishingInterval: Double;
     readonly keepAliveTime: Double;
     readonly priority: Byte;
-    readonly localeIds?: UaString[];
+    readonly localeIds?: ReadonlyArray<UaString>;
     readonly headerLayoutUri?: UaString;
     readonly transportSettings: ExtensionObject;
     readonly messageSettings: ExtensionObject;
-    readonly dataSetWriters?: DataSetWriterDataType[];
+    readonly dataSetWriters?: ReadonlyArray<DataSetWriterDataType>;
     constructor(options?: WriterGroupDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1181,10 +1181,10 @@ export interface PubSubConnectionDataTypeOptions {
     publisherId?: Variant | undefined;
     transportProfileUri?: UaString | undefined;
     address?: ExtensionObject | undefined;
-    connectionProperties?: KeyValuePair[] | undefined;
+    connectionProperties?: ReadonlyArray<KeyValuePair> | undefined;
     transportSettings?: ExtensionObject | undefined;
-    writerGroups?: WriterGroupDataType[] | undefined;
-    readerGroups?: ReaderGroupDataType[] | undefined;
+    writerGroups?: ReadonlyArray<WriterGroupDataType> | undefined;
+    readerGroups?: ReadonlyArray<ReaderGroupDataType> | undefined;
 }
 export class PubSubConnectionDataType implements PubSubConnectionDataTypeOptions {
     readonly name?: UaString;
@@ -1192,10 +1192,10 @@ export class PubSubConnectionDataType implements PubSubConnectionDataTypeOptions
     readonly publisherId: Variant;
     readonly transportProfileUri?: UaString;
     readonly address: ExtensionObject;
-    readonly connectionProperties?: KeyValuePair[];
+    readonly connectionProperties?: ReadonlyArray<KeyValuePair>;
     readonly transportSettings: ExtensionObject;
-    readonly writerGroups?: WriterGroupDataType[];
-    readonly readerGroups?: ReaderGroupDataType[];
+    readonly writerGroups?: ReadonlyArray<WriterGroupDataType>;
+    readonly readerGroups?: ReadonlyArray<ReaderGroupDataType>;
     constructor(options?: PubSubConnectionDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1287,24 +1287,24 @@ export interface ReaderGroupDataTypeOptions {
     enabled?: boolean | undefined;
     securityMode?: MessageSecurityMode | undefined;
     securityGroupId?: UaString | undefined;
-    securityKeyServices?: EndpointDescription[] | undefined;
+    securityKeyServices?: ReadonlyArray<EndpointDescription> | undefined;
     maxNetworkMessageSize?: UInt32 | undefined;
-    groupProperties?: KeyValuePair[] | undefined;
+    groupProperties?: ReadonlyArray<KeyValuePair> | undefined;
     transportSettings?: ExtensionObject | undefined;
     messageSettings?: ExtensionObject | undefined;
-    dataSetReaders?: DataSetReaderDataType[] | undefined;
+    dataSetReaders?: ReadonlyArray<DataSetReaderDataType> | undefined;
 }
 export class ReaderGroupDataType implements ReaderGroupDataTypeOptions {
     readonly name?: UaString;
     readonly enabled: boolean;
     readonly securityMode: MessageSecurityMode;
     readonly securityGroupId?: UaString;
-    readonly securityKeyServices?: EndpointDescription[];
+    readonly securityKeyServices?: ReadonlyArray<EndpointDescription>;
     readonly maxNetworkMessageSize: UInt32;
-    readonly groupProperties?: KeyValuePair[];
+    readonly groupProperties?: ReadonlyArray<KeyValuePair>;
     readonly transportSettings: ExtensionObject;
     readonly messageSettings: ExtensionObject;
-    readonly dataSetReaders?: DataSetReaderDataType[];
+    readonly dataSetReaders?: ReadonlyArray<DataSetReaderDataType>;
     constructor(options?: ReaderGroupDataTypeOptions) {
         this.name = options?.name;
         this.enabled = options?.enabled ?? false;
@@ -1374,8 +1374,8 @@ export interface DataSetReaderDataTypeOptions {
     headerLayoutUri?: UaString | undefined;
     securityMode?: MessageSecurityMode | undefined;
     securityGroupId?: UaString | undefined;
-    securityKeyServices?: EndpointDescription[] | undefined;
-    dataSetReaderProperties?: KeyValuePair[] | undefined;
+    securityKeyServices?: ReadonlyArray<EndpointDescription> | undefined;
+    dataSetReaderProperties?: ReadonlyArray<KeyValuePair> | undefined;
     transportSettings?: ExtensionObject | undefined;
     messageSettings?: ExtensionObject | undefined;
     subscribedDataSet?: ExtensionObject | undefined;
@@ -1393,8 +1393,8 @@ export class DataSetReaderDataType implements DataSetReaderDataTypeOptions {
     readonly headerLayoutUri?: UaString;
     readonly securityMode: MessageSecurityMode;
     readonly securityGroupId?: UaString;
-    readonly securityKeyServices?: EndpointDescription[];
-    readonly dataSetReaderProperties?: KeyValuePair[];
+    readonly securityKeyServices?: ReadonlyArray<EndpointDescription>;
+    readonly dataSetReaderProperties?: ReadonlyArray<KeyValuePair>;
     readonly transportSettings: ExtensionObject;
     readonly messageSettings: ExtensionObject;
     readonly subscribedDataSet: ExtensionObject;
@@ -1484,10 +1484,10 @@ export class SubscribedDataSetDataType {
     }
 }
 export interface TargetVariablesDataTypeOptions {
-    targetVariables?: FieldTargetDataType[] | undefined;
+    targetVariables?: ReadonlyArray<FieldTargetDataType> | undefined;
 }
 export class TargetVariablesDataType implements TargetVariablesDataTypeOptions {
-    readonly targetVariables?: FieldTargetDataType[];
+    readonly targetVariables?: ReadonlyArray<FieldTargetDataType>;
     constructor(options?: TargetVariablesDataTypeOptions) {
         this.targetVariables = options?.targetVariables;
     }
@@ -1556,11 +1556,11 @@ export enum OverrideValueHandling {
 }
 export interface SubscribedDataSetMirrorDataTypeOptions {
     parentNodeName?: UaString | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
 }
 export class SubscribedDataSetMirrorDataType implements SubscribedDataSetMirrorDataTypeOptions {
     readonly parentNodeName?: UaString;
-    readonly rolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
     constructor(options?: SubscribedDataSetMirrorDataTypeOptions) {
         this.parentNodeName = options?.parentNodeName;
         this.rolePermissions = options?.rolePermissions;
@@ -1578,13 +1578,13 @@ export class SubscribedDataSetMirrorDataType implements SubscribedDataSetMirrorD
     }
 }
 export interface PubSubConfigurationDataTypeOptions {
-    publishedDataSets?: PublishedDataSetDataType[] | undefined;
-    connections?: PubSubConnectionDataType[] | undefined;
+    publishedDataSets?: ReadonlyArray<PublishedDataSetDataType> | undefined;
+    connections?: ReadonlyArray<PubSubConnectionDataType> | undefined;
     enabled?: boolean | undefined;
 }
 export class PubSubConfigurationDataType implements PubSubConfigurationDataTypeOptions {
-    readonly publishedDataSets?: PublishedDataSetDataType[];
-    readonly connections?: PubSubConnectionDataType[];
+    readonly publishedDataSets?: ReadonlyArray<PublishedDataSetDataType>;
+    readonly connections?: ReadonlyArray<PubSubConnectionDataType>;
     readonly enabled: boolean;
     constructor(options?: PubSubConfigurationDataTypeOptions) {
         this.publishedDataSets = options?.publishedDataSets;
@@ -1629,14 +1629,14 @@ export interface UadpWriterGroupMessageDataTypeOptions {
     dataSetOrdering?: DataSetOrderingType | undefined;
     networkMessageContentMask?: UadpNetworkMessageContentMask | undefined;
     samplingOffset?: Double | undefined;
-    publishingOffset?: Double[] | undefined;
+    publishingOffset?: ReadonlyArray<Double> | undefined;
 }
 export class UadpWriterGroupMessageDataType implements UadpWriterGroupMessageDataTypeOptions {
     readonly groupVersion: UInt32;
     readonly dataSetOrdering: DataSetOrderingType;
     readonly networkMessageContentMask: UadpNetworkMessageContentMask;
     readonly samplingOffset: Double;
-    readonly publishingOffset?: Double[];
+    readonly publishingOffset?: ReadonlyArray<Double>;
     constructor(options?: UadpWriterGroupMessageDataTypeOptions) {
         this.groupVersion = options?.groupVersion ?? 0;
         this.dataSetOrdering = options?.dataSetOrdering ?? DataSetOrderingType.Undefined;
@@ -2036,11 +2036,11 @@ export enum PubSubDiagnosticsCounterClassification {
 }
 export interface AliasNameDataTypeOptions {
     aliasName?: QualifiedName | undefined;
-    referencedNodes?: ExpandedNodeId[] | undefined;
+    referencedNodes?: ReadonlyArray<ExpandedNodeId> | undefined;
 }
 export class AliasNameDataType implements AliasNameDataTypeOptions {
     readonly aliasName: QualifiedName;
-    readonly referencedNodes?: ExpandedNodeId[];
+    readonly referencedNodes?: ReadonlyArray<ExpandedNodeId>;
     constructor(options?: AliasNameDataTypeOptions) {
         this.aliasName = options?.aliasName ?? new QualifiedName();
         this.referencedNodes = options?.referencedNodes;
@@ -2164,7 +2164,7 @@ export interface StructureFieldOptions {
     description?: LocalizedText | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     maxStringLength?: UInt32 | undefined;
     isOptional?: boolean | undefined;
 }
@@ -2173,7 +2173,7 @@ export class StructureField implements StructureFieldOptions {
     readonly description: LocalizedText;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly maxStringLength: UInt32;
     readonly isOptional: boolean;
     constructor(options?: StructureFieldOptions) {
@@ -2211,13 +2211,13 @@ export interface StructureDefinitionOptions {
     defaultEncodingId?: NodeId | undefined;
     baseDataType?: NodeId | undefined;
     structureType?: StructureType | undefined;
-    fields?: StructureField[] | undefined;
+    fields?: ReadonlyArray<StructureField> | undefined;
 }
 export class StructureDefinition implements StructureDefinitionOptions {
     readonly defaultEncodingId: NodeId;
     readonly baseDataType: NodeId;
     readonly structureType: StructureType;
-    readonly fields?: StructureField[];
+    readonly fields?: ReadonlyArray<StructureField>;
     constructor(options?: StructureDefinitionOptions) {
         this.defaultEncodingId = options?.defaultEncodingId ?? NodeId.null();
         this.baseDataType = options?.baseDataType ?? NodeId.null();
@@ -2241,10 +2241,10 @@ export class StructureDefinition implements StructureDefinitionOptions {
     }
 }
 export interface EnumDefinitionOptions {
-    fields?: EnumField[] | undefined;
+    fields?: ReadonlyArray<EnumField> | undefined;
 }
 export class EnumDefinition implements EnumDefinitionOptions {
-    readonly fields?: EnumField[];
+    readonly fields?: ReadonlyArray<EnumField>;
     constructor(options?: EnumDefinitionOptions) {
         this.fields = options?.fields;
     }
@@ -2266,10 +2266,10 @@ export interface NodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
 }
 export class Node implements NodeOptions {
     readonly nodeId: NodeId;
@@ -2279,10 +2279,10 @@ export class Node implements NodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     constructor(options?: NodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2334,10 +2334,10 @@ export interface InstanceNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
 }
 export class InstanceNode implements InstanceNodeOptions {
     readonly nodeId: NodeId;
@@ -2347,10 +2347,10 @@ export class InstanceNode implements InstanceNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     constructor(options?: InstanceNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2402,10 +2402,10 @@ export interface TypeNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
 }
 export class TypeNode implements TypeNodeOptions {
     readonly nodeId: NodeId;
@@ -2415,10 +2415,10 @@ export class TypeNode implements TypeNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     constructor(options?: TypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.nodeClass = options?.nodeClass ?? NodeClass.Unspecified;
@@ -2470,10 +2470,10 @@ export interface ObjectNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     eventNotifier?: Byte | undefined;
 }
 export class ObjectNode implements ObjectNodeOptions {
@@ -2484,10 +2484,10 @@ export class ObjectNode implements ObjectNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly eventNotifier: Byte;
     constructor(options?: ObjectNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
@@ -2543,10 +2543,10 @@ export interface ObjectTypeNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     isAbstract?: boolean | undefined;
 }
 export class ObjectTypeNode implements ObjectTypeNodeOptions {
@@ -2557,10 +2557,10 @@ export class ObjectTypeNode implements ObjectTypeNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly isAbstract: boolean;
     constructor(options?: ObjectTypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
@@ -2616,14 +2616,14 @@ export interface VariableNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     value?: Variant | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     accessLevel?: Byte | undefined;
     userAccessLevel?: Byte | undefined;
     minimumSamplingInterval?: Double | undefined;
@@ -2638,14 +2638,14 @@ export class VariableNode implements VariableNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly value: Variant;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly accessLevel: Byte;
     readonly userAccessLevel: Byte;
     readonly minimumSamplingInterval: Double;
@@ -2729,14 +2729,14 @@ export interface VariableTypeNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     value?: Variant | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     isAbstract?: boolean | undefined;
 }
 export class VariableTypeNode implements VariableTypeNodeOptions {
@@ -2747,14 +2747,14 @@ export class VariableTypeNode implements VariableTypeNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly value: Variant;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly isAbstract: boolean;
     constructor(options?: VariableTypeNodeOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
@@ -2822,10 +2822,10 @@ export interface ReferenceTypeNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     isAbstract?: boolean | undefined;
     symmetric?: boolean | undefined;
     inverseName?: LocalizedText | undefined;
@@ -2838,10 +2838,10 @@ export class ReferenceTypeNode implements ReferenceTypeNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly isAbstract: boolean;
     readonly symmetric: boolean;
     readonly inverseName: LocalizedText;
@@ -2905,10 +2905,10 @@ export interface MethodNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     executable?: boolean | undefined;
     userExecutable?: boolean | undefined;
 }
@@ -2920,10 +2920,10 @@ export class MethodNode implements MethodNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly executable: boolean;
     readonly userExecutable: boolean;
     constructor(options?: MethodNodeOptions) {
@@ -2983,10 +2983,10 @@ export interface ViewNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     containsNoLoops?: boolean | undefined;
     eventNotifier?: Byte | undefined;
 }
@@ -2998,10 +2998,10 @@ export class ViewNode implements ViewNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly containsNoLoops: boolean;
     readonly eventNotifier: Byte;
     constructor(options?: ViewNodeOptions) {
@@ -3061,10 +3061,10 @@ export interface DataTypeNodeOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    rolePermissions?: RolePermissionType[] | undefined;
-    userRolePermissions?: RolePermissionType[] | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    userRolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
     accessRestrictions?: UInt16 | undefined;
-    references?: ReferenceNode[] | undefined;
+    references?: ReadonlyArray<ReferenceNode> | undefined;
     isAbstract?: boolean | undefined;
     dataTypeDefinition?: ExtensionObject | undefined;
 }
@@ -3076,10 +3076,10 @@ export class DataTypeNode implements DataTypeNodeOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly rolePermissions?: RolePermissionType[];
-    readonly userRolePermissions?: RolePermissionType[];
+    readonly rolePermissions?: ReadonlyArray<RolePermissionType>;
+    readonly userRolePermissions?: ReadonlyArray<RolePermissionType>;
     readonly accessRestrictions: UInt16;
-    readonly references?: ReferenceNode[];
+    readonly references?: ReadonlyArray<ReferenceNode>;
     readonly isAbstract: boolean;
     readonly dataTypeDefinition: ExtensionObject;
     constructor(options?: DataTypeNodeOptions) {
@@ -3163,14 +3163,14 @@ export interface ArgumentOptions {
     name?: UaString | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     description?: LocalizedText | undefined;
 }
 export class Argument implements ArgumentOptions {
     readonly name?: UaString;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly description: LocalizedText;
     constructor(options?: ArgumentOptions) {
         this.name = options?.name;
@@ -3325,7 +3325,7 @@ export interface ApplicationDescriptionOptions {
     applicationType?: ApplicationType | undefined;
     gatewayServerUri?: UaString | undefined;
     discoveryProfileUri?: UaString | undefined;
-    discoveryUrls?: UaString[] | undefined;
+    discoveryUrls?: ReadonlyArray<UaString> | undefined;
 }
 export class ApplicationDescription implements ApplicationDescriptionOptions {
     readonly applicationUri?: UaString;
@@ -3334,7 +3334,7 @@ export class ApplicationDescription implements ApplicationDescriptionOptions {
     readonly applicationType: ApplicationType;
     readonly gatewayServerUri?: UaString;
     readonly discoveryProfileUri?: UaString;
-    readonly discoveryUrls?: UaString[];
+    readonly discoveryUrls?: ReadonlyArray<UaString>;
     constructor(options?: ApplicationDescriptionOptions) {
         this.applicationUri = options?.applicationUri;
         this.productUri = options?.productUri;
@@ -3419,7 +3419,7 @@ export interface ResponseHeaderOptions {
     requestHandle?: UInt32 | undefined;
     serviceResult?: StatusCode | undefined;
     serviceDiagnostics?: DiagnosticInfo | undefined;
-    stringTable?: UaString[] | undefined;
+    stringTable?: ReadonlyArray<UaString> | undefined;
     additionalHeader?: ExtensionObject | undefined;
 }
 export class ResponseHeader implements ResponseHeaderOptions {
@@ -3427,7 +3427,7 @@ export class ResponseHeader implements ResponseHeaderOptions {
     readonly requestHandle: UInt32;
     readonly serviceResult: StatusCode;
     readonly serviceDiagnostics: DiagnosticInfo;
-    readonly stringTable?: UaString[];
+    readonly stringTable?: ReadonlyArray<UaString>;
     readonly additionalHeader: ExtensionObject;
     constructor(options?: ResponseHeaderOptions) {
         this.timestamp = options?.timestamp ?? new Date(-11644473600000);
@@ -3459,16 +3459,16 @@ export class ResponseHeader implements ResponseHeaderOptions {
 }
 export interface SessionlessInvokeRequestTypeOptions {
     urisVersion?: UInt32 | undefined;
-    namespaceUris?: UaString[] | undefined;
-    serverUris?: UaString[] | undefined;
-    localeIds?: UaString[] | undefined;
+    namespaceUris?: ReadonlyArray<UaString> | undefined;
+    serverUris?: ReadonlyArray<UaString> | undefined;
+    localeIds?: ReadonlyArray<UaString> | undefined;
     serviceId?: UInt32 | undefined;
 }
 export class SessionlessInvokeRequestType implements SessionlessInvokeRequestTypeOptions {
     readonly urisVersion: UInt32;
-    readonly namespaceUris?: UaString[];
-    readonly serverUris?: UaString[];
-    readonly localeIds?: UaString[];
+    readonly namespaceUris?: ReadonlyArray<UaString>;
+    readonly serverUris?: ReadonlyArray<UaString>;
+    readonly localeIds?: ReadonlyArray<UaString>;
     readonly serviceId: UInt32;
     constructor(options?: SessionlessInvokeRequestTypeOptions) {
         this.urisVersion = options?.urisVersion ?? 0;
@@ -3496,13 +3496,13 @@ export class SessionlessInvokeRequestType implements SessionlessInvokeRequestTyp
     }
 }
 export interface SessionlessInvokeResponseTypeOptions {
-    namespaceUris?: UaString[] | undefined;
-    serverUris?: UaString[] | undefined;
+    namespaceUris?: ReadonlyArray<UaString> | undefined;
+    serverUris?: ReadonlyArray<UaString> | undefined;
     serviceId?: UInt32 | undefined;
 }
 export class SessionlessInvokeResponseType implements SessionlessInvokeResponseTypeOptions {
-    readonly namespaceUris?: UaString[];
-    readonly serverUris?: UaString[];
+    readonly namespaceUris?: ReadonlyArray<UaString>;
+    readonly serverUris?: ReadonlyArray<UaString>;
     readonly serviceId: UInt32;
     constructor(options?: SessionlessInvokeResponseTypeOptions) {
         this.namespaceUris = options?.namespaceUris;
@@ -3526,14 +3526,14 @@ export class SessionlessInvokeResponseType implements SessionlessInvokeResponseT
 export interface FindServersRequestOptions {
     requestHeader?: RequestHeader | undefined;
     endpointUrl?: UaString | undefined;
-    localeIds?: UaString[] | undefined;
-    serverUris?: UaString[] | undefined;
+    localeIds?: ReadonlyArray<UaString> | undefined;
+    serverUris?: ReadonlyArray<UaString> | undefined;
 }
 export class FindServersRequest implements FindServersRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly endpointUrl?: UaString;
-    readonly localeIds?: UaString[];
-    readonly serverUris?: UaString[];
+    readonly localeIds?: ReadonlyArray<UaString>;
+    readonly serverUris?: ReadonlyArray<UaString>;
     constructor(options?: FindServersRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.endpointUrl = options?.endpointUrl;
@@ -3558,11 +3558,11 @@ export class FindServersRequest implements FindServersRequestOptions {
 }
 export interface FindServersResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    servers?: ApplicationDescription[] | undefined;
+    servers?: ReadonlyArray<ApplicationDescription> | undefined;
 }
 export class FindServersResponse implements FindServersResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly servers?: ApplicationDescription[];
+    readonly servers?: ReadonlyArray<ApplicationDescription>;
     constructor(options?: FindServersResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.servers = options?.servers;
@@ -3583,13 +3583,13 @@ export interface ServerOnNetworkOptions {
     recordId?: UInt32 | undefined;
     serverName?: UaString | undefined;
     discoveryUrl?: UaString | undefined;
-    serverCapabilities?: UaString[] | undefined;
+    serverCapabilities?: ReadonlyArray<UaString> | undefined;
 }
 export class ServerOnNetwork implements ServerOnNetworkOptions {
     readonly recordId: UInt32;
     readonly serverName?: UaString;
     readonly discoveryUrl?: UaString;
-    readonly serverCapabilities?: UaString[];
+    readonly serverCapabilities?: ReadonlyArray<UaString>;
     constructor(options?: ServerOnNetworkOptions) {
         this.recordId = options?.recordId ?? 0;
         this.serverName = options?.serverName;
@@ -3616,13 +3616,13 @@ export interface FindServersOnNetworkRequestOptions {
     requestHeader?: RequestHeader | undefined;
     startingRecordId?: UInt32 | undefined;
     maxRecordsToReturn?: UInt32 | undefined;
-    serverCapabilityFilter?: UaString[] | undefined;
+    serverCapabilityFilter?: ReadonlyArray<UaString> | undefined;
 }
 export class FindServersOnNetworkRequest implements FindServersOnNetworkRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly startingRecordId: UInt32;
     readonly maxRecordsToReturn: UInt32;
-    readonly serverCapabilityFilter?: UaString[];
+    readonly serverCapabilityFilter?: ReadonlyArray<UaString>;
     constructor(options?: FindServersOnNetworkRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.startingRecordId = options?.startingRecordId ?? 0;
@@ -3648,12 +3648,12 @@ export class FindServersOnNetworkRequest implements FindServersOnNetworkRequestO
 export interface FindServersOnNetworkResponseOptions {
     responseHeader?: ResponseHeader | undefined;
     lastCounterResetTime?: Date | undefined;
-    servers?: ServerOnNetwork[] | undefined;
+    servers?: ReadonlyArray<ServerOnNetwork> | undefined;
 }
 export class FindServersOnNetworkResponse implements FindServersOnNetworkResponseOptions {
     readonly responseHeader: ResponseHeader;
     readonly lastCounterResetTime: Date;
-    readonly servers?: ServerOnNetwork[];
+    readonly servers?: ReadonlyArray<ServerOnNetwork>;
     constructor(options?: FindServersOnNetworkResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.lastCounterResetTime = options?.lastCounterResetTime ?? new Date(-11644473600000);
@@ -3729,7 +3729,7 @@ export interface EndpointDescriptionOptions {
     serverCertificate?: ByteString | undefined;
     securityMode?: MessageSecurityMode | undefined;
     securityPolicyUri?: UaString | undefined;
-    userIdentityTokens?: UserTokenPolicy[] | undefined;
+    userIdentityTokens?: ReadonlyArray<UserTokenPolicy> | undefined;
     transportProfileUri?: UaString | undefined;
     securityLevel?: Byte | undefined;
 }
@@ -3739,7 +3739,7 @@ export class EndpointDescription implements EndpointDescriptionOptions {
     readonly serverCertificate?: ByteString;
     readonly securityMode: MessageSecurityMode;
     readonly securityPolicyUri?: UaString;
-    readonly userIdentityTokens?: UserTokenPolicy[];
+    readonly userIdentityTokens?: ReadonlyArray<UserTokenPolicy>;
     readonly transportProfileUri?: UaString;
     readonly securityLevel: Byte;
     constructor(options?: EndpointDescriptionOptions) {
@@ -3779,14 +3779,14 @@ export class EndpointDescription implements EndpointDescriptionOptions {
 export interface GetEndpointsRequestOptions {
     requestHeader?: RequestHeader | undefined;
     endpointUrl?: UaString | undefined;
-    localeIds?: UaString[] | undefined;
-    profileUris?: UaString[] | undefined;
+    localeIds?: ReadonlyArray<UaString> | undefined;
+    profileUris?: ReadonlyArray<UaString> | undefined;
 }
 export class GetEndpointsRequest implements GetEndpointsRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly endpointUrl?: UaString;
-    readonly localeIds?: UaString[];
-    readonly profileUris?: UaString[];
+    readonly localeIds?: ReadonlyArray<UaString>;
+    readonly profileUris?: ReadonlyArray<UaString>;
     constructor(options?: GetEndpointsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.endpointUrl = options?.endpointUrl;
@@ -3811,11 +3811,11 @@ export class GetEndpointsRequest implements GetEndpointsRequestOptions {
 }
 export interface GetEndpointsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    endpoints?: EndpointDescription[] | undefined;
+    endpoints?: ReadonlyArray<EndpointDescription> | undefined;
 }
 export class GetEndpointsResponse implements GetEndpointsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly endpoints?: EndpointDescription[];
+    readonly endpoints?: ReadonlyArray<EndpointDescription>;
     constructor(options?: GetEndpointsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.endpoints = options?.endpoints;
@@ -3835,20 +3835,20 @@ export class GetEndpointsResponse implements GetEndpointsResponseOptions {
 export interface RegisteredServerOptions {
     serverUri?: UaString | undefined;
     productUri?: UaString | undefined;
-    serverNames?: LocalizedText[] | undefined;
+    serverNames?: ReadonlyArray<LocalizedText> | undefined;
     serverType?: ApplicationType | undefined;
     gatewayServerUri?: UaString | undefined;
-    discoveryUrls?: UaString[] | undefined;
+    discoveryUrls?: ReadonlyArray<UaString> | undefined;
     semaphoreFilePath?: UaString | undefined;
     isOnline?: boolean | undefined;
 }
 export class RegisteredServer implements RegisteredServerOptions {
     readonly serverUri?: UaString;
     readonly productUri?: UaString;
-    readonly serverNames?: LocalizedText[];
+    readonly serverNames?: ReadonlyArray<LocalizedText>;
     readonly serverType: ApplicationType;
     readonly gatewayServerUri?: UaString;
-    readonly discoveryUrls?: UaString[];
+    readonly discoveryUrls?: ReadonlyArray<UaString>;
     readonly semaphoreFilePath?: UaString;
     readonly isOnline: boolean;
     constructor(options?: RegisteredServerOptions) {
@@ -3936,11 +3936,11 @@ export class DiscoveryConfiguration {
 }
 export interface MdnsDiscoveryConfigurationOptions {
     mdnsServerName?: UaString | undefined;
-    serverCapabilities?: UaString[] | undefined;
+    serverCapabilities?: ReadonlyArray<UaString> | undefined;
 }
 export class MdnsDiscoveryConfiguration implements MdnsDiscoveryConfigurationOptions {
     readonly mdnsServerName?: UaString;
-    readonly serverCapabilities?: UaString[];
+    readonly serverCapabilities?: ReadonlyArray<UaString>;
     constructor(options?: MdnsDiscoveryConfigurationOptions) {
         this.mdnsServerName = options?.mdnsServerName;
         this.serverCapabilities = options?.serverCapabilities;
@@ -3960,12 +3960,12 @@ export class MdnsDiscoveryConfiguration implements MdnsDiscoveryConfigurationOpt
 export interface RegisterServer2RequestOptions {
     requestHeader?: RequestHeader | undefined;
     server?: RegisteredServer | undefined;
-    discoveryConfiguration?: ExtensionObject[] | undefined;
+    discoveryConfiguration?: ReadonlyArray<ExtensionObject> | undefined;
 }
 export class RegisterServer2Request implements RegisterServer2RequestOptions {
     readonly requestHeader: RequestHeader;
     readonly server: RegisteredServer;
-    readonly discoveryConfiguration?: ExtensionObject[];
+    readonly discoveryConfiguration?: ReadonlyArray<ExtensionObject>;
     constructor(options?: RegisterServer2RequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.server = options?.server ?? new RegisteredServer();
@@ -3987,13 +3987,13 @@ export class RegisterServer2Request implements RegisterServer2RequestOptions {
 }
 export interface RegisterServer2ResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    configurationResults?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    configurationResults?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class RegisterServer2Response implements RegisterServer2ResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly configurationResults?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly configurationResults?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: RegisterServer2ResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.configurationResults = options?.configurationResults;
@@ -4273,8 +4273,8 @@ export interface CreateSessionResponseOptions {
     revisedSessionTimeout?: Double | undefined;
     serverNonce?: ByteString | undefined;
     serverCertificate?: ByteString | undefined;
-    serverEndpoints?: EndpointDescription[] | undefined;
-    serverSoftwareCertificates?: SignedSoftwareCertificate[] | undefined;
+    serverEndpoints?: ReadonlyArray<EndpointDescription> | undefined;
+    serverSoftwareCertificates?: ReadonlyArray<SignedSoftwareCertificate> | undefined;
     serverSignature?: SignatureData | undefined;
     maxRequestMessageSize?: UInt32 | undefined;
 }
@@ -4285,8 +4285,8 @@ export class CreateSessionResponse implements CreateSessionResponseOptions {
     readonly revisedSessionTimeout: Double;
     readonly serverNonce?: ByteString;
     readonly serverCertificate?: ByteString;
-    readonly serverEndpoints?: EndpointDescription[];
-    readonly serverSoftwareCertificates?: SignedSoftwareCertificate[];
+    readonly serverEndpoints?: ReadonlyArray<EndpointDescription>;
+    readonly serverSoftwareCertificates?: ReadonlyArray<SignedSoftwareCertificate>;
     readonly serverSignature: SignatureData;
     readonly maxRequestMessageSize: UInt32;
     constructor(options?: CreateSessionResponseOptions) {
@@ -4452,16 +4452,16 @@ export class IssuedIdentityToken implements IssuedIdentityTokenOptions {
 export interface ActivateSessionRequestOptions {
     requestHeader?: RequestHeader | undefined;
     clientSignature?: SignatureData | undefined;
-    clientSoftwareCertificates?: SignedSoftwareCertificate[] | undefined;
-    localeIds?: UaString[] | undefined;
+    clientSoftwareCertificates?: ReadonlyArray<SignedSoftwareCertificate> | undefined;
+    localeIds?: ReadonlyArray<UaString> | undefined;
     userIdentityToken?: ExtensionObject | undefined;
     userTokenSignature?: SignatureData | undefined;
 }
 export class ActivateSessionRequest implements ActivateSessionRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly clientSignature: SignatureData;
-    readonly clientSoftwareCertificates?: SignedSoftwareCertificate[];
-    readonly localeIds?: UaString[];
+    readonly clientSoftwareCertificates?: ReadonlyArray<SignedSoftwareCertificate>;
+    readonly localeIds?: ReadonlyArray<UaString>;
     readonly userIdentityToken: ExtensionObject;
     readonly userTokenSignature: SignatureData;
     constructor(options?: ActivateSessionRequestOptions) {
@@ -4495,14 +4495,14 @@ export class ActivateSessionRequest implements ActivateSessionRequestOptions {
 export interface ActivateSessionResponseOptions {
     responseHeader?: ResponseHeader | undefined;
     serverNonce?: ByteString | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class ActivateSessionResponse implements ActivateSessionResponseOptions {
     readonly responseHeader: ResponseHeader;
     readonly serverNonce?: ByteString;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: ActivateSessionResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.serverNonce = options?.serverNonce;
@@ -4739,7 +4739,7 @@ export interface VariableAttributesOptions {
     value?: Variant | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     accessLevel?: Byte | undefined;
     userAccessLevel?: Byte | undefined;
     minimumSamplingInterval?: Double | undefined;
@@ -4754,7 +4754,7 @@ export class VariableAttributes implements VariableAttributesOptions {
     readonly value: Variant;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly accessLevel: Byte;
     readonly userAccessLevel: Byte;
     readonly minimumSamplingInterval: Double;
@@ -4908,7 +4908,7 @@ export interface VariableTypeAttributesOptions {
     value?: Variant | undefined;
     dataType?: NodeId | undefined;
     valueRank?: Int32 | undefined;
-    arrayDimensions?: UInt32[] | undefined;
+    arrayDimensions?: ReadonlyArray<UInt32> | undefined;
     isAbstract?: boolean | undefined;
 }
 export class VariableTypeAttributes implements VariableTypeAttributesOptions {
@@ -4920,7 +4920,7 @@ export class VariableTypeAttributes implements VariableTypeAttributesOptions {
     readonly value: Variant;
     readonly dataType: NodeId;
     readonly valueRank: Int32;
-    readonly arrayDimensions?: UInt32[];
+    readonly arrayDimensions?: ReadonlyArray<UInt32>;
     readonly isAbstract: boolean;
     constructor(options?: VariableTypeAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
@@ -5135,7 +5135,7 @@ export interface GenericAttributesOptions {
     description?: LocalizedText | undefined;
     writeMask?: UInt32 | undefined;
     userWriteMask?: UInt32 | undefined;
-    attributeValues?: GenericAttributeValue[] | undefined;
+    attributeValues?: ReadonlyArray<GenericAttributeValue> | undefined;
 }
 export class GenericAttributes implements GenericAttributesOptions {
     readonly specifiedAttributes: UInt32;
@@ -5143,7 +5143,7 @@ export class GenericAttributes implements GenericAttributesOptions {
     readonly description: LocalizedText;
     readonly writeMask: UInt32;
     readonly userWriteMask: UInt32;
-    readonly attributeValues?: GenericAttributeValue[];
+    readonly attributeValues?: ReadonlyArray<GenericAttributeValue>;
     constructor(options?: GenericAttributesOptions) {
         this.specifiedAttributes = options?.specifiedAttributes ?? 0;
         this.displayName = options?.displayName ?? new LocalizedText();
@@ -5245,11 +5245,11 @@ export class AddNodesResult implements AddNodesResultOptions {
 }
 export interface AddNodesRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    nodesToAdd?: AddNodesItem[] | undefined;
+    nodesToAdd?: ReadonlyArray<AddNodesItem> | undefined;
 }
 export class AddNodesRequest implements AddNodesRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly nodesToAdd?: AddNodesItem[];
+    readonly nodesToAdd?: ReadonlyArray<AddNodesItem>;
     constructor(options?: AddNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToAdd = options?.nodesToAdd;
@@ -5268,13 +5268,13 @@ export class AddNodesRequest implements AddNodesRequestOptions {
 }
 export interface AddNodesResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: AddNodesResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<AddNodesResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class AddNodesResponse implements AddNodesResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: AddNodesResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<AddNodesResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: AddNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5339,11 +5339,11 @@ export class AddReferencesItem implements AddReferencesItemOptions {
 }
 export interface AddReferencesRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    referencesToAdd?: AddReferencesItem[] | undefined;
+    referencesToAdd?: ReadonlyArray<AddReferencesItem> | undefined;
 }
 export class AddReferencesRequest implements AddReferencesRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly referencesToAdd?: AddReferencesItem[];
+    readonly referencesToAdd?: ReadonlyArray<AddReferencesItem>;
     constructor(options?: AddReferencesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.referencesToAdd = options?.referencesToAdd;
@@ -5362,13 +5362,13 @@ export class AddReferencesRequest implements AddReferencesRequestOptions {
 }
 export interface AddReferencesResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class AddReferencesResponse implements AddReferencesResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: AddReferencesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5413,11 +5413,11 @@ export class DeleteNodesItem implements DeleteNodesItemOptions {
 }
 export interface DeleteNodesRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    nodesToDelete?: DeleteNodesItem[] | undefined;
+    nodesToDelete?: ReadonlyArray<DeleteNodesItem> | undefined;
 }
 export class DeleteNodesRequest implements DeleteNodesRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly nodesToDelete?: DeleteNodesItem[];
+    readonly nodesToDelete?: ReadonlyArray<DeleteNodesItem>;
     constructor(options?: DeleteNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToDelete = options?.nodesToDelete;
@@ -5436,13 +5436,13 @@ export class DeleteNodesRequest implements DeleteNodesRequestOptions {
 }
 export interface DeleteNodesResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class DeleteNodesResponse implements DeleteNodesResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: DeleteNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5502,11 +5502,11 @@ export class DeleteReferencesItem implements DeleteReferencesItemOptions {
 }
 export interface DeleteReferencesRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    referencesToDelete?: DeleteReferencesItem[] | undefined;
+    referencesToDelete?: ReadonlyArray<DeleteReferencesItem> | undefined;
 }
 export class DeleteReferencesRequest implements DeleteReferencesRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly referencesToDelete?: DeleteReferencesItem[];
+    readonly referencesToDelete?: ReadonlyArray<DeleteReferencesItem>;
     constructor(options?: DeleteReferencesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.referencesToDelete = options?.referencesToDelete;
@@ -5525,13 +5525,13 @@ export class DeleteReferencesRequest implements DeleteReferencesRequestOptions {
 }
 export interface DeleteReferencesResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class DeleteReferencesResponse implements DeleteReferencesResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: DeleteReferencesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5720,12 +5720,12 @@ export class ReferenceDescription implements ReferenceDescriptionOptions {
 export interface BrowseResultOptions {
     statusCode?: StatusCode | undefined;
     continuationPoint?: ByteString | undefined;
-    references?: ReferenceDescription[] | undefined;
+    references?: ReadonlyArray<ReferenceDescription> | undefined;
 }
 export class BrowseResult implements BrowseResultOptions {
     readonly statusCode: StatusCode;
     readonly continuationPoint?: ByteString;
-    readonly references?: ReferenceDescription[];
+    readonly references?: ReadonlyArray<ReferenceDescription>;
     constructor(options?: BrowseResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.continuationPoint = options?.continuationPoint;
@@ -5749,13 +5749,13 @@ export interface BrowseRequestOptions {
     requestHeader?: RequestHeader | undefined;
     view?: ViewDescription | undefined;
     requestedMaxReferencesPerNode?: UInt32 | undefined;
-    nodesToBrowse?: BrowseDescription[] | undefined;
+    nodesToBrowse?: ReadonlyArray<BrowseDescription> | undefined;
 }
 export class BrowseRequest implements BrowseRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly view: ViewDescription;
     readonly requestedMaxReferencesPerNode: UInt32;
-    readonly nodesToBrowse?: BrowseDescription[];
+    readonly nodesToBrowse?: ReadonlyArray<BrowseDescription>;
     constructor(options?: BrowseRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.view = options?.view ?? new ViewDescription();
@@ -5780,13 +5780,13 @@ export class BrowseRequest implements BrowseRequestOptions {
 }
 export interface BrowseResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: BrowseResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<BrowseResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class BrowseResponse implements BrowseResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: BrowseResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<BrowseResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: BrowseResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5809,12 +5809,12 @@ export class BrowseResponse implements BrowseResponseOptions {
 export interface BrowseNextRequestOptions {
     requestHeader?: RequestHeader | undefined;
     releaseContinuationPoints?: boolean | undefined;
-    continuationPoints?: ByteString[] | undefined;
+    continuationPoints?: ReadonlyArray<ByteString> | undefined;
 }
 export class BrowseNextRequest implements BrowseNextRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly releaseContinuationPoints: boolean;
-    readonly continuationPoints?: ByteString[];
+    readonly continuationPoints?: ReadonlyArray<ByteString>;
     constructor(options?: BrowseNextRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.releaseContinuationPoints = options?.releaseContinuationPoints ?? false;
@@ -5836,13 +5836,13 @@ export class BrowseNextRequest implements BrowseNextRequestOptions {
 }
 export interface BrowseNextResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: BrowseResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<BrowseResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class BrowseNextResponse implements BrowseNextResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: BrowseResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<BrowseResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: BrowseNextResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -5896,10 +5896,10 @@ export class RelativePathElement implements RelativePathElementOptions {
     }
 }
 export interface RelativePathOptions {
-    elements?: RelativePathElement[] | undefined;
+    elements?: ReadonlyArray<RelativePathElement> | undefined;
 }
 export class RelativePath implements RelativePathOptions {
-    readonly elements?: RelativePathElement[];
+    readonly elements?: ReadonlyArray<RelativePathElement>;
     constructor(options?: RelativePathOptions) {
         this.elements = options?.elements;
     }
@@ -5961,11 +5961,11 @@ export class BrowsePathTarget implements BrowsePathTargetOptions {
 }
 export interface BrowsePathResultOptions {
     statusCode?: StatusCode | undefined;
-    targets?: BrowsePathTarget[] | undefined;
+    targets?: ReadonlyArray<BrowsePathTarget> | undefined;
 }
 export class BrowsePathResult implements BrowsePathResultOptions {
     readonly statusCode: StatusCode;
-    readonly targets?: BrowsePathTarget[];
+    readonly targets?: ReadonlyArray<BrowsePathTarget>;
     constructor(options?: BrowsePathResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.targets = options?.targets;
@@ -5984,11 +5984,11 @@ export class BrowsePathResult implements BrowsePathResultOptions {
 }
 export interface TranslateBrowsePathsToNodeIdsRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    browsePaths?: BrowsePath[] | undefined;
+    browsePaths?: ReadonlyArray<BrowsePath> | undefined;
 }
 export class TranslateBrowsePathsToNodeIdsRequest implements TranslateBrowsePathsToNodeIdsRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly browsePaths?: BrowsePath[];
+    readonly browsePaths?: ReadonlyArray<BrowsePath>;
     constructor(options?: TranslateBrowsePathsToNodeIdsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.browsePaths = options?.browsePaths;
@@ -6007,13 +6007,13 @@ export class TranslateBrowsePathsToNodeIdsRequest implements TranslateBrowsePath
 }
 export interface TranslateBrowsePathsToNodeIdsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: BrowsePathResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<BrowsePathResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class TranslateBrowsePathsToNodeIdsResponse implements TranslateBrowsePathsToNodeIdsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: BrowsePathResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<BrowsePathResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: TranslateBrowsePathsToNodeIdsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6035,11 +6035,11 @@ export class TranslateBrowsePathsToNodeIdsResponse implements TranslateBrowsePat
 }
 export interface RegisterNodesRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    nodesToRegister?: NodeId[] | undefined;
+    nodesToRegister?: ReadonlyArray<NodeId> | undefined;
 }
 export class RegisterNodesRequest implements RegisterNodesRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly nodesToRegister?: NodeId[];
+    readonly nodesToRegister?: ReadonlyArray<NodeId>;
     constructor(options?: RegisterNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToRegister = options?.nodesToRegister;
@@ -6058,11 +6058,11 @@ export class RegisterNodesRequest implements RegisterNodesRequestOptions {
 }
 export interface RegisterNodesResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    registeredNodeIds?: NodeId[] | undefined;
+    registeredNodeIds?: ReadonlyArray<NodeId> | undefined;
 }
 export class RegisterNodesResponse implements RegisterNodesResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly registeredNodeIds?: NodeId[];
+    readonly registeredNodeIds?: ReadonlyArray<NodeId>;
     constructor(options?: RegisterNodesResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.registeredNodeIds = options?.registeredNodeIds;
@@ -6081,11 +6081,11 @@ export class RegisterNodesResponse implements RegisterNodesResponseOptions {
 }
 export interface UnregisterNodesRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    nodesToUnregister?: NodeId[] | undefined;
+    nodesToUnregister?: ReadonlyArray<NodeId> | undefined;
 }
 export class UnregisterNodesRequest implements UnregisterNodesRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly nodesToUnregister?: NodeId[];
+    readonly nodesToUnregister?: ReadonlyArray<NodeId>;
     constructor(options?: UnregisterNodesRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToUnregister = options?.nodesToUnregister;
@@ -6209,12 +6209,12 @@ export class QueryDataDescription implements QueryDataDescriptionOptions {
 export interface NodeTypeDescriptionOptions {
     typeDefinitionNode?: ExpandedNodeId | undefined;
     includeSubTypes?: boolean | undefined;
-    dataToReturn?: QueryDataDescription[] | undefined;
+    dataToReturn?: ReadonlyArray<QueryDataDescription> | undefined;
 }
 export class NodeTypeDescription implements NodeTypeDescriptionOptions {
     readonly typeDefinitionNode: ExpandedNodeId;
     readonly includeSubTypes: boolean;
-    readonly dataToReturn?: QueryDataDescription[];
+    readonly dataToReturn?: ReadonlyArray<QueryDataDescription>;
     constructor(options?: NodeTypeDescriptionOptions) {
         this.typeDefinitionNode = options?.typeDefinitionNode ?? new ExpandedNodeId();
         this.includeSubTypes = options?.includeSubTypes ?? false;
@@ -6257,12 +6257,12 @@ export enum FilterOperator {
 export interface QueryDataSetOptions {
     nodeId?: ExpandedNodeId | undefined;
     typeDefinitionNode?: ExpandedNodeId | undefined;
-    values?: Variant[] | undefined;
+    values?: ReadonlyArray<Variant> | undefined;
 }
 export class QueryDataSet implements QueryDataSetOptions {
     readonly nodeId: ExpandedNodeId;
     readonly typeDefinitionNode: ExpandedNodeId;
-    readonly values?: Variant[];
+    readonly values?: ReadonlyArray<Variant>;
     constructor(options?: QueryDataSetOptions) {
         this.nodeId = options?.nodeId ?? new ExpandedNodeId();
         this.typeDefinitionNode = options?.typeDefinitionNode ?? new ExpandedNodeId();
@@ -6286,13 +6286,13 @@ export interface NodeReferenceOptions {
     nodeId?: NodeId | undefined;
     referenceTypeId?: NodeId | undefined;
     isForward?: boolean | undefined;
-    referencedNodeIds?: NodeId[] | undefined;
+    referencedNodeIds?: ReadonlyArray<NodeId> | undefined;
 }
 export class NodeReference implements NodeReferenceOptions {
     readonly nodeId: NodeId;
     readonly referenceTypeId: NodeId;
     readonly isForward: boolean;
-    readonly referencedNodeIds?: NodeId[];
+    readonly referencedNodeIds?: ReadonlyArray<NodeId>;
     constructor(options?: NodeReferenceOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.referenceTypeId = options?.referenceTypeId ?? NodeId.null();
@@ -6317,11 +6317,11 @@ export class NodeReference implements NodeReferenceOptions {
 }
 export interface ContentFilterElementOptions {
     filterOperator?: FilterOperator | undefined;
-    filterOperands?: ExtensionObject[] | undefined;
+    filterOperands?: ReadonlyArray<ExtensionObject> | undefined;
 }
 export class ContentFilterElement implements ContentFilterElementOptions {
     readonly filterOperator: FilterOperator;
-    readonly filterOperands?: ExtensionObject[];
+    readonly filterOperands?: ReadonlyArray<ExtensionObject>;
     constructor(options?: ContentFilterElementOptions) {
         this.filterOperator = options?.filterOperator ?? FilterOperator.Equals;
         this.filterOperands = options?.filterOperands;
@@ -6339,10 +6339,10 @@ export class ContentFilterElement implements ContentFilterElementOptions {
     }
 }
 export interface ContentFilterOptions {
-    elements?: ContentFilterElement[] | undefined;
+    elements?: ReadonlyArray<ContentFilterElement> | undefined;
 }
 export class ContentFilter implements ContentFilterOptions {
-    readonly elements?: ContentFilterElement[];
+    readonly elements?: ReadonlyArray<ContentFilterElement>;
     constructor(options?: ContentFilterOptions) {
         this.elements = options?.elements;
     }
@@ -6440,13 +6440,13 @@ export class AttributeOperand implements AttributeOperandOptions {
 }
 export interface SimpleAttributeOperandOptions {
     typeDefinitionId?: NodeId | undefined;
-    browsePath?: QualifiedName[] | undefined;
+    browsePath?: ReadonlyArray<QualifiedName> | undefined;
     attributeId?: UInt32 | undefined;
     indexRange?: UaString | undefined;
 }
 export class SimpleAttributeOperand implements SimpleAttributeOperandOptions {
     readonly typeDefinitionId: NodeId;
-    readonly browsePath?: QualifiedName[];
+    readonly browsePath?: ReadonlyArray<QualifiedName>;
     readonly attributeId: UInt32;
     readonly indexRange?: UaString;
     constructor(options?: SimpleAttributeOperandOptions) {
@@ -6473,13 +6473,13 @@ export class SimpleAttributeOperand implements SimpleAttributeOperandOptions {
 }
 export interface ContentFilterElementResultOptions {
     statusCode?: StatusCode | undefined;
-    operandStatusCodes?: StatusCode[] | undefined;
-    operandDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    operandStatusCodes?: ReadonlyArray<StatusCode> | undefined;
+    operandDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class ContentFilterElementResult implements ContentFilterElementResultOptions {
     readonly statusCode: StatusCode;
-    readonly operandStatusCodes?: StatusCode[];
-    readonly operandDiagnosticInfos?: DiagnosticInfo[];
+    readonly operandStatusCodes?: ReadonlyArray<StatusCode>;
+    readonly operandDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: ContentFilterElementResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.operandStatusCodes = options?.operandStatusCodes;
@@ -6500,12 +6500,12 @@ export class ContentFilterElementResult implements ContentFilterElementResultOpt
     }
 }
 export interface ContentFilterResultOptions {
-    elementResults?: ContentFilterElementResult[] | undefined;
-    elementDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    elementResults?: ReadonlyArray<ContentFilterElementResult> | undefined;
+    elementDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class ContentFilterResult implements ContentFilterResultOptions {
-    readonly elementResults?: ContentFilterElementResult[];
-    readonly elementDiagnosticInfos?: DiagnosticInfo[];
+    readonly elementResults?: ReadonlyArray<ContentFilterElementResult>;
+    readonly elementDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: ContentFilterResultOptions) {
         this.elementResults = options?.elementResults;
         this.elementDiagnosticInfos = options?.elementDiagnosticInfos;
@@ -6524,13 +6524,13 @@ export class ContentFilterResult implements ContentFilterResultOptions {
 }
 export interface ParsingResultOptions {
     statusCode?: StatusCode | undefined;
-    dataStatusCodes?: StatusCode[] | undefined;
-    dataDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    dataStatusCodes?: ReadonlyArray<StatusCode> | undefined;
+    dataDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class ParsingResult implements ParsingResultOptions {
     readonly statusCode: StatusCode;
-    readonly dataStatusCodes?: StatusCode[];
-    readonly dataDiagnosticInfos?: DiagnosticInfo[];
+    readonly dataStatusCodes?: ReadonlyArray<StatusCode>;
+    readonly dataDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: ParsingResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.dataStatusCodes = options?.dataStatusCodes;
@@ -6553,7 +6553,7 @@ export class ParsingResult implements ParsingResultOptions {
 export interface QueryFirstRequestOptions {
     requestHeader?: RequestHeader | undefined;
     view?: ViewDescription | undefined;
-    nodeTypes?: NodeTypeDescription[] | undefined;
+    nodeTypes?: ReadonlyArray<NodeTypeDescription> | undefined;
     filter?: ContentFilter | undefined;
     maxDataSetsToReturn?: UInt32 | undefined;
     maxReferencesToReturn?: UInt32 | undefined;
@@ -6561,7 +6561,7 @@ export interface QueryFirstRequestOptions {
 export class QueryFirstRequest implements QueryFirstRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly view: ViewDescription;
-    readonly nodeTypes?: NodeTypeDescription[];
+    readonly nodeTypes?: ReadonlyArray<NodeTypeDescription>;
     readonly filter: ContentFilter;
     readonly maxDataSetsToReturn: UInt32;
     readonly maxReferencesToReturn: UInt32;
@@ -6595,18 +6595,18 @@ export class QueryFirstRequest implements QueryFirstRequestOptions {
 }
 export interface QueryFirstResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    queryDataSets?: QueryDataSet[] | undefined;
+    queryDataSets?: ReadonlyArray<QueryDataSet> | undefined;
     continuationPoint?: ByteString | undefined;
-    parsingResults?: ParsingResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    parsingResults?: ReadonlyArray<ParsingResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
     filterResult?: ContentFilterResult | undefined;
 }
 export class QueryFirstResponse implements QueryFirstResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly queryDataSets?: QueryDataSet[];
+    readonly queryDataSets?: ReadonlyArray<QueryDataSet>;
     readonly continuationPoint?: ByteString;
-    readonly parsingResults?: ParsingResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly parsingResults?: ReadonlyArray<ParsingResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     readonly filterResult: ContentFilterResult;
     constructor(options?: QueryFirstResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
@@ -6666,12 +6666,12 @@ export class QueryNextRequest implements QueryNextRequestOptions {
 }
 export interface QueryNextResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    queryDataSets?: QueryDataSet[] | undefined;
+    queryDataSets?: ReadonlyArray<QueryDataSet> | undefined;
     revisedContinuationPoint?: ByteString | undefined;
 }
 export class QueryNextResponse implements QueryNextResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly queryDataSets?: QueryDataSet[];
+    readonly queryDataSets?: ReadonlyArray<QueryDataSet>;
     readonly revisedContinuationPoint?: ByteString;
     constructor(options?: QueryNextResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
@@ -6736,13 +6736,13 @@ export interface ReadRequestOptions {
     requestHeader?: RequestHeader | undefined;
     maxAge?: Double | undefined;
     timestampsToReturn?: TimestampsToReturn | undefined;
-    nodesToRead?: ReadValueId[] | undefined;
+    nodesToRead?: ReadonlyArray<ReadValueId> | undefined;
 }
 export class ReadRequest implements ReadRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly maxAge: Double;
     readonly timestampsToReturn: TimestampsToReturn;
-    readonly nodesToRead?: ReadValueId[];
+    readonly nodesToRead?: ReadonlyArray<ReadValueId>;
     constructor(options?: ReadRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.maxAge = options?.maxAge ?? 0;
@@ -6767,13 +6767,13 @@ export class ReadRequest implements ReadRequestOptions {
 }
 export interface ReadResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: DataValue[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<DataValue> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class ReadResponse implements ReadResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: DataValue[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<DataValue>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: ReadResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -6937,14 +6937,14 @@ export interface ReadProcessedDetailsOptions {
     startTime?: Date | undefined;
     endTime?: Date | undefined;
     processingInterval?: Double | undefined;
-    aggregateType?: NodeId[] | undefined;
+    aggregateType?: ReadonlyArray<NodeId> | undefined;
     aggregateConfiguration?: AggregateConfiguration | undefined;
 }
 export class ReadProcessedDetails implements ReadProcessedDetailsOptions {
     readonly startTime: Date;
     readonly endTime: Date;
     readonly processingInterval: Double;
-    readonly aggregateType?: NodeId[];
+    readonly aggregateType?: ReadonlyArray<NodeId>;
     readonly aggregateConfiguration: AggregateConfiguration;
     constructor(options?: ReadProcessedDetailsOptions) {
         this.startTime = options?.startTime ?? new Date(-11644473600000);
@@ -6972,11 +6972,11 @@ export class ReadProcessedDetails implements ReadProcessedDetailsOptions {
     }
 }
 export interface ReadAtTimeDetailsOptions {
-    reqTimes?: Date[] | undefined;
+    reqTimes?: ReadonlyArray<Date> | undefined;
     useSimpleBounds?: boolean | undefined;
 }
 export class ReadAtTimeDetails implements ReadAtTimeDetailsOptions {
-    readonly reqTimes?: Date[];
+    readonly reqTimes?: ReadonlyArray<Date>;
     readonly useSimpleBounds: boolean;
     constructor(options?: ReadAtTimeDetailsOptions) {
         this.reqTimes = options?.reqTimes;
@@ -6995,10 +6995,10 @@ export class ReadAtTimeDetails implements ReadAtTimeDetailsOptions {
     }
 }
 export interface ReadAnnotationDataDetailsOptions {
-    reqTimes?: Date[] | undefined;
+    reqTimes?: ReadonlyArray<Date> | undefined;
 }
 export class ReadAnnotationDataDetails implements ReadAnnotationDataDetailsOptions {
-    readonly reqTimes?: Date[];
+    readonly reqTimes?: ReadonlyArray<Date>;
     constructor(options?: ReadAnnotationDataDetailsOptions) {
         this.reqTimes = options?.reqTimes;
     }
@@ -7013,10 +7013,10 @@ export class ReadAnnotationDataDetails implements ReadAnnotationDataDetailsOptio
     }
 }
 export interface HistoryDataOptions {
-    dataValues?: DataValue[] | undefined;
+    dataValues?: ReadonlyArray<DataValue> | undefined;
 }
 export class HistoryData implements HistoryDataOptions {
-    readonly dataValues?: DataValue[];
+    readonly dataValues?: ReadonlyArray<DataValue>;
     constructor(options?: HistoryDataOptions) {
         this.dataValues = options?.dataValues;
     }
@@ -7059,12 +7059,12 @@ export class ModificationInfo implements ModificationInfoOptions {
     }
 }
 export interface HistoryModifiedDataOptions {
-    dataValues?: DataValue[] | undefined;
-    modificationInfos?: ModificationInfo[] | undefined;
+    dataValues?: ReadonlyArray<DataValue> | undefined;
+    modificationInfos?: ReadonlyArray<ModificationInfo> | undefined;
 }
 export class HistoryModifiedData implements HistoryModifiedDataOptions {
-    readonly dataValues?: DataValue[];
-    readonly modificationInfos?: ModificationInfo[];
+    readonly dataValues?: ReadonlyArray<DataValue>;
+    readonly modificationInfos?: ReadonlyArray<ModificationInfo>;
     constructor(options?: HistoryModifiedDataOptions) {
         this.dataValues = options?.dataValues;
         this.modificationInfos = options?.modificationInfos;
@@ -7082,10 +7082,10 @@ export class HistoryModifiedData implements HistoryModifiedDataOptions {
     }
 }
 export interface HistoryEventOptions {
-    events?: HistoryEventFieldList[] | undefined;
+    events?: ReadonlyArray<HistoryEventFieldList> | undefined;
 }
 export class HistoryEvent implements HistoryEventOptions {
-    readonly events?: HistoryEventFieldList[];
+    readonly events?: ReadonlyArray<HistoryEventFieldList>;
     constructor(options?: HistoryEventOptions) {
         this.events = options?.events;
     }
@@ -7104,14 +7104,14 @@ export interface HistoryReadRequestOptions {
     historyReadDetails?: ExtensionObject | undefined;
     timestampsToReturn?: TimestampsToReturn | undefined;
     releaseContinuationPoints?: boolean | undefined;
-    nodesToRead?: HistoryReadValueId[] | undefined;
+    nodesToRead?: ReadonlyArray<HistoryReadValueId> | undefined;
 }
 export class HistoryReadRequest implements HistoryReadRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly historyReadDetails: ExtensionObject;
     readonly timestampsToReturn: TimestampsToReturn;
     readonly releaseContinuationPoints: boolean;
-    readonly nodesToRead?: HistoryReadValueId[];
+    readonly nodesToRead?: ReadonlyArray<HistoryReadValueId>;
     constructor(options?: HistoryReadRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.historyReadDetails = options?.historyReadDetails ?? new ExtensionObject();
@@ -7139,13 +7139,13 @@ export class HistoryReadRequest implements HistoryReadRequestOptions {
 }
 export interface HistoryReadResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: HistoryReadResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<HistoryReadResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class HistoryReadResponse implements HistoryReadResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: HistoryReadResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<HistoryReadResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: HistoryReadResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -7200,11 +7200,11 @@ export class WriteValue implements WriteValueOptions {
 }
 export interface WriteRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    nodesToWrite?: WriteValue[] | undefined;
+    nodesToWrite?: ReadonlyArray<WriteValue> | undefined;
 }
 export class WriteRequest implements WriteRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly nodesToWrite?: WriteValue[];
+    readonly nodesToWrite?: ReadonlyArray<WriteValue>;
     constructor(options?: WriteRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.nodesToWrite = options?.nodesToWrite;
@@ -7223,13 +7223,13 @@ export class WriteRequest implements WriteRequestOptions {
 }
 export interface WriteResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class WriteResponse implements WriteResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: WriteResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -7282,12 +7282,12 @@ export enum PerformUpdateType {
 export interface UpdateDataDetailsOptions {
     nodeId?: NodeId | undefined;
     performInsertReplace?: PerformUpdateType | undefined;
-    updateValues?: DataValue[] | undefined;
+    updateValues?: ReadonlyArray<DataValue> | undefined;
 }
 export class UpdateDataDetails implements UpdateDataDetailsOptions {
     readonly nodeId: NodeId;
     readonly performInsertReplace: PerformUpdateType;
-    readonly updateValues?: DataValue[];
+    readonly updateValues?: ReadonlyArray<DataValue>;
     constructor(options?: UpdateDataDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
@@ -7310,12 +7310,12 @@ export class UpdateDataDetails implements UpdateDataDetailsOptions {
 export interface UpdateStructureDataDetailsOptions {
     nodeId?: NodeId | undefined;
     performInsertReplace?: PerformUpdateType | undefined;
-    updateValues?: DataValue[] | undefined;
+    updateValues?: ReadonlyArray<DataValue> | undefined;
 }
 export class UpdateStructureDataDetails implements UpdateStructureDataDetailsOptions {
     readonly nodeId: NodeId;
     readonly performInsertReplace: PerformUpdateType;
-    readonly updateValues?: DataValue[];
+    readonly updateValues?: ReadonlyArray<DataValue>;
     constructor(options?: UpdateStructureDataDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
@@ -7339,13 +7339,13 @@ export interface UpdateEventDetailsOptions {
     nodeId?: NodeId | undefined;
     performInsertReplace?: PerformUpdateType | undefined;
     filter?: EventFilter | undefined;
-    eventData?: HistoryEventFieldList[] | undefined;
+    eventData?: ReadonlyArray<HistoryEventFieldList> | undefined;
 }
 export class UpdateEventDetails implements UpdateEventDetailsOptions {
     readonly nodeId: NodeId;
     readonly performInsertReplace: PerformUpdateType;
     readonly filter: EventFilter;
-    readonly eventData?: HistoryEventFieldList[];
+    readonly eventData?: ReadonlyArray<HistoryEventFieldList>;
     constructor(options?: UpdateEventDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.performInsertReplace = options?.performInsertReplace ?? PerformUpdateType.Insert;
@@ -7403,11 +7403,11 @@ export class DeleteRawModifiedDetails implements DeleteRawModifiedDetailsOptions
 }
 export interface DeleteAtTimeDetailsOptions {
     nodeId?: NodeId | undefined;
-    reqTimes?: Date[] | undefined;
+    reqTimes?: ReadonlyArray<Date> | undefined;
 }
 export class DeleteAtTimeDetails implements DeleteAtTimeDetailsOptions {
     readonly nodeId: NodeId;
-    readonly reqTimes?: Date[];
+    readonly reqTimes?: ReadonlyArray<Date>;
     constructor(options?: DeleteAtTimeDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.reqTimes = options?.reqTimes;
@@ -7426,11 +7426,11 @@ export class DeleteAtTimeDetails implements DeleteAtTimeDetailsOptions {
 }
 export interface DeleteEventDetailsOptions {
     nodeId?: NodeId | undefined;
-    eventIds?: ByteString[] | undefined;
+    eventIds?: ReadonlyArray<ByteString> | undefined;
 }
 export class DeleteEventDetails implements DeleteEventDetailsOptions {
     readonly nodeId: NodeId;
-    readonly eventIds?: ByteString[];
+    readonly eventIds?: ReadonlyArray<ByteString>;
     constructor(options?: DeleteEventDetailsOptions) {
         this.nodeId = options?.nodeId ?? NodeId.null();
         this.eventIds = options?.eventIds;
@@ -7449,13 +7449,13 @@ export class DeleteEventDetails implements DeleteEventDetailsOptions {
 }
 export interface HistoryUpdateResultOptions {
     statusCode?: StatusCode | undefined;
-    operationResults?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    operationResults?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class HistoryUpdateResult implements HistoryUpdateResultOptions {
     readonly statusCode: StatusCode;
-    readonly operationResults?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly operationResults?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: HistoryUpdateResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.operationResults = options?.operationResults;
@@ -7477,11 +7477,11 @@ export class HistoryUpdateResult implements HistoryUpdateResultOptions {
 }
 export interface HistoryUpdateRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    historyUpdateDetails?: ExtensionObject[] | undefined;
+    historyUpdateDetails?: ReadonlyArray<ExtensionObject> | undefined;
 }
 export class HistoryUpdateRequest implements HistoryUpdateRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly historyUpdateDetails?: ExtensionObject[];
+    readonly historyUpdateDetails?: ReadonlyArray<ExtensionObject>;
     constructor(options?: HistoryUpdateRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.historyUpdateDetails = options?.historyUpdateDetails;
@@ -7500,13 +7500,13 @@ export class HistoryUpdateRequest implements HistoryUpdateRequestOptions {
 }
 export interface HistoryUpdateResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: HistoryUpdateResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<HistoryUpdateResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class HistoryUpdateResponse implements HistoryUpdateResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: HistoryUpdateResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<HistoryUpdateResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: HistoryUpdateResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -7529,12 +7529,12 @@ export class HistoryUpdateResponse implements HistoryUpdateResponseOptions {
 export interface CallMethodRequestOptions {
     objectId?: NodeId | undefined;
     methodId?: NodeId | undefined;
-    inputArguments?: Variant[] | undefined;
+    inputArguments?: ReadonlyArray<Variant> | undefined;
 }
 export class CallMethodRequest implements CallMethodRequestOptions {
     readonly objectId: NodeId;
     readonly methodId: NodeId;
-    readonly inputArguments?: Variant[];
+    readonly inputArguments?: ReadonlyArray<Variant>;
     constructor(options?: CallMethodRequestOptions) {
         this.objectId = options?.objectId ?? NodeId.null();
         this.methodId = options?.methodId ?? NodeId.null();
@@ -7556,15 +7556,15 @@ export class CallMethodRequest implements CallMethodRequestOptions {
 }
 export interface CallMethodResultOptions {
     statusCode?: StatusCode | undefined;
-    inputArgumentResults?: StatusCode[] | undefined;
-    inputArgumentDiagnosticInfos?: DiagnosticInfo[] | undefined;
-    outputArguments?: Variant[] | undefined;
+    inputArgumentResults?: ReadonlyArray<StatusCode> | undefined;
+    inputArgumentDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
+    outputArguments?: ReadonlyArray<Variant> | undefined;
 }
 export class CallMethodResult implements CallMethodResultOptions {
     readonly statusCode: StatusCode;
-    readonly inputArgumentResults?: StatusCode[];
-    readonly inputArgumentDiagnosticInfos?: DiagnosticInfo[];
-    readonly outputArguments?: Variant[];
+    readonly inputArgumentResults?: ReadonlyArray<StatusCode>;
+    readonly inputArgumentDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
+    readonly outputArguments?: ReadonlyArray<Variant>;
     constructor(options?: CallMethodResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.inputArgumentResults = options?.inputArgumentResults;
@@ -7589,11 +7589,11 @@ export class CallMethodResult implements CallMethodResultOptions {
 }
 export interface CallRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    methodsToCall?: CallMethodRequest[] | undefined;
+    methodsToCall?: ReadonlyArray<CallMethodRequest> | undefined;
 }
 export class CallRequest implements CallRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly methodsToCall?: CallMethodRequest[];
+    readonly methodsToCall?: ReadonlyArray<CallMethodRequest>;
     constructor(options?: CallRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.methodsToCall = options?.methodsToCall;
@@ -7612,13 +7612,13 @@ export class CallRequest implements CallRequestOptions {
 }
 export interface CallResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: CallMethodResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<CallMethodResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class CallResponse implements CallResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: CallMethodResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<CallMethodResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: CallResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -7690,11 +7690,11 @@ export class DataChangeFilter implements DataChangeFilterOptions {
     }
 }
 export interface EventFilterOptions {
-    selectClauses?: SimpleAttributeOperand[] | undefined;
+    selectClauses?: ReadonlyArray<SimpleAttributeOperand> | undefined;
     whereClause?: ContentFilter | undefined;
 }
 export class EventFilter implements EventFilterOptions {
-    readonly selectClauses?: SimpleAttributeOperand[];
+    readonly selectClauses?: ReadonlyArray<SimpleAttributeOperand>;
     readonly whereClause: ContentFilter;
     constructor(options?: EventFilterOptions) {
         this.selectClauses = options?.selectClauses;
@@ -7792,13 +7792,13 @@ export class MonitoringFilterResult {
     }
 }
 export interface EventFilterResultOptions {
-    selectClauseResults?: StatusCode[] | undefined;
-    selectClauseDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    selectClauseResults?: ReadonlyArray<StatusCode> | undefined;
+    selectClauseDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
     whereClauseResult?: ContentFilterResult | undefined;
 }
 export class EventFilterResult implements EventFilterResultOptions {
-    readonly selectClauseResults?: StatusCode[];
-    readonly selectClauseDiagnosticInfos?: DiagnosticInfo[];
+    readonly selectClauseResults?: ReadonlyArray<StatusCode>;
+    readonly selectClauseDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     readonly whereClauseResult: ContentFilterResult;
     constructor(options?: EventFilterResultOptions) {
         this.selectClauseResults = options?.selectClauseResults;
@@ -7955,13 +7955,13 @@ export interface CreateMonitoredItemsRequestOptions {
     requestHeader?: RequestHeader | undefined;
     subscriptionId?: UInt32 | undefined;
     timestampsToReturn?: TimestampsToReturn | undefined;
-    itemsToCreate?: MonitoredItemCreateRequest[] | undefined;
+    itemsToCreate?: ReadonlyArray<MonitoredItemCreateRequest> | undefined;
 }
 export class CreateMonitoredItemsRequest implements CreateMonitoredItemsRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly subscriptionId: UInt32;
     readonly timestampsToReturn: TimestampsToReturn;
-    readonly itemsToCreate?: MonitoredItemCreateRequest[];
+    readonly itemsToCreate?: ReadonlyArray<MonitoredItemCreateRequest>;
     constructor(options?: CreateMonitoredItemsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -7986,13 +7986,13 @@ export class CreateMonitoredItemsRequest implements CreateMonitoredItemsRequestO
 }
 export interface CreateMonitoredItemsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: MonitoredItemCreateResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<MonitoredItemCreateResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class CreateMonitoredItemsResponse implements CreateMonitoredItemsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: MonitoredItemCreateResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<MonitoredItemCreateResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: CreateMonitoredItemsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8072,13 +8072,13 @@ export interface ModifyMonitoredItemsRequestOptions {
     requestHeader?: RequestHeader | undefined;
     subscriptionId?: UInt32 | undefined;
     timestampsToReturn?: TimestampsToReturn | undefined;
-    itemsToModify?: MonitoredItemModifyRequest[] | undefined;
+    itemsToModify?: ReadonlyArray<MonitoredItemModifyRequest> | undefined;
 }
 export class ModifyMonitoredItemsRequest implements ModifyMonitoredItemsRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly subscriptionId: UInt32;
     readonly timestampsToReturn: TimestampsToReturn;
-    readonly itemsToModify?: MonitoredItemModifyRequest[];
+    readonly itemsToModify?: ReadonlyArray<MonitoredItemModifyRequest>;
     constructor(options?: ModifyMonitoredItemsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -8103,13 +8103,13 @@ export class ModifyMonitoredItemsRequest implements ModifyMonitoredItemsRequestO
 }
 export interface ModifyMonitoredItemsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: MonitoredItemModifyResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<MonitoredItemModifyResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class ModifyMonitoredItemsResponse implements ModifyMonitoredItemsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: MonitoredItemModifyResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<MonitoredItemModifyResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: ModifyMonitoredItemsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8133,13 +8133,13 @@ export interface SetMonitoringModeRequestOptions {
     requestHeader?: RequestHeader | undefined;
     subscriptionId?: UInt32 | undefined;
     monitoringMode?: MonitoringMode | undefined;
-    monitoredItemIds?: UInt32[] | undefined;
+    monitoredItemIds?: ReadonlyArray<UInt32> | undefined;
 }
 export class SetMonitoringModeRequest implements SetMonitoringModeRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly subscriptionId: UInt32;
     readonly monitoringMode: MonitoringMode;
-    readonly monitoredItemIds?: UInt32[];
+    readonly monitoredItemIds?: ReadonlyArray<UInt32>;
     constructor(options?: SetMonitoringModeRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -8164,13 +8164,13 @@ export class SetMonitoringModeRequest implements SetMonitoringModeRequestOptions
 }
 export interface SetMonitoringModeResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class SetMonitoringModeResponse implements SetMonitoringModeResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: SetMonitoringModeResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8194,15 +8194,15 @@ export interface SetTriggeringRequestOptions {
     requestHeader?: RequestHeader | undefined;
     subscriptionId?: UInt32 | undefined;
     triggeringItemId?: UInt32 | undefined;
-    linksToAdd?: UInt32[] | undefined;
-    linksToRemove?: UInt32[] | undefined;
+    linksToAdd?: ReadonlyArray<UInt32> | undefined;
+    linksToRemove?: ReadonlyArray<UInt32> | undefined;
 }
 export class SetTriggeringRequest implements SetTriggeringRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly subscriptionId: UInt32;
     readonly triggeringItemId: UInt32;
-    readonly linksToAdd?: UInt32[];
-    readonly linksToRemove?: UInt32[];
+    readonly linksToAdd?: ReadonlyArray<UInt32>;
+    readonly linksToRemove?: ReadonlyArray<UInt32>;
     constructor(options?: SetTriggeringRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -8230,17 +8230,17 @@ export class SetTriggeringRequest implements SetTriggeringRequestOptions {
 }
 export interface SetTriggeringResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    addResults?: StatusCode[] | undefined;
-    addDiagnosticInfos?: DiagnosticInfo[] | undefined;
-    removeResults?: StatusCode[] | undefined;
-    removeDiagnosticInfos?: DiagnosticInfo[] | undefined;
+    addResults?: ReadonlyArray<StatusCode> | undefined;
+    addDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
+    removeResults?: ReadonlyArray<StatusCode> | undefined;
+    removeDiagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class SetTriggeringResponse implements SetTriggeringResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly addResults?: StatusCode[];
-    readonly addDiagnosticInfos?: DiagnosticInfo[];
-    readonly removeResults?: StatusCode[];
-    readonly removeDiagnosticInfos?: DiagnosticInfo[];
+    readonly addResults?: ReadonlyArray<StatusCode>;
+    readonly addDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
+    readonly removeResults?: ReadonlyArray<StatusCode>;
+    readonly removeDiagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: SetTriggeringResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.addResults = options?.addResults;
@@ -8269,12 +8269,12 @@ export class SetTriggeringResponse implements SetTriggeringResponseOptions {
 export interface DeleteMonitoredItemsRequestOptions {
     requestHeader?: RequestHeader | undefined;
     subscriptionId?: UInt32 | undefined;
-    monitoredItemIds?: UInt32[] | undefined;
+    monitoredItemIds?: ReadonlyArray<UInt32> | undefined;
 }
 export class DeleteMonitoredItemsRequest implements DeleteMonitoredItemsRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly subscriptionId: UInt32;
-    readonly monitoredItemIds?: UInt32[];
+    readonly monitoredItemIds?: ReadonlyArray<UInt32>;
     constructor(options?: DeleteMonitoredItemsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -8296,13 +8296,13 @@ export class DeleteMonitoredItemsRequest implements DeleteMonitoredItemsRequestO
 }
 export interface DeleteMonitoredItemsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class DeleteMonitoredItemsResponse implements DeleteMonitoredItemsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: DeleteMonitoredItemsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8492,12 +8492,12 @@ export class ModifySubscriptionResponse implements ModifySubscriptionResponseOpt
 export interface SetPublishingModeRequestOptions {
     requestHeader?: RequestHeader | undefined;
     publishingEnabled?: boolean | undefined;
-    subscriptionIds?: UInt32[] | undefined;
+    subscriptionIds?: ReadonlyArray<UInt32> | undefined;
 }
 export class SetPublishingModeRequest implements SetPublishingModeRequestOptions {
     readonly requestHeader: RequestHeader;
     readonly publishingEnabled: boolean;
-    readonly subscriptionIds?: UInt32[];
+    readonly subscriptionIds?: ReadonlyArray<UInt32>;
     constructor(options?: SetPublishingModeRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.publishingEnabled = options?.publishingEnabled ?? false;
@@ -8519,13 +8519,13 @@ export class SetPublishingModeRequest implements SetPublishingModeRequestOptions
 }
 export interface SetPublishingModeResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class SetPublishingModeResponse implements SetPublishingModeResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: SetPublishingModeResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8548,12 +8548,12 @@ export class SetPublishingModeResponse implements SetPublishingModeResponseOptio
 export interface NotificationMessageOptions {
     sequenceNumber?: UInt32 | undefined;
     publishTime?: Date | undefined;
-    notificationData?: ExtensionObject[] | undefined;
+    notificationData?: ReadonlyArray<ExtensionObject> | undefined;
 }
 export class NotificationMessage implements NotificationMessageOptions {
     readonly sequenceNumber: UInt32;
     readonly publishTime: Date;
-    readonly notificationData?: ExtensionObject[];
+    readonly notificationData?: ReadonlyArray<ExtensionObject>;
     constructor(options?: NotificationMessageOptions) {
         this.sequenceNumber = options?.sequenceNumber ?? 0;
         this.publishTime = options?.publishTime ?? new Date(-11644473600000);
@@ -8582,12 +8582,12 @@ export class NotificationData {
     }
 }
 export interface DataChangeNotificationOptions {
-    monitoredItems?: MonitoredItemNotification[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    monitoredItems?: ReadonlyArray<MonitoredItemNotification> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class DataChangeNotification implements DataChangeNotificationOptions {
-    readonly monitoredItems?: MonitoredItemNotification[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly monitoredItems?: ReadonlyArray<MonitoredItemNotification>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: DataChangeNotificationOptions) {
         this.monitoredItems = options?.monitoredItems;
         this.diagnosticInfos = options?.diagnosticInfos;
@@ -8628,10 +8628,10 @@ export class MonitoredItemNotification implements MonitoredItemNotificationOptio
     }
 }
 export interface EventNotificationListOptions {
-    events?: EventFieldList[] | undefined;
+    events?: ReadonlyArray<EventFieldList> | undefined;
 }
 export class EventNotificationList implements EventNotificationListOptions {
-    readonly events?: EventFieldList[];
+    readonly events?: ReadonlyArray<EventFieldList>;
     constructor(options?: EventNotificationListOptions) {
         this.events = options?.events;
     }
@@ -8647,11 +8647,11 @@ export class EventNotificationList implements EventNotificationListOptions {
 }
 export interface EventFieldListOptions {
     clientHandle?: UInt32 | undefined;
-    eventFields?: Variant[] | undefined;
+    eventFields?: ReadonlyArray<Variant> | undefined;
 }
 export class EventFieldList implements EventFieldListOptions {
     readonly clientHandle: UInt32;
-    readonly eventFields?: Variant[];
+    readonly eventFields?: ReadonlyArray<Variant>;
     constructor(options?: EventFieldListOptions) {
         this.clientHandle = options?.clientHandle ?? 0;
         this.eventFields = options?.eventFields;
@@ -8669,10 +8669,10 @@ export class EventFieldList implements EventFieldListOptions {
     }
 }
 export interface HistoryEventFieldListOptions {
-    eventFields?: Variant[] | undefined;
+    eventFields?: ReadonlyArray<Variant> | undefined;
 }
 export class HistoryEventFieldList implements HistoryEventFieldListOptions {
-    readonly eventFields?: Variant[];
+    readonly eventFields?: ReadonlyArray<Variant>;
     constructor(options?: HistoryEventFieldListOptions) {
         this.eventFields = options?.eventFields;
     }
@@ -8734,11 +8734,11 @@ export class SubscriptionAcknowledgement implements SubscriptionAcknowledgementO
 }
 export interface PublishRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    subscriptionAcknowledgements?: SubscriptionAcknowledgement[] | undefined;
+    subscriptionAcknowledgements?: ReadonlyArray<SubscriptionAcknowledgement> | undefined;
 }
 export class PublishRequest implements PublishRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly subscriptionAcknowledgements?: SubscriptionAcknowledgement[];
+    readonly subscriptionAcknowledgements?: ReadonlyArray<SubscriptionAcknowledgement>;
     constructor(options?: PublishRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionAcknowledgements = options?.subscriptionAcknowledgements;
@@ -8758,20 +8758,20 @@ export class PublishRequest implements PublishRequestOptions {
 export interface PublishResponseOptions {
     responseHeader?: ResponseHeader | undefined;
     subscriptionId?: UInt32 | undefined;
-    availableSequenceNumbers?: UInt32[] | undefined;
+    availableSequenceNumbers?: ReadonlyArray<UInt32> | undefined;
     moreNotifications?: boolean | undefined;
     notificationMessage?: NotificationMessage | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class PublishResponse implements PublishResponseOptions {
     readonly responseHeader: ResponseHeader;
     readonly subscriptionId: UInt32;
-    readonly availableSequenceNumbers?: UInt32[];
+    readonly availableSequenceNumbers?: ReadonlyArray<UInt32>;
     readonly moreNotifications: boolean;
     readonly notificationMessage: NotificationMessage;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: PublishResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.subscriptionId = options?.subscriptionId ?? 0;
@@ -8856,11 +8856,11 @@ export class RepublishResponse implements RepublishResponseOptions {
 }
 export interface TransferResultOptions {
     statusCode?: StatusCode | undefined;
-    availableSequenceNumbers?: UInt32[] | undefined;
+    availableSequenceNumbers?: ReadonlyArray<UInt32> | undefined;
 }
 export class TransferResult implements TransferResultOptions {
     readonly statusCode: StatusCode;
-    readonly availableSequenceNumbers?: UInt32[];
+    readonly availableSequenceNumbers?: ReadonlyArray<UInt32>;
     constructor(options?: TransferResultOptions) {
         this.statusCode = options?.statusCode ?? StatusCode.Good;
         this.availableSequenceNumbers = options?.availableSequenceNumbers;
@@ -8879,12 +8879,12 @@ export class TransferResult implements TransferResultOptions {
 }
 export interface TransferSubscriptionsRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    subscriptionIds?: UInt32[] | undefined;
+    subscriptionIds?: ReadonlyArray<UInt32> | undefined;
     sendInitialValues?: boolean | undefined;
 }
 export class TransferSubscriptionsRequest implements TransferSubscriptionsRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly subscriptionIds?: UInt32[];
+    readonly subscriptionIds?: ReadonlyArray<UInt32>;
     readonly sendInitialValues: boolean;
     constructor(options?: TransferSubscriptionsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
@@ -8907,13 +8907,13 @@ export class TransferSubscriptionsRequest implements TransferSubscriptionsReques
 }
 export interface TransferSubscriptionsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: TransferResult[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<TransferResult> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class TransferSubscriptionsResponse implements TransferSubscriptionsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: TransferResult[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<TransferResult>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: TransferSubscriptionsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -8935,11 +8935,11 @@ export class TransferSubscriptionsResponse implements TransferSubscriptionsRespo
 }
 export interface DeleteSubscriptionsRequestOptions {
     requestHeader?: RequestHeader | undefined;
-    subscriptionIds?: UInt32[] | undefined;
+    subscriptionIds?: ReadonlyArray<UInt32> | undefined;
 }
 export class DeleteSubscriptionsRequest implements DeleteSubscriptionsRequestOptions {
     readonly requestHeader: RequestHeader;
-    readonly subscriptionIds?: UInt32[];
+    readonly subscriptionIds?: ReadonlyArray<UInt32>;
     constructor(options?: DeleteSubscriptionsRequestOptions) {
         this.requestHeader = options?.requestHeader ?? new RequestHeader();
         this.subscriptionIds = options?.subscriptionIds;
@@ -8958,13 +8958,13 @@ export class DeleteSubscriptionsRequest implements DeleteSubscriptionsRequestOpt
 }
 export interface DeleteSubscriptionsResponseOptions {
     responseHeader?: ResponseHeader | undefined;
-    results?: StatusCode[] | undefined;
-    diagnosticInfos?: DiagnosticInfo[] | undefined;
+    results?: ReadonlyArray<StatusCode> | undefined;
+    diagnosticInfos?: ReadonlyArray<DiagnosticInfo> | undefined;
 }
 export class DeleteSubscriptionsResponse implements DeleteSubscriptionsResponseOptions {
     readonly responseHeader: ResponseHeader;
-    readonly results?: StatusCode[];
-    readonly diagnosticInfos?: DiagnosticInfo[];
+    readonly results?: ReadonlyArray<StatusCode>;
+    readonly diagnosticInfos?: ReadonlyArray<DiagnosticInfo>;
     constructor(options?: DeleteSubscriptionsResponseOptions) {
         this.responseHeader = options?.responseHeader ?? new ResponseHeader();
         this.results = options?.results;
@@ -9074,10 +9074,10 @@ export class RedundantServerDataType implements RedundantServerDataTypeOptions {
     }
 }
 export interface EndpointUrlListDataTypeOptions {
-    endpointUrlList?: UaString[] | undefined;
+    endpointUrlList?: ReadonlyArray<UaString> | undefined;
 }
 export class EndpointUrlListDataType implements EndpointUrlListDataTypeOptions {
-    readonly endpointUrlList?: UaString[];
+    readonly endpointUrlList?: ReadonlyArray<UaString>;
     constructor(options?: EndpointUrlListDataTypeOptions) {
         this.endpointUrlList = options?.endpointUrlList;
     }
@@ -9093,11 +9093,11 @@ export class EndpointUrlListDataType implements EndpointUrlListDataTypeOptions {
 }
 export interface NetworkGroupDataTypeOptions {
     serverUri?: UaString | undefined;
-    networkPaths?: EndpointUrlListDataType[] | undefined;
+    networkPaths?: ReadonlyArray<EndpointUrlListDataType> | undefined;
 }
 export class NetworkGroupDataType implements NetworkGroupDataTypeOptions {
     readonly serverUri?: UaString;
-    readonly networkPaths?: EndpointUrlListDataType[];
+    readonly networkPaths?: ReadonlyArray<EndpointUrlListDataType>;
     constructor(options?: NetworkGroupDataTypeOptions) {
         this.serverUri = options?.serverUri;
         this.networkPaths = options?.networkPaths;
@@ -9269,7 +9269,7 @@ export interface SessionDiagnosticsDataTypeOptions {
     clientDescription?: ApplicationDescription | undefined;
     serverUri?: UaString | undefined;
     endpointUrl?: UaString | undefined;
-    localeIds?: UaString[] | undefined;
+    localeIds?: ReadonlyArray<UaString> | undefined;
     actualSessionTimeout?: Double | undefined;
     maxResponseMessageSize?: UInt32 | undefined;
     clientConnectionTime?: Date | undefined;
@@ -9314,7 +9314,7 @@ export class SessionDiagnosticsDataType implements SessionDiagnosticsDataTypeOpt
     readonly clientDescription: ApplicationDescription;
     readonly serverUri?: UaString;
     readonly endpointUrl?: UaString;
-    readonly localeIds?: UaString[];
+    readonly localeIds?: ReadonlyArray<UaString>;
     readonly actualSessionTimeout: Double;
     readonly maxResponseMessageSize: UInt32;
     readonly clientConnectionTime: Date;
@@ -9494,7 +9494,7 @@ export class SessionDiagnosticsDataType implements SessionDiagnosticsDataTypeOpt
 export interface SessionSecurityDiagnosticsDataTypeOptions {
     sessionId?: NodeId | undefined;
     clientUserIdOfSession?: UaString | undefined;
-    clientUserIdHistory?: UaString[] | undefined;
+    clientUserIdHistory?: ReadonlyArray<UaString> | undefined;
     authenticationMechanism?: UaString | undefined;
     encoding?: UaString | undefined;
     transportProtocol?: UaString | undefined;
@@ -9505,7 +9505,7 @@ export interface SessionSecurityDiagnosticsDataTypeOptions {
 export class SessionSecurityDiagnosticsDataType implements SessionSecurityDiagnosticsDataTypeOptions {
     readonly sessionId: NodeId;
     readonly clientUserIdOfSession?: UaString;
-    readonly clientUserIdHistory?: UaString[];
+    readonly clientUserIdHistory?: ReadonlyArray<UaString>;
     readonly authenticationMechanism?: UaString;
     readonly encoding?: UaString;
     readonly transportProtocol?: UaString;
@@ -9933,14 +9933,14 @@ export interface AxisInformationOptions {
     euRange?: Range | undefined;
     title?: LocalizedText | undefined;
     axisScaleType?: AxisScaleEnumeration | undefined;
-    axisSteps?: Double[] | undefined;
+    axisSteps?: ReadonlyArray<Double> | undefined;
 }
 export class AxisInformation implements AxisInformationOptions {
     readonly engineeringUnits: EUInformation;
     readonly euRange: Range;
     readonly title: LocalizedText;
     readonly axisScaleType: AxisScaleEnumeration;
-    readonly axisSteps?: Double[];
+    readonly axisSteps?: ReadonlyArray<Double>;
     constructor(options?: AxisInformationOptions) {
         this.engineeringUnits = options?.engineeringUnits ?? new EUInformation();
         this.euRange = options?.euRange ?? new Range();
@@ -9996,8 +9996,8 @@ export interface ProgramDiagnosticDataTypeOptions {
     lastTransitionTime?: Date | undefined;
     lastMethodCall?: UaString | undefined;
     lastMethodSessionId?: NodeId | undefined;
-    lastMethodInputArguments?: Argument[] | undefined;
-    lastMethodOutputArguments?: Argument[] | undefined;
+    lastMethodInputArguments?: ReadonlyArray<Argument> | undefined;
+    lastMethodOutputArguments?: ReadonlyArray<Argument> | undefined;
     lastMethodCallTime?: Date | undefined;
     lastMethodReturnStatus?: StatusResult | undefined;
 }
@@ -10008,8 +10008,8 @@ export class ProgramDiagnosticDataType implements ProgramDiagnosticDataTypeOptio
     readonly lastTransitionTime: Date;
     readonly lastMethodCall?: UaString;
     readonly lastMethodSessionId: NodeId;
-    readonly lastMethodInputArguments?: Argument[];
-    readonly lastMethodOutputArguments?: Argument[];
+    readonly lastMethodInputArguments?: ReadonlyArray<Argument>;
+    readonly lastMethodOutputArguments?: ReadonlyArray<Argument>;
     readonly lastMethodCallTime: Date;
     readonly lastMethodReturnStatus: StatusResult;
     constructor(options?: ProgramDiagnosticDataTypeOptions) {
@@ -10059,10 +10059,10 @@ export interface ProgramDiagnostic2DataTypeOptions {
     lastTransitionTime?: Date | undefined;
     lastMethodCall?: UaString | undefined;
     lastMethodSessionId?: NodeId | undefined;
-    lastMethodInputArguments?: Argument[] | undefined;
-    lastMethodOutputArguments?: Argument[] | undefined;
-    lastMethodInputValues?: Variant[] | undefined;
-    lastMethodOutputValues?: Variant[] | undefined;
+    lastMethodInputArguments?: ReadonlyArray<Argument> | undefined;
+    lastMethodOutputArguments?: ReadonlyArray<Argument> | undefined;
+    lastMethodInputValues?: ReadonlyArray<Variant> | undefined;
+    lastMethodOutputValues?: ReadonlyArray<Variant> | undefined;
     lastMethodCallTime?: Date | undefined;
     lastMethodReturnStatus?: StatusResult | undefined;
 }
@@ -10073,10 +10073,10 @@ export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOpt
     readonly lastTransitionTime: Date;
     readonly lastMethodCall?: UaString;
     readonly lastMethodSessionId: NodeId;
-    readonly lastMethodInputArguments?: Argument[];
-    readonly lastMethodOutputArguments?: Argument[];
-    readonly lastMethodInputValues?: Variant[];
-    readonly lastMethodOutputValues?: Variant[];
+    readonly lastMethodInputArguments?: ReadonlyArray<Argument>;
+    readonly lastMethodOutputArguments?: ReadonlyArray<Argument>;
+    readonly lastMethodInputValues?: ReadonlyArray<Variant>;
+    readonly lastMethodOutputValues?: ReadonlyArray<Variant>;
     readonly lastMethodCallTime: Date;
     readonly lastMethodReturnStatus: StatusResult;
     constructor(options?: ProgramDiagnostic2DataTypeOptions) {

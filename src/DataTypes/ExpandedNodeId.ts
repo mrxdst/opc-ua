@@ -60,7 +60,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     this.serverIndex === 0;
   }
 
-  toNodeId(namespaceArray: string[]): NodeId {
+  toNodeId(namespaceArray: ReadonlyArray<string>): NodeId {
     if (!this.namespaceUri) {
       return this.nodeId;
     }
