@@ -616,6 +616,28 @@ export class StatusCode implements StatusCodeOptions {
   static BadSyntaxError = new StatusCode({name: "BadSyntaxError", code: 0x80B60000, description: "A value had an invalid syntax."});
   /** The operation could not be finished because all available connections are in use. */
   static BadMaxConnectionsReached = new StatusCode({name: "BadMaxConnectionsReached", code: 0x80B70000, description: "The operation could not be finished because all available connections are in use."});
+  /** The value may not be accurate because the transducer is in manual mode. */
+  static UncertainTransducerInManual = new StatusCode({name: "UncertainTransducerInManual", code: 0x42080000, description: "The value may not be accurate because the transducer is in manual mode."});
+  /** The value is simulated. */
+  static UncertainSimulatedValue = new StatusCode({name: "UncertainSimulatedValue", code: 0x42090000, description: "The value is simulated."});
+  /** The value may not be accurate due to a sensor calibration fault. */
+  static UncertainSensorCalibration = new StatusCode({name: "UncertainSensorCalibration", code: 0x420A0000, description: "The value may not be accurate due to a sensor calibration fault."});
+  /** The value may not be accurate due to a configuration issue. */
+  static UncertainConfigurationError = new StatusCode({name: "UncertainConfigurationError", code: 0x420F0000, description: "The value may not be accurate due to a configuration issue."});
+  /** The value source supports cascade handshaking and the value has been Initialized based on an initialization request from a cascade secondary. */
+  static GoodCascadeInitializationAcknowledged = new StatusCode({name: "GoodCascadeInitializationAcknowledged", code: 0x04010000, description: "The value source supports cascade handshaking and the value has been Initialized based on an initialization request from a cascade secondary."});
+  /** The value source supports cascade handshaking and is requesting initialization of a cascade primary. */
+  static GoodCascadeInitializationRequest = new StatusCode({name: "GoodCascadeInitializationRequest", code: 0x04020000, description: "The value source supports cascade handshaking and is requesting initialization of a cascade primary."});
+  /** The value source supports cascade handshaking, however, the source’s current state does not allow for cascade. */
+  static GoodCascadeNotInvited = new StatusCode({name: "GoodCascadeNotInvited", code: 0x04030000, description: "The value source supports cascade handshaking, however, the source’s current state does not allow for cascade."});
+  /** The value source supports cascade handshaking, however, the source has not selected the corresponding cascade primary for use. */
+  static GoodCascadeNotSelected = new StatusCode({name: "GoodCascadeNotSelected", code: 0x04040000, description: "The value source supports cascade handshaking, however, the source has not selected the corresponding cascade primary for use."});
+  /** There is a fault state condition active in the value source. */
+  static GoodFaultStateActive = new StatusCode({name: "GoodFaultStateActive", code: 0x04070000, description: "There is a fault state condition active in the value source."});
+  /** A fault state condition is being requested of the destination. */
+  static GoodInitiateFaultState = new StatusCode({name: "GoodInitiateFaultState", code: 0x04080000, description: "A fault state condition is being requested of the destination."});
+  /** The value is accurate, and the signal source supports cascade handshaking. */
+  static GoodCascade = new StatusCode({name: "GoodCascade", code: 0x04090000, description: "The value is accurate, and the signal source supports cascade handshaking."});
   static 0x00000000 = StatusCode.Good;
   static 0x40000000 = StatusCode.Uncertain;
   static 0x80000000 = StatusCode.Bad;
@@ -866,4 +888,15 @@ export class StatusCode implements StatusCodeOptions {
   static 0x80B50000 = StatusCode.BadWouldBlock;
   static 0x80B60000 = StatusCode.BadSyntaxError;
   static 0x80B70000 = StatusCode.BadMaxConnectionsReached;
+  static 0x42080000 = StatusCode.UncertainTransducerInManual;
+  static 0x42090000 = StatusCode.UncertainSimulatedValue;
+  static 0x420A0000 = StatusCode.UncertainSensorCalibration;
+  static 0x420F0000 = StatusCode.UncertainConfigurationError;
+  static 0x04010000 = StatusCode.GoodCascadeInitializationAcknowledged;
+  static 0x04020000 = StatusCode.GoodCascadeInitializationRequest;
+  static 0x04030000 = StatusCode.GoodCascadeNotInvited;
+  static 0x04040000 = StatusCode.GoodCascadeNotSelected;
+  static 0x04070000 = StatusCode.GoodFaultStateActive;
+  static 0x04080000 = StatusCode.GoodInitiateFaultState;
+  static 0x04090000 = StatusCode.GoodCascade;
 }

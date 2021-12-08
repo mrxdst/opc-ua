@@ -40,6 +40,16 @@ export enum NamingRuleType {
     Optional = 2,
     Constraint = 3
 }
+export enum Enumeration {
+}
+export class Union {
+    static [typeId] = NodeIds.Union_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+    }
+    static [decode](decoder: BinaryDataDecoder): Union {
+        return new Union();
+    }
+}
 export interface KeyValuePairOptions {
     key?: QualifiedName | undefined;
     value?: Variant | undefined;
@@ -311,7 +321,8 @@ export enum IdentityCriteriaType {
     Role = 3,
     GroupId = 4,
     Anonymous = 5,
-    AuthenticatedUser = 6
+    AuthenticatedUser = 6,
+    Application = 7
 }
 export interface IdentityMappingRuleTypeOptions {
     criteriaType?: IdentityCriteriaType | undefined;
@@ -640,7 +651,8 @@ export enum PubSubState {
     Disabled = 0,
     Paused = 1,
     Operational = 2,
-    Error = 3
+    Error = 3,
+    PreOperational = 4
 }
 export interface DataSetMetaDataTypeOptions {
     namespaces?: ReadonlyArray<UaString> | undefined;
@@ -1795,7 +1807,8 @@ export enum JsonDataSetMessageContentMask {
     MetaDataVersion = 2,
     SequenceNumber = 4,
     Timestamp = 8,
-    Status = 16
+    Status = 16,
+    MessageType = 32
 }
 export interface JsonDataSetWriterMessageDataTypeOptions {
     dataSetMessageContentMask?: JsonDataSetMessageContentMask | undefined;
@@ -2057,6 +2070,101 @@ export class AliasNameDataType implements AliasNameDataTypeOptions {
         });
     }
 }
+export enum Duplex {
+    Full = 0,
+    Half = 1,
+    Unknown = 2
+}
+export enum InterfaceAdminStatus {
+    Up = 0,
+    Down = 1,
+    Testing = 2
+}
+export enum InterfaceOperStatus {
+    Up = 0,
+    Down = 1,
+    Testing = 2,
+    Unknown = 3,
+    Dormant = 4,
+    NotPresent = 5,
+    LowerLayerDown = 6
+}
+export enum NegotiationStatus {
+    InProgress = 0,
+    Complete = 1,
+    Failed = 2,
+    Unknown = 3,
+    NoNegotiation = 4
+}
+export enum TsnFailureCode {
+    NoFailure = 0,
+    InsufficientBandwidth = 1,
+    InsufficientResources = 2,
+    InsufficientTrafficClassBandwidth = 3,
+    StreamIdInUse = 4,
+    StreamDestinationAddressInUse = 5,
+    StreamPreemptedByHigherRank = 6,
+    LatencyHasChanged = 7,
+    EgressPortNotAvbCapable = 8,
+    UseDifferentDestinationAddress = 9,
+    OutOfMsrpResources = 10,
+    OutOfMmrpResources = 11,
+    CannotStoreDestinationAddress = 12,
+    PriorityIsNotAnSrcClass = 13,
+    MaxFrameSizeTooLarge = 14,
+    MaxFanInPortsLimitReached = 15,
+    FirstValueChangedForStreamId = 16,
+    VlanBlockedOnEgress = 17,
+    VlanTaggingDisabledOnEgress = 18,
+    SrClassPriorityMismatch = 19,
+    FeatureNotPropagated = 20,
+    MaxLatencyExceeded = 21,
+    BridgeDoesNotProvideNetworkId = 22,
+    StreamTransformNotSupported = 23,
+    StreamIdTypeNotSupported = 24,
+    FeatureNotSupported = 25
+}
+export enum TsnStreamState {
+    Disabled = 0,
+    Configuring = 1,
+    Ready = 2,
+    Operational = 3,
+    Error = 4
+}
+export enum TsnTalkerStatus {
+    None = 0,
+    Ready = 1,
+    Failed = 2
+}
+export enum TsnListenerStatus {
+    None = 0,
+    Ready = 1,
+    PartialFailed = 2,
+    Failed = 3
+}
+export interface UnsignedRationalNumberOptions {
+    numerator?: UInt32 | undefined;
+    denominator?: UInt32 | undefined;
+}
+export class UnsignedRationalNumber implements UnsignedRationalNumberOptions {
+    readonly numerator: UInt32;
+    readonly denominator: UInt32;
+    constructor(options?: UnsignedRationalNumberOptions) {
+        this.numerator = options?.numerator ?? 0;
+        this.denominator = options?.denominator ?? 0;
+    }
+    static [typeId] = NodeIds.UnsignedRationalNumber_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeUInt32(this.numerator);
+        encoder.writeUInt32(this.denominator);
+    }
+    static [decode](decoder: BinaryDataDecoder): UnsignedRationalNumber {
+        return new UnsignedRationalNumber({
+            numerator: decoder.readUInt32(),
+            denominator: decoder.readUInt32()
+        });
+    }
+}
 export enum IdType {
     Numeric = 0,
     String = 1,
@@ -2154,10 +2262,20 @@ export class RolePermissionType implements RolePermissionTypeOptions {
         });
     }
 }
+export class DataTypeDefinition {
+    static [typeId] = NodeIds.DataTypeDefinition_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+    }
+    static [decode](decoder: BinaryDataDecoder): DataTypeDefinition {
+        return new DataTypeDefinition();
+    }
+}
 export enum StructureType {
     Structure = 0,
     StructureWithOptionalFields = 1,
-    Union = 2
+    Union = 2,
+    StructureWithSubtypedValues = 3,
+    UnionWithSubtypedValues = 4
 }
 export interface StructureFieldOptions {
     name?: UaString | undefined;
@@ -3279,14 +3397,6 @@ export class OptionSet implements OptionSetOptions {
             value: decoder.readByteString(),
             validBits: decoder.readByteString()
         });
-    }
-}
-export class Union {
-    static [typeId] = NodeIds.Union_Encoding_DefaultBinary as const;
-    [encode](encoder: BinaryDataEncoder): void {
-    }
-    static [decode](decoder: BinaryDataDecoder): Union {
-        return new Union();
     }
 }
 export interface TimeZoneDataTypeOptions {
@@ -10064,7 +10174,7 @@ export interface ProgramDiagnostic2DataTypeOptions {
     lastMethodInputValues?: ReadonlyArray<Variant> | undefined;
     lastMethodOutputValues?: ReadonlyArray<Variant> | undefined;
     lastMethodCallTime?: Date | undefined;
-    lastMethodReturnStatus?: StatusResult | undefined;
+    lastMethodReturnStatus?: StatusCode | undefined;
 }
 export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOptions {
     readonly createSessionId: NodeId;
@@ -10078,7 +10188,7 @@ export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOpt
     readonly lastMethodInputValues?: ReadonlyArray<Variant>;
     readonly lastMethodOutputValues?: ReadonlyArray<Variant>;
     readonly lastMethodCallTime: Date;
-    readonly lastMethodReturnStatus: StatusResult;
+    readonly lastMethodReturnStatus: StatusCode;
     constructor(options?: ProgramDiagnostic2DataTypeOptions) {
         this.createSessionId = options?.createSessionId ?? NodeId.null();
         this.createClientName = options?.createClientName;
@@ -10091,7 +10201,7 @@ export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOpt
         this.lastMethodInputValues = options?.lastMethodInputValues;
         this.lastMethodOutputValues = options?.lastMethodOutputValues;
         this.lastMethodCallTime = options?.lastMethodCallTime ?? new Date(-11644473600000);
-        this.lastMethodReturnStatus = options?.lastMethodReturnStatus ?? new StatusResult();
+        this.lastMethodReturnStatus = options?.lastMethodReturnStatus ?? StatusCode.Good;
     }
     static [typeId] = NodeIds.ProgramDiagnostic2DataType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
@@ -10121,7 +10231,7 @@ export class ProgramDiagnostic2DataType implements ProgramDiagnostic2DataTypeOpt
             lastMethodInputValues: decoder.readTypeArray(Variant),
             lastMethodOutputValues: decoder.readTypeArray(Variant),
             lastMethodCallTime: decoder.readDateTime(),
-            lastMethodReturnStatus: decoder.readType(StatusResult)
+            lastMethodReturnStatus: decoder.readType(StatusCode)
         });
     }
 }

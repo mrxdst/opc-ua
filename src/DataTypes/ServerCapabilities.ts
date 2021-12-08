@@ -10,7 +10,7 @@ export enum ServerCapabilities {
     AC = 'AC',
     /**Provides historical alarms and events.*/
     HE = 'HE',
-    /**Supports the Global Discovery Server information model.*/
+    /**Supports the Global Discovery Server information model. */
     GDS = 'GDS',
     /**Only supports the Discovery Services. Cannot be used in combination with any other capability.*/
     LDS = 'LDS',
@@ -65,5 +65,7 @@ export enum ServerCapabilities {
     /**Supports the VDMA ROBOTICS information model.*/
     VROBOT = 'VROBOT',
     /**Supports the ProfiNET information model.*/
-    PNO = 'PNO'
+    PNO = 'PNO',
+    /**Supports the information model for Process Automation Devices.*/
+    PADIM = 'PADIM'
 }
