@@ -266,27 +266,15 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
     });
   }
 
-  isNull(): this is Variant<VariantType, VariantTypeId.Null> {
+  isNull(): boolean {
     return this.typeId === VariantTypeId.Null;
   }
 
-  static readonly Scalar = class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
-    constructor(options: ScalarVariantOptions<T>) {
-      super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
-    }
-  };
+  static readonly Scalar: new <T extends VariantTypeId = VariantTypeId>(options: ScalarVariantOptions<T>) => Variant<VariantType.Scalar, T>;
 
-  static readonly Array = class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
-    constructor(options: ArrayVariantOptions<T>) {
-      super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
-    }
-  };
+  static readonly Array: new <T extends VariantTypeId = VariantTypeId>(options: ArrayVariantOptions<T>) => Variant<VariantType.Array, T>;
 
-  static readonly NdArray = class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
-    constructor(options: NdArrayVariantOptions<T>) {
-      super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
-    }
-  };
+  static readonly NdArray: new <T extends VariantTypeId = VariantTypeId>(options: NdArrayVariantOptions<T>) => Variant<VariantType.NdArray, T>;
 
   static [typeId] = NodeIds.BaseDataType as const;
 
@@ -395,6 +383,28 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
     });
   }
 }
+
+class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
+  constructor(options: ScalarVariantOptions<T>) {
+    super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
+  }
+}
+
+class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
+  constructor(options: ArrayVariantOptions<T>) {
+    super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
+  }
+}
+
+class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
+  constructor(options: NdArrayVariantOptions<T>) {
+    super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
+  }
+}
+
+(Variant.Scalar as unknown) = ScalarVariant;
+(Variant.Array as unknown) = ArrayVariant;
+(Variant.NdArray as unknown) = NdArrayVariant;
 
 export function writeVariantValue<T extends VariantTypeId = VariantTypeId>(encoder: BinaryDataEncoder, typeId: T, value: VariantValueType<T>): void {
   switch (typeId) {

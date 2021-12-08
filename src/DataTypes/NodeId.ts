@@ -224,29 +224,13 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
     }
   }
 
-  static readonly Numeric = class NumericNodeId extends NodeId<NodeIdType.Numeric> {
-    constructor(options: NumericNodeIdOptions) {
-      super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
-    }
-  };
+  static readonly Numeric: new (options: NumericNodeIdOptions) => NodeId<NodeIdType.Numeric>;
 
-  static readonly String = class NumericNodeId extends NodeId<NodeIdType.String> {
-    constructor(options: StringNodeIdOptions) {
-      super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
-    }
-  };
+  static readonly String: new (options: StringNodeIdOptions) => NodeId<NodeIdType.String>;
 
-  static readonly ByteString = class NumericNodeId extends NodeId<NodeIdType.ByteString> {
-    constructor(options: ByteStringNodeIdOptions) {
-      super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
-    }
-  };
+  static readonly ByteString: new (options: ByteStringNodeIdOptions) => NodeId<NodeIdType.ByteString>;
 
-  static readonly GuidString = class NumericNodeId extends NodeId<NodeIdType.Guid> {
-    constructor(options: GuidNodeIdOptions) {
-      super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
-    }
-  };
+  static readonly Guid: new (options: GuidNodeIdOptions) => NodeId<NodeIdType.Guid>;
 
   static [typeId] = NodeIds.NodeId as const;
 
@@ -400,3 +384,32 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
     });
   }
 }
+
+class NumericNodeId extends NodeId<NodeIdType.Numeric> {
+  constructor(options: NumericNodeIdOptions) {
+    super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
+  }
+}
+
+class StringNodeId extends NodeId<NodeIdType.String> {
+  constructor(options: StringNodeIdOptions) {
+    super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
+  }
+}
+
+class ByteStringNodeId extends NodeId<NodeIdType.ByteString> {
+  constructor(options: ByteStringNodeIdOptions) {
+    super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
+  }
+}
+
+class GuidNodeId extends NodeId<NodeIdType.Guid> {
+  constructor(options: GuidNodeIdOptions) {
+    super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
+  }
+}
+
+(NodeId.Numeric as unknown) = NumericNodeId;
+(NodeId.String as unknown) = StringNodeId;
+(NodeId.ByteString as unknown) = ByteStringNodeId;
+(NodeId.Guid as unknown) = GuidNodeId;
