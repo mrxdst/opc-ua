@@ -1,4 +1,4 @@
-import { Variant, isVariantValue, VariantTypeId, readVariantValue, writeVariantValue, VariantType } from './Variant';
+import { Variant, VariantTypeId, readVariantValue, writeVariantValue, VariantType } from './Variant';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
 import { Guid } from './Guid';
 import { NodeId } from './NodeId';
@@ -10,7 +10,6 @@ import { LocalizedText } from './LocalizedText';
 import { DataValue } from './DataValue';
 import { DiagnosticInfo } from './DiagnosticInfo';
 import ndarray from 'ndarray';
-import { UaError } from '../UaError';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();
@@ -26,37 +25,6 @@ test('Encode/Decode', () => {
   expect(decoder.readType(Variant).value).toBe(true);
   expect(decoder.readType(Variant).value).toStrictEqual([true, false]);
   expect(decoder.readType(Variant).value).toStrictEqual(ndarray([1,2,3,4,5,6,7,8], [2,2,2]));
-});
-
-test('isVariantValue', () => {
-  expect(isVariantValue(VariantTypeId.Null, undefined)).toBe(true);
-  expect(isVariantValue(VariantTypeId.Boolean, true)).toBe(true);
-  expect(isVariantValue(VariantTypeId.SByte, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.Byte, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.Int16, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.UInt16, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.Int32, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.UInt32, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.Int64, BigInt(1))).toBe(true);
-  expect(isVariantValue(VariantTypeId.UInt64, BigInt(1))).toBe(true);
-  expect(isVariantValue(VariantTypeId.Float, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.Double, 1)).toBe(true);
-  expect(isVariantValue(VariantTypeId.String, '')).toBe(true);
-  expect(isVariantValue(VariantTypeId.DateTime, new Date())).toBe(true);
-  expect(isVariantValue(VariantTypeId.Guid, Guid.new())).toBe(true);
-  expect(isVariantValue(VariantTypeId.ByteString, new Uint8Array())).toBe(true);
-  expect(isVariantValue(VariantTypeId.XmlElement, '')).toBe(true);
-  expect(isVariantValue(VariantTypeId.NodeId, NodeId.parse('i=1'))).toBe(true);
-  expect(isVariantValue(VariantTypeId.ExpandedNodeId, new ExpandedNodeId({nodeId: NodeId.parse('i=1')}))).toBe(true);
-  expect(isVariantValue(VariantTypeId.StatusCode, StatusCode.BadInternalError)).toBe(true);
-  expect(isVariantValue(VariantTypeId.QualifiedName, new QualifiedName({namespaceIndex: 0}))).toBe(true);
-  expect(isVariantValue(VariantTypeId.LocalizedText, new LocalizedText())).toBe(true);
-  expect(isVariantValue(VariantTypeId.ExtensionObject, new ExtensionObject({typeId: NodeId.parse('i=1')}))).toBe(true);
-  expect(isVariantValue(VariantTypeId.DataValue, new DataValue())).toBe(true);
-  expect(isVariantValue(VariantTypeId.Variant, new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Boolean, value: true}))).toBe(true);
-  expect(isVariantValue(VariantTypeId.DiagnosticInfo, new DiagnosticInfo())).toBe(true);
-
-  expect(() => isVariantValue(255 as VariantTypeId, 1)).toThrowError(UaError);
 });
 
 test('Read/Write VariantValue', () => {
@@ -88,8 +56,6 @@ test('Read/Write VariantValue', () => {
   writeVariantValue(encoder, VariantTypeId.Variant, new Variant({type: VariantType.Scalar, typeId: VariantTypeId.Boolean, value: true}));
   writeVariantValue(encoder, VariantTypeId.DiagnosticInfo, new DiagnosticInfo());
 
-  expect(() => writeVariantValue(encoder, VariantTypeId.Boolean as VariantTypeId.Byte, 1)).toThrowError(UaError);
-
   const decoder = new BinaryDataDecoder(encoder.finish());
 
   expect(readVariantValue(decoder, VariantTypeId.Boolean)).toBe(true);
@@ -117,6 +83,4 @@ test('Read/Write VariantValue', () => {
   expect(readVariantValue(decoder, VariantTypeId.DataValue)).toBeInstanceOf(DataValue);
   expect(readVariantValue(decoder, VariantTypeId.Variant)).toBeInstanceOf(Variant);
   expect(readVariantValue(decoder, VariantTypeId.DiagnosticInfo)).toBeInstanceOf(DiagnosticInfo);
-
-  expect(() => readVariantValue(decoder, 99 as VariantTypeId)).toThrowError(UaError);
 });

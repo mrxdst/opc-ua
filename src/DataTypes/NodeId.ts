@@ -19,7 +19,7 @@ export interface NodeIdOptions<T extends SimpleNodeIdType = SimpleNodeIdType> {
   /** The format and data type of the identifier. */
   identifierType: T;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value: NodeIdValueType<T>;
+  value: NodeIdValueTypeStrict<T>;
   /** Used internally by ExpandedNodeId. */
   [namespaceUriFlag]?: boolean | undefined;
   /** Used internally by ExpandedNodeId. */
@@ -37,23 +37,29 @@ export type NodeIdValueType<T extends SimpleNodeIdType = SimpleNodeIdType> =
   T extends NodeIdType.Guid ? Guid :
   T extends NodeIdType.ByteString ? ByteString : never;
 
+export type NodeIdValueTypeStrict<T extends SimpleNodeIdType = SimpleNodeIdType> =
+  [T] extends [NodeIdType.Numeric] ? UInt32 :
+  [T] extends [NodeIdType.String] ? UaString :
+  [T] extends [NodeIdType.Guid] ? Guid :
+  [T] extends [NodeIdType.ByteString] ? ByteString : never;
+
 /** An identifier for a node in a UA server address space. */
-export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements NodeIdOptions<T> {
+export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
   /** The index for a namespace URI. An index of 0 is used for OPC UA defined NodeIds. */
   readonly namespace: UInt16;
   /** The format and data type of the identifier. */
   readonly identifierType: T;
   /** The identifier for a node in the address space of an OPC UA Server. */
   readonly value: NodeIdValueType<T>;
-  /** Used internaly by ExpandedNodeId. */
+  /** Used internally by ExpandedNodeId. */
   readonly [namespaceUriFlag]: boolean | undefined;
-  /** Used internaly by ExpandedNodeId. */
+  /** Used internally by ExpandedNodeId. */
   readonly [serverIndexFlag]: boolean | undefined;
   
-  constructor(options: NodeIdOptions<T>) {
+  constructor(options: NodeIdOptions<T> | NodeId) {
     this.namespace = options.namespace ?? 0;
-    this.identifierType = options.identifierType;
-    this.value = options.value;
+    this.identifierType = options.identifierType as T;
+    this.value = options.value as NodeIdValueType<T>;
     this[namespaceUriFlag] = options[namespaceUriFlag];
     this[serverIndexFlag] = options[serverIndexFlag];
 
@@ -62,7 +68,7 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements No
       case NodeIdType.FourByte:
       case NodeIdType.Numeric: {
         this.identifierType = NodeIdType.Numeric as T;
-        if (!isUInt32(this.value) || !isUInt16(this.namespace)) {
+        if (!isUInt32(this.value as number) || !isUInt16(this.namespace)) {
           throw new UaError({ code: StatusCode.BadNodeIdInvalid });
         }
         break;
@@ -249,7 +255,7 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements No
       case NodeIdType.TwoByte:
       case NodeIdType.FourByte:
       case NodeIdType.Numeric: {
-        if (this.namespace === 0 && isByte(this.value)) {
+        if (this.namespace === 0 && isByte(this.value as number)) {
           let identifierType: Byte = NodeIdType.TwoByte;
           if (this[namespaceUriFlag]) {
             identifierType |= namespaceUriFlagMask;
@@ -258,9 +264,9 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements No
             identifierType |= serverIndexFlagMask;
           }
           encoder.writeByte(identifierType);
-          encoder.writeByte(this.value);
+          encoder.writeByte(this.value as number);
         }
-        else if (isByte(this.namespace) && isUInt16(this.value)) {
+        else if (isByte(this.namespace) && isUInt16(this.value as number)) {
           let identifierType: Byte = NodeIdType.FourByte;
           if (this[namespaceUriFlag]) {
             identifierType |= namespaceUriFlagMask;
@@ -270,7 +276,7 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements No
           }
           encoder.writeByte(identifierType);
           encoder.writeByte(this.namespace);
-          encoder.writeUInt16(this.value);
+          encoder.writeUInt16(this.value as number);
         }
         else {
           let identifierType: Byte = this.identifierType;
@@ -282,7 +288,7 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements No
           }
           encoder.writeByte(identifierType);
           encoder.writeUInt16(this.namespace);
-          encoder.writeUInt32(this.value as UInt32);
+          encoder.writeUInt32(this.value as number);
         }
         break;
       }
@@ -388,7 +394,7 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements No
     return new NodeId({
       identifierType,
       namespace,
-      value,
+      value: value as NodeIdValueTypeStrict<typeof identifierType>,
       [namespaceUriFlag]: namespaceUriFlagSet,
       [serverIndexFlag]: serverIndexFlagSet
     });

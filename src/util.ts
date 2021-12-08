@@ -9,9 +9,7 @@ import {
   Int64,
   UInt64,
   ByteString,
-  UaString,
-  Float,
-  Double
+  UaString
 } from './DataTypes/Primitives';
 import * as GeneratedTypes from './DataTypes/Generated';
 import { decode, encode } from './symbols';
@@ -34,121 +32,36 @@ export const isNode = typeof process !== 'undefined' && process.versions !== und
 export const isTest = isNode && process.env.NODE_ENV === 'test';
 export const isDevelopment = isNode && process.env.NODE_ENV === 'development';
 
-export function clampSByte(value: unknown): SByte {
-  return clampInteger(value, -0x80, 0x7F);
-}
-
-export function clampByte(value: unknown): Byte {
-  return clampInteger(value, 0x00, 0xFF);
-}
-
-export function clampInt16(value: unknown): Int16 {
-  return clampInteger(value, -0x8000, 0x7FFF);
-}
-
-export function clampUInt16(value: unknown): UInt16 {
-  return clampInteger(value, 0x00, 0xFFFF);
-}
-
-export function clampInt32(value: unknown): Int32 {
-  return clampInteger(value, -0x80000000, 0x7FFFFFFF);
-}
-
-export function clampUInt32(value: unknown): UInt32 {
-  return clampInteger(value, 0x00, 0xFFFFFFFF);
-}
-
-export function clampInt64(value: unknown): Int64 {
-  return clampBigInteger(value, BigInt(-1) * BigInt('0x8000000000000000'), BigInt('0x7FFFFFFFFFFFFFFF'));
-}
-
-export function clampUInt64(value: unknown): UInt64 {
-  return clampBigInteger(value, BigInt(0), BigInt('0xFFFFFFFFFFFFFFFF'));
-}
-
-export function clampInteger(value: unknown, min: number, max: number): number {
-  let val = Number(value);
-  if (isNaN(val)) {
-    if (min > 0) {
-      return min;
-    } else if (max < 0) {
-      return max;
-    }
-    return 0;
-  }
-  val = Math.floor(val);
-  if (val > max) {
-    return max;
-  } else if (val < min) {
-    return min;
-  }
-  return val;
-}
-
-export function clampBigInteger(value: unknown, min: bigint, max: bigint): bigint {
-  let val: bigint;
-  if (typeof value === 'bigint') {
-    val = value;
-  } else if (typeof value === 'string') {
-    try {
-      val = BigInt(value);
-    } catch (e) {
-      val = BigInt(0);
-    }
-  } else {
-    val = BigInt(0);
-  }
-
-  if (val > max) {
-    return max;
-  } else if (val < min) {
-    return min;
-  }
-  return val;
-}
-
-export function isBoolean(value: unknown): value is boolean {
-  return typeof value === 'boolean';
-}
-
 export function isSByte(value: unknown): value is SByte {
-  return typeof value === 'number' && value === clampSByte(value);
+  return typeof value === 'number' && Number.isInteger(value) && value >= -0x80 && value <= 0x7F;
 }
 
 export function isByte(value: unknown): value is Byte {
-  return typeof value === 'number' && value === clampByte(value);
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0x00 && value <= 0xFF;
 }
 
 export function isInt16(value: unknown): value is Int16 {
-  return typeof value === 'number' && value === clampInt16(value);
+  return typeof value === 'number' && Number.isInteger(value) && value >= -0x8000 && value <= 0x7FFF;
 }
 
 export function isUInt16(value: unknown): value is UInt16 {
-  return typeof value === 'number' && value === clampUInt16(value);
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0x00 && value <= 0xFFFF;
 }
 
 export function isInt32(value: unknown): value is Int32 {
-  return typeof value === 'number' && value === clampInt32(value);
+  return typeof value === 'number' && Number.isInteger(value) && value >= -0x80000000 && value <= 0x7FFFFFFF;
 }
 
 export function isUInt32(value: unknown): value is UInt32 {
-  return typeof value === 'number' && value === clampUInt32(value);
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0x00 && value <= 0xFFFFFFFF;
 }
 
 export function isInt64(value: unknown): value is Int64 {
-  return typeof value === 'bigint' && value === clampInt64(value);
+  return typeof value === 'bigint' && value >= BigInt(-1) * BigInt('0x8000000000000000') && value <= BigInt('0x7FFFFFFFFFFFFFFF');
 }
 
 export function isUInt64(value: unknown): value is UInt64 {
-  return typeof value === 'bigint' && value === clampUInt64(value);
-}
-
-export function isFloat(value: unknown): value is Float {
-  return typeof value === 'number';
-}
-
-export function isDouble(value: unknown): value is Double {
-  return typeof value === 'number';
+  return typeof value === 'bigint' && value >= BigInt(0x00) && value <= BigInt('0xFFFFFFFFFFFFFFFF');
 }
 
 export function isByteString(value: unknown): value is ByteString {
@@ -252,8 +165,4 @@ export function getTypeFromTypeId(typeId: NodeIds): DecodableType | undefined {
       return type as DecodableType;
     }
   }
-}
-
-export function setTimeoutAsync(timeout?: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, timeout));
 }

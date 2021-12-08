@@ -2,7 +2,7 @@ import { Byte, ByteString, Double, Float, Int16, Int32, Int64, SByte, UaString, 
 import { StatusCode } from './DataTypes/StatusCode';
 import { decode, encode } from './symbols';
 import { UaError } from './UaError';
-import { dateToFileTime, fileTimeToDate, clampSByte, clampByte, clampInt16, clampUInt16, clampInt32, clampUInt32, clampInt64, clampUInt64, uaStringToByteString, byteStringToUaString } from './util';
+import { dateToFileTime, fileTimeToDate, uaStringToByteString, byteStringToUaString, isByte, isInt16, isInt32, isInt64, isSByte, isUInt16, isUInt32, isUInt64 } from './util';
 
 enum DataTypeSize {
   SByte = 1,
@@ -61,49 +61,79 @@ export class BinaryDataEncoder {
 
   writeSByte(value: SByte): void {
     this.#growBuffer(DataTypeSize.SByte);
-    this.#dv.setInt8(this.#byteOffset, clampSByte(value));
+    value = Math.trunc(value);
+    if (!isSByte(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'SByte value out of range'});
+    }
+    this.#dv.setInt8(this.#byteOffset, value);
     this.#byteOffset += DataTypeSize.SByte;
   }
 
   writeByte(value: Byte): void {
     this.#growBuffer(DataTypeSize.Byte);
-    this.#dv.setUint8(this.#byteOffset, clampByte(value));
+    value = Math.trunc(value);
+    if (!isByte(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'Byte value out of range'});
+    }
+    this.#dv.setUint8(this.#byteOffset, value);
     this.#byteOffset += DataTypeSize.Byte;
   }
 
   writeInt16(value: Int16): void {
     this.#growBuffer(DataTypeSize.Int16);
-    this.#dv.setInt16(this.#byteOffset, clampInt16(value), true);
+    value = Math.trunc(value);
+    if (!isInt16(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'Int16 value out of range'});
+    }
+    this.#dv.setInt16(this.#byteOffset, value, true);
     this.#byteOffset += DataTypeSize.Int16;
   }
 
   writeUInt16(value: UInt16): void {
     this.#growBuffer(DataTypeSize.UInt16);
-    this.#dv.setUint16(this.#byteOffset, clampUInt16(value), true);
+    value = Math.trunc(value);
+    if (!isUInt16(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'UInt16 value out of range'});
+    }
+    this.#dv.setUint16(this.#byteOffset, value, true);
     this.#byteOffset += DataTypeSize.UInt16;
   }
 
   writeInt32(value: Int32): void {
     this.#growBuffer(DataTypeSize.Int32);
-    this.#dv.setInt32(this.#byteOffset, clampInt32(value), true);
+    value = Math.trunc(value);
+    if (!isInt32(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'Int32 value out of range'});
+    }
+    this.#dv.setInt32(this.#byteOffset, value, true);
     this.#byteOffset += DataTypeSize.Int32;
   }
 
   writeUInt32(value: UInt32): void {
     this.#growBuffer(DataTypeSize.UInt32);
-    this.#dv.setUint32(this.#byteOffset, clampUInt32(value), true);
+    value = Math.trunc(value);
+    if (!isUInt32(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'UInt32 value out of range'});
+    }
+    this.#dv.setUint32(this.#byteOffset, value, true);
     this.#byteOffset += DataTypeSize.UInt32;
   }
 
   writeInt64(value: Int64): void {
     this.#growBuffer(DataTypeSize.Int64);
-    this.#dv.setBigInt64(this.#byteOffset, clampInt64(value), true);
+    if (!isInt64(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'Int64 value out of range'});
+    }
+    this.#dv.setBigInt64(this.#byteOffset, value, true);
     this.#byteOffset += DataTypeSize.Int64;
   }
 
   writeUInt64(value: UInt64): void {
     this.#growBuffer(DataTypeSize.UInt64);
-    this.#dv.setBigUint64(this.#byteOffset, clampUInt64(value), true);
+    if (!isUInt64(value)) {
+      throw new UaError({code: StatusCode.BadEncodingError, reason: 'UInt64 value out of range'});
+    }
+    this.#dv.setBigUint64(this.#byteOffset, value, true);
     this.#byteOffset += DataTypeSize.UInt64;
   }
 

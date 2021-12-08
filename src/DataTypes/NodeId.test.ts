@@ -58,18 +58,16 @@ test('Encode/Decode', () => {
 });
 
 test('Invalid throws', () => {
-  const encoder = new BinaryDataEncoder();
-  expect(() => encoder.writeType(new NodeId({ identifierType: 255 as SimpleNodeIdType, value: 1}))).toThrowError(UaError);
-  expect(() => encoder.writeType(new NodeId({ identifierType: NodeIdType.String as SimpleNodeIdType, value: 1}))).toThrowError(UaError);
-  expect(() => encoder.writeType(new NodeId({ identifierType: NodeIdType.Numeric as SimpleNodeIdType, value: ''}))).toThrowError(UaError);
-  expect(() => encoder.writeType(new NodeId({ identifierType: NodeIdType.ByteString as SimpleNodeIdType, value: ''}))).toThrowError(UaError);
-  expect(() => encoder.writeType(new NodeId({ identifierType: NodeIdType.Guid as SimpleNodeIdType, value: ''}))).toThrowError(UaError);
-  
-  encoder.writeByte(255);
-
-  const decoder = new BinaryDataDecoder(encoder.finish());
-  
-  expect(() => decoder.readType(NodeId)).toThrowError(UaError);
+  // @ts-expect-error do not distribute
+  expect(() => new NodeId({ identifierType: 255 as SimpleNodeIdType, value: 1})).toThrowError(UaError);
+  // @ts-expect-error do not distribute
+  expect(() => new NodeId({ identifierType: NodeIdType.String as SimpleNodeIdType, value: 1})).toThrowError(UaError);
+  // @ts-expect-error do not distribute
+  expect(() => new NodeId({ identifierType: NodeIdType.Numeric as SimpleNodeIdType, value: ''})).toThrowError(UaError);
+  // @ts-expect-error do not distribute
+  expect(() => new NodeId({ identifierType: NodeIdType.ByteString as SimpleNodeIdType, value: ''})).toThrowError(UaError);
+  // @ts-expect-error do not distribute
+  expect(() => new NodeId({ identifierType: NodeIdType.Guid as SimpleNodeIdType, value: ''})).toThrowError(UaError);
 });
 
 test('toString', () => {

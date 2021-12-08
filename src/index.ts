@@ -75,14 +75,6 @@ export { UaError } from './UaError';
 export type { EncodableType, DecodableType } from './types';
 
 export {
-  clampByte,
-  clampInt16,
-  clampInt32,
-  clampInt64,
-  clampSByte,
-  clampUInt16,
-  clampUInt32,
-  clampUInt64,
   isByte,
   isInt16,
   isInt32,

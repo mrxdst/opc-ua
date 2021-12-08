@@ -18,7 +18,6 @@ import {
 import { NodeId } from '../DataTypes/NodeId';
 import { NodeIds } from '../DataTypes/NodeIds';
 import { QualifiedName } from '../DataTypes/QualifiedName';
-import { setTimeoutAsync } from '../util';
 import { UaClient } from './UaClient';
 
 const endpointUrl = 'opc.tcp://localhost:4840';
@@ -166,7 +165,7 @@ testFn('MonitoredItem', async () => {
     value = dataValue.value?.value as Date;
   });
 
-  await setTimeoutAsync(5000);
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
   expect(value?.valueOf()).toBeGreaterThanOrEqual(startDate.valueOf());
 

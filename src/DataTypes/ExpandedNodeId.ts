@@ -43,7 +43,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     const nodeId = new NodeId({
       ...this.nodeId,
       namespace: 0
-    });
+    } as NodeId);
 
     const identifierPart = nodeId.toString();
         
@@ -74,7 +74,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     const nodeId = new NodeId({
       ...this.nodeId,
       namespace: index
-    });
+    } as NodeId);
 
     return nodeId;
   }
@@ -119,7 +119,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
       ...this.nodeId,
       [namespaceUriFlag]: !!this.namespaceUri,
       [serverIndexFlag]: !!this.serverIndex
-    });
+    } as NodeId);
 
     encoder.writeType(nodeId);
 
@@ -147,7 +147,7 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
       ...nodeId,
       [namespaceUriFlag]: undefined,
       [serverIndexFlag]: undefined
-    });
+    } as NodeId);
 
     return new ExpandedNodeId({
       nodeId,

@@ -1,6 +1,6 @@
 import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
 import { decode, encode, typeId } from '../symbols';
-import { clampInteger } from '../util';
+import { isUInt16 } from '../util';
 import { NodeIds } from './NodeIds';
 import { UInt16 } from './Primitives';
 import { StatusCode } from './StatusCode';
@@ -66,7 +66,7 @@ export class DataValue implements DataValueOptions {
     }
     if (this.sourcePicoSeconds !== undefined) {
       let _str = this.sourcePicoSeconds.toString();
-      if (this.sourcePicoSeconds !== clampInteger(this.sourcePicoSeconds, 0, 9999)) {
+      if (!isUInt16(this.sourcePicoSeconds) || this.sourcePicoSeconds > 9999) {
         _str += ' (Invalid)';
       }
       str.push(`  SourcePicoSeconds: ${_str}`);
@@ -76,7 +76,7 @@ export class DataValue implements DataValueOptions {
     }
     if (this.serverPicoSeconds !== undefined) {
       let _str = this.serverPicoSeconds.toString();
-      if (this.serverPicoSeconds !== clampInteger(this.serverPicoSeconds, 0, 9999)) {
+      if (!isUInt16(this.serverPicoSeconds) || this.serverPicoSeconds > 9999) {
         _str += ' (Invalid)';
       }
       str.push(`  ServerPicoSeconds: ${_str}`);
@@ -132,10 +132,10 @@ export class DataValue implements DataValueOptions {
       encoder.writeDateTime(this.serverTimestamp);
     }
     if (this.sourceTimestamp !== undefined &&  this.sourcePicoSeconds !== undefined) {
-      encoder.writeUInt16(clampInteger(this.sourcePicoSeconds, 0, 9999));
+      encoder.writeUInt16(Math.min(this.sourcePicoSeconds, 9999));
     }
     if (this.serverTimestamp !== undefined && this.serverPicoSeconds !== undefined) {
-      encoder.writeUInt16(clampInteger(this.serverPicoSeconds, 0, 9999));
+      encoder.writeUInt16(Math.min(this.serverPicoSeconds, 9999));
     }
   }
 
