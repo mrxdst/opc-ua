@@ -13,45 +13,44 @@ const serverIndexFlagMask = 0x40;
 
 export type SimpleNodeIdType = NodeIdType.Numeric | NodeIdType.String | NodeIdType.ByteString | NodeIdType.Guid;
 
-export interface NodeIdOptions<N extends SimpleNodeIdType = SimpleNodeIdType, V extends NodeIdValueType<N> = NodeIdValueType<N>> {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
+export interface NodeIdOptions<T extends SimpleNodeIdType = SimpleNodeIdType> {
+  /** The index for a namespace URI. An index of 0 is used for OPC UA defined NodeIds. */
   namespace?: UInt16 | undefined;
   /** The format and data type of the identifier. */
-  identifierType: N;
+  identifierType: T;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  value: V;
+  value: NodeIdValueType<T>;
   /** Used internally by ExpandedNodeId. */
   [namespaceUriFlag]?: boolean | undefined;
   /** Used internally by ExpandedNodeId. */
   [serverIndexFlag]?: boolean | undefined;
 }
 
-export type NodeIdValueType<T extends SimpleNodeIdType = SimpleNodeIdType> = 
+export type NumericNodeIdOptions = Omit<NodeIdOptions<NodeIdType.Numeric>, 'identifierType'>;
+export type StringNodeIdOptions = Omit<NodeIdOptions<NodeIdType.String>, 'identifierType'>;
+export type ByteStringNodeIdOptions = Omit<NodeIdOptions<NodeIdType.ByteString>, 'identifierType'>;
+export type GuidNodeIdOptions = Omit<NodeIdOptions<NodeIdType.Guid>, 'identifierType'>;
+
+export type NodeIdValueType<T extends SimpleNodeIdType = SimpleNodeIdType> =
   T extends NodeIdType.Numeric ? UInt32 :
   T extends NodeIdType.String ? UaString :
   T extends NodeIdType.Guid ? Guid :
   T extends NodeIdType.ByteString ? ByteString : never;
 
 /** An identifier for a node in a UA server address space. */
-export class NodeId<N extends SimpleNodeIdType = SimpleNodeIdType, V extends NodeIdValueType<N> = NodeIdValueType<N>> implements NodeIdOptions<N, V> {
-  /**
-   * The index for a namespace URI.  
-   * An index of 0 is used for OPC UA defined NodeIds.
-   */
+export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> implements NodeIdOptions<T> {
+  /** The index for a namespace URI. An index of 0 is used for OPC UA defined NodeIds. */
   readonly namespace: UInt16;
   /** The format and data type of the identifier. */
-  readonly identifierType: N;
+  readonly identifierType: T;
   /** The identifier for a node in the address space of an OPC UA Server. */
-  readonly value: V;
+  readonly value: NodeIdValueType<T>;
   /** Used internaly by ExpandedNodeId. */
   readonly [namespaceUriFlag]: boolean | undefined;
   /** Used internaly by ExpandedNodeId. */
   readonly [serverIndexFlag]: boolean | undefined;
   
-  constructor(options: NodeIdOptions<N, V>) {
+  constructor(options: NodeIdOptions<T>) {
     this.namespace = options.namespace ?? 0;
     this.identifierType = options.identifierType;
     this.value = options.value;
@@ -60,12 +59,9 @@ export class NodeId<N extends SimpleNodeIdType = SimpleNodeIdType, V extends Nod
 
     switch (this.identifierType) {
       case NodeIdType.TwoByte:
-      case NodeIdType.FourByte: {
-        // Just in case.
-        this.identifierType = NodeIdType.Numeric as N;
-      }
-      // eslint-disable-next-line no-fallthrough
+      case NodeIdType.FourByte:
       case NodeIdType.Numeric: {
+        this.identifierType = NodeIdType.Numeric as T;
         if (!isUInt32(this.value) || !isUInt16(this.namespace)) {
           throw new UaError({ code: StatusCode.BadNodeIdInvalid });
         }
@@ -203,7 +199,7 @@ export class NodeId<N extends SimpleNodeIdType = SimpleNodeIdType, V extends Nod
   }
 
   /** Return a new null NodeId */
-  static null(): NodeId {
+  static null(): NodeId<NodeIdType.Numeric> {
     return new NodeId({identifierType: NodeIdType.Numeric, value: 0});
   }
 
@@ -222,10 +218,36 @@ export class NodeId<N extends SimpleNodeIdType = SimpleNodeIdType, V extends Nod
     }
   }
 
+  static readonly Numeric = class NumericNodeId extends NodeId<NodeIdType.Numeric> {
+    constructor(options: NumericNodeIdOptions) {
+      super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
+    }
+  };
+
+  static readonly String = class NumericNodeId extends NodeId<NodeIdType.String> {
+    constructor(options: StringNodeIdOptions) {
+      super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
+    }
+  };
+
+  static readonly ByteString = class NumericNodeId extends NodeId<NodeIdType.ByteString> {
+    constructor(options: ByteStringNodeIdOptions) {
+      super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
+    }
+  };
+
+  static readonly GuidString = class NumericNodeId extends NodeId<NodeIdType.Guid> {
+    constructor(options: GuidNodeIdOptions) {
+      super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
+    }
+  };
+
   static [typeId] = NodeIds.NodeId as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     switch (this.identifierType) {
+      case NodeIdType.TwoByte:
+      case NodeIdType.FourByte:
       case NodeIdType.Numeric: {
         if (this.namespace === 0 && isByte(this.value)) {
           let identifierType: Byte = NodeIdType.TwoByte;

@@ -81,89 +81,22 @@ export type VariantValueType<T extends VariantTypeId = VariantTypeId> =
   T extends VariantTypeId.Variant         ? Variant :
   T extends VariantTypeId.DiagnosticInfo  ? DiagnosticInfo : never;
 
-export type VariantScalarType<T extends VariantTypeId = VariantTypeId> =
-  T extends VariantTypeId.Null            ? VariantValueType<VariantTypeId.Null> :
-  T extends VariantTypeId.Boolean         ? VariantValueType<VariantTypeId.Boolean> :
-  T extends VariantTypeId.SByte           ? VariantValueType<VariantTypeId.SByte> :
-  T extends VariantTypeId.Byte            ? VariantValueType<VariantTypeId.Byte> :
-  T extends VariantTypeId.Int16           ? VariantValueType<VariantTypeId.Int16> :
-  T extends VariantTypeId.UInt16          ? VariantValueType<VariantTypeId.UInt16> :
-  T extends VariantTypeId.Int32           ? VariantValueType<VariantTypeId.Int32> :
-  T extends VariantTypeId.UInt32          ? VariantValueType<VariantTypeId.UInt32> :
-  T extends VariantTypeId.Int64           ? VariantValueType<VariantTypeId.Int64> :
-  T extends VariantTypeId.UInt64          ? VariantValueType<VariantTypeId.UInt64> :
-  T extends VariantTypeId.Float           ? VariantValueType<VariantTypeId.Float> :
-  T extends VariantTypeId.Double          ? VariantValueType<VariantTypeId.Double> :
-  T extends VariantTypeId.String          ? VariantValueType<VariantTypeId.String> :
-  T extends VariantTypeId.DateTime        ? VariantValueType<VariantTypeId.DateTime> :
-  T extends VariantTypeId.Guid            ? VariantValueType<VariantTypeId.Guid> :
-  T extends VariantTypeId.ByteString      ? VariantValueType<VariantTypeId.ByteString> :
-  T extends VariantTypeId.XmlElement      ? VariantValueType<VariantTypeId.XmlElement> :
-  T extends VariantTypeId.NodeId          ? VariantValueType<VariantTypeId.NodeId> :
-  T extends VariantTypeId.ExpandedNodeId  ? VariantValueType<VariantTypeId.ExpandedNodeId> :
-  T extends VariantTypeId.StatusCode      ? VariantValueType<VariantTypeId.StatusCode> :
-  T extends VariantTypeId.QualifiedName   ? VariantValueType<VariantTypeId.QualifiedName> :
-  T extends VariantTypeId.LocalizedText   ? VariantValueType<VariantTypeId.LocalizedText> :
-  T extends VariantTypeId.ExtensionObject ? VariantValueType<VariantTypeId.ExtensionObject> :
-  T extends VariantTypeId.DataValue       ? VariantValueType<VariantTypeId.DataValue> :
-  T extends VariantTypeId.Variant         ? VariantValueType<VariantTypeId.Variant> : // Variant isn't actually allowed. But it occurs in the wild. So..
-  T extends VariantTypeId.DiagnosticInfo  ? VariantValueType<VariantTypeId.DiagnosticInfo> : never;
+export type VariantScalarType<T extends VariantTypeId = VariantTypeId> = VariantValueType<T>;
 
 export type VariantArrayType<T extends VariantTypeId = VariantTypeId> =
-  T extends VariantTypeId.Null            ? ReadonlyArray<VariantValueType<VariantTypeId.Null>>                   | undefined :
-  T extends VariantTypeId.Boolean         ? ReadonlyArray<VariantValueType<VariantTypeId.Boolean>>                | undefined :
-  T extends VariantTypeId.SByte           ? ReadonlyArray<VariantValueType<VariantTypeId.SByte>>  | Int8Array     | undefined :
-  T extends VariantTypeId.Byte            ? ReadonlyArray<VariantValueType<VariantTypeId.Byte>>   | Uint8Array    | undefined :
-  T extends VariantTypeId.Int16           ? ReadonlyArray<VariantValueType<VariantTypeId.Int16>>  | Int16Array    | undefined :
-  T extends VariantTypeId.UInt16          ? ReadonlyArray<VariantValueType<VariantTypeId.UInt16>> | Uint16Array   | undefined :
-  T extends VariantTypeId.Int32           ? ReadonlyArray<VariantValueType<VariantTypeId.Int32>>  | Int32Array    | undefined :
-  T extends VariantTypeId.UInt32          ? ReadonlyArray<VariantValueType<VariantTypeId.UInt32>> | Uint32Array   | undefined :
-  T extends VariantTypeId.Int64           ? ReadonlyArray<VariantValueType<VariantTypeId.Int64>>  | BigInt64Array | undefined :
-  T extends VariantTypeId.UInt64          ? ReadonlyArray<VariantValueType<VariantTypeId.UInt64>> | BigInt64Array | undefined :
-  T extends VariantTypeId.Float           ? ReadonlyArray<VariantValueType<VariantTypeId.Float>>  | Float32Array  | undefined :
-  T extends VariantTypeId.Double          ? ReadonlyArray<VariantValueType<VariantTypeId.Double>> | Float64Array  | undefined : 
-  T extends VariantTypeId.String          ? ReadonlyArray<VariantValueType<VariantTypeId.String>>                 | undefined :
-  T extends VariantTypeId.DateTime        ? ReadonlyArray<VariantValueType<VariantTypeId.DateTime>>               | undefined :
-  T extends VariantTypeId.Guid            ? ReadonlyArray<VariantValueType<VariantTypeId.Guid>>                   | undefined :
-  T extends VariantTypeId.ByteString      ? ReadonlyArray<VariantValueType<VariantTypeId.ByteString>>             | undefined :
-  T extends VariantTypeId.XmlElement      ? ReadonlyArray<VariantValueType<VariantTypeId.XmlElement>>             | undefined :
-  T extends VariantTypeId.NodeId          ? ReadonlyArray<VariantValueType<VariantTypeId.NodeId>>                 | undefined :
-  T extends VariantTypeId.ExpandedNodeId  ? ReadonlyArray<VariantValueType<VariantTypeId.ExpandedNodeId>>         | undefined :
-  T extends VariantTypeId.StatusCode      ? ReadonlyArray<VariantValueType<VariantTypeId.StatusCode>>             | undefined :
-  T extends VariantTypeId.QualifiedName   ? ReadonlyArray<VariantValueType<VariantTypeId.QualifiedName>>          | undefined :
-  T extends VariantTypeId.LocalizedText   ? ReadonlyArray<VariantValueType<VariantTypeId.LocalizedText>>          | undefined :
-  T extends VariantTypeId.ExtensionObject ? ReadonlyArray<VariantValueType<VariantTypeId.ExtensionObject>>        | undefined :
-  T extends VariantTypeId.DataValue       ? ReadonlyArray<VariantValueType<VariantTypeId.DataValue>>              | undefined :
-  T extends VariantTypeId.Variant         ? ReadonlyArray<VariantValueType<VariantTypeId.Variant>>                | undefined :
-  T extends VariantTypeId.DiagnosticInfo  ? ReadonlyArray<VariantValueType<VariantTypeId.DiagnosticInfo>>         | undefined : never;
+  T extends VariantTypeId.SByte           ? ReadonlyArray<VariantValueType<T>> | undefined | Int8Array :
+  T extends VariantTypeId.Byte            ? ReadonlyArray<VariantValueType<T>> | undefined | Uint8Array :
+  T extends VariantTypeId.Int16           ? ReadonlyArray<VariantValueType<T>> | undefined | Int16Array :
+  T extends VariantTypeId.UInt16          ? ReadonlyArray<VariantValueType<T>> | undefined | Uint16Array :
+  T extends VariantTypeId.Int32           ? ReadonlyArray<VariantValueType<T>> | undefined | Int32Array :
+  T extends VariantTypeId.UInt32          ? ReadonlyArray<VariantValueType<T>> | undefined | Uint32Array :
+  T extends VariantTypeId.Int64           ? ReadonlyArray<VariantValueType<T>> | undefined | BigInt64Array :
+  T extends VariantTypeId.UInt64          ? ReadonlyArray<VariantValueType<T>> | undefined | BigInt64Array :
+  T extends VariantTypeId.Float           ? ReadonlyArray<VariantValueType<T>> | undefined | Float32Array :
+  T extends VariantTypeId.Double          ? ReadonlyArray<VariantValueType<T>> | undefined | Float64Array : 
+  ReadonlyArray<VariantValueType<T>> | undefined;
 
-export type VariantNdArrayType<T extends VariantTypeId = VariantTypeId> =
-  T extends VariantTypeId.Null            ? NdArray<VariantValueType<VariantTypeId.Null>[]>            | undefined :
-  T extends VariantTypeId.Boolean         ? NdArray<VariantValueType<VariantTypeId.Boolean>[]>         | undefined :
-  T extends VariantTypeId.SByte           ? NdArray<VariantValueType<VariantTypeId.SByte>[]>           | undefined :
-  T extends VariantTypeId.Byte            ? NdArray<VariantValueType<VariantTypeId.Byte>[]>            | undefined :
-  T extends VariantTypeId.Int16           ? NdArray<VariantValueType<VariantTypeId.Int16>[]>           | undefined :
-  T extends VariantTypeId.UInt16          ? NdArray<VariantValueType<VariantTypeId.UInt16>[]>          | undefined :
-  T extends VariantTypeId.Int32           ? NdArray<VariantValueType<VariantTypeId.Int32>[]>           | undefined :
-  T extends VariantTypeId.UInt32          ? NdArray<VariantValueType<VariantTypeId.UInt32>[]>          | undefined :
-  T extends VariantTypeId.Int64           ? NdArray<VariantValueType<VariantTypeId.Int64>[]>           | undefined :
-  T extends VariantTypeId.UInt64          ? NdArray<VariantValueType<VariantTypeId.UInt64>[]>          | undefined :
-  T extends VariantTypeId.Float           ? NdArray<VariantValueType<VariantTypeId.Float>[]>           | undefined :
-  T extends VariantTypeId.Double          ? NdArray<VariantValueType<VariantTypeId.Double>[]>          | undefined : 
-  T extends VariantTypeId.String          ? NdArray<VariantValueType<VariantTypeId.String>[]>          | undefined :
-  T extends VariantTypeId.DateTime        ? NdArray<VariantValueType<VariantTypeId.DateTime>[]>        | undefined :
-  T extends VariantTypeId.Guid            ? NdArray<VariantValueType<VariantTypeId.Guid>[]>            | undefined :
-  T extends VariantTypeId.ByteString      ? NdArray<VariantValueType<VariantTypeId.ByteString>[]>      | undefined :
-  T extends VariantTypeId.XmlElement      ? NdArray<VariantValueType<VariantTypeId.XmlElement>[]>      | undefined :
-  T extends VariantTypeId.NodeId          ? NdArray<VariantValueType<VariantTypeId.NodeId>[]>          | undefined :
-  T extends VariantTypeId.ExpandedNodeId  ? NdArray<VariantValueType<VariantTypeId.ExpandedNodeId>[]>  | undefined :
-  T extends VariantTypeId.StatusCode      ? NdArray<VariantValueType<VariantTypeId.StatusCode>[]>      | undefined :
-  T extends VariantTypeId.QualifiedName   ? NdArray<VariantValueType<VariantTypeId.QualifiedName>[]>   | undefined :
-  T extends VariantTypeId.LocalizedText   ? NdArray<VariantValueType<VariantTypeId.LocalizedText>[]>   | undefined :
-  T extends VariantTypeId.ExtensionObject ? NdArray<VariantValueType<VariantTypeId.ExtensionObject>[]> | undefined :
-  T extends VariantTypeId.DataValue       ? NdArray<VariantValueType<VariantTypeId.DataValue>[]>       | undefined :
-  T extends VariantTypeId.Variant         ? NdArray<VariantValueType<VariantTypeId.Variant>[]>         | undefined :
-  T extends VariantTypeId.DiagnosticInfo  ? NdArray<VariantValueType<VariantTypeId.DiagnosticInfo>[]>  | undefined : never;
+export type VariantNdArrayType<T extends VariantTypeId = VariantTypeId> = NdArray<VariantValueType<T>[]> | undefined;
 
 export type VariantValue<T extends VariantType = VariantType, V extends VariantTypeId = VariantTypeId> = 
   T extends VariantType.Scalar  ? VariantScalarType<V>  :
@@ -178,6 +111,12 @@ export interface VariantOptions<T extends VariantType = VariantType, V extends V
   /** The value. */
   value: VariantValue<T, V>;
 }
+
+export type ScalarVariantOptions<T extends VariantTypeId = VariantTypeId> = Omit<VariantOptions<VariantType.Scalar, T>, 'type'>;
+
+export type ArrayVariantOptions<T extends VariantTypeId = VariantTypeId> = Omit<VariantOptions<VariantType.Array, T>, 'type'>;
+
+export type NdArrayVariantOptions<T extends VariantTypeId = VariantTypeId> = Omit<VariantOptions<VariantType.NdArray, T>, 'type'>;
 
 /** A union of several types. */
 export class Variant<T extends VariantType = VariantType, V extends VariantTypeId = VariantTypeId> implements VariantOptions<T, V> {
@@ -201,7 +140,7 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
   }
 
   /** Return a new null Variant */
-  static null(): Variant {
+  static null(): Variant<VariantType.Scalar, VariantTypeId.Null> {
     return new Variant({
       type: VariantType.Scalar,
       typeId: VariantTypeId.Null,
@@ -209,9 +148,27 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
     });
   }
 
-  isNull(): boolean {
+  isNull(): this is Variant<VariantType, VariantTypeId.Null> {
     return this.typeId === VariantTypeId.Null;
   }
+
+  static readonly Scalar = class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
+    constructor(options: ScalarVariantOptions<T>) {
+      super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
+    }
+  };
+
+  static readonly Array = class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
+    constructor(options: ArrayVariantOptions<T>) {
+      super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
+    }
+  };
+
+  static readonly NdArray = class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
+    constructor(options: NdArrayVariantOptions<T>) {
+      super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
+    }
+  };
 
   static [typeId] = NodeIds.BaseDataType as const;
 

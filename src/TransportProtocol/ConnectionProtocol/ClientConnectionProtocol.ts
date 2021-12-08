@@ -153,59 +153,58 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
   #onMessage = (_data: Uint8Array): void => {
     this.#dataStream.push(_data);
 
-    const msData = this.#dataStream.read(8) as Buffer | null;
-    if (!msData) {
-      return;
-    }
-    const messageSize = msData.readUInt32LE(4);
-    this.#dataStream.unshift(msData);
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      try {
+        const msData = this.#dataStream.read(8) as Buffer | null;
+        if (!msData) {
+          return;
+        }
+        const messageSize = msData.readUInt32LE(4);
+        this.#dataStream.unshift(msData);
 
-    const dataBuf = this.#dataStream.read(messageSize) as Buffer | null;
+        const dataBuf = this.#dataStream.read(messageSize) as Buffer | null;
 
-    if (!dataBuf) {
-      return;
-    }
+        if (!dataBuf) {
+          return;
+        }
 
-    const data = new Uint8Array(dataBuf.buffer, dataBuf.byteOffset, dataBuf.byteLength);
-    let hadError = false;
-    
-    try {
-      const decoder = new BinaryDataDecoder(data);
-      const messageType = decoder.readFixedLengthString(3) as MessageType;
+        const data = new Uint8Array(dataBuf.buffer, dataBuf.byteOffset, dataBuf.byteLength);
 
-      if (!MessageType[messageType]) {
-        this.emit('message', data);
+        const decoder = new BinaryDataDecoder(data);
+        const messageType = decoder.readFixedLengthString(3) as MessageType;
+
+        if (!MessageType[messageType]) {
+          this.emit('message', data);
+          continue;
+        }
+
+        const message = BinaryDataDecoder.decodeType(data, Message);
+        switch (message.messageType) {
+          case MessageType.ACK: {
+            this.#openResponse?.resolve(message.body as AcknowledgeMessageBody);
+            continue;
+          }
+          case MessageType.ERR: {
+            const errMessage = message.body as ErrorMessageBody;
+            this.#transportProtocol.close(new UaError({
+              code: errMessage.error,
+              reason: errMessage.reason
+            }));
+            return;
+          }
+          case MessageType.HEL: {
+            throw new UaError({ code: StatusCode.BadUnexpectedError, reason: 'Unexpected HelloMessage' });
+          }
+          case MessageType.RHE: {
+            // Ignore
+            continue;
+          }
+        }
+
+      } catch (e) {
+        this.#transportProtocol.close(e as UaError);
         return;
-      }
-      
-      const message = BinaryDataDecoder.decodeType(data, Message);
-      switch (message.messageType) {
-        case MessageType.ACK: {
-          this.#openResponse?.resolve(message.body as AcknowledgeMessageBody);
-          break;
-        }
-        case MessageType.ERR: {
-          const errMessage = message.body as ErrorMessageBody;
-          this.#transportProtocol.close(new UaError({
-            code: errMessage.error,
-            reason: errMessage.reason
-          }));
-          break;
-        }
-        case MessageType.HEL: {
-          throw new UaError({code: StatusCode.BadUnexpectedError, reason: 'Unexpected HelloMessage'});
-        }
-        case MessageType.RHE: {
-          // Ignore
-          break;
-        }
-      }
-    } catch (e) {
-      hadError = true;
-      this.#transportProtocol.close(e as UaError);
-    } finally {
-      if (!hadError) {
-        this.#dataStream.readableLength && this.#onMessage(new Uint8Array(0));
       }
     }
   };
