@@ -55,7 +55,8 @@ export class ExtensionObject implements ExtensionObjectOptions {
     return this.typeId.isNull();
   }
 
-  static [typeId] = NodeIds.Structure as const;
+  readonly [typeId] = NodeIds.Structure as const;
+  static readonly [typeId] = NodeIds.Structure as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     if (this.body === undefined) {
@@ -73,7 +74,7 @@ export class ExtensionObject implements ExtensionObjectOptions {
       encoder.writeByteString(this.body);
     } 
     else {
-      const _typeId = (this.body as unknown as {constructor: {[typeId]: NodeIds}}).constructor[typeId];
+      const _typeId = this.body[typeId];
       encoder.writeType(NodeId.parse(_typeId));
       encoder.writeByte(Encoding.ByteString);
       encoder.writeByteString(BinaryDataEncoder.encodeType(this.body));
@@ -128,5 +129,5 @@ function decodeBody(typeId: NodeId, body: Uint8Array): EncodableType {
     throw new UaError({code: StatusCode.BadDecodingError});
   }
 
-  return BinaryDataDecoder.decodeType(body, decodable);
+  return BinaryDataDecoder.decodeType<EncodableType>(body, decodable);
 }

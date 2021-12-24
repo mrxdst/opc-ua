@@ -232,7 +232,8 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
 
   static readonly Guid: new (options: GuidNodeIdOptions) => NodeId<NodeIdType.Guid>;
 
-  static [typeId] = NodeIds.NodeId as const;
+  readonly [typeId] = NodeIds.NodeId as const;
+  static readonly [typeId] = NodeIds.NodeId as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     switch (this.identifierType) {

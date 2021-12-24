@@ -112,7 +112,8 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     });
   }
 
-  static [typeId] = NodeIds.ExpandedNodeId as const;
+  readonly [typeId] = NodeIds.ExpandedNodeId as const;
+  static readonly [typeId] = NodeIds.ExpandedNodeId as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     const nodeId = new NodeId({

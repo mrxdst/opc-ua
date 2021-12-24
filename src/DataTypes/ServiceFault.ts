@@ -19,7 +19,8 @@ export class ServiceFault extends UaError implements ServiceFaultOptions {
     this.responseHeader = options.responseHeader;
   }
   
-  static [typeId] = NodeIds.ServiceFault_Encoding_DefaultBinary as const;
+  readonly [typeId] = NodeIds.ServiceFault_Encoding_DefaultBinary as const;
+  static readonly [typeId] = NodeIds.ServiceFault_Encoding_DefaultBinary as const;
   
   [encode](encoder: BinaryDataEncoder): void {
     encoder.writeType(this.responseHeader);

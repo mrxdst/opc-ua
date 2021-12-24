@@ -94,7 +94,8 @@ export class DataValue implements DataValueOptions {
     this.serverPicoSeconds === undefined;
   }
 
-  static [typeId] = NodeIds.DataValue as const;
+  readonly [typeId] = NodeIds.DataValue as const;
+  static readonly [typeId] = NodeIds.DataValue as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     let encodingMask = 0;

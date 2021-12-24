@@ -153,6 +153,7 @@ async function createTypes(): Promise<void> {
     }
 
     members.push(createTypeIdProperty());
+    members.push(createStaticTypeIdProperty());
     members.push(createEncodeFunction());
     members.push(createDecodeFunction());
 
@@ -301,7 +302,27 @@ async function createTypes(): Promise<void> {
     function createTypeIdProperty(): ts.PropertyDeclaration {
       return factory.createPropertyDeclaration(
         undefined,
-        [factory.createModifier(ts.SyntaxKind.StaticKeyword)],
+        [factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
+        factory.createComputedPropertyName(factory.createIdentifier('typeId')),
+        undefined,
+        undefined,
+        factory.createAsExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('NodeIds'),
+            factory.createIdentifier(`${name}_Encoding_DefaultBinary`)
+          ),
+          factory.createTypeReferenceNode(
+            factory.createIdentifier("const"),
+            undefined
+          )
+        )
+      );
+    }
+
+    function createStaticTypeIdProperty(): ts.PropertyDeclaration {
+      return factory.createPropertyDeclaration(
+        undefined,
+        [factory.createModifier(ts.SyntaxKind.StaticKeyword), factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
         factory.createComputedPropertyName(factory.createIdentifier('typeId')),
         undefined,
         undefined,

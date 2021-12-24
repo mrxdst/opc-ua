@@ -76,7 +76,8 @@ export class Guid implements GuidOptions {
     this.data4.reduce((acc, cur) => acc += cur, 0) === 0;
   }
 
-  static [typeId] = NodeIds.Guid as const;
+  readonly [typeId] = NodeIds.Guid as const;
+  static readonly [typeId] = NodeIds.Guid as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     if (!isUInt32(this.data1) || !isUInt16(this.data2) || !isUInt16(this.data3) || this.data4.byteLength !== 8) {

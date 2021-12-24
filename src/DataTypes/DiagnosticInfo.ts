@@ -112,7 +112,8 @@ export class DiagnosticInfo implements DiagnosticInfoOptions {
     this.innerDiagnosticInfo === undefined;
   }
 
-  static [typeId] = NodeIds.DiagnosticInfo as const;
+  readonly [typeId] = NodeIds.DiagnosticInfo as const;
+  static readonly [typeId] = NodeIds.DiagnosticInfo as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     let mask = 0x00;

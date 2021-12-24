@@ -102,7 +102,8 @@ export class StatusCode implements StatusCodeOptions {
     return new StatusCode({code});
   }
 
-  static [typeId] = NodeIds.StatusCode as const;
+  readonly [typeId] = NodeIds.StatusCode as const;
+  static readonly [typeId] = NodeIds.StatusCode as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     encoder.writeUInt32(this.code);

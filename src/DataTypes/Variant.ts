@@ -276,7 +276,8 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
 
   static readonly NdArray: new <T extends VariantTypeId = VariantTypeId>(options: NdArrayVariantOptions<T>) => Variant<VariantType.NdArray, T>;
 
-  static [typeId] = NodeIds.BaseDataType as const;
+  readonly [typeId] = NodeIds.BaseDataType as const;
+  static readonly [typeId] = NodeIds.BaseDataType as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     if (this.typeId === VariantTypeId.Null) {

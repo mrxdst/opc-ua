@@ -42,7 +42,8 @@ export class LocalizedText implements LocalizedTextOptions {
     return !this.locale && !this.text;
   }
 
-  static [typeId] = NodeIds.LocalizedText as const;
+  readonly [typeId] = NodeIds.LocalizedText as const;
+  static readonly [typeId] = NodeIds.LocalizedText as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     let mask = 0x00;

@@ -142,7 +142,7 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
   sendRequest(request: Request): Promise<Response> {
     return this.#sendQueue.add(async () => {
 
-      const _typeId = (request as unknown as {constructor: {[typeId]: NodeIds}}).constructor[typeId];
+      const _typeId = request[typeId];
 
       debug(`Sending request: ${NodeIds[_typeId] ?? _typeId as number}`);
 

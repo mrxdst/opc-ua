@@ -12,6 +12,8 @@ import { LocalizedText } from './DataTypes/LocalizedText';
 import { DataValue } from './DataTypes/DataValue';
 import { Variant } from './DataTypes/Variant';
 import { DiagnosticInfo } from './DataTypes/DiagnosticInfo';
+import { NodeIds } from './DataTypes/NodeIds';
+import { typeId } from './symbols';
 
 export enum OpenState {
   Closed,
@@ -28,10 +30,12 @@ export enum SessionState {
 }
 
 export type Request = Encodable & {
-  requestHeader: RequestHeader
+  [typeId]: NodeIds;
+  requestHeader: RequestHeader;
 };
 
 export type Response = Encodable & {
+  [typeId]: NodeIds;
   responseHeader: ResponseHeader
 };
 

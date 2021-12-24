@@ -60,7 +60,8 @@ export class QualifiedName implements QualifiedName {
     });
   }
 
-  static [typeId] = NodeIds.QualifiedName as const;
+  readonly [typeId] = NodeIds.QualifiedName as const;
+  static readonly [typeId] = NodeIds.QualifiedName as const;
 
   [encode](encoder: BinaryDataEncoder): void {
     encoder.writeUInt16(this.namespaceIndex);
