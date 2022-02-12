@@ -389,25 +389,31 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
   }
 }
 
+class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
+  constructor(options: ScalarVariantOptions<T>) {
+    super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
+  }
+}
+
+class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
+  constructor(options: ArrayVariantOptions<T>) {
+    super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
+  }
+}
+
+class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
+  constructor(options: NdArrayVariantOptions<T>) {
+    super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Variant {
-  export const Scalar = class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
-    constructor(options: ScalarVariantOptions<T>) {
-      super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
-    }
-  };
+  export const Scalar = ScalarVariant;
 
-  export const Array = class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
-    constructor(options: ArrayVariantOptions<T>) {
-      super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
-    }
-  };
+  export const Array = ArrayVariant;
 
-  export const NdArray = class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
-    constructor(options: NdArrayVariantOptions<T>) {
-      super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
-    }
-  };
+  export const NdArray = NdArrayVariant;
 }
 
 export function writeVariantValue<T extends VariantTypeId = VariantTypeId>(encoder: BinaryDataEncoder, typeId: T, value: VariantValueType<T>): void {

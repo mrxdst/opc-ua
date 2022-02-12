@@ -398,29 +398,37 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
   }
 }
 
+class NumericNodeId extends NodeId<NodeIdType.Numeric> {
+  constructor(options: NumericNodeIdOptions) {
+    super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
+  }
+}
+
+class StringNodeId extends NodeId<NodeIdType.String> {
+  constructor(options: StringNodeIdOptions) {
+    super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
+  }
+}
+
+class ByteStringNodeId extends NodeId<NodeIdType.ByteString> {
+  constructor(options: ByteStringNodeIdOptions) {
+    super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
+  }
+}
+
+class GuidNodeId extends NodeId<NodeIdType.Guid> {
+  constructor(options: GuidNodeIdOptions) {
+    super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace NodeId {
-  export const Numeric = class NumericNodeId extends NodeId<NodeIdType.Numeric> {
-    constructor(options: NumericNodeIdOptions) {
-      super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
-    }
-  };
+  export const Numeric = NumericNodeId;
 
-  export const String = class StringNodeId extends NodeId<NodeIdType.String> {
-    constructor(options: StringNodeIdOptions) {
-      super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
-    }
-  };
+  export const String = StringNodeId;
 
-  export const ByteString = class ByteStringNodeId extends NodeId<NodeIdType.ByteString> {
-    constructor(options: ByteStringNodeIdOptions) {
-      super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
-    }
-  };
+  export const ByteString = ByteStringNodeId;
 
-  export const Guid = class GuidNodeId extends NodeId<NodeIdType.Guid> {
-    constructor(options: GuidNodeIdOptions) {
-      super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
-    }
-  };
+  export const Guid = GuidNodeId;
 }
