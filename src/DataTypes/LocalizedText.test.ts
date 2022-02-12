@@ -1,5 +1,5 @@
-import { LocalizedText } from './LocalizedText';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
+import { LocalizedText } from './LocalizedText.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();

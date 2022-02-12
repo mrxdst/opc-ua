@@ -1,5 +1,5 @@
-import TypedEmitter from 'typed-emitter';
-import { UaError } from '../UaError';
+import { TypedEmitter } from 'tiny-typed-emitter';
+import { UaError } from '../UaError.js';
 
 export interface ClientTransportProtocolEvents {
   message: (data: Uint8Array) => void;

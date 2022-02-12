@@ -1,6 +1,6 @@
-import { DiagnosticInfo } from './DiagnosticInfo';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { StatusCode } from './StatusCode';
+import { DiagnosticInfo } from './DiagnosticInfo.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { StatusCode } from './StatusCode.js';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();

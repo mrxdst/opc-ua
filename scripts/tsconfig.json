@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "module": "commonjs",
+    "module": "ES2020",
     "moduleResolution": "node"
   }
 }

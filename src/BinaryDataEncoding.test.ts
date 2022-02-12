@@ -1,5 +1,5 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding';
-import { Guid } from './DataTypes/Guid';
+import { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding.js';
+import { Guid } from './DataTypes/Guid.js';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();

@@ -1,10 +1,10 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
-import { isUInt16 } from '../util';
-import { NodeIds } from './NodeIds';
-import { UInt16 } from './Primitives';
-import { StatusCode } from './StatusCode';
-import { Variant } from './Variant';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { isUInt16 } from '../util.js';
+import { NodeIds } from './NodeIds.js';
+import { UInt16 } from './Primitives.js';
+import { StatusCode } from './StatusCode.js';
+import { Variant } from './Variant.js';
 
 const valueMask = 0x01;
 const statusCodeMask = 0x02;

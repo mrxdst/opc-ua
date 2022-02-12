@@ -1,6 +1,6 @@
-import { Guid } from './Guid';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { UaError } from '../UaError';
+import { Guid } from './Guid.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { UaError } from '../UaError.js';
 
 const testStr = '72962B91-FA75-4AE6-8D28-B404DC7DAF63';
 

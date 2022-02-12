@@ -1,11 +1,10 @@
 import PQueue from 'p-queue';
-import TypedEmitter from 'typed-emitter';
+import { TypedEmitter } from 'tiny-typed-emitter';
 import net from 'net';
-import { EventEmitter } from 'events';
-import { isNode } from '../util';
-import { ClientTransportProtocol, ClientTransportProtocolEvents } from './types';
-import { UaError } from '../UaError';
-import { StatusCode } from '../DataTypes/StatusCode';
+import { isNode } from '../util.js';
+import { ClientTransportProtocol, ClientTransportProtocolEvents } from './types.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
 
 export interface ClientTcpTransportOptions {
   host: string;
@@ -13,14 +12,14 @@ export interface ClientTcpTransportOptions {
   openTimeout: number;
 }
 
-export class ClientTcpTransport extends (EventEmitter as new () => TypedEmitter<ClientTransportProtocolEvents>) implements ClientTransportProtocol, ClientTcpTransportOptions {
+export class ClientTcpTransport extends TypedEmitter<ClientTransportProtocolEvents> implements ClientTransportProtocol, ClientTcpTransportOptions {
   get host(): string { return this.#host; }
   #host: string;
   get port(): number { return this.#port; }
   #port: number;
   openTimeout: number;
 
-  #socket?: net.Socket;
+  #socket: net.Socket | undefined;
   #openQueue = new PQueue({concurrency: 1});
 
   constructor (options: ClientTcpTransportOptions) {

@@ -1,7 +1,7 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
-import { NodeIds } from './NodeIds';
-import { UaString } from './Primitives';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { NodeIds } from './NodeIds.js';
+import { UaString } from './Primitives.js';
 
 const localeMask = 0x01;
 const textMask = 0x02;

@@ -1,6 +1,6 @@
-import { FindServersOnNetworkRequest, FindServersOnNetworkResponse, FindServersRequest, FindServersResponse, GetEndpointsRequest, GetEndpointsResponse, RequestHeader } from '../DataTypes/Generated';
-import { ClientSecureConversation } from '../SecureConversation/ClientSecureConversation';
-import { Request } from '../types';
+import { FindServersOnNetworkRequest, FindServersOnNetworkResponse, FindServersRequest, FindServersResponse, GetEndpointsRequest, GetEndpointsResponse, RequestHeader } from '../DataTypes/Generated.js';
+import { ClientSecureConversation } from '../SecureConversation/ClientSecureConversation.js';
+import { Request } from '../types.js';
 
 /** This Service returns the Servers known to a Server or Discovery Server. */
 export async function findServers(endpointUrl: string, request?: FindServersRequest): Promise<FindServersResponse> {

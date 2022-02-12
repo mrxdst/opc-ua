@@ -1,11 +1,11 @@
-import { NodeId } from './NodeId';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { UaString, UInt32 } from './Primitives';
-import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols';
-import { isUInt32 } from '../util';
-import { UaError } from '../UaError';
-import { StatusCode } from './StatusCode';
-import { NodeIds } from './NodeIds';
+import { NodeId } from './NodeId.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { UaString, UInt32 } from './Primitives.js';
+import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols.js';
+import { isUInt32 } from '../util.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from './StatusCode.js';
+import { NodeIds } from './NodeIds.js';
 
 export interface ExpandedNodeIdOptions {
   nodeId?: NodeId | undefined;
@@ -77,6 +77,10 @@ export class ExpandedNodeId implements ExpandedNodeIdOptions {
     } as NodeId);
 
     return nodeId;
+  }
+
+  static fromNodeId(nodeId: NodeId, namespaceArray: ReadonlyArray<string>): ExpandedNodeId {
+    return nodeId.toExpandedNodeId(namespaceArray);
   }
 
   /** Parses the string to a ExpandedNodeId. */

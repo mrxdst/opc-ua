@@ -1,4 +1,4 @@
-import { AttributeIds } from '../DataTypes/AttributeIds';
+import { AttributeIds } from '../DataTypes/AttributeIds.js';
 import {
   BrowseDescription,
   BrowsePath,
@@ -14,11 +14,11 @@ import {
   RelativePath,
   RelativePathElement,
   TranslateBrowsePathsToNodeIdsRequest
-} from '../DataTypes/Generated';
-import { NodeId } from '../DataTypes/NodeId';
-import { NodeIds } from '../DataTypes/NodeIds';
-import { QualifiedName } from '../DataTypes/QualifiedName';
-import { UaClient } from './UaClient';
+} from '../DataTypes/Generated.js';
+import { NodeId } from '../DataTypes/NodeId.js';
+import { NodeIds } from '../DataTypes/NodeIds.js';
+import { QualifiedName } from '../DataTypes/QualifiedName.js';
+import { UaClient } from './UaClient.js';
 
 const endpointUrl = 'opc.tcp://localhost:4840';
 //const endpointUrl = 'opc.ws://localhost:8080';

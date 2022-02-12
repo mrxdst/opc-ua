@@ -1,8 +1,8 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { ByteString, UaString, UInt32 } from '../DataTypes/Primitives';
-import { StatusCode } from '../DataTypes/StatusCode';
-import { decode, encode } from '../symbols';
-import { UaError } from '../UaError';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { ByteString, UaString, UInt32 } from '../DataTypes/Primitives.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
+import { decode, encode } from '../symbols.js';
+import { UaError } from '../UaError.js';
 
 
 export enum MessageType {
@@ -31,13 +31,13 @@ export interface MessageOptions {
   /** A unique identifier for the SecureChannel assigned by the Server. */
   secureChannelId: UInt32;
   /** A unique identifier for the SecureChannel SecurityToken used to secure the Message. */
-  tokenId?: UInt32;
+  tokenId?: UInt32 | undefined;
   /** The URI of the Security Policy used to secure the Message. */
-  securityPolicyUri?: UaString;
+  securityPolicyUri?: UaString | undefined;
   /** The X.509 v3 Certificate assigned to the sending application Instance. */
-  senderCertificate?: ByteString;
+  senderCertificate?: ByteString | undefined;
   /** The thumbprint of the X.509 v3 Certificate assigned to the receiving application Instance. */
-  receiverCertificateThumbprint?: ByteString;
+  receiverCertificateThumbprint?: ByteString | undefined;
   /** A monotonically increasing sequence number assigned by the sender to each MessageChunk sent over the SecureChannel. */
   sequenceNumber: UInt32;
   /** An identifier assigned by the Client to OPC UA request Message. All MessageChunks for the request and the associated response use the same identifier. */
@@ -54,13 +54,13 @@ export class Message implements MessageOptions {
   /** A unique identifier for the SecureChannel assigned by the Server. */
   secureChannelId: UInt32;
   /** A unique identifier for the SecureChannel SecurityToken used to secure the Message. */
-  tokenId?: UInt32;
+  tokenId: UInt32 | undefined;
   /** The URI of the Security Policy used to secure the Message. */
-  securityPolicyUri?: UaString;
+  securityPolicyUri: UaString | undefined;
   /** The X.509 v3 Certificate assigned to the sending application Instance. */
-  senderCertificate?: ByteString;
+  senderCertificate: ByteString | undefined;
   /** The thumbprint of the X.509 v3 Certificate assigned to the receiving application Instance. */
-  receiverCertificateThumbprint?: ByteString;
+  receiverCertificateThumbprint: ByteString | undefined;
   /** A monotonically increasing sequence number assigned by the sender to each MessageChunk sent over the SecureChannel. */
   sequenceNumber: UInt32;
   /** An identifier assigned by the Client to OPC UA request Message. All MessageChunks for the request and the associated response use the same identifier. */

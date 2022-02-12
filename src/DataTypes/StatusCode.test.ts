@@ -1,4 +1,4 @@
-import { StatusCode } from './StatusCode';
+import { StatusCode } from './StatusCode.js';
 
 test('statusCodeSeverity', () => {
   expect(StatusCode.BadInternalError.isGood()).toBe(false);

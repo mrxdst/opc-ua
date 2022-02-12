@@ -1,35 +1,35 @@
-export { findServers, findServersOnNetwork, getEndpoints } from './Client/discovery';
+export { findServers, findServersOnNetwork, getEndpoints } from './Client/discovery.js';
 
-export type { MonitoredItem } from './Client/MonitoredItem';
+export type { MonitoredItem } from './Client/MonitoredItem.js';
 
-export type { Subscription } from './Client/Subscription';
+export type { Subscription } from './Client/Subscription.js';
 
-export { UaClient } from './Client/UaClient';
-export type { UaClientOptions } from './Client/UaClient';
+export { UaClient } from './Client/UaClient.js';
+export type { UaClientOptions } from './Client/UaClient.js';
 
-export { AttributeIds } from './DataTypes/AttributeIds';
+export { AttributeIds } from './DataTypes/AttributeIds.js';
 
-export { DataValue } from './DataTypes/DataValue';
-export type { DataValueOptions } from './DataTypes/DataValue';
+export { DataValue } from './DataTypes/DataValue.js';
+export type { DataValueOptions } from './DataTypes/DataValue.js';
 
-export { DiagnosticInfo } from './DataTypes/DiagnosticInfo';
-export type { DiagnosticInfoOptions } from './DataTypes/DiagnosticInfo';
+export { DiagnosticInfo } from './DataTypes/DiagnosticInfo.js';
+export type { DiagnosticInfoOptions } from './DataTypes/DiagnosticInfo.js';
 
-export { ExpandedNodeId } from './DataTypes/ExpandedNodeId';
-export type { ExpandedNodeIdOptions } from './DataTypes/ExpandedNodeId';
+export { ExpandedNodeId } from './DataTypes/ExpandedNodeId.js';
+export type { ExpandedNodeIdOptions } from './DataTypes/ExpandedNodeId.js';
 
-export { ExtensionObject } from './DataTypes/ExtensionObject';
-export type { ExtensionObjectOptions } from './DataTypes/ExtensionObject';
+export { ExtensionObject } from './DataTypes/ExtensionObject.js';
+export type { ExtensionObjectOptions } from './DataTypes/ExtensionObject.js';
 
-export * from './DataTypes/Generated';
+export * from './DataTypes/Generated.js';
 
-export { Guid } from './DataTypes/Guid';
-export type { GuidOptions } from './DataTypes/Guid';
+export { Guid } from './DataTypes/Guid.js';
+export type { GuidOptions } from './DataTypes/Guid.js';
 
-export { LocalizedText } from './DataTypes/LocalizedText';
-export type { LocalizedTextOptions } from './DataTypes/LocalizedText';
+export { LocalizedText } from './DataTypes/LocalizedText.js';
+export type { LocalizedTextOptions } from './DataTypes/LocalizedText.js';
 
-export { NodeId } from './DataTypes/NodeId';
+export { NodeId } from './DataTypes/NodeId.js';
 export type {
   NodeIdValueType,
   SimpleNodeIdType,
@@ -38,23 +38,23 @@ export type {
   StringNodeIdOptions,
   ByteStringNodeIdOptions,
   GuidNodeIdOptions
-} from './DataTypes/NodeId';
+} from './DataTypes/NodeId.js';
 
-export { NodeIds } from './DataTypes/NodeIds';
+export { NodeIds } from './DataTypes/NodeIds.js';
 
-export * from './DataTypes/Primitives';
+export * from './DataTypes/Primitives.js';
 
-export { QualifiedName } from './DataTypes/QualifiedName';
-export type { QualifiedNameOptions } from './DataTypes/QualifiedName';
+export { QualifiedName } from './DataTypes/QualifiedName.js';
+export type { QualifiedNameOptions } from './DataTypes/QualifiedName.js';
 
-export { ServerCapabilities } from './DataTypes/ServerCapabilities';
+export { ServerCapabilities } from './DataTypes/ServerCapabilities.js';
 
-export { ServiceFault } from './DataTypes/ServiceFault';
-export type { ServiceFaultOptions } from './DataTypes/ServiceFault';
+export { ServiceFault } from './DataTypes/ServiceFault.js';
+export type { ServiceFaultOptions } from './DataTypes/ServiceFault.js';
 
-export { StatusCode, StatusCodeSeverity } from './DataTypes/StatusCode';
+export { StatusCode, StatusCodeSeverity } from './DataTypes/StatusCode.js';
 
-export { Variant, VariantTypeId, VariantType } from './DataTypes/Variant';
+export { Variant, VariantTypeId, VariantType } from './DataTypes/Variant.js';
 export type {
   VariantValueType,
   VariantScalarType,
@@ -65,14 +65,14 @@ export type {
   ScalarVariantOptions,
   ArrayVariantOptions,
   NdArrayVariantOptions
-} from './DataTypes/Variant';
+} from './DataTypes/Variant.js';
 
-export { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding';
-export type { Encodable, Decodable } from './BinaryDataEncoding';
+export { BinaryDataDecoder, BinaryDataEncoder } from './BinaryDataEncoding.js';
+export type { Encodable, Decodable } from './BinaryDataEncoding.js';
 
-export { UaError } from './UaError';
+export { UaError } from './UaError.js';
 
-export type { EncodableType, DecodableType } from './types';
+export type { EncodableType, DecodableType } from './types.js';
 
 export {
   isByte,
@@ -85,4 +85,4 @@ export {
   isUInt64,
   uaStringToByteString,
   byteStringToUaString,
-} from './util';
+} from './util.js';

@@ -1,11 +1,11 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { UInt16, UInt32 } from './Primitives';
-import { isUInt16, isUInt32 } from '../util';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { UInt16, UInt32 } from './Primitives.js';
+import { isUInt16, isUInt32 } from '../util.js';
 import { v4 as uuidv4 } from 'uuid';
-import { decode, encode, typeId } from '../symbols';
-import { UaError } from '../UaError';
-import { StatusCode } from './StatusCode';
-import { NodeIds } from './NodeIds';
+import { decode, encode, typeId } from '../symbols.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from './StatusCode.js';
+import { NodeIds } from './NodeIds.js';
 
 export interface GuidOptions {
   data1?: UInt32 | undefined;

@@ -1,11 +1,10 @@
-import TypedEmitter from 'typed-emitter';
-import { EventEmitter } from 'events';
+import { TypedEmitter } from 'tiny-typed-emitter';
 import PQueue from 'p-queue';
-import pDefer from 'p-defer';
-import { BinaryDataDecoder, BinaryDataEncoder, Decodable } from '../BinaryDataEncoding';
-import { NodeId } from '../DataTypes/NodeId';
-import { NodeIds } from '../DataTypes/NodeIds';
-import { UInt32 } from '../DataTypes/Primitives';
+import pDefer, { DeferredPromise } from 'p-defer';
+import { BinaryDataDecoder, BinaryDataEncoder, Decodable } from '../BinaryDataEncoding.js';
+import { NodeId } from '../DataTypes/NodeId.js';
+import { NodeIds } from '../DataTypes/NodeIds.js';
+import { UInt32 } from '../DataTypes/Primitives.js';
 import {
   ChannelSecurityToken,
   OpenSecureChannelRequest,
@@ -15,19 +14,19 @@ import {
   RequestHeader,
   SecurityTokenRequestType,
   MessageSecurityMode
-} from '../DataTypes/Generated';
-import { UaError } from '../UaError';
-import { chunkBody } from './util';
-import { ExpandedNodeId } from '../DataTypes/ExpandedNodeId';
-import { typeId } from '../symbols';
-import { ClientConnectionProtocol } from '../TransportProtocol/ConnectionProtocol/ClientConnectionProtocol';
-import { OpenState, Request, Response } from '../types';
-import { IsFinal, Message, MessageType } from './Message';
-import { AbortMessageBody } from './AbortMessageBody';
-import { getTypeFromTypeId, integerIdGenerator } from '../util';
+} from '../DataTypes/Generated.js';
+import { UaError } from '../UaError.js';
+import { chunkBody } from './util.js';
+import { ExpandedNodeId } from '../DataTypes/ExpandedNodeId.js';
+import { typeId } from '../symbols.js';
+import { ClientConnectionProtocol } from '../TransportProtocol/ConnectionProtocol/ClientConnectionProtocol.js';
+import { OpenState, Request, Response } from '../types.js';
+import { IsFinal, Message, MessageType } from './Message.js';
+import { AbortMessageBody } from './AbortMessageBody.js';
+import { getTypeFromTypeId, integerIdGenerator } from '../util.js';
 import createDebug from 'debug';
-import { ServiceFault } from '../DataTypes/ServiceFault';
-import { StatusCode } from '../DataTypes/StatusCode';
+import { ServiceFault } from '../DataTypes/ServiceFault.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
 
 const debug = createDebug('opc-ua:ClientSecureConversation');
 
@@ -43,7 +42,7 @@ export interface ClientSecureConversationOptions {
   openTimeout: UInt32;
 }
 
-export class ClientSecureConversation extends (EventEmitter as new () => TypedEmitter<ClientSecureConversationEvents>) implements ClientSecureConversationOptions {
+export class ClientSecureConversation extends TypedEmitter<ClientSecureConversationEvents> implements ClientSecureConversationOptions {
   get endpointUrl(): string { return this.#endpointUrl; }
   #endpointUrl: string;
   get securityMode(): MessageSecurityMode { return this.#securityMode; }
@@ -63,14 +62,14 @@ export class ClientSecureConversation extends (EventEmitter as new () => TypedEm
   #requestId = integerIdGenerator();
   #sequenceNumber = integerIdGenerator();
   
-  #securityToken?: ChannelSecurityToken;
+  #securityToken: ChannelSecurityToken | undefined;
 
   #renewSecurityTokenTimer?: number | NodeJS.Timeout;
   #receivedSequenceNumber: UInt32 | undefined;
   #receivedMessages = new Map<UInt32, Message[]>();
   #openSecureChannelQueue = new PQueue({concurrency: 1});
   #sendQueue = new PQueue({concurrency: 10});
-  #deferredResponses = new Map<UInt32, pDefer.DeferredPromise<Response>>();
+  #deferredResponses = new Map<UInt32, DeferredPromise<Response>>();
 
   constructor(options: ClientSecureConversationOptions) {
     super();

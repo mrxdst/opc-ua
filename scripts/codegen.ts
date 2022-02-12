@@ -1,9 +1,14 @@
-import ts, { factory } from 'typescript';
+import ts from 'typescript';
 import fs from 'fs-extra';
 import path from 'path';
-import parseCsv from 'csv-parse/lib/sync';
+import { fileURLToPath } from 'url';
+import { parse as parseCsv } from 'csv-parse/sync';
 import camelcase from 'camelcase';
 import { JSDOM } from 'jsdom';
+
+const { factory } = ts;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 process.on('unhandledRejection', e => {throw e;});
 
@@ -292,8 +297,8 @@ async function createTypes(): Promise<void> {
           undefined,
           [factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
           field.propertyName,
-          field.nullable ? factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
-          factory.createTypeReferenceNode(field.mappedTypeName),
+          undefined,
+          factory.createTypeReferenceNode(field.nullable ? `${field.mappedTypeName} | undefined` : field.mappedTypeName),
           undefined
         );
       });
@@ -563,17 +568,17 @@ async function createTypes(): Promise<void> {
   const header = 
 `/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DataValue } from './DataValue';
-import { DiagnosticInfo } from './DiagnosticInfo';
-import { ExpandedNodeId } from './ExpandedNodeId';
-import { ExtensionObject } from './ExtensionObject';
-import { Guid } from './Guid';
-import { LocalizedText } from './LocalizedText';
-import { NodeId } from './NodeId';
-import { NodeIds } from './NodeIds';
-import { QualifiedName } from './QualifiedName';
-import { Variant } from './Variant';
-import { StatusCode } from './StatusCode';
+import { DataValue } from './DataValue.js';
+import { DiagnosticInfo } from './DiagnosticInfo.js';
+import { ExpandedNodeId } from './ExpandedNodeId.js';
+import { ExtensionObject } from './ExtensionObject.js';
+import { Guid } from './Guid.js';
+import { LocalizedText } from './LocalizedText.js';
+import { NodeId } from './NodeId.js';
+import { NodeIds } from './NodeIds.js';
+import { QualifiedName } from './QualifiedName.js';
+import { Variant } from './Variant.js';
+import { StatusCode } from './StatusCode.js';
 import {
   SByte,
   Byte,
@@ -586,9 +591,9 @@ import {
   Double,
   UaString,
   ByteString
-} from './Primitives';
-import { BinaryDataEncoder, BinaryDataDecoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
+} from './Primitives.js';
+import { BinaryDataEncoder, BinaryDataDecoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
 `;
 
   await printNodes(path.join(srcPath, 'DataTypes', 'Generated.ts'), nodes, header);

@@ -1,13 +1,13 @@
-import { NodeId } from './NodeId';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { ByteString, XmlElement } from './Primitives';
-import { decode, encode } from '../symbols';
-import { UaError } from '../UaError';
-import { StatusCode } from './StatusCode';
-import { NodeIds } from './NodeIds';
-import { EncodableType } from '../types';
-import { typeId } from '../symbols';
-import { getTypeFromTypeId } from '../util';
+import { NodeId } from './NodeId.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { ByteString, XmlElement } from './Primitives.js';
+import { decode, encode } from '../symbols.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from './StatusCode.js';
+import { NodeIds } from './NodeIds.js';
+import { EncodableType } from '../types.js';
+import { typeId } from '../symbols.js';
+import { getTypeFromTypeId } from '../util.js';
 
 enum Encoding {
   NoBody = 0x00,

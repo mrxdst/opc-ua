@@ -1,8 +1,8 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
-import { UaError } from '../UaError';
-import { ResponseHeader } from './Generated';
-import { NodeIds } from './NodeIds';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { UaError } from '../UaError.js';
+import { ResponseHeader } from './Generated.js';
+import { NodeIds } from './NodeIds.js';
 
 export interface ServiceFaultOptions {
   responseHeader: ResponseHeader;

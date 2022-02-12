@@ -1,6 +1,6 @@
-import { ExpandedNodeId } from './ExpandedNodeId';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { NodeId } from './NodeId';
+import { ExpandedNodeId } from './ExpandedNodeId.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { NodeId } from './NodeId.js';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();

@@ -1,4 +1,4 @@
-import { BinaryDataDecoder } from '../BinaryDataEncoding';
+import { BinaryDataDecoder } from '../BinaryDataEncoding.js';
 
 export function chunkBody(options: {
   body: Uint8Array;

@@ -1,14 +1,14 @@
-import { Variant, VariantTypeId, readVariantValue, writeVariantValue, VariantType } from './Variant';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { Guid } from './Guid';
-import { NodeId } from './NodeId';
-import { StatusCode } from './StatusCode';
-import { ExtensionObject } from './ExtensionObject';
-import { ExpandedNodeId } from './ExpandedNodeId';
-import { QualifiedName } from './QualifiedName';
-import { LocalizedText } from './LocalizedText';
-import { DataValue } from './DataValue';
-import { DiagnosticInfo } from './DiagnosticInfo';
+import { Variant, VariantTypeId, readVariantValue, writeVariantValue, VariantType } from './Variant.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { Guid } from './Guid.js';
+import { NodeId } from './NodeId.js';
+import { StatusCode } from './StatusCode.js';
+import { ExtensionObject } from './ExtensionObject.js';
+import { ExpandedNodeId } from './ExpandedNodeId.js';
+import { QualifiedName } from './QualifiedName.js';
+import { LocalizedText } from './LocalizedText.js';
+import { DataValue } from './DataValue.js';
+import { DiagnosticInfo } from './DiagnosticInfo.js';
 import ndarray from 'ndarray';
 
 test('Encode/Decode', () => {

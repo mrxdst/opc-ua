@@ -1,7 +1,7 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding';
-import { UaString } from '../../DataTypes/Primitives';
-import { decode, encode } from '../../symbols';
-import { uaStringToByteString } from '../../util';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding.js';
+import { UaString } from '../../DataTypes/Primitives.js';
+import { decode, encode } from '../../symbols.js';
+import { uaStringToByteString } from '../../util.js';
 
 export interface ReverseHelloMessageBodyOptions {
   /** The ApplicationUri of the Server which sent the Message. */

@@ -1,18 +1,18 @@
 import ndarray, { NdArray } from 'ndarray';
-import { BinaryDataEncoder, BinaryDataDecoder } from '../BinaryDataEncoding';
-import { DataValue } from './DataValue';
-import { DiagnosticInfo } from './DiagnosticInfo';
-import { ExpandedNodeId } from './ExpandedNodeId';
-import { ExtensionObject } from './ExtensionObject';
-import { LocalizedText } from './LocalizedText';
-import { ByteString, Double, Float, Int16, Int64, Byte, Int32, SByte, UaString, UInt16, UInt32, UInt64, XmlElement } from './Primitives';
-import { Guid } from './Guid';
-import { StatusCode } from './StatusCode';
-import { NodeId } from './NodeId';
-import { QualifiedName } from './QualifiedName';
-import { decode, encode, typeId } from '../symbols';
-import { UaError } from '../UaError';
-import { NodeIds } from './NodeIds';
+import { BinaryDataEncoder, BinaryDataDecoder } from '../BinaryDataEncoding.js';
+import { DataValue } from './DataValue.js';
+import { DiagnosticInfo } from './DiagnosticInfo.js';
+import { ExpandedNodeId } from './ExpandedNodeId.js';
+import { ExtensionObject } from './ExtensionObject.js';
+import { LocalizedText } from './LocalizedText.js';
+import { ByteString, Double, Float, Int16, Int64, Byte, Int32, SByte, UaString, UInt16, UInt32, UInt64, XmlElement } from './Primitives.js';
+import { Guid } from './Guid.js';
+import { StatusCode } from './StatusCode.js';
+import { NodeId } from './NodeId.js';
+import { QualifiedName } from './QualifiedName.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { UaError } from '../UaError.js';
+import { NodeIds } from './NodeIds.js';
 
 const arrayDimensionsMask = 0x40;
 const arrayValuesMask = 0x80;
@@ -270,11 +270,15 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
     return this.typeId === VariantTypeId.Null;
   }
 
-  static readonly Scalar: new <T extends VariantTypeId = VariantTypeId>(options: ScalarVariantOptions<T>) => Variant<VariantType.Scalar, T>;
-
-  static readonly Array: new <T extends VariantTypeId = VariantTypeId>(options: ArrayVariantOptions<T>) => Variant<VariantType.Array, T>;
-
-  static readonly NdArray: new <T extends VariantTypeId = VariantTypeId>(options: NdArrayVariantOptions<T>) => Variant<VariantType.NdArray, T>;
+  as<T2 extends T = T, V2 extends V = V>(type: T2 | undefined, typeId: V2 | undefined): Variant<T2, V2> {
+    if (type !== undefined && (this.type as unknown as T2) !== type) {
+      throw new UaError({ code: StatusCode.BadTypeMismatch, reason: 'Invalid Type' });
+    }
+    if (typeId !== undefined && (this.typeId as unknown as V2) !== typeId) {
+      throw new UaError({ code: StatusCode.BadTypeMismatch, reason: 'Invalid TypeId' });
+    }
+    return this as unknown as Variant<T2, V2>;
+  }
 
   readonly [typeId] = NodeIds.BaseDataType as const;
   static readonly [typeId] = NodeIds.BaseDataType as const;
@@ -385,27 +389,26 @@ export class Variant<T extends VariantType = VariantType, V extends VariantTypeI
   }
 }
 
-class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
-  constructor(options: ScalarVariantOptions<T>) {
-    super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
-  }
-}
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace Variant {
+  export const Scalar = class ScalarVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Scalar, T> {
+    constructor(options: ScalarVariantOptions<T>) {
+      super({ type: VariantType.Scalar, typeId: options.typeId, value: options.value });
+    }
+  };
 
-class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
-  constructor(options: ArrayVariantOptions<T>) {
-    super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
-  }
-}
+  export const Array = class ArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.Array, T> {
+    constructor(options: ArrayVariantOptions<T>) {
+      super({ type: VariantType.Array, typeId: options.typeId, value: options.value });
+    }
+  };
 
-class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
-  constructor(options: NdArrayVariantOptions<T>) {
-    super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
-  }
+  export const NdArray = class NdArrayVariant<T extends VariantTypeId = VariantTypeId> extends Variant<VariantType.NdArray, T> {
+    constructor(options: NdArrayVariantOptions<T>) {
+      super({ type: VariantType.NdArray, typeId: options.typeId, value: options.value });
+    }
+  };
 }
-
-(Variant.Scalar as unknown) = ScalarVariant;
-(Variant.Array as unknown) = ArrayVariant;
-(Variant.NdArray as unknown) = NdArrayVariant;
 
 export function writeVariantValue<T extends VariantTypeId = VariantTypeId>(encoder: BinaryDataEncoder, typeId: T, value: VariantValueType<T>): void {
   switch (typeId) {

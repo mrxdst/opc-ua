@@ -1,6 +1,6 @@
-import { QualifiedName } from './QualifiedName';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { UaError } from '../UaError';
+import { QualifiedName } from './QualifiedName.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { UaError } from '../UaError.js';
 
 const longName = [...Array<string>(513)].map(() => '.').join('');
 

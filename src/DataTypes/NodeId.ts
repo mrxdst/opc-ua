@@ -1,12 +1,13 @@
-import { Guid } from './Guid';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { Byte, ByteString, UaString, UInt16, UInt32 } from './Primitives';
-import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols';
-import { byteStringToUaString, isByte, isByteString, isUaString, isUInt16, isUInt32, uaStringToByteString } from '../util';
-import { UaError } from '../UaError';
-import { StatusCode } from './StatusCode';
-import { NodeIds } from './NodeIds';
-import { NodeIdType } from './Generated';
+import { Guid } from './Guid.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { Byte, ByteString, UaString, UInt16, UInt32 } from './Primitives.js';
+import { decode, encode, namespaceUriFlag, serverIndexFlag, typeId } from '../symbols.js';
+import { byteStringToUaString, isByte, isByteString, isUaString, isUInt16, isUInt32, uaStringToByteString } from '../util.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from './StatusCode.js';
+import { NodeIds } from './NodeIds.js';
+import { NodeIdType } from './Generated.js';
+import { ExpandedNodeId } from './ExpandedNodeId.js';
 
 const namespaceUriFlagMask = 0x80;
 const serverIndexFlagMask = 0x40;
@@ -224,13 +225,24 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
     }
   }
 
-  static readonly Numeric: new (options: NumericNodeIdOptions) => NodeId<NodeIdType.Numeric>;
+  toExpandedNodeId(namespaceArray: ReadonlyArray<string>): ExpandedNodeId {
+    const namespaceUri = namespaceArray[this.namespace];
 
-  static readonly String: new (options: StringNodeIdOptions) => NodeId<NodeIdType.String>;
+    if (!namespaceUri) {
+      throw new UaError({ code: StatusCode.BadInvalidArgument, reason: "Namespace index doesn't exist in NamespaceArray" });
+    }
 
-  static readonly ByteString: new (options: ByteStringNodeIdOptions) => NodeId<NodeIdType.ByteString>;
+    const nodeId = new ExpandedNodeId({
+      nodeId: this,
+      namespaceUri
+    });
 
-  static readonly Guid: new (options: GuidNodeIdOptions) => NodeId<NodeIdType.Guid>;
+    return nodeId;
+  }
+
+  static fromExpandedNodeId(expandedNodeId: ExpandedNodeId, namespaceArray: ReadonlyArray<string>): NodeId {
+    return expandedNodeId.toNodeId(namespaceArray);
+  }
 
   readonly [typeId] = NodeIds.NodeId as const;
   static readonly [typeId] = NodeIds.NodeId as const;
@@ -386,31 +398,29 @@ export class NodeId<T extends SimpleNodeIdType = SimpleNodeIdType> {
   }
 }
 
-class NumericNodeId extends NodeId<NodeIdType.Numeric> {
-  constructor(options: NumericNodeIdOptions) {
-    super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
-  }
-}
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace NodeId {
+  export const Numeric = class NumericNodeId extends NodeId<NodeIdType.Numeric> {
+    constructor(options: NumericNodeIdOptions) {
+      super({ identifierType: NodeIdType.Numeric, namespace: options.namespace, value: options.value });
+    }
+  };
 
-class StringNodeId extends NodeId<NodeIdType.String> {
-  constructor(options: StringNodeIdOptions) {
-    super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
-  }
-}
+  export const String = class StringNodeId extends NodeId<NodeIdType.String> {
+    constructor(options: StringNodeIdOptions) {
+      super({ identifierType: NodeIdType.String, namespace: options.namespace, value: options.value });
+    }
+  };
 
-class ByteStringNodeId extends NodeId<NodeIdType.ByteString> {
-  constructor(options: ByteStringNodeIdOptions) {
-    super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
-  }
-}
+  export const ByteString = class ByteStringNodeId extends NodeId<NodeIdType.ByteString> {
+    constructor(options: ByteStringNodeIdOptions) {
+      super({ identifierType: NodeIdType.ByteString, namespace: options.namespace, value: options.value });
+    }
+  };
 
-class GuidNodeId extends NodeId<NodeIdType.Guid> {
-  constructor(options: GuidNodeIdOptions) {
-    super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
-  }
+  export const Guid = class GuidNodeId extends NodeId<NodeIdType.Guid> {
+    constructor(options: GuidNodeIdOptions) {
+      super({ identifierType: NodeIdType.Guid, namespace: options.namespace, value: options.value });
+    }
+  };
 }
-
-(NodeId.Numeric as unknown) = NumericNodeId;
-(NodeId.String as unknown) = StringNodeId;
-(NodeId.ByteString as unknown) = ByteStringNodeId;
-(NodeId.Guid as unknown) = GuidNodeId;

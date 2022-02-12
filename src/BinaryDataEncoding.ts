@@ -1,8 +1,8 @@
-import { Byte, ByteString, Double, Float, Int16, Int32, Int64, SByte, UaString, UInt16, UInt32, UInt64, XmlElement } from './DataTypes/Primitives';
-import { StatusCode } from './DataTypes/StatusCode';
-import { decode, encode } from './symbols';
-import { UaError } from './UaError';
-import { dateToFileTime, fileTimeToDate, uaStringToByteString, byteStringToUaString, isByte, isInt16, isInt32, isInt64, isSByte, isUInt16, isUInt32, isUInt64 } from './util';
+import { Byte, ByteString, Double, Float, Int16, Int32, Int64, SByte, UaString, UInt16, UInt32, UInt64, XmlElement } from './DataTypes/Primitives.js';
+import { StatusCode } from './DataTypes/StatusCode.js';
+import { decode, encode } from './symbols.js';
+import { UaError } from './UaError.js';
+import { dateToFileTime, fileTimeToDate, uaStringToByteString, byteStringToUaString, isByte, isInt16, isInt32, isInt64, isSByte, isUInt16, isUInt32, isUInt64 } from './util.js';
 
 enum DataTypeSize {
   SByte = 1,

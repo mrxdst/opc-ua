@@ -1,6 +1,5 @@
-import TypedEmitter from 'typed-emitter';
-import { EventEmitter } from 'events';
-import { DiagnosticInfo } from '../DataTypes/DiagnosticInfo';
+import { TypedEmitter } from 'tiny-typed-emitter';
+import { DiagnosticInfo } from '../DataTypes/DiagnosticInfo.js';
 import {
   CreateMonitoredItemsRequest,
   CreateMonitoredItemsResponse,
@@ -32,15 +31,15 @@ import {
   StatusChangeNotification,
   TransferSubscriptionsRequest,
   TransferSubscriptionsResponse
-} from '../DataTypes/Generated';
-import { Byte, Double, UInt32 } from '../DataTypes/Primitives';
-import { sendStandardRequest, handleNotificationMessage, handleDataChange, handleEvent, setInternals, handleRecreate } from '../symbols';
-import { integerIdGenerator } from '../util';
-import { MonitoredItem } from './MonitoredItem';
-import { UaClient } from './UaClient';
-import { StatusCode } from '../DataTypes/StatusCode';
+} from '../DataTypes/Generated.js';
+import { Byte, Double, UInt32 } from '../DataTypes/Primitives.js';
+import { sendStandardRequest, handleNotificationMessage, handleDataChange, handleEvent, setInternals, handleRecreate } from '../symbols.js';
+import { integerIdGenerator } from '../util.js';
+import { MonitoredItem } from './MonitoredItem.js';
+import { UaClient } from './UaClient.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
 import createDebug from 'debug';
-import { UaError } from '../UaError';
+import { UaError } from '../UaError.js';
 
 const debug = createDebug('opc-ua:Subscription');
 
@@ -72,7 +71,7 @@ export interface SubscriptionOptions {
   response: CreateSubscriptionResponse;
 }
 
-export class Subscription extends (EventEmitter as new () => TypedEmitter<SubscriptionEvents>) implements CreateSubscriptionResponseOptions {
+export class Subscription extends TypedEmitter<SubscriptionEvents> implements CreateSubscriptionResponseOptions {
   /** The UaClient that the Subscription belongs to. */
   get client(): UaClient { return this.#client; }
   #client: UaClient;

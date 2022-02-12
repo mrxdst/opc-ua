@@ -1,5 +1,5 @@
-import { UaString } from './DataTypes/Primitives';
-import { StatusCode } from './DataTypes/StatusCode';
+import { UaString } from './DataTypes/Primitives.js';
+import { StatusCode } from './DataTypes/StatusCode.js';
 
 export interface UaErrorOptions {
   /** The StatusCode for the error. */

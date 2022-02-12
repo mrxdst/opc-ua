@@ -1,4 +1,4 @@
-import { DecodableType } from './types';
+import { DecodableType } from './types.js';
 import {
   SByte,
   Byte,
@@ -10,22 +10,22 @@ import {
   UInt64,
   ByteString,
   UaString
-} from './DataTypes/Primitives';
-import * as GeneratedTypes from './DataTypes/Generated';
-import { decode, encode } from './symbols';
-import { Decodable, Encodable } from './BinaryDataEncoding';
-import { NodeIds } from './DataTypes/NodeIds';
-import { Guid } from './DataTypes/Guid';
-import { NodeId } from './DataTypes/NodeId';
-import { ExpandedNodeId } from './DataTypes/ExpandedNodeId';
-import { StatusCode } from './DataTypes/StatusCode';
-import { QualifiedName } from './DataTypes/QualifiedName';
-import { LocalizedText } from './DataTypes/LocalizedText';
-import { ExtensionObject } from './DataTypes/ExtensionObject';
-import { DataValue } from './DataTypes/DataValue';
-import { Variant } from './DataTypes/Variant';
-import { DiagnosticInfo } from './DataTypes/DiagnosticInfo';
-import { ServiceFault } from './DataTypes/ServiceFault';
+} from './DataTypes/Primitives.js';
+import * as GeneratedTypes from './DataTypes/Generated.js';
+import { decode, encode } from './symbols.js';
+import { Decodable, Encodable } from './BinaryDataEncoding.js';
+import { NodeIds } from './DataTypes/NodeIds.js';
+import { Guid } from './DataTypes/Guid.js';
+import { NodeId } from './DataTypes/NodeId.js';
+import { ExpandedNodeId } from './DataTypes/ExpandedNodeId.js';
+import { StatusCode } from './DataTypes/StatusCode.js';
+import { QualifiedName } from './DataTypes/QualifiedName.js';
+import { LocalizedText } from './DataTypes/LocalizedText.js';
+import { ExtensionObject } from './DataTypes/ExtensionObject.js';
+import { DataValue } from './DataTypes/DataValue.js';
+import { Variant } from './DataTypes/Variant.js';
+import { DiagnosticInfo } from './DataTypes/DiagnosticInfo.js';
+import { ServiceFault } from './DataTypes/ServiceFault.js';
 
 export const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 export const isNode = typeof process !== 'undefined' && process.versions !== undefined && process.versions.node !== undefined;

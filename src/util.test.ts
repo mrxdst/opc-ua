@@ -1,7 +1,7 @@
 import {
   dateToFileTime,
   fileTimeToDate
-} from './util';
+} from './util.js';
 
 test('FileTime', () => {
   expect(dateToFileTime(new Date('1601-01-01T00:00:00Z'))).toBe(BigInt(0));

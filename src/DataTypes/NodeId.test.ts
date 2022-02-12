@@ -1,8 +1,8 @@
-import { NodeIdType } from './Generated';
-import { NodeId, SimpleNodeIdType } from './NodeId';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { Guid } from './Guid';
-import { UaError } from '../UaError';
+import { NodeIdType } from './Generated.js';
+import { NodeId, SimpleNodeIdType } from './NodeId.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { Guid } from './Guid.js';
+import { UaError } from '../UaError.js';
 
 test('NumericNodeId', () => {
   const nodeId = new NodeId({identifierType: NodeIdType.Numeric, value: 0xFF});

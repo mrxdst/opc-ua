@@ -1,19 +1,19 @@
-import { Decodable, Encodable } from './BinaryDataEncoding';
-import { RequestHeader, ResponseHeader } from './DataTypes/Generated';
-import { ServiceFault } from './DataTypes/ServiceFault';
-import * as GeneratedTypes from './DataTypes/Generated';
-import { ExtensionObject } from './DataTypes/ExtensionObject';
-import { Guid } from './DataTypes/Guid';
-import { NodeId } from './DataTypes/NodeId';
-import { ExpandedNodeId } from './DataTypes/ExpandedNodeId';
-import { StatusCode } from './DataTypes/StatusCode';
-import { QualifiedName } from './DataTypes/QualifiedName';
-import { LocalizedText } from './DataTypes/LocalizedText';
-import { DataValue } from './DataTypes/DataValue';
-import { Variant } from './DataTypes/Variant';
-import { DiagnosticInfo } from './DataTypes/DiagnosticInfo';
-import { NodeIds } from './DataTypes/NodeIds';
-import { typeId } from './symbols';
+import { Decodable, Encodable } from './BinaryDataEncoding.js';
+import { RequestHeader, ResponseHeader } from './DataTypes/Generated.js';
+import { ServiceFault } from './DataTypes/ServiceFault.js';
+import * as GeneratedTypes from './DataTypes/Generated.js';
+import { ExtensionObject } from './DataTypes/ExtensionObject.js';
+import { Guid } from './DataTypes/Guid.js';
+import { NodeId } from './DataTypes/NodeId.js';
+import { ExpandedNodeId } from './DataTypes/ExpandedNodeId.js';
+import { StatusCode } from './DataTypes/StatusCode.js';
+import { QualifiedName } from './DataTypes/QualifiedName.js';
+import { LocalizedText } from './DataTypes/LocalizedText.js';
+import { DataValue } from './DataTypes/DataValue.js';
+import { Variant } from './DataTypes/Variant.js';
+import { DiagnosticInfo } from './DataTypes/DiagnosticInfo.js';
+import { NodeIds } from './DataTypes/NodeIds.js';
+import { typeId } from './symbols.js';
 
 export enum OpenState {
   Closed,

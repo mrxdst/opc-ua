@@ -1,9 +1,9 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
-import { UaError } from '../UaError';
-import { isUInt32 } from '../util';
-import { NodeIds } from './NodeIds';
-import { UInt32 } from './Primitives';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { UaError } from '../UaError.js';
+import { isUInt32 } from '../util.js';
+import { NodeIds } from './NodeIds.js';
+import { UInt32 } from './Primitives.js';
 
 export enum StatusCodeSeverity {
   Good = 0b00,
@@ -42,6 +42,10 @@ export class StatusCode implements StatusCodeOptions {
       return `${severity}Unknown`;
     }
     return 'Unknown';
+  }
+
+  valueOf(): number {
+    return this.code;
   }
 
   get severity(): StatusCodeSeverity {

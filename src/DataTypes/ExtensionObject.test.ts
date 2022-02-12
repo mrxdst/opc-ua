@@ -1,8 +1,8 @@
-import { ExtensionObject } from './ExtensionObject';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { NodeId } from './NodeId';
-import { UaError } from '../UaError';
-import { ThreeDVector } from './Generated';
+import { ExtensionObject } from './ExtensionObject.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { NodeId } from './NodeId.js';
+import { UaError } from '../UaError.js';
+import { ThreeDVector } from './Generated.js';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();

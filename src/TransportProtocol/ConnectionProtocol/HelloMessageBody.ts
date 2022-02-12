@@ -1,6 +1,6 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding';
-import { UaString, UInt32 } from '../../DataTypes/Primitives';
-import { decode, encode } from '../../symbols';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding.js';
+import { UaString, UInt32 } from '../../DataTypes/Primitives.js';
+import { decode, encode } from '../../symbols.js';
 
 export interface HelloMessageBodyOptions {
   /** The latest version of the UACP protocol supported by the Client. */

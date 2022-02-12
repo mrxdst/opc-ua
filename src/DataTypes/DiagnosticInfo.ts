@@ -1,9 +1,9 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
-import { isUInt32 } from '../util';
-import { NodeIds } from './NodeIds';
-import { Int32, UaString } from './Primitives';
-import { StatusCode } from './StatusCode';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { isUInt32 } from '../util.js';
+import { NodeIds } from './NodeIds.js';
+import { Int32, UaString } from './Primitives.js';
+import { StatusCode } from './StatusCode.js';
 
 const symbolicIdMask = 0x01;
 const namespaceMask = 0x02;

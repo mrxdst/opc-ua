@@ -1,27 +1,26 @@
-import TypedEmitter from 'typed-emitter';
-import { EventEmitter } from 'events';
+import { TypedEmitter } from 'tiny-typed-emitter';
 import PQueue from 'p-queue';
-import pDefer from 'p-defer';
+import pDefer, { DeferredPromise } from 'p-defer';
 import { Transform } from 'stream';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding';
-import { Message, MessageType } from './Message';
-import { UInt32 } from '../../DataTypes/Primitives';
-import { ClientTcpTransport } from '../ClientTcpTransport';
-import { ClientTransportProtocol, ClientTransportProtocolEvents } from '../types';
-import { ClientWssTransport } from '../ClientWssTransport';
-import { HelloMessageBody } from './HelloMessageBody';
-import { AcknowledgeMessageBody } from './AcknowledgeMessageBody';
-import { OpenState } from '../../types';
-import { ErrorMessageBody } from './ErrorMessageBody';
-import { UaError } from '../../UaError';
-import { StatusCode } from '../../DataTypes/StatusCode';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding.js';
+import { Message, MessageType } from './Message.js';
+import { UInt32 } from '../../DataTypes/Primitives.js';
+import { ClientTcpTransport } from '../ClientTcpTransport.js';
+import { ClientTransportProtocol, ClientTransportProtocolEvents } from '../types.js';
+import { ClientWssTransport } from '../ClientWssTransport.js';
+import { HelloMessageBody } from './HelloMessageBody.js';
+import { AcknowledgeMessageBody } from './AcknowledgeMessageBody.js';
+import { OpenState } from '../../types.js';
+import { ErrorMessageBody } from './ErrorMessageBody.js';
+import { UaError } from '../../UaError.js';
+import { StatusCode } from '../../DataTypes/StatusCode.js';
 
 export interface ClientConnectionProtocolOptions {
   endpointUrl: string;
   openTimeout: number;
 }
 
-export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEmitter<ClientTransportProtocolEvents>) implements ClientTransportProtocol, ClientConnectionProtocolOptions {
+export class ClientConnectionProtocol extends TypedEmitter<ClientTransportProtocolEvents> implements ClientTransportProtocol, ClientConnectionProtocolOptions {
   get endpointUrl(): string { return this.#endpointUrl; }
   #endpointUrl: string;
   get openTimeout(): number { return this.#transportProtocol.openTimeout; }
@@ -41,7 +40,7 @@ export class ClientConnectionProtocol extends (EventEmitter as new () => TypedEm
 
   #openQueue = new PQueue({concurrency: 1});
   #writeQueue = new PQueue({concurrency: 1});
-  #openResponse?: pDefer.DeferredPromise<AcknowledgeMessageBody>;
+  #openResponse: DeferredPromise<AcknowledgeMessageBody> | undefined;
   #dataStream = new Transform();
 
   constructor(options: ClientConnectionProtocolOptions) {

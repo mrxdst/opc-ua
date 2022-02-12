@@ -1,8 +1,8 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { UaString } from '../DataTypes/Primitives';
-import { StatusCode } from '../DataTypes/StatusCode';
-import { decode, encode } from '../symbols';
-import { uaStringToByteString } from '../util';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { UaString } from '../DataTypes/Primitives.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
+import { decode, encode } from '../symbols.js';
+import { uaStringToByteString } from '../util.js';
 
 export interface AbortMessageBodyOptions {
   /** The numeric code for the error. */

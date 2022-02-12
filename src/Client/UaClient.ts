@@ -1,5 +1,4 @@
-import { EventEmitter } from 'events';
-import TypedEmitter from 'typed-emitter';
+import { TypedEmitter } from 'tiny-typed-emitter';
 import PQueue from 'p-queue';
 import { 
   ActivateSessionRequest,
@@ -62,22 +61,22 @@ import {
   WriteRequest,
   WriteResponse,
   X509IdentityToken
-} from '../DataTypes/Generated';
-import { NodeId } from '../DataTypes/NodeId';
-import { Double, UaString, UInt32 } from '../DataTypes/Primitives';
-import { ClientSecureConversation } from '../SecureConversation/ClientSecureConversation';
-import { BinaryDataEncoder, Decodable } from '../BinaryDataEncoding';
-import { LocalizedText } from '../DataTypes/LocalizedText';
-import { Request, Response, SessionState } from '../types';
-import { setInternals, handleNotificationMessage, handleRecreate, sendStandardRequest } from '../symbols';
-import { Subscription } from './Subscription';
+} from '../DataTypes/Generated.js';
+import { NodeId } from '../DataTypes/NodeId.js';
+import { Double, UaString, UInt32 } from '../DataTypes/Primitives.js';
+import { ClientSecureConversation } from '../SecureConversation/ClientSecureConversation.js';
+import { BinaryDataEncoder, Decodable } from '../BinaryDataEncoding.js';
+import { LocalizedText } from '../DataTypes/LocalizedText.js';
+import { Request, Response, SessionState } from '../types.js';
+import { setInternals, handleNotificationMessage, handleRecreate, sendStandardRequest } from '../symbols.js';
+import { Subscription } from './Subscription.js';
 import createDebug from 'debug';
-import { ExtensionObject } from '../DataTypes/ExtensionObject';
-import { NodeIds } from '../DataTypes/NodeIds';
-import { ServiceFault } from '../DataTypes/ServiceFault';
-import { AttributeIds } from '../DataTypes/AttributeIds';
-import { UaError } from '../UaError';
-import { StatusCode } from '../DataTypes/StatusCode';
+import { ExtensionObject } from '../DataTypes/ExtensionObject.js';
+import { NodeIds } from '../DataTypes/NodeIds.js';
+import { ServiceFault } from '../DataTypes/ServiceFault.js';
+import { AttributeIds } from '../DataTypes/AttributeIds.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
 
 const debug = createDebug('opc-ua:UaClient');
 
@@ -85,27 +84,27 @@ export interface UaClientOptions {
   /** The endpoint url to connect to. */
   endpointUrl: string;
   /** The requested lifetime of the SecureChannel. */
-  requestedLifetime?: UInt32;
+  requestedLifetime?: UInt32 | undefined;
   /** The MessageSecurityMode of the SecureChannel */
-  securityMode?: MessageSecurityMode;
+  securityMode?: MessageSecurityMode | undefined;
   /** A localized descriptive name for the application. */
-  applicationName?: LocalizedText;
+  applicationName?: LocalizedText | undefined;
   /** Requested maximum number of milliseconds that a Session should remain open without activity. */
-  requestedSessionTimeout?: Double;
+  requestedSessionTimeout?: Double | undefined;
   /** The globally unique identifier for the product. */
-  productUri?: UaString;
+  productUri?: UaString | undefined;
   /** Human readable string that identifies the Session. */
-  sessionName?: UaString;
+  sessionName?: UaString | undefined;
   /** The credentials of the user associated with the Client application. */
-  userIdentityToken?: AnonymousIdentityToken | UserNameIdentityToken | X509IdentityToken | IssuedIdentityToken;
+  userIdentityToken?: AnonymousIdentityToken | UserNameIdentityToken | X509IdentityToken | IssuedIdentityToken | undefined;
   /** If the Client specified a user identity token that supports digital signatures, then it shall create a signature and pass it as this parameter. */
-  userTokenSignature?: SignatureData;
+  userTokenSignature?: SignatureData | undefined;
   /** Automatically reconnect the client if it disconnects from the server. */
-  autoReconnect?: boolean;
+  autoReconnect?: boolean | undefined;
   /** Timeout between reconnect attempts. The first attempt is instantaneously. */
-  reconnectTimeout?: number;
+  reconnectTimeout?: number | undefined;
   /** The connect timeout and default request timeout. */
-  timeout?: number;
+  timeout?: number | undefined;
 }
 
 export interface UaClientEvents {
@@ -116,7 +115,7 @@ export interface UaClientEvents {
   error: (error: UaError) => void;
 }
 
-export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEvents>) implements UaClientOptions {
+export class UaClient extends TypedEmitter<UaClientEvents> implements UaClientOptions {
   /** A localized descriptive name for the application. */
   get applicationName(): LocalizedText { return this.#applicationName; }
   #applicationName: LocalizedText;
@@ -164,13 +163,13 @@ export class UaClient extends (EventEmitter as new () => TypedEmitter<UaClientEv
   get subscriptions(): ReadonlyArray<Subscription> { return [...this.#subscriptions.values()]; }
   #subscriptions = new Set<Subscription>();
 
-  #userIdentityToken?: AnonymousIdentityToken | UserNameIdentityToken | X509IdentityToken | IssuedIdentityToken;
-  #userTokenSignature?: SignatureData;
+  #userIdentityToken: AnonymousIdentityToken | UserNameIdentityToken | X509IdentityToken | IssuedIdentityToken | undefined;
+  #userTokenSignature: SignatureData | undefined;
 
   #secureConversation: ClientSecureConversation;
 
   #sessionId?: NodeId;
-  #authenticationToken?: NodeId;
+  #authenticationToken: NodeId | undefined;
 
   #connectQueue = new PQueue({concurrency: 1});
   #sessionState = SessionState.Closed;

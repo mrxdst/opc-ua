@@ -1,11 +1,11 @@
-import { BinaryDataDecoder, BinaryDataEncoder, Encodable } from '../../BinaryDataEncoding';
-import { StatusCode } from '../../DataTypes/StatusCode';
-import { decode, encode } from '../../symbols';
-import { UaError } from '../../UaError';
-import { AcknowledgeMessageBody } from './AcknowledgeMessageBody';
-import { ErrorMessageBody } from './ErrorMessageBody';
-import { HelloMessageBody } from './HelloMessageBody';
-import { ReverseHelloMessageBody } from './ReverseHelloMessageBody';
+import { BinaryDataDecoder, BinaryDataEncoder, Encodable } from '../../BinaryDataEncoding.js';
+import { StatusCode } from '../../DataTypes/StatusCode.js';
+import { decode, encode } from '../../symbols.js';
+import { UaError } from '../../UaError.js';
+import { AcknowledgeMessageBody } from './AcknowledgeMessageBody.js';
+import { ErrorMessageBody } from './ErrorMessageBody.js';
+import { HelloMessageBody } from './HelloMessageBody.js';
+import { ReverseHelloMessageBody } from './ReverseHelloMessageBody.js';
 
 export enum MessageType {
   /** Hello Message. */

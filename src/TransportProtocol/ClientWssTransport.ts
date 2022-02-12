@@ -1,11 +1,10 @@
 import PQueue from 'p-queue';
-import TypedEmitter from 'typed-emitter';
+import { TypedEmitter } from 'tiny-typed-emitter';
 import ws from 'ws';
-import { EventEmitter } from 'events';
-import { isBrowser } from '../util';
-import { ClientTransportProtocol, ClientTransportProtocolEvents } from './types';
-import { UaError } from '../UaError';
-import { StatusCode } from '../DataTypes/StatusCode';
+import { isBrowser } from '../util.js';
+import { ClientTransportProtocol, ClientTransportProtocolEvents } from './types.js';
+import { UaError } from '../UaError.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
 
 const WebSocket = (isBrowser ? window.WebSocket : ws as unknown as typeof window.WebSocket);
 
@@ -18,12 +17,12 @@ interface ErrorEvent {
   message: string;
 }
 
-export class ClientWssTransport extends (EventEmitter as new () => TypedEmitter<ClientTransportProtocolEvents>) implements ClientTransportProtocol, ClientWssTransportOptions {
+export class ClientWssTransport extends TypedEmitter<ClientTransportProtocolEvents> implements ClientTransportProtocol, ClientWssTransportOptions {
   get url(): string { return this.#url; }
   #url: string;
   openTimeout: number;
 
-  #socket?: WebSocket;
+  #socket: WebSocket | undefined;
   #openQueue = new PQueue({concurrency: 1});
 
   constructor (options: ClientWssTransportOptions) {

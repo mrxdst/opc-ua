@@ -1,4 +1,4 @@
-import { getEndpoints } from './discovery';
+import { getEndpoints } from './discovery.js';
 
 const endpointUrl = 'opc.tcp://localhost:4840';
 //const endpointUrl = 'opc.ws://localhost:8080';

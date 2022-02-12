@@ -1,7 +1,7 @@
-import { DataValue } from './DataValue';
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { Variant, VariantType, VariantTypeId } from './Variant';
-import { StatusCode } from './StatusCode';
+import { DataValue } from './DataValue.js';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { Variant, VariantType, VariantTypeId } from './Variant.js';
+import { StatusCode } from './StatusCode.js';
 
 test('Encode/Decode', () => {
   const encoder = new BinaryDataEncoder();

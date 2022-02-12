@@ -1,10 +1,10 @@
-import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding';
-import { decode, encode, typeId } from '../symbols';
-import { UaError } from '../UaError';
-import { isUInt16 } from '../util';
-import { NodeIds } from './NodeIds';
-import { UaString, UInt16 } from './Primitives';
-import { StatusCode } from './StatusCode';
+import { BinaryDataDecoder, BinaryDataEncoder } from '../BinaryDataEncoding.js';
+import { decode, encode, typeId } from '../symbols.js';
+import { UaError } from '../UaError.js';
+import { isUInt16 } from '../util.js';
+import { NodeIds } from './NodeIds.js';
+import { UaString, UInt16 } from './Primitives.js';
+import { StatusCode } from './StatusCode.js';
 
 export interface QualifiedNameOptions {
   /** The namespace index. */

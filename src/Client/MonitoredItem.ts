@@ -1,9 +1,8 @@
 
-import TypedEmitter from 'typed-emitter';
-import { EventEmitter } from 'events';
-import { DataValue } from '../DataTypes/DataValue';
-import { DiagnosticInfo } from '../DataTypes/DiagnosticInfo';
-import { ExtensionObject } from '../DataTypes/ExtensionObject';
+import { TypedEmitter } from 'tiny-typed-emitter';
+import { DataValue } from '../DataTypes/DataValue.js';
+import { DiagnosticInfo } from '../DataTypes/DiagnosticInfo.js';
+import { ExtensionObject } from '../DataTypes/ExtensionObject.js';
 import {
   DeleteMonitoredItemsRequest,
   DeleteMonitoredItemsResponse,
@@ -20,31 +19,31 @@ import {
   SetTriggeringRequest,
   SetTriggeringResponse,
   TimestampsToReturn
-} from '../DataTypes/Generated';
-import { Double, UInt32 } from '../DataTypes/Primitives';
-import { StatusCode } from '../DataTypes/StatusCode';
-import { Variant } from '../DataTypes/Variant';
-import { sendStandardRequest, handleDataChange, handleEvent, setInternals } from '../symbols';
-import { Subscription } from './Subscription';
+} from '../DataTypes/Generated.js';
+import { Double, UInt32 } from '../DataTypes/Primitives.js';
+import { StatusCode } from '../DataTypes/StatusCode.js';
+import { Variant } from '../DataTypes/Variant.js';
+import { sendStandardRequest, handleDataChange, handleEvent, setInternals } from '../symbols.js';
+import { Subscription } from './Subscription.js';
 import createDebug from 'debug';
-import { UaError } from '../UaError';
+import { UaError } from '../UaError.js';
 
 const debug = createDebug('opc-ua:MonitoredItem');
 
 interface MonitoredItemInternals {
-  timestampsToReturn?: TimestampsToReturn;
-  itemToMonitor?: ReadValueId;
-  monitoringMode?: MonitoringMode;
-  requestedParameters?: MonitoringParameters;
-  triggeringLinks?: UInt32[];
-  statusCode?: StatusCode;
-  monitoredItemId?: UInt32;
-  revisedSamplingInterval?: Double;
-  revisedQueueSize?: UInt32;
-  filterResult?: ExtensionObject;
-  diagnosticInfo?: DiagnosticInfo;
-  clientHandle?: UInt32;
-  deleted?: boolean;
+  timestampsToReturn?: TimestampsToReturn | undefined;
+  itemToMonitor?: ReadValueId | undefined;
+  monitoringMode?: MonitoringMode | undefined;
+  requestedParameters?: MonitoringParameters | undefined;
+  triggeringLinks?: UInt32[] | undefined;
+  statusCode?: StatusCode | undefined;
+  monitoredItemId?: UInt32 | undefined;
+  revisedSamplingInterval?: Double | undefined;
+  revisedQueueSize?: UInt32 | undefined;
+  filterResult?: ExtensionObject | undefined;
+  diagnosticInfo?: DiagnosticInfo | undefined;
+  clientHandle?: UInt32 | undefined;
+  deleted?: boolean | undefined;
 }
 
 export interface MonitoredItemEvents {
@@ -62,7 +61,7 @@ export interface MonitoredItemOptions {
   clientHandle: UInt32;
 }
 
-export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<MonitoredItemEvents>) implements MonitoredItemCreateResultOptions {
+export class MonitoredItem extends TypedEmitter<MonitoredItemEvents> implements MonitoredItemCreateResultOptions {
   /** The Subscription that the MonitoredItem belongs to. */
   get subscription(): Subscription { return this.#subscription; }
   #subscription: Subscription;
@@ -110,7 +109,7 @@ export class MonitoredItem extends (EventEmitter as new () => TypedEmitter<Monit
   #value: DataValue = new DataValue();
   /** The last received event fields of the MonitoredItem. */
   get eventFields(): ReadonlyArray<Variant> | undefined {return this.#eventFields; }
-  #eventFields?: ReadonlyArray<Variant>;
+  #eventFields: ReadonlyArray<Variant> | undefined;
   /** The MonitoredItem is deleted. */
   get deleted(): boolean { return this.#deleted; }
   #deleted = false;
