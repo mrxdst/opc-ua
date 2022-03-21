@@ -110,7 +110,7 @@ export class ClientConnectionProtocol extends TypedEmitter<ClientTransportProtoc
 
         const deferredResponse = this.#openResponse = pDefer<AcknowledgeMessageBody>();
   
-        setTimeout(() => {
+        queueMicrotask(() => {
           const write = async (): Promise<void> => {
             try {
               await this.write(BinaryDataEncoder.encodeType(message));

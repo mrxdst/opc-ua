@@ -216,7 +216,7 @@ export class ClientSecureConversation extends TypedEmitter<ClientSecureConversat
       const deferredResponse = pDefer<Response>();
       this.#deferredResponses.set(requestId, deferredResponse);
 
-      setTimeout(() => {
+      queueMicrotask(() => {
         const write = async (): Promise<void> => {
           try {
             for (const message of messages) {

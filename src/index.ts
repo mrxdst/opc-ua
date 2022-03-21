@@ -32,6 +32,7 @@ export type { LocalizedTextOptions } from './DataTypes/LocalizedText.js';
 export { NodeId } from './DataTypes/NodeId.js';
 export type {
   NodeIdValueType,
+  NodeIdValueTypeStrict,
   SimpleNodeIdType,
   NodeIdOptions,
   NumericNodeIdOptions,
@@ -57,10 +58,15 @@ export { StatusCode, StatusCodeSeverity } from './DataTypes/StatusCode.js';
 export { Variant, VariantTypeId, VariantType } from './DataTypes/Variant.js';
 export type {
   VariantValueType,
+  VariantValueTypeStrict,
   VariantScalarType,
+  VariantScalarTypeStrict,
   VariantArrayType,
+  VariantArrayTypeStrict,
   VariantNdArrayType,
+  VariantNdArrayTypeStrict,
   VariantValue,
+  VariantValueStrict,
   VariantOptions,
   ScalarVariantOptions,
   ArrayVariantOptions,

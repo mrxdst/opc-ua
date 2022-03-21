@@ -220,7 +220,7 @@ export class UaClient extends TypedEmitter<UaClientEvents> implements UaClientOp
         this.#startKeepAlive();
         debug('Connected');
         this.#connected = true;
-        setTimeout(() => {
+        queueMicrotask(() => {
           this.connected && this.emit('connected');
         });
       } catch (e) {
