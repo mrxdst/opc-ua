@@ -1,4 +1,4 @@
-import { TypedEmitter } from 'tiny-typed-emitter';
+import EventEmitter from 'eventemitter3';
 import PQueue from 'p-queue';
 import pDefer, { DeferredPromise } from 'p-defer';
 import { BinaryDataDecoder, BinaryDataEncoder, Decodable } from '../BinaryDataEncoding.js';
@@ -42,7 +42,7 @@ export interface ClientSecureConversationOptions {
   openTimeout: UInt32;
 }
 
-export class ClientSecureConversation extends TypedEmitter<ClientSecureConversationEvents> implements ClientSecureConversationOptions {
+export class ClientSecureConversation extends EventEmitter<ClientSecureConversationEvents> implements ClientSecureConversationOptions {
   get endpointUrl(): string { return this.#endpointUrl; }
   #endpointUrl: string;
   get securityMode(): MessageSecurityMode { return this.#securityMode; }

@@ -1,8 +1,7 @@
 import PQueue from 'p-queue';
-import { TypedEmitter } from 'tiny-typed-emitter';
 import ws from 'ws';
 import { isBrowser } from '../util.js';
-import { ClientTransportProtocol, ClientTransportProtocolEvents } from './types.js';
+import { ClientTransportProtocol } from './types.js';
 import { UaError } from '../UaError.js';
 import { StatusCode } from '../DataTypes/StatusCode.js';
 
@@ -17,7 +16,7 @@ interface ErrorEvent {
   message: string;
 }
 
-export class ClientWssTransport extends TypedEmitter<ClientTransportProtocolEvents> implements ClientTransportProtocol, ClientWssTransportOptions {
+export class ClientWssTransport extends ClientTransportProtocol implements ClientWssTransportOptions {
   get url(): string { return this.#url; }
   #url: string;
   openTimeout: number;

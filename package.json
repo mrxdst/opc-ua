@@ -41,10 +41,10 @@
   "dependencies": {
     "@types/ndarray": "~1.0.10",
     "debug": "~4.3.1",
+    "eventemitter3": "~4.0.7",
     "ndarray": "~1.0.19",
     "p-defer": "~4.0.0",
     "p-queue": "~7.2.0",
-    "tiny-typed-emitter": "~2.1.0",
     "uuid": "~8.3.2",
     "ws": "~8.5.0"
   },

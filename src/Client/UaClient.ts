@@ -1,4 +1,4 @@
-import { TypedEmitter } from 'tiny-typed-emitter';
+import EventEmitter from 'eventemitter3';
 import PQueue from 'p-queue';
 import { 
   ActivateSessionRequest,
@@ -115,7 +115,7 @@ export interface UaClientEvents {
   error: (error: UaError) => void;
 }
 
-export class UaClient extends TypedEmitter<UaClientEvents> implements UaClientOptions {
+export class UaClient extends EventEmitter<UaClientEvents> implements UaClientOptions {
   /** A localized descriptive name for the application. */
   get applicationName(): LocalizedText { return this.#applicationName; }
   #applicationName: LocalizedText;

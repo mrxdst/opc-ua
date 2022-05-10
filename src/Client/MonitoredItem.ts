@@ -1,5 +1,4 @@
-
-import { TypedEmitter } from 'tiny-typed-emitter';
+import EventEmitter from 'eventemitter3';
 import { DataValue } from '../DataTypes/DataValue.js';
 import { DiagnosticInfo } from '../DataTypes/DiagnosticInfo.js';
 import { ExtensionObject } from '../DataTypes/ExtensionObject.js';
@@ -61,7 +60,7 @@ export interface MonitoredItemOptions {
   clientHandle: UInt32;
 }
 
-export class MonitoredItem extends TypedEmitter<MonitoredItemEvents> implements MonitoredItemCreateResultOptions {
+export class MonitoredItem extends EventEmitter<MonitoredItemEvents> implements MonitoredItemCreateResultOptions {
   /** The Subscription that the MonitoredItem belongs to. */
   get subscription(): Subscription { return this.#subscription; }
   #subscription: Subscription;

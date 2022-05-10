@@ -1,12 +1,11 @@
-import { TypedEmitter } from 'tiny-typed-emitter';
 import PQueue from 'p-queue';
 import pDefer, { DeferredPromise } from 'p-defer';
-import { Transform } from 'stream';
+import stream from 'stream';
 import { BinaryDataDecoder, BinaryDataEncoder } from '../../BinaryDataEncoding.js';
 import { Message, MessageType } from './Message.js';
 import { UInt32 } from '../../DataTypes/Primitives.js';
 import { ClientTcpTransport } from '../ClientTcpTransport.js';
-import { ClientTransportProtocol, ClientTransportProtocolEvents } from '../types.js';
+import { ClientTransportProtocol } from '../types.js';
 import { ClientWssTransport } from '../ClientWssTransport.js';
 import { HelloMessageBody } from './HelloMessageBody.js';
 import { AcknowledgeMessageBody } from './AcknowledgeMessageBody.js';
@@ -20,7 +19,7 @@ export interface ClientConnectionProtocolOptions {
   openTimeout: number;
 }
 
-export class ClientConnectionProtocol extends TypedEmitter<ClientTransportProtocolEvents> implements ClientTransportProtocol, ClientConnectionProtocolOptions {
+export class ClientConnectionProtocol extends ClientTransportProtocol implements ClientConnectionProtocolOptions {
   get endpointUrl(): string { return this.#endpointUrl; }
   #endpointUrl: string;
   get openTimeout(): number { return this.#transportProtocol.openTimeout; }
@@ -36,12 +35,12 @@ export class ClientConnectionProtocol extends TypedEmitter<ClientTransportProtoc
   get state(): OpenState{ return this.#state; }
   #state = OpenState.Closed;
   
-  #transportProtocol: ClientTransportProtocol & TypedEmitter<ClientTransportProtocolEvents>;
+  #transportProtocol: ClientTransportProtocol;
 
   #openQueue = new PQueue({concurrency: 1});
   #writeQueue = new PQueue({concurrency: 1});
   #openResponse: DeferredPromise<AcknowledgeMessageBody> | undefined;
-  #dataStream = new Transform();
+  #dataStream = new stream.Transform();
 
   constructor(options: ClientConnectionProtocolOptions) {
     super();
@@ -210,7 +209,7 @@ export class ClientConnectionProtocol extends TypedEmitter<ClientTransportProtoc
 
   #onClose = (error?: UaError): void => {
     this.#state = OpenState.Closed;
-    this.#dataStream = new Transform();
+    this.#dataStream = new stream.Transform();
 
     if (this.#openResponse) {
       this.#openResponse.reject(error ?? new UaError({code: StatusCode.BadCommunicationError}));

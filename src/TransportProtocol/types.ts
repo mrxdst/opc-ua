@@ -1,4 +1,4 @@
-import { TypedEmitter } from 'tiny-typed-emitter';
+import EventEmitter from 'eventemitter3';
 import { UaError } from '../UaError.js';
 
 export interface ClientTransportProtocolEvents {
@@ -7,9 +7,9 @@ export interface ClientTransportProtocolEvents {
   error: (error: UaError) => void;
 }
 
-export interface ClientTransportProtocol extends TypedEmitter<ClientTransportProtocolEvents> {
-  openTimeout: number;
-  open(): Promise<void>;
-  write(data: Uint8Array): Promise<void>;
-  close(error?: UaError): void;
+export abstract class ClientTransportProtocol extends EventEmitter<ClientTransportProtocolEvents> {
+  abstract openTimeout: number;
+  abstract open(): Promise<void>;
+  abstract write(data: Uint8Array): Promise<void>;
+  abstract close(error?: UaError): void;
 }

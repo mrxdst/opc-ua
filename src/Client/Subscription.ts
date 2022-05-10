@@ -1,4 +1,4 @@
-import { TypedEmitter } from 'tiny-typed-emitter';
+import EventEmitter from 'eventemitter3';
 import { DiagnosticInfo } from '../DataTypes/DiagnosticInfo.js';
 import {
   CreateMonitoredItemsRequest,
@@ -71,7 +71,7 @@ export interface SubscriptionOptions {
   response: CreateSubscriptionResponse;
 }
 
-export class Subscription extends TypedEmitter<SubscriptionEvents> implements CreateSubscriptionResponseOptions {
+export class Subscription extends EventEmitter<SubscriptionEvents> implements CreateSubscriptionResponseOptions {
   /** The UaClient that the Subscription belongs to. */
   get client(): UaClient { return this.#client; }
   #client: UaClient;
