@@ -73,24 +73,21 @@ export class Guid implements GuidOptions {
     return this.data1 === 0 &&
     this.data2 === 0 &&
     this.data3 === 0 &&
-    this.data4.reduce((acc, cur) => acc += cur, 0) === 0;
+    this.data4.every(b => b === 0);
   }
 
   readonly [typeId] = NodeIds.Guid as const;
   static readonly [typeId] = NodeIds.Guid as const;
 
   [encode](encoder: BinaryDataEncoder): void {
-    if (!isUInt32(this.data1) || !isUInt16(this.data2) || !isUInt16(this.data3) || this.data4.byteLength !== 8) {
-      encoder.writeUInt32(0);
-      encoder.writeUInt16(0);
-      encoder.writeUInt16(0);
-      encoder.writeBytes(new Uint8Array(8));
-    } else {
-      encoder.writeUInt32(this.data1);
-      encoder.writeUInt16(this.data2);
-      encoder.writeUInt16(this.data3);
-      encoder.writeBytes(this.data4);
+    if (this.data4.byteLength !== 8) {
+      throw new UaError({ code: StatusCode.BadEncodingError, reason: 'Bad data length' });
     }
+    
+    encoder.writeUInt32(this.data1);
+    encoder.writeUInt16(this.data2);
+    encoder.writeUInt16(this.data3);
+    encoder.writeBytes(this.data4);
   }
 
   static [decode](decoder: BinaryDataDecoder): Guid {

@@ -41,7 +41,7 @@ export type {
   GuidNodeIdOptions
 } from './DataTypes/NodeId.js';
 
-export { NodeIds } from './DataTypes/NodeIds.js';
+export { NodeIds, NodeIds2 } from './DataTypes/NodeIds.js';
 
 export * from './DataTypes/Primitives.js';
 

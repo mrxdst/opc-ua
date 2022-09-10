@@ -5,9 +5,7 @@ import { decode, encode } from '../symbols.js';
 import { UaError } from '../UaError.js';
 import { StatusCode } from './StatusCode.js';
 import { NodeIds } from './NodeIds.js';
-import { EncodableType } from '../types.js';
 import { typeId } from '../symbols.js';
-import { getTypeFromTypeId } from '../util.js';
 
 enum Encoding {
   NoBody = 0x00,
@@ -21,7 +19,7 @@ export interface ExtensionObjectOptions {
    */
   typeId?: NodeId | undefined;
   /** The object body. */
-  body?: EncodableType | ByteString | XmlElement | undefined;
+  body?: ByteString | XmlElement | undefined;
 }
 
 /** A serialized object prefixed with its data type identifier. */
@@ -31,7 +29,7 @@ export class ExtensionObject implements ExtensionObjectOptions {
    */
   readonly typeId: NodeId;
   /** The object body. */
-  readonly body: EncodableType | ByteString | XmlElement | undefined;
+  readonly body: ByteString | XmlElement | undefined;
 
   constructor(options?: ExtensionObjectOptions) {
     this.typeId = options?.typeId ?? NodeId.null();
@@ -74,17 +72,14 @@ export class ExtensionObject implements ExtensionObjectOptions {
       encoder.writeByteString(this.body);
     } 
     else {
-      const _typeId = this.body[typeId];
-      encoder.writeType(NodeId.parse(_typeId));
-      encoder.writeByte(Encoding.ByteString);
-      encoder.writeByteString(BinaryDataEncoder.encodeType(this.body));
+      throw new UaError({ code: StatusCode.BadEncodingError, reason: 'Invalid body' });
     }
   }
 
   static [decode](decoder: BinaryDataDecoder): ExtensionObject {
     const typeId = decoder.readType(NodeId);
     const encoding = decoder.readByte() as Encoding;
-    let body: EncodableType | ByteString | XmlElement;
+    let body: ByteString | XmlElement | undefined;
 
     switch (encoding) {
       case Encoding.NoBody: {
@@ -103,31 +98,9 @@ export class ExtensionObject implements ExtensionObjectOptions {
       }
     }
 
-    if (body instanceof Uint8Array) {
-      try {
-        body = decodeBody(typeId, body);
-      } catch (e) {
-        // Nothing
-      }
-    }
-
     return new ExtensionObject({
       typeId,
       body
     });
   }
-}
-
-function decodeBody(typeId: NodeId, body: Uint8Array): EncodableType {
-  if (typeId.namespace !== 0 || typeof typeId.value !== 'number') {
-    throw new UaError({code: StatusCode.BadDecodingError});
-  }
-
-  const decodable = getTypeFromTypeId(typeId.value);
-  
-  if (!decodable) {
-    throw new UaError({code: StatusCode.BadDecodingError});
-  }
-
-  return BinaryDataDecoder.decodeType<EncodableType>(body, decodable);
 }

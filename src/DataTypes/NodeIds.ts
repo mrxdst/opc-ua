@@ -16162,3 +16162,4 @@ export enum NodeIds {
     PubSubKeyPushTargetFolderType_PushTargetName_Placeholder_TriggerKeyUpdate = 25661,
     AuditClientUpdateMethodResultEventType_OutputArguments = 25684
 }
+export const NodeIds2 = NodeIds as Record<string | number, string | number>;

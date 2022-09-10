@@ -54,7 +54,7 @@ async function createNodeIds() {
     name: row[0] as string,
     value: parseInt(row[1] as string)
   }));
-  await printNodes(path.join(srcPath, 'DataTypes', 'NodeIds.ts'), createEnum('NodeIds', data));
+  await printNodes(path.join(srcPath, 'DataTypes', 'NodeIds.ts'), createEnum('NodeIds', data), '', '\nexport const NodeIds2 = NodeIds as Record<string | number, string | number>;');
 }
 
 async function createServerCapabilities() {
@@ -631,7 +631,7 @@ function createEnum(name: string, members: EnumData[]): ts.EnumDeclaration {
   return enumDeclaration;
 }
 
-async function printNodes(filename: string, nodes: ts.Node | ts.Node[], prefix?: string) {
+async function printNodes(filename: string, nodes: ts.Node | ts.Node[], prefix?: string, suffix?: string) {
   const resultFile = ts.createSourceFile(filename, '', ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
@@ -642,7 +642,7 @@ async function printNodes(filename: string, nodes: ts.Node | ts.Node[], prefix?:
     result = printer.printNode(ts.EmitHint.Unspecified, nodes, resultFile);
   }
   
-  await printText(filename, (prefix ?? '') + result);
+  await printText(filename, (prefix ?? '') + result + (suffix ?? ''));
 }
 
 async function printText(filename: string, text: string) {
