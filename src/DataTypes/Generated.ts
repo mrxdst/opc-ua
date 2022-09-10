@@ -336,7 +336,8 @@ export enum IdentityCriteriaType {
     GroupId = 4,
     Anonymous = 5,
     AuthenticatedUser = 6,
-    Application = 7
+    Application = 7,
+    X509Subject = 8
 }
 export interface IdentityMappingRuleTypeOptions {
     criteriaType?: IdentityCriteriaType | undefined;
@@ -671,6 +672,78 @@ export class UABinaryFileDataType implements UABinaryFileDataTypeOptions {
         });
     }
 }
+export interface PortableQualifiedNameOptions {
+    namespaceUri?: UaString | undefined;
+    name?: UaString | undefined;
+}
+export class PortableQualifiedName implements PortableQualifiedNameOptions {
+    readonly namespaceUri: UaString | undefined;
+    readonly name: UaString | undefined;
+    constructor(options?: PortableQualifiedNameOptions) {
+        this.namespaceUri = options?.namespaceUri;
+        this.name = options?.name;
+    }
+    readonly [typeId] = NodeIds.PortableQualifiedName_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PortableQualifiedName_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.namespaceUri);
+        encoder.writeString(this.name);
+    }
+    static [decode](decoder: BinaryDataDecoder): PortableQualifiedName {
+        return new PortableQualifiedName({
+            namespaceUri: decoder.readString(),
+            name: decoder.readString()
+        });
+    }
+}
+export interface PortableNodeIdOptions {
+    namespaceUri?: UaString | undefined;
+    identifier?: NodeId | undefined;
+}
+export class PortableNodeId implements PortableNodeIdOptions {
+    readonly namespaceUri: UaString | undefined;
+    readonly identifier: NodeId;
+    constructor(options?: PortableNodeIdOptions) {
+        this.namespaceUri = options?.namespaceUri;
+        this.identifier = options?.identifier ?? NodeId.null();
+    }
+    readonly [typeId] = NodeIds.PortableNodeId_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PortableNodeId_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.namespaceUri);
+        encoder.writeType(this.identifier);
+    }
+    static [decode](decoder: BinaryDataDecoder): PortableNodeId {
+        return new PortableNodeId({
+            namespaceUri: decoder.readString(),
+            identifier: decoder.readType(NodeId)
+        });
+    }
+}
+export interface UnsignedRationalNumberOptions {
+    numerator?: UInt32 | undefined;
+    denominator?: UInt32 | undefined;
+}
+export class UnsignedRationalNumber implements UnsignedRationalNumberOptions {
+    readonly numerator: UInt32;
+    readonly denominator: UInt32;
+    constructor(options?: UnsignedRationalNumberOptions) {
+        this.numerator = options?.numerator ?? 0;
+        this.denominator = options?.denominator ?? 0;
+    }
+    readonly [typeId] = NodeIds.UnsignedRationalNumber_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.UnsignedRationalNumber_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeUInt32(this.numerator);
+        encoder.writeUInt32(this.denominator);
+    }
+    static [decode](decoder: BinaryDataDecoder): UnsignedRationalNumber {
+        return new UnsignedRationalNumber({
+            numerator: decoder.readUInt32(),
+            denominator: decoder.readUInt32()
+        });
+    }
+}
 export enum PubSubState {
     Disabled = 0,
     Paused = 1,
@@ -976,6 +1049,25 @@ export class PublishedEventsDataType implements PublishedEventsDataTypeOptions {
             eventNotifier: decoder.readType(NodeId),
             selectedFields: decoder.readTypeArray(SimpleAttributeOperand),
             filter: decoder.readType(ContentFilter)
+        });
+    }
+}
+export interface PublishedDataSetCustomSourceDataTypeOptions {
+    cyclicDataSet?: boolean | undefined;
+}
+export class PublishedDataSetCustomSourceDataType implements PublishedDataSetCustomSourceDataTypeOptions {
+    readonly cyclicDataSet: boolean;
+    constructor(options?: PublishedDataSetCustomSourceDataTypeOptions) {
+        this.cyclicDataSet = options?.cyclicDataSet ?? false;
+    }
+    readonly [typeId] = NodeIds.PublishedDataSetCustomSourceDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PublishedDataSetCustomSourceDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeBoolean(this.cyclicDataSet);
+    }
+    static [decode](decoder: BinaryDataDecoder): PublishedDataSetCustomSourceDataType {
+        return new PublishedDataSetCustomSourceDataType({
+            cyclicDataSet: decoder.readBoolean()
         });
     }
 }
@@ -1671,6 +1763,241 @@ export class PubSubConfigurationDataType implements PubSubConfigurationDataTypeO
         });
     }
 }
+export interface StandaloneSubscribedDataSetRefDataTypeOptions {
+    dataSetName?: UaString | undefined;
+}
+export class StandaloneSubscribedDataSetRefDataType implements StandaloneSubscribedDataSetRefDataTypeOptions {
+    readonly dataSetName: UaString | undefined;
+    constructor(options?: StandaloneSubscribedDataSetRefDataTypeOptions) {
+        this.dataSetName = options?.dataSetName;
+    }
+    readonly [typeId] = NodeIds.StandaloneSubscribedDataSetRefDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.StandaloneSubscribedDataSetRefDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.dataSetName);
+    }
+    static [decode](decoder: BinaryDataDecoder): StandaloneSubscribedDataSetRefDataType {
+        return new StandaloneSubscribedDataSetRefDataType({
+            dataSetName: decoder.readString()
+        });
+    }
+}
+export interface StandaloneSubscribedDataSetDataTypeOptions {
+    name?: UaString | undefined;
+    dataSetFolder?: ReadonlyArray<UaString> | undefined;
+    dataSetMetaData?: DataSetMetaDataType | undefined;
+    subscribedDataSet?: ExtensionObject | undefined;
+}
+export class StandaloneSubscribedDataSetDataType implements StandaloneSubscribedDataSetDataTypeOptions {
+    readonly name: UaString | undefined;
+    readonly dataSetFolder: ReadonlyArray<UaString> | undefined;
+    readonly dataSetMetaData: DataSetMetaDataType;
+    readonly subscribedDataSet: ExtensionObject;
+    constructor(options?: StandaloneSubscribedDataSetDataTypeOptions) {
+        this.name = options?.name;
+        this.dataSetFolder = options?.dataSetFolder;
+        this.dataSetMetaData = options?.dataSetMetaData ?? new DataSetMetaDataType();
+        this.subscribedDataSet = options?.subscribedDataSet ?? new ExtensionObject();
+    }
+    readonly [typeId] = NodeIds.StandaloneSubscribedDataSetDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.StandaloneSubscribedDataSetDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.name);
+        encoder.writeStringArray(this.dataSetFolder);
+        encoder.writeType(this.dataSetMetaData);
+        encoder.writeType(this.subscribedDataSet);
+    }
+    static [decode](decoder: BinaryDataDecoder): StandaloneSubscribedDataSetDataType {
+        return new StandaloneSubscribedDataSetDataType({
+            name: decoder.readString(),
+            dataSetFolder: decoder.readStringArray(),
+            dataSetMetaData: decoder.readType(DataSetMetaDataType),
+            subscribedDataSet: decoder.readType(ExtensionObject)
+        });
+    }
+}
+export interface SecurityGroupDataTypeOptions {
+    name?: UaString | undefined;
+    securityGroupFolder?: ReadonlyArray<UaString> | undefined;
+    keyLifetime?: Double | undefined;
+    securityPolicyUri?: UaString | undefined;
+    maxFutureKeyCount?: UInt32 | undefined;
+    maxPastKeyCount?: UInt32 | undefined;
+    securityGroupId?: UaString | undefined;
+    rolePermissions?: ReadonlyArray<RolePermissionType> | undefined;
+    groupProperties?: ReadonlyArray<KeyValuePair> | undefined;
+}
+export class SecurityGroupDataType implements SecurityGroupDataTypeOptions {
+    readonly name: UaString | undefined;
+    readonly securityGroupFolder: ReadonlyArray<UaString> | undefined;
+    readonly keyLifetime: Double;
+    readonly securityPolicyUri: UaString | undefined;
+    readonly maxFutureKeyCount: UInt32;
+    readonly maxPastKeyCount: UInt32;
+    readonly securityGroupId: UaString | undefined;
+    readonly rolePermissions: ReadonlyArray<RolePermissionType> | undefined;
+    readonly groupProperties: ReadonlyArray<KeyValuePair> | undefined;
+    constructor(options?: SecurityGroupDataTypeOptions) {
+        this.name = options?.name;
+        this.securityGroupFolder = options?.securityGroupFolder;
+        this.keyLifetime = options?.keyLifetime ?? 0;
+        this.securityPolicyUri = options?.securityPolicyUri;
+        this.maxFutureKeyCount = options?.maxFutureKeyCount ?? 0;
+        this.maxPastKeyCount = options?.maxPastKeyCount ?? 0;
+        this.securityGroupId = options?.securityGroupId;
+        this.rolePermissions = options?.rolePermissions;
+        this.groupProperties = options?.groupProperties;
+    }
+    readonly [typeId] = NodeIds.SecurityGroupDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.SecurityGroupDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.name);
+        encoder.writeStringArray(this.securityGroupFolder);
+        encoder.writeDouble(this.keyLifetime);
+        encoder.writeString(this.securityPolicyUri);
+        encoder.writeUInt32(this.maxFutureKeyCount);
+        encoder.writeUInt32(this.maxPastKeyCount);
+        encoder.writeString(this.securityGroupId);
+        encoder.writeTypeArray(this.rolePermissions);
+        encoder.writeTypeArray(this.groupProperties);
+    }
+    static [decode](decoder: BinaryDataDecoder): SecurityGroupDataType {
+        return new SecurityGroupDataType({
+            name: decoder.readString(),
+            securityGroupFolder: decoder.readStringArray(),
+            keyLifetime: decoder.readDouble(),
+            securityPolicyUri: decoder.readString(),
+            maxFutureKeyCount: decoder.readUInt32(),
+            maxPastKeyCount: decoder.readUInt32(),
+            securityGroupId: decoder.readString(),
+            rolePermissions: decoder.readTypeArray(RolePermissionType),
+            groupProperties: decoder.readTypeArray(KeyValuePair)
+        });
+    }
+}
+export interface PubSubKeyPushTargetDataTypeOptions {
+    applicationUri?: UaString | undefined;
+    pushTargetFolder?: ReadonlyArray<UaString> | undefined;
+    endpointUrl?: UaString | undefined;
+    securityPolicyUri?: UaString | undefined;
+    userTokenType?: UserTokenPolicy | undefined;
+    requestedKeyCount?: UInt16 | undefined;
+    retryInterval?: Double | undefined;
+    pushTargetProperties?: ReadonlyArray<KeyValuePair> | undefined;
+    securityGroups?: ReadonlyArray<UaString> | undefined;
+}
+export class PubSubKeyPushTargetDataType implements PubSubKeyPushTargetDataTypeOptions {
+    readonly applicationUri: UaString | undefined;
+    readonly pushTargetFolder: ReadonlyArray<UaString> | undefined;
+    readonly endpointUrl: UaString | undefined;
+    readonly securityPolicyUri: UaString | undefined;
+    readonly userTokenType: UserTokenPolicy;
+    readonly requestedKeyCount: UInt16;
+    readonly retryInterval: Double;
+    readonly pushTargetProperties: ReadonlyArray<KeyValuePair> | undefined;
+    readonly securityGroups: ReadonlyArray<UaString> | undefined;
+    constructor(options?: PubSubKeyPushTargetDataTypeOptions) {
+        this.applicationUri = options?.applicationUri;
+        this.pushTargetFolder = options?.pushTargetFolder;
+        this.endpointUrl = options?.endpointUrl;
+        this.securityPolicyUri = options?.securityPolicyUri;
+        this.userTokenType = options?.userTokenType ?? new UserTokenPolicy();
+        this.requestedKeyCount = options?.requestedKeyCount ?? 0;
+        this.retryInterval = options?.retryInterval ?? 0;
+        this.pushTargetProperties = options?.pushTargetProperties;
+        this.securityGroups = options?.securityGroups;
+    }
+    readonly [typeId] = NodeIds.PubSubKeyPushTargetDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PubSubKeyPushTargetDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.applicationUri);
+        encoder.writeStringArray(this.pushTargetFolder);
+        encoder.writeString(this.endpointUrl);
+        encoder.writeString(this.securityPolicyUri);
+        encoder.writeType(this.userTokenType);
+        encoder.writeUInt16(this.requestedKeyCount);
+        encoder.writeDouble(this.retryInterval);
+        encoder.writeTypeArray(this.pushTargetProperties);
+        encoder.writeStringArray(this.securityGroups);
+    }
+    static [decode](decoder: BinaryDataDecoder): PubSubKeyPushTargetDataType {
+        return new PubSubKeyPushTargetDataType({
+            applicationUri: decoder.readString(),
+            pushTargetFolder: decoder.readStringArray(),
+            endpointUrl: decoder.readString(),
+            securityPolicyUri: decoder.readString(),
+            userTokenType: decoder.readType(UserTokenPolicy),
+            requestedKeyCount: decoder.readUInt16(),
+            retryInterval: decoder.readDouble(),
+            pushTargetProperties: decoder.readTypeArray(KeyValuePair),
+            securityGroups: decoder.readStringArray()
+        });
+    }
+}
+export interface PubSubConfiguration2DataTypeOptions {
+    publishedDataSets?: ReadonlyArray<PublishedDataSetDataType> | undefined;
+    connections?: ReadonlyArray<PubSubConnectionDataType> | undefined;
+    enabled?: boolean | undefined;
+    subscribedDataSets?: ReadonlyArray<StandaloneSubscribedDataSetDataType> | undefined;
+    dataSetClasses?: ReadonlyArray<DataSetMetaDataType> | undefined;
+    defaultSecurityKeyServices?: ReadonlyArray<EndpointDescription> | undefined;
+    securityGroups?: ReadonlyArray<SecurityGroupDataType> | undefined;
+    pubSubKeyPushTargets?: ReadonlyArray<PubSubKeyPushTargetDataType> | undefined;
+    configurationVersion?: UInt32 | undefined;
+    configurationProperties?: ReadonlyArray<KeyValuePair> | undefined;
+}
+export class PubSubConfiguration2DataType implements PubSubConfiguration2DataTypeOptions {
+    readonly publishedDataSets: ReadonlyArray<PublishedDataSetDataType> | undefined;
+    readonly connections: ReadonlyArray<PubSubConnectionDataType> | undefined;
+    readonly enabled: boolean;
+    readonly subscribedDataSets: ReadonlyArray<StandaloneSubscribedDataSetDataType> | undefined;
+    readonly dataSetClasses: ReadonlyArray<DataSetMetaDataType> | undefined;
+    readonly defaultSecurityKeyServices: ReadonlyArray<EndpointDescription> | undefined;
+    readonly securityGroups: ReadonlyArray<SecurityGroupDataType> | undefined;
+    readonly pubSubKeyPushTargets: ReadonlyArray<PubSubKeyPushTargetDataType> | undefined;
+    readonly configurationVersion: UInt32;
+    readonly configurationProperties: ReadonlyArray<KeyValuePair> | undefined;
+    constructor(options?: PubSubConfiguration2DataTypeOptions) {
+        this.publishedDataSets = options?.publishedDataSets;
+        this.connections = options?.connections;
+        this.enabled = options?.enabled ?? false;
+        this.subscribedDataSets = options?.subscribedDataSets;
+        this.dataSetClasses = options?.dataSetClasses;
+        this.defaultSecurityKeyServices = options?.defaultSecurityKeyServices;
+        this.securityGroups = options?.securityGroups;
+        this.pubSubKeyPushTargets = options?.pubSubKeyPushTargets;
+        this.configurationVersion = options?.configurationVersion ?? 0;
+        this.configurationProperties = options?.configurationProperties;
+    }
+    readonly [typeId] = NodeIds.PubSubConfiguration2DataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PubSubConfiguration2DataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeTypeArray(this.publishedDataSets);
+        encoder.writeTypeArray(this.connections);
+        encoder.writeBoolean(this.enabled);
+        encoder.writeTypeArray(this.subscribedDataSets);
+        encoder.writeTypeArray(this.dataSetClasses);
+        encoder.writeTypeArray(this.defaultSecurityKeyServices);
+        encoder.writeTypeArray(this.securityGroups);
+        encoder.writeTypeArray(this.pubSubKeyPushTargets);
+        encoder.writeUInt32(this.configurationVersion);
+        encoder.writeTypeArray(this.configurationProperties);
+    }
+    static [decode](decoder: BinaryDataDecoder): PubSubConfiguration2DataType {
+        return new PubSubConfiguration2DataType({
+            publishedDataSets: decoder.readTypeArray(PublishedDataSetDataType),
+            connections: decoder.readTypeArray(PubSubConnectionDataType),
+            enabled: decoder.readBoolean(),
+            subscribedDataSets: decoder.readTypeArray(StandaloneSubscribedDataSetDataType),
+            dataSetClasses: decoder.readTypeArray(DataSetMetaDataType),
+            defaultSecurityKeyServices: decoder.readTypeArray(EndpointDescription),
+            securityGroups: decoder.readTypeArray(SecurityGroupDataType),
+            pubSubKeyPushTargets: decoder.readTypeArray(PubSubKeyPushTargetDataType),
+            configurationVersion: decoder.readUInt32(),
+            configurationProperties: decoder.readTypeArray(KeyValuePair)
+        });
+    }
+}
 export enum DataSetOrderingType {
     Undefined = 0,
     AscendingWriterId = 1,
@@ -1866,7 +2193,9 @@ export enum JsonDataSetMessageContentMask {
     SequenceNumber = 4,
     Timestamp = 8,
     Status = 16,
-    MessageType = 32
+    MessageType = 32,
+    DataSetWriterName = 64,
+    ReversibleFieldEncoding = 128
 }
 export interface JsonDataSetWriterMessageDataTypeOptions {
     dataSetMessageContentMask?: JsonDataSetMessageContentMask | undefined;
@@ -1911,6 +2240,71 @@ export class JsonDataSetReaderMessageDataType implements JsonDataSetReaderMessag
         });
     }
 }
+export class QosDataType {
+    readonly [typeId] = NodeIds.QosDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.QosDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+    }
+    static [decode](decoder: BinaryDataDecoder): QosDataType {
+        return new QosDataType();
+    }
+}
+export class TransmitQosDataType {
+    readonly [typeId] = NodeIds.TransmitQosDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.TransmitQosDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+    }
+    static [decode](decoder: BinaryDataDecoder): TransmitQosDataType {
+        return new TransmitQosDataType();
+    }
+}
+export interface TransmitQosPriorityDataTypeOptions {
+    priorityLabel?: UaString | undefined;
+}
+export class TransmitQosPriorityDataType implements TransmitQosPriorityDataTypeOptions {
+    readonly priorityLabel: UaString | undefined;
+    constructor(options?: TransmitQosPriorityDataTypeOptions) {
+        this.priorityLabel = options?.priorityLabel;
+    }
+    readonly [typeId] = NodeIds.TransmitQosPriorityDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.TransmitQosPriorityDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.priorityLabel);
+    }
+    static [decode](decoder: BinaryDataDecoder): TransmitQosPriorityDataType {
+        return new TransmitQosPriorityDataType({
+            priorityLabel: decoder.readString()
+        });
+    }
+}
+export class ReceiveQosDataType {
+    readonly [typeId] = NodeIds.ReceiveQosDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.ReceiveQosDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+    }
+    static [decode](decoder: BinaryDataDecoder): ReceiveQosDataType {
+        return new ReceiveQosDataType();
+    }
+}
+export interface ReceiveQosPriorityDataTypeOptions {
+    priorityLabel?: UaString | undefined;
+}
+export class ReceiveQosPriorityDataType implements ReceiveQosPriorityDataTypeOptions {
+    readonly priorityLabel: UaString | undefined;
+    constructor(options?: ReceiveQosPriorityDataTypeOptions) {
+        this.priorityLabel = options?.priorityLabel;
+    }
+    readonly [typeId] = NodeIds.ReceiveQosPriorityDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.ReceiveQosPriorityDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.priorityLabel);
+    }
+    static [decode](decoder: BinaryDataDecoder): ReceiveQosPriorityDataType {
+        return new ReceiveQosPriorityDataType({
+            priorityLabel: decoder.readString()
+        });
+    }
+}
 export interface DatagramConnectionTransportDataTypeOptions {
     discoveryAddress?: ExtensionObject | undefined;
 }
@@ -1927,6 +2321,45 @@ export class DatagramConnectionTransportDataType implements DatagramConnectionTr
     static [decode](decoder: BinaryDataDecoder): DatagramConnectionTransportDataType {
         return new DatagramConnectionTransportDataType({
             discoveryAddress: decoder.readType(ExtensionObject)
+        });
+    }
+}
+export interface DatagramConnectionTransport2DataTypeOptions {
+    discoveryAddress?: ExtensionObject | undefined;
+    discoveryAnnounceRate?: UInt32 | undefined;
+    discoveryMaxMessageSize?: UInt32 | undefined;
+    qosCategory?: UaString | undefined;
+    datagramQos?: ReadonlyArray<ExtensionObject> | undefined;
+}
+export class DatagramConnectionTransport2DataType implements DatagramConnectionTransport2DataTypeOptions {
+    readonly discoveryAddress: ExtensionObject;
+    readonly discoveryAnnounceRate: UInt32;
+    readonly discoveryMaxMessageSize: UInt32;
+    readonly qosCategory: UaString | undefined;
+    readonly datagramQos: ReadonlyArray<ExtensionObject> | undefined;
+    constructor(options?: DatagramConnectionTransport2DataTypeOptions) {
+        this.discoveryAddress = options?.discoveryAddress ?? new ExtensionObject();
+        this.discoveryAnnounceRate = options?.discoveryAnnounceRate ?? 0;
+        this.discoveryMaxMessageSize = options?.discoveryMaxMessageSize ?? 0;
+        this.qosCategory = options?.qosCategory;
+        this.datagramQos = options?.datagramQos;
+    }
+    readonly [typeId] = NodeIds.DatagramConnectionTransport2DataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.DatagramConnectionTransport2DataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeType(this.discoveryAddress);
+        encoder.writeUInt32(this.discoveryAnnounceRate);
+        encoder.writeUInt32(this.discoveryMaxMessageSize);
+        encoder.writeString(this.qosCategory);
+        encoder.writeTypeArray(this.datagramQos);
+    }
+    static [decode](decoder: BinaryDataDecoder): DatagramConnectionTransport2DataType {
+        return new DatagramConnectionTransport2DataType({
+            discoveryAddress: decoder.readType(ExtensionObject),
+            discoveryAnnounceRate: decoder.readUInt32(),
+            discoveryMaxMessageSize: decoder.readUInt32(),
+            qosCategory: decoder.readString(),
+            datagramQos: decoder.readTypeArray(ExtensionObject)
         });
     }
 }
@@ -1951,6 +2384,89 @@ export class DatagramWriterGroupTransportDataType implements DatagramWriterGroup
         return new DatagramWriterGroupTransportDataType({
             messageRepeatCount: decoder.readByte(),
             messageRepeatDelay: decoder.readDouble()
+        });
+    }
+}
+export interface DatagramWriterGroupTransport2DataTypeOptions {
+    messageRepeatCount?: Byte | undefined;
+    messageRepeatDelay?: Double | undefined;
+    address?: ExtensionObject | undefined;
+    qosCategory?: UaString | undefined;
+    datagramQos?: ReadonlyArray<ExtensionObject> | undefined;
+    discoveryAnnounceRate?: UInt32 | undefined;
+    topic?: UaString | undefined;
+}
+export class DatagramWriterGroupTransport2DataType implements DatagramWriterGroupTransport2DataTypeOptions {
+    readonly messageRepeatCount: Byte;
+    readonly messageRepeatDelay: Double;
+    readonly address: ExtensionObject;
+    readonly qosCategory: UaString | undefined;
+    readonly datagramQos: ReadonlyArray<ExtensionObject> | undefined;
+    readonly discoveryAnnounceRate: UInt32;
+    readonly topic: UaString | undefined;
+    constructor(options?: DatagramWriterGroupTransport2DataTypeOptions) {
+        this.messageRepeatCount = options?.messageRepeatCount ?? 0;
+        this.messageRepeatDelay = options?.messageRepeatDelay ?? 0;
+        this.address = options?.address ?? new ExtensionObject();
+        this.qosCategory = options?.qosCategory;
+        this.datagramQos = options?.datagramQos;
+        this.discoveryAnnounceRate = options?.discoveryAnnounceRate ?? 0;
+        this.topic = options?.topic;
+    }
+    readonly [typeId] = NodeIds.DatagramWriterGroupTransport2DataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.DatagramWriterGroupTransport2DataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeByte(this.messageRepeatCount);
+        encoder.writeDouble(this.messageRepeatDelay);
+        encoder.writeType(this.address);
+        encoder.writeString(this.qosCategory);
+        encoder.writeTypeArray(this.datagramQos);
+        encoder.writeUInt32(this.discoveryAnnounceRate);
+        encoder.writeString(this.topic);
+    }
+    static [decode](decoder: BinaryDataDecoder): DatagramWriterGroupTransport2DataType {
+        return new DatagramWriterGroupTransport2DataType({
+            messageRepeatCount: decoder.readByte(),
+            messageRepeatDelay: decoder.readDouble(),
+            address: decoder.readType(ExtensionObject),
+            qosCategory: decoder.readString(),
+            datagramQos: decoder.readTypeArray(ExtensionObject),
+            discoveryAnnounceRate: decoder.readUInt32(),
+            topic: decoder.readString()
+        });
+    }
+}
+export interface DatagramDataSetReaderTransportDataTypeOptions {
+    address?: ExtensionObject | undefined;
+    qosCategory?: UaString | undefined;
+    datagramQos?: ReadonlyArray<ExtensionObject> | undefined;
+    topic?: UaString | undefined;
+}
+export class DatagramDataSetReaderTransportDataType implements DatagramDataSetReaderTransportDataTypeOptions {
+    readonly address: ExtensionObject;
+    readonly qosCategory: UaString | undefined;
+    readonly datagramQos: ReadonlyArray<ExtensionObject> | undefined;
+    readonly topic: UaString | undefined;
+    constructor(options?: DatagramDataSetReaderTransportDataTypeOptions) {
+        this.address = options?.address ?? new ExtensionObject();
+        this.qosCategory = options?.qosCategory;
+        this.datagramQos = options?.datagramQos;
+        this.topic = options?.topic;
+    }
+    readonly [typeId] = NodeIds.DatagramDataSetReaderTransportDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.DatagramDataSetReaderTransportDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeType(this.address);
+        encoder.writeString(this.qosCategory);
+        encoder.writeTypeArray(this.datagramQos);
+        encoder.writeString(this.topic);
+    }
+    static [decode](decoder: BinaryDataDecoder): DatagramDataSetReaderTransportDataType {
+        return new DatagramDataSetReaderTransportDataType({
+            address: decoder.readType(ExtensionObject),
+            qosCategory: decoder.readString(),
+            datagramQos: decoder.readTypeArray(ExtensionObject),
+            topic: decoder.readString()
         });
     }
 }
@@ -2102,6 +2618,85 @@ export class BrokerDataSetReaderTransportDataType implements BrokerDataSetReader
         });
     }
 }
+export enum PubSubConfigurationRefMask {
+    None = 0,
+    ElementAdd = 1,
+    ElementMatch = 2,
+    ElementModify = 4,
+    ElementRemove = 8,
+    ReferenceWriter = 16,
+    ReferenceReader = 32,
+    ReferenceWriterGroup = 64,
+    ReferenceReaderGroup = 128,
+    ReferenceConnection = 256,
+    ReferencePubDataset = 512,
+    ReferenceSubDataset = 1024,
+    ReferenceSecurityGroup = 2048,
+    ReferencePushTarget = 4096
+}
+export interface PubSubConfigurationRefDataTypeOptions {
+    configurationMask?: PubSubConfigurationRefMask | undefined;
+    elementIndex?: UInt16 | undefined;
+    connectionIndex?: UInt16 | undefined;
+    groupIndex?: UInt16 | undefined;
+}
+export class PubSubConfigurationRefDataType implements PubSubConfigurationRefDataTypeOptions {
+    readonly configurationMask: PubSubConfigurationRefMask;
+    readonly elementIndex: UInt16;
+    readonly connectionIndex: UInt16;
+    readonly groupIndex: UInt16;
+    constructor(options?: PubSubConfigurationRefDataTypeOptions) {
+        this.configurationMask = options?.configurationMask ?? PubSubConfigurationRefMask.None;
+        this.elementIndex = options?.elementIndex ?? 0;
+        this.connectionIndex = options?.connectionIndex ?? 0;
+        this.groupIndex = options?.groupIndex ?? 0;
+    }
+    readonly [typeId] = NodeIds.PubSubConfigurationRefDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PubSubConfigurationRefDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeUInt32(this.configurationMask);
+        encoder.writeUInt16(this.elementIndex);
+        encoder.writeUInt16(this.connectionIndex);
+        encoder.writeUInt16(this.groupIndex);
+    }
+    static [decode](decoder: BinaryDataDecoder): PubSubConfigurationRefDataType {
+        return new PubSubConfigurationRefDataType({
+            configurationMask: decoder.readUInt32(),
+            elementIndex: decoder.readUInt16(),
+            connectionIndex: decoder.readUInt16(),
+            groupIndex: decoder.readUInt16()
+        });
+    }
+}
+export interface PubSubConfigurationValueDataTypeOptions {
+    configurationElement?: PubSubConfigurationRefDataType | undefined;
+    name?: UaString | undefined;
+    identifier?: Variant | undefined;
+}
+export class PubSubConfigurationValueDataType implements PubSubConfigurationValueDataTypeOptions {
+    readonly configurationElement: PubSubConfigurationRefDataType;
+    readonly name: UaString | undefined;
+    readonly identifier: Variant;
+    constructor(options?: PubSubConfigurationValueDataTypeOptions) {
+        this.configurationElement = options?.configurationElement ?? new PubSubConfigurationRefDataType();
+        this.name = options?.name;
+        this.identifier = options?.identifier ?? Variant.null();
+    }
+    readonly [typeId] = NodeIds.PubSubConfigurationValueDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PubSubConfigurationValueDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeType(this.configurationElement);
+        encoder.writeString(this.name);
+        encoder.writeType(this.identifier);
+    }
+    static [decode](decoder: BinaryDataDecoder): PubSubConfigurationValueDataType {
+        return new PubSubConfigurationValueDataType({
+            configurationElement: decoder.readType(PubSubConfigurationRefDataType),
+            name: decoder.readString(),
+            identifier: decoder.readType(Variant)
+        });
+    }
+}
 export enum DiagnosticsLevel {
     Basic = 0,
     Advanced = 1,
@@ -2134,6 +2729,54 @@ export class AliasNameDataType implements AliasNameDataTypeOptions {
         return new AliasNameDataType({
             aliasName: decoder.readType(QualifiedName),
             referencedNodes: decoder.readTypeArray(ExpandedNodeId)
+        });
+    }
+}
+export enum PasswordOptionsMask {
+    None = 0,
+    SupportInitialPasswordChange = 1,
+    SupportDisableUser = 2,
+    SupportDisableDeleteForUser = 4,
+    SupportNoChangeForUser = 8,
+    SupportDescriptionForUser = 16,
+    RequiresUpperCaseCharacters = 32,
+    RequiresLowerCaseCharacters = 64,
+    RequiresDigitCharacters = 128,
+    RequiresSpecialCharacters = 256
+}
+export enum UserConfigurationMask {
+    None = 0,
+    NoDelete = 1,
+    Disabled = 2,
+    NoChangeByUser = 4,
+    MustChangePassword = 8
+}
+export interface UserManagementDataTypeOptions {
+    userName?: UaString | undefined;
+    userConfiguration?: UserConfigurationMask | undefined;
+    description?: UaString | undefined;
+}
+export class UserManagementDataType implements UserManagementDataTypeOptions {
+    readonly userName: UaString | undefined;
+    readonly userConfiguration: UserConfigurationMask;
+    readonly description: UaString | undefined;
+    constructor(options?: UserManagementDataTypeOptions) {
+        this.userName = options?.userName;
+        this.userConfiguration = options?.userConfiguration ?? UserConfigurationMask.None;
+        this.description = options?.description;
+    }
+    readonly [typeId] = NodeIds.UserManagementDataType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.UserManagementDataType_Encoding_DefaultBinary as const;
+    [encode](encoder: BinaryDataEncoder): void {
+        encoder.writeString(this.userName);
+        encoder.writeUInt32(this.userConfiguration);
+        encoder.writeString(this.description);
+    }
+    static [decode](decoder: BinaryDataDecoder): UserManagementDataType {
+        return new UserManagementDataType({
+            userName: decoder.readString(),
+            userConfiguration: decoder.readUInt32(),
+            description: decoder.readString()
         });
     }
 }
@@ -2209,27 +2852,37 @@ export enum TsnListenerStatus {
     PartialFailed = 2,
     Failed = 3
 }
-export interface UnsignedRationalNumberOptions {
-    numerator?: UInt32 | undefined;
-    denominator?: UInt32 | undefined;
+export interface PriorityMappingEntryTypeOptions {
+    mappingUri?: UaString | undefined;
+    priorityLabel?: UaString | undefined;
+    priorityValuePcp?: Byte | undefined;
+    priorityValueDscp?: UInt32 | undefined;
 }
-export class UnsignedRationalNumber implements UnsignedRationalNumberOptions {
-    readonly numerator: UInt32;
-    readonly denominator: UInt32;
-    constructor(options?: UnsignedRationalNumberOptions) {
-        this.numerator = options?.numerator ?? 0;
-        this.denominator = options?.denominator ?? 0;
+export class PriorityMappingEntryType implements PriorityMappingEntryTypeOptions {
+    readonly mappingUri: UaString | undefined;
+    readonly priorityLabel: UaString | undefined;
+    readonly priorityValuePcp: Byte;
+    readonly priorityValueDscp: UInt32;
+    constructor(options?: PriorityMappingEntryTypeOptions) {
+        this.mappingUri = options?.mappingUri;
+        this.priorityLabel = options?.priorityLabel;
+        this.priorityValuePcp = options?.priorityValuePcp ?? 0;
+        this.priorityValueDscp = options?.priorityValueDscp ?? 0;
     }
-    readonly [typeId] = NodeIds.UnsignedRationalNumber_Encoding_DefaultBinary as const;
-    static readonly [typeId] = NodeIds.UnsignedRationalNumber_Encoding_DefaultBinary as const;
+    readonly [typeId] = NodeIds.PriorityMappingEntryType_Encoding_DefaultBinary as const;
+    static readonly [typeId] = NodeIds.PriorityMappingEntryType_Encoding_DefaultBinary as const;
     [encode](encoder: BinaryDataEncoder): void {
-        encoder.writeUInt32(this.numerator);
-        encoder.writeUInt32(this.denominator);
+        encoder.writeString(this.mappingUri);
+        encoder.writeString(this.priorityLabel);
+        encoder.writeByte(this.priorityValuePcp);
+        encoder.writeUInt32(this.priorityValueDscp);
     }
-    static [decode](decoder: BinaryDataDecoder): UnsignedRationalNumber {
-        return new UnsignedRationalNumber({
-            numerator: decoder.readUInt32(),
-            denominator: decoder.readUInt32()
+    static [decode](decoder: BinaryDataDecoder): PriorityMappingEntryType {
+        return new PriorityMappingEntryType({
+            mappingUri: decoder.readString(),
+            priorityLabel: decoder.readString(),
+            priorityValuePcp: decoder.readByte(),
+            priorityValueDscp: decoder.readUInt32()
         });
     }
 }
@@ -2292,7 +2945,9 @@ export enum AccessLevelExType {
     NonatomicRead = 256,
     NonatomicWrite = 512,
     WriteFullArrayOnly = 1024,
-    NoSubDataTypes = 2048
+    NoSubDataTypes = 2048,
+    NonVolatile = 4096,
+    Constant = 8192
 }
 export enum EventNotifierType {
     None = 0,
