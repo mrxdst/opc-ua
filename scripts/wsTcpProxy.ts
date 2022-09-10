@@ -1,7 +1,7 @@
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 import net from 'net';
 
-const wss = new WebSocket.Server({port: 8080});
+const wss = new WebSocketServer({port: 8080});
 
 wss.on('connection', ws => {
   const socket = net.createConnection({
